@@ -26,9 +26,9 @@ const loadOwnedEnsDomains = async () => {
         id: web3Account.value.toLowerCase()
       }
     });
-    ownedEnsDomains.value = res.account?.domains || [];
+    ownedEnsDomains.value =  [{name: "robin.eth"}];
   } else {
-    ownedEnsDomains.value = [];
+    ownedEnsDomains.value = [{name: "robin.eth"}];
   }
 };
 
@@ -97,7 +97,7 @@ onUnmounted(() => clearInterval(waitingForRegistrationInterval));
           <RowLoading class="my-2" />
         </Block>
         <Block v-else>
-          <div v-if="ownedEnsDomains.length">
+          <div v-if="true">
             <div class="mb-3">
               {{
                 $t(
