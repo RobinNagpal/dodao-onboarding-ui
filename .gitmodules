@@ -4,3 +4,6 @@
 [submodule "snapshot-plugins"]
 	path = snapshot-plugins
 	url = https://github.com/snapshot-labs/snapshot-plugins
+[submodule "dodao-onboarding-schemas"]
+	path = dodao-onboarding-schemas
+	url = git@github.com:RobinNagpal/dodao-onboarding-schemas.git

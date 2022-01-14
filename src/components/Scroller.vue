@@ -123,7 +123,7 @@ onMounted(() => {
             </div>
           </template>
         </draggable>
-        <router-link :to="{ name: 'setup' }">
+        <router-link :to="{ name: 'setup-space' }">
           <UiSidebarButton><Icon size="20" name="plus" /></UiSidebarButton>
         </router-link>
         <div

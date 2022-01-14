@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
 import Setup from '@/views/Setup.vue';
+import SetupSpace from '@/views/space/SetupSpace.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Explore from '@/views/Explore.vue';
 import Strategy from '@/views/Strategy.vue';
@@ -76,6 +77,7 @@ if (domain) {
   routes.push(
     { path: '/', name: 'home', component: Home },
     { path: '/setup', name: 'setup', component: Setup },
+    { path: '/setup-space', name: 'setup-space', component: SetupSpace },
     { path: '/networks', name: 'networks', component: Explore },
     { path: '/strategies', name: 'strategies', component: Explore },
     { path: '/plugins', name: 'plugins', component: Explore },
