@@ -19,7 +19,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      '@dodao/onboarding-schemas': path.resolve(
+        __dirname,
+        './dodao-onboarding-schemas/src'
+      )
     },
     dedupe: ['@popperjs/core']
   },

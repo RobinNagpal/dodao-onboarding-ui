@@ -3,7 +3,7 @@ import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getAddress } from '@ethersproject/address';
 import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
-import validationSchema from '../../../../dodao-onboarding-schemas/src/schemas/space/dodaoSpace.json';
+import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { useSearchFilters } from '@/composables/useSearchFilters';
 import defaults from '@/locales/default';
@@ -31,7 +31,6 @@ const currentSettings = ref({});
 const modalNetworksOpen = ref(false);
 const modalSkinsOpen = ref(false);
 const modalCategoryOpen = ref(false);
-const modalVotingTypeOpen = ref(false);
 const modalValidationOpen = ref(false);
 const loaded = ref(false);
 const uploadLoading = ref(false);
@@ -45,7 +44,7 @@ const form = ref({
 
 const validate = computed(() => {
   if (form.value.terms === '') delete form.value.terms;
-  return validateSchema(validationSchema, form.value);
+  return validateSchema(spaceSchema, form.value);
 });
 
 const isValid = computed(() => {
@@ -156,14 +155,8 @@ function formatSpace(spaceRaw) {
   Object.entries(space).forEach(([key, value]) => {
     if (value === null) delete space[key];
   });
-  space.plugins = space.plugins || {};
   space.validation = space.validation || basicValidation;
   space.filters = space.filters || {};
-  space.voting = space.voting || {};
-  space.voting.delay = space.voting?.delay || undefined;
-  space.voting.period = space.voting?.period || undefined;
-  space.voting.type = space.voting?.type || undefined;
-  space.voting.quorum = space.voting?.quorum || undefined;
   return space;
 }
 
