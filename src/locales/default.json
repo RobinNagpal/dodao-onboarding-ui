@@ -452,7 +452,9 @@
         "create": "Create {space} proposal",
         "about": "About {space}",
         "proposals": "{space} Proposals",
+        "positions": "{space} Positions",
         "proposal": "{space} proposal: {proposal}",
+        "position": "{space} position: {position}",
         "settings": "{space} Settings"
       },
       "strategy": "{key} strategy",

@@ -2,10 +2,10 @@ import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
 import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
 import SpaceProposals from '@/views/SpaceProposals.vue';
-import Position from '@/views/position/Position.vue';
+import Position from '@/views/Position/Position.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
 import Setup from '@/views/Setup.vue';
-import SetupSpace from '@/views/space/SetupSpace.vue';
+import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Explore from '@/views/Explore.vue';
 import Strategy from '@/views/Strategy.vue';
@@ -14,7 +14,7 @@ import Delegate from '@/views/Delegate.vue';
 import Timeline from '@/views/Timeline.vue';
 import Space from '@/views/Space.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
-import Positions from '@/views/position/Positions.vue';
+import Positions from '@/views/Position/Positions.vue';
 import { useDomain } from '@/composables/useDomain';
 
 // The frontend shows all spaces or just a single one, when being accessed
