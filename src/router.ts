@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
 import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
+import SpaceProposals from '@/views/SpaceProposals.vue';
+import Position from '@/views/position/Position.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
 import Setup from '@/views/Setup.vue';
 import SetupSpace from '@/views/space/SetupSpace.vue';
@@ -12,7 +14,7 @@ import Delegate from '@/views/Delegate.vue';
 import Timeline from '@/views/Timeline.vue';
 import Space from '@/views/Space.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
-import SpaceProposals from '@/views/SpaceProposals.vue';
+import Positions from '@/views/position/Positions.vue';
 import { useDomain } from '@/composables/useDomain';
 
 // The frontend shows all spaces or just a single one, when being accessed
@@ -25,13 +27,23 @@ const routes: any[] = [];
 const spaceRoutes = [
   {
     path: '',
+    name: 'positions',
+    component: Positions
+  },
+  {
+    path: '',
     name: 'spaceProposals',
-    component: SpaceProposals
+    component: Positions
   },
   {
     path: 'proposal/:id',
     name: 'spaceProposal',
     component: SpaceProposal
+  },
+  {
+    path: 'proposal/:id',
+    name: 'spacePosition',
+    component: Position
   },
   {
     path: 'create/:from?',

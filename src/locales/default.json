@@ -183,6 +183,29 @@
       "closed": "Closed"
     }
   },
+  "position": {
+    "castVote": "Cast your vote",
+    "vote": "Vote",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "votingSystem": "Voting system"
+  },
+  "positions": {
+    "header": "Positions",
+    "new": "New position",
+    "noPositions": "There aren't any positions here yet!",
+    "createPosition": "Create position",
+    "createFirstPosition": "Let's create your first position",
+    "states": {
+      "all": "All",
+      "core": "Core",
+      "community": "Community",
+      "active": "Active",
+      "pending": "Pending",
+      "closed": "Closed"
+    }
+  },
+
   "settings": {
     "header": "Settings",
     "seeENS": "See on ENS",

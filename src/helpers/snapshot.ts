@@ -1,7 +1,7 @@
 import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
 import voting from '@snapshot-labs/snapshot.js/src/voting';
 import { apolloClient } from '@/helpers/apollo';
-import { PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
+import {POSITION_QUERY, PROPOSAL_QUERY, VOTES_QUERY} from '@/helpers/queries';
 import cloneDeep from 'lodash/cloneDeep';
 
 export async function getProposalVotes(
@@ -30,9 +30,9 @@ export async function getProposalVotes(
   }
 }
 
-export async function getProposal(id) {
+export async function getPosition(id) {
   try {
-    console.time('getProposal');
+    console.time('getPosition');
     const response = await apolloClient.query({
       query: PROPOSAL_QUERY,
       variables: {
@@ -52,6 +52,28 @@ export async function getProposal(id) {
     }
 
     return proposal;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+}
+
+export async function getProposal(id) {
+  try {
+    console.time('getProposal');
+    const response = await apolloClient.query({
+      query: POSITION_QUERY,
+      variables: {
+        id
+      }
+    });
+    console.timeEnd('getProposal');
+
+    const positionResClone = cloneDeep(response);
+    const position = positionResClone.data.position;
+
+
+    return position;
   } catch (e) {
     console.log(e);
     return e;
