@@ -81,6 +81,17 @@ export function useClient() {
         plugins: JSON.stringify(plugins),
         metadata: JSON.stringify({})
       });
+    } else if (type === 'position') {
+      return clientEIP712.position(auth.web3, web3.value.account, {
+        space: space.id,
+        title: payload.name,
+        body: payload.body,
+        choices: payload.choices,
+        start: payload.start,
+        end: payload.end,
+        network: space.network,
+        metadata: JSON.stringify({})
+      });
     } else if (type === 'vote') {
       return clientEIP712.vote(auth.web3, web3.value.account, {
         space: space.id,

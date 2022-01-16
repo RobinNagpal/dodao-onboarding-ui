@@ -1,8 +1,7 @@
-import Client from '@snapshot-labs/snapshot.js/src/client';
+import OnboardingClient from '@/helpers/onboardingClient';
 
-const relayerUrl =
-  // @ts-ignore
-  import.meta.env.VITE_RELAYER_URL || 'https://testnet.snapshot.org';
-const client = new Client(relayerUrl);
+const relayerUrl: string = (import.meta.env.VITE_RELAYER_URL ||
+  'https://testnet.snapshot.org') as string;
+const client = new OnboardingClient(relayerUrl);
 
 export default client;

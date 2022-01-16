@@ -1,7 +1,8 @@
-import Client from '@snapshot-labs/snapshot.js/src/client';
+import OnboardingClient from '@/helpers/onboardingClient';
 
-// @ts-ignore
-const hubUrl = import.meta.env.VITE_HUB_URL || 'https://testnet.snapshot.org';
-const client = new Client(hubUrl);
+const hubUrl: string = (import.meta.env.VITE_HUB_URL ||
+  'https://testnet.snapshot.org') as string;
+
+const client = new OnboardingClient(hubUrl);
 
 export default client;

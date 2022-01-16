@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
 import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
-import SpaceProposals from '@/views/SpaceProposals.vue';
 import Position from '@/views/Position/Position.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
+import PositionCreate from '@/views/Position/Create.vue';
 import Setup from '@/views/Setup.vue';
 import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
@@ -44,6 +44,11 @@ const spaceRoutes = [
     path: 'proposal/:id',
     name: 'spacePosition',
     component: Position
+  },
+  {
+    path: 'create/:from?',
+    name: 'positionCreate',
+    component: PositionCreate
   },
   {
     path: 'create/:from?',
