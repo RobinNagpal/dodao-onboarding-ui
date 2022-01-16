@@ -26,7 +26,7 @@ export function useApp() {
   async function init() {
     const auth = getInstance();
     state.loading = true;
-    await Promise.all([getStrategies(), getExplore()]);
+    await Promise.all([getExplore()]);
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
     if (window?.parent === window)
@@ -37,14 +37,6 @@ export function useApp() {
 
     state.init = true;
     state.loading = false;
-  }
-
-  async function getStrategies() {
-    const strategiesObj: any = await fetch(
-      `${import.meta.env.VITE_SCORES_URL}/api/strategies`
-    ).then(res => res.json());
-    strategies.value = strategiesObj;
-    return;
   }
 
   async function getExplore() {

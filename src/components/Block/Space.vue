@@ -92,11 +92,9 @@ watchEffect(() => {
       </div>
       <div class="py-3">
         <router-link
-          :to="{ name: 'spaceProposals', params: { key: space.id } }"
-          v-text="$t('proposals.header')"
-          :class="
-            $route.name === 'spaceProposals' && 'router-link-exact-active'
-          "
+          :to="{ name: 'guides', params: { key: space.id } }"
+          v-text="$t('guides.header')"
+          :class="$route.name === 'guides' && 'router-link-exact-active'"
           class="block px-4 py-2 sidenav-item"
         />
         <router-link

@@ -5,27 +5,27 @@ import { useUsername } from '@/composables/useUsername';
 import removeMd from 'remove-markdown';
 
 const props = defineProps({
-  position: Object,
+  guide: Object,
   profiles: Object
 });
 
-const body = computed(() => removeMd(props.position.body));
+const body = computed(() => removeMd(props.guide.body));
 
 const winningChoice = computed(() =>
-  props.position.scores.indexOf(Math.max(...props.position.scores))
+  props.guide.scores.indexOf(Math.max(...props.guide.scores))
 );
 
 const period = computed(() => {
-  if (props.position.state === 'closed') return 'endedAgo';
-  if (props.position.state === 'active') return 'positionToNow';
-  return 'positionStartIn';
+  if (props.guide.state === 'closed') return 'endedAgo';
+  if (props.guide.state === 'active') return 'guideToNow';
+  return 'guideStartIn';
 });
 
 const { address, profile, username } = useUsername();
 
 watchEffect(() => {
-  address.value = props.position.author;
-  profile.value = props.profiles[props.position.author];
+  address.value = props.guide.author;
+  profile.value = props.profiles[props.guide.author];
 });
 </script>
 
@@ -34,8 +34,8 @@ watchEffect(() => {
     <router-link
       class="p-4 block text-color"
       :to="{
-        name: 'spacePosition',
-        params: { key: position.space.id, id: position.id }
+        name: 'spaceGuide',
+        params: { key: guide.space.id, id: guide.id }
       }"
     >
       <div>
@@ -43,34 +43,31 @@ watchEffect(() => {
           <router-link
             class="text-color group"
             :to="{
-              name: 'spacePositions',
-              params: { key: position.space.id }
+              name: 'spaceGuides',
+              params: { key: guide.space.id }
             }"
           >
-            <Token :space="position.space" size="28" />
+            <Token :space="guide.space" size="28" />
             <span
               class="ml-2 group-hover:text-skin-link"
-              v-text="position.space.name"
+              v-text="guide.space.name"
             />
           </router-link>
-          {{ $tc('positionBy', [username]) }}
-          <Badges
-            :address="position.author"
-            :members="position.space.members"
-          />
+          {{ $tc('guideBy', [username]) }}
+          <Badges :address="guide.author" :members="guide.space.members" />
         </div>
-        <h3 v-text="position.title" class="mt-1 mb-1" />
+        <h3 v-text="guide.title" class="mt-1 mb-1" />
         <p v-text="shorten(body, 120)" class="break-words mb-2 text-md" />
         <div
           v-if="
-            position.scores_state === 'final' &&
-            position.scores_total > 0 &&
-            position.choices.length <= 6
+            guide.scores_state === 'final' &&
+            guide.scores_total > 0 &&
+            guide.choices.length <= 6
           "
           class="mb-3"
         >
           <div
-            v-for="(choice, i) in position.choices"
+            v-for="(choice, i) in guide.choices"
             :key="i"
             class="mt-1 w-full relative"
           >
@@ -83,32 +80,30 @@ watchEffect(() => {
               />
               {{ shorten(choice, 32) }}
               <span class="text-color ml-1">
-                {{ n(position.scores[i]) }} {{ position.space.symbol }}
+                {{ n(guide.scores[i]) }} {{ guide.space.symbol }}
               </span>
             </div>
             <div
-              v-text="
-                n((1 / position.scores_total) * position.scores[i], '0.[0]%')
-              "
+              v-text="n((1 / guide.scores_total) * guide.scores[i], '0.[0]%')"
               class="absolute right-0 leading-[40px] mr-3 link-color"
             />
             <div
               :style="`width: ${
-                (100 / position.scores_total) * position.scores[i]
+                (100 / guide.scores_total) * guide.scores[i]
               }%;`"
               class="bg-[color:var(--border-color)] rounded-md h-[40px]"
             />
           </div>
         </div>
         <div>
-          <UiState :state="position.state" slim class="mr-1" />
-          {{ $t(`positions.states.${position.state}`) }},
+          <UiState :state="guide.state" slim class="mr-1" />
+          {{ $t(`guides.states.${guide.state}`) }},
           <span
-            v-if="position.scores_state !== 'final'"
-            v-text="$tc(period, [toNow(position.end)])"
+            v-if="guide.scores_state !== 'final'"
+            v-text="$tc(period, [toNow(guide.end)])"
           />
-          <span v-if="position.scores_state === 'final'" class="mt-2">
-            {{ n(position.votes, '0,00') }} votes
+          <span v-if="guide.scores_state === 'final'" class="mt-2">
+            {{ n(guide.votes, '0,00') }} votes
           </span>
         </div>
       </div>

@@ -61,9 +61,9 @@ export const PROPOSAL_QUERY = gql`
   }
 `;
 
-export const POSITION_QUERY = gql`
-  query Proposal($id: String!) {
-    position(id: $id) {
+export const GUIDE_QUERY = gql`
+  query Guide($id: String!) {
+    guide(id: $id) {
       id
       ipfs
       title
@@ -128,8 +128,8 @@ export const PROPOSALS_QUERY = gql`
   }
 `;
 
-export const POSITIONS_QUERY = gql`
-  query Positions(
+export const GUIDES_QUERY = gql`
+  query Guides(
     $first: Int!
     $skip: Int!
     $state: String!
@@ -137,7 +137,7 @@ export const POSITIONS_QUERY = gql`
     $space_in: [String]
     $author_in: [String]
   ) {
-    positions(
+    guides(
       first: $first
       skip: $skip
       where: {

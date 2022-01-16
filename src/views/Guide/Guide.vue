@@ -2,10 +2,7 @@
 import { ref, computed, watch, onMounted, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import {
-  getPosition,
-  getPower,
-} from '@/helpers/snapshot';
+import { getGuide, getPower } from '@/helpers/snapshot';
 import { setPageTitle, explorerUrl, ms, n, getIpfsUrl } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
@@ -38,21 +35,21 @@ const id = route.params.id;
 
 const modalOpen = ref(false);
 const loading = ref(true);
-const position = ref({});
+const guide = ref({});
 const results = ref({});
 const totalScore = ref(0);
 const scores = ref([]);
 
-const isCreator = computed(() => position.value.author === web3Account.value);
+const isCreator = computed(() => guide.value.author === web3Account.value);
 const loaded = computed(() => !props.spaceLoading && !loading.value);
 const isAdmin = computed(() => {
   const admins = (props.space.admins || []).map(admin => admin.toLowerCase());
   return admins.includes(web3Account.value?.toLowerCase());
 });
 const threeDotItems = computed(() => {
-  const items = [{ text: t('duplicatePosition'), action: 'duplicate' }];
+  const items = [{ text: t('duplicateGuide'), action: 'duplicate' }];
   if (isAdmin.value || isCreator.value)
-    items.push({ text: t('deletePosition'), action: 'delete' });
+    items.push({ text: t('deleteGuide'), action: 'delete' });
   return items;
 });
 
@@ -61,21 +58,16 @@ const browserHasHistory = computed(() => window.history.state.back);
 const { modalAccountOpen } = useModal();
 const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
 
-
-async function loadPosition() {
-  position.value = await getPosition(id);
-  // Redirect to position spaceId if it doesn't match route key
-  if (
-    route.name === 'spacePosition' &&
-    props.spaceId !== position.value.space.id
-  ) {
+async function loadGuide() {
+  guide.value = await getGuide(id);
+  // Redirect to guide spaceId if it doesn't match route key
+  if (route.name === 'spaceGuide' && props.spaceId !== guide.value.space.id) {
     router.push({ name: 'error-404' });
   }
 
   loading.value = false;
   if (loaded.value) loadResults();
 }
-
 
 async function loadResults() {}
 
@@ -84,29 +76,25 @@ const { loadBy, loadingMore, loadMore } = useInfiniteLoader(10);
 async function loadPower() {
   if (
     !web3Account.value ||
-    !position.value.author ||
-    position.value.state === 'closed'
+    !guide.value.author ||
+    guide.value.state === 'closed'
   )
     return;
-  const response = await getPower(
-    props.space,
-    web3Account.value,
-    position.value
-  );
+  const response = await getPower(props.space, web3Account.value, guide.value);
   totalScore.value = response.totalScore;
   scores.value = response.scores;
 }
 
-async function deletePosition() {
-  const result = await send(props.space, 'delete-position', {
-    position: position.value
+async function deleteGuide() {
+  const result = await send(props.space, 'delete-guide', {
+    guide: guide.value
   });
   console.log('Result', result);
   if (result.id) {
     getExplore();
-    store.space.positions = [];
-    notify(['green', t('notify.positionDeleted')]);
-    router.push({ name: 'spacePositions' });
+    store.space.guides = [];
+    notify(['green', t('notify.guideDeleted')]);
+    router.push({ name: 'spaceGuides' });
   }
 }
 
@@ -120,30 +108,28 @@ const {
 } = useSharing();
 
 function selectFromThreedotDropdown(e) {
-  if (e === 'delete') deletePosition();
+  if (e === 'delete') deleteGuide();
   if (e === 'duplicate')
     router.push({
       name: 'spaceCreate',
       params: {
-        key: position.value.space.id,
-        from: position.value.id
+        key: guide.value.space.id,
+        from: guide.value.id
       }
     });
 }
 
 function selectFromShareDropdown(e) {
-  if (e === 'shareToTwitter')
-    shareToTwitter(props.space, position.value, window);
+  if (e === 'shareToTwitter') shareToTwitter(props.space, guide.value, window);
   else if (e === 'shareToFacebook')
-    shareToFacebook(props.space, position.value, window);
-  else if (e === 'shareToClipboard')
-    shareToClipboard(props.space, position.value);
+    shareToFacebook(props.space, guide.value, window);
+  else if (e === 'shareToClipboard') shareToClipboard(props.space, guide.value);
 }
 
 const { profiles, loadProfiles } = useProfiles();
 
-watch(position, () => {
-  loadProfiles([position.value.author]);
+watch(guide, () => {
+  loadProfiles([guide.value.author]);
 });
 
 watch(web3Account, (val, prev) => {
@@ -158,9 +144,9 @@ watch([loaded, web3Account], () => {
 });
 
 onMounted(async () => {
-  await loadPosition();
-  setPageTitle('page.title.space.position', {
-    position: position.value.title,
+  await loadGuide();
+  setPageTitle('page.title.space.guide', {
+    guide: guide.value.title,
     space: props.space.name
   });
 });
@@ -175,9 +161,7 @@ onMounted(async () => {
           @click="
             browserHasHistory
               ? $router.go(-1)
-              : $router.push(
-                  domain ? { path: '/' } : { name: 'spacePositions' }
-                )
+              : $router.push(domain ? { path: '/' } : { name: 'spaceGuides' })
           "
         >
           <Icon name="back" size="22" class="!align-middle" />
@@ -186,15 +170,15 @@ onMounted(async () => {
       </div>
       <div class="px-4 md:px-0">
         <template v-if="loaded">
-          <h1 v-text="position.title" class="mb-2" />
+          <h1 v-text="guide.title" class="mb-2" />
           <div class="mb-4">
-            <UiState :state="position.state" class="inline-block" />
+            <UiState :state="guide.state" class="inline-block" />
             <UiDropdown
               top="2.5rem"
               right="1.5rem"
               class="float-right mr-2"
               @select="selectFromShareDropdown"
-              @clickedNoDropdown="startShare(space, position)"
+              @clickedNoDropdown="startShare(space, guide)"
               :items="sharingItems"
               :hideDropdown="sharingIsSupported"
             >
@@ -216,7 +200,7 @@ onMounted(async () => {
               </div>
             </UiDropdown>
           </div>
-          <UiMarkdown :body="position.body" class="mb-6" />
+          <UiMarkdown :body="guide.body" class="mb-6" />
         </template>
         <PageLoading v-else />
       </div>
@@ -227,46 +211,46 @@ onMounted(async () => {
           <div>
             <b>{{ $t('author') }}</b>
             <User
-              :address="position.author"
-              :profile="profiles[position.author]"
+              :address="guide.author"
+              :profile="profiles[guide.author]"
               :space="space"
-              :position="position"
+              :guide="guide"
               class="float-right"
             />
           </div>
           <div>
             <b>IPFS</b>
             <a
-              :href="getIpfsUrl(position.ipfs)"
+              :href="getIpfsUrl(guide.ipfs)"
               target="_blank"
               class="float-right"
             >
-              #{{ position.ipfs.slice(0, 7) }}
+              #{{ guide.ipfs.slice(0, 7) }}
               <Icon name="external-link" class="ml-1" />
             </a>
           </div>
           <div>
-            <b>{{ $t('position.votingSystem') }}</b>
+            <b>{{ $t('guide.votingSystem') }}</b>
             <span class="float-right link-color">
-              {{ $t(`voting.${position.type}`) }}
+              {{ $t(`voting.${guide.type}`) }}
             </span>
           </div>
           <div>
-            <b>{{ $t('position.startDate') }}</b>
+            <b>{{ $t('guide.startDate') }}</b>
             <span
-              v-text="$d(position.start * 1e3, 'short', 'en-US')"
+              v-text="$d(guide.start * 1e3, 'short', 'en-US')"
               v-tippy="{
-                content: ms(position.start)
+                content: ms(guide.start)
               }"
               class="float-right link-color"
             />
           </div>
           <div>
-            <b>{{ $t('position.endDate') }}</b>
+            <b>{{ $t('guide.endDate') }}</b>
             <span
-              v-text="$d(position.end * 1e3, 'short', 'en-US')"
+              v-text="$d(guide.end * 1e3, 'short', 'en-US')"
               v-tippy="{
-                content: ms(position.end)
+                content: ms(guide.end)
               }"
               class="link-color float-right"
             />
@@ -280,9 +264,9 @@ onMounted(async () => {
       v-if="loaded"
       :open="modalOpen"
       @close="modalOpen = false"
-      @reload="loadPosition"
+      @reload="loadGuide"
       :space="space"
-      :position="position"
+      :guide="guide"
       :id="id"
     />
     <ModalTerms

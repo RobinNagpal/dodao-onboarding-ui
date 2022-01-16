@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
 import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
-import Position from '@/views/Position/Position.vue';
+import Guide from '@/views/Guide/Guide.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
-import PositionCreate from '@/views/Position/Create.vue';
+import GuideCreate from '@/views/Guide/Create.vue';
 import Setup from '@/views/Setup.vue';
 import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
@@ -14,7 +14,7 @@ import Delegate from '@/views/Delegate.vue';
 import Timeline from '@/views/Timeline.vue';
 import Space from '@/views/Space.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
-import Positions from '@/views/Position/Positions.vue';
+import Guides from '@/views/Guide/Guides.vue';
 import { useDomain } from '@/composables/useDomain';
 
 // The frontend shows all spaces or just a single one, when being accessed
@@ -27,13 +27,18 @@ const routes: any[] = [];
 const spaceRoutes = [
   {
     path: '',
-    name: 'positions',
-    component: Positions
+    name: 'spaceProposals',
+    component: Guides
   },
   {
     path: '',
-    name: 'spaceProposals',
-    component: Positions
+    name: 'guides',
+    component: Guides
+  },
+  {
+    path: 'guides',
+    name: 'guides',
+    component: Guides
   },
   {
     path: 'proposal/:id',
@@ -41,14 +46,14 @@ const spaceRoutes = [
     component: SpaceProposal
   },
   {
-    path: 'proposal/:id',
-    name: 'spacePosition',
-    component: Position
+    path: 'guide/:id',
+    name: 'spaceGuide',
+    component: Guide
   },
   {
     path: 'create/:from?',
-    name: 'positionCreate',
-    component: PositionCreate
+    name: 'guideCreate',
+    component: GuideCreate
   },
   {
     path: 'create/:from?',
@@ -117,18 +122,18 @@ routes.push({
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
+  scrollBehavior(to, from, savedGuide) {
+    if (savedGuide) {
+      return savedGuide;
     }
 
-    if (to.params.retainScrollPosition) {
+    if (to.params.retainScrollGuide) {
       return {};
     }
 
     if (to.hash) {
-      const position = { selector: to.hash };
-      return { el: position };
+      const guide = { selector: to.hash };
+      return { el: guide };
     }
 
     return { top: 0 };

@@ -8,7 +8,7 @@ import { clone } from '@snapshot-labs/snapshot.js/src/utils';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
-import { POSITION_QUERY } from '@/helpers/queries';
+import { GUIDE_QUERY } from '@/helpers/queries';
 import validations from '@snapshot-labs/snapshot.js/src/validations';
 import { useDomain } from '@/composables/useDomain';
 import { useApolloQuery } from '@/composables/useApolloQuery';
@@ -44,6 +44,7 @@ const form = ref({
   name: '',
   body: '',
   start: 0,
+  end: 0,
   snapshot: '',
   metadata: {}
 });
@@ -54,7 +55,7 @@ const nameForm = ref(null);
 const passValidation = ref([true]);
 const loadingSnapshot = ref(true);
 
-const position = computed(() => Object.assign(form.value, {}));
+const guide = computed(() => Object.assign(form.value, {}));
 
 // Check if account passes space validation
 watchEffect(async () => {
@@ -106,14 +107,15 @@ async function handleSubmit() {
   form.value.metadata.network = props.space.network;
   form.value.start = dateStart.value;
   form.value.end = dateEnd.value;
-  const result = await send(props.space, 'position', form.value);
+  console.log('Send', form.value);
+  const result = await send(props.space, 'guide', form.value);
   console.log('Result', result);
   if (result.id) {
     getExplore();
-    store.space.positions = [];
-    notify(['green', t('notify.positionCreated')]);
+    store.space.guides = [];
+    notify(['green', t('notify.guideCreated')]);
     router.push({
-      name: 'position',
+      name: 'guide',
       params: {
         key: props.spaceId,
         id: result.id
@@ -135,27 +137,27 @@ function clickSubmit() {
 
 const { apolloQuery, queryLoading } = useApolloQuery();
 
-async function loadPosition() {
-  const position = await apolloQuery(
+async function loadGuide() {
+  const guide = await apolloQuery(
     {
-      query: POSITION_QUERY,
+      query: GUIDE_QUERY,
       variables: {
         id: props.from
       }
     },
-    'position'
+    'guide'
   );
 
   form.value = {
-    name: position.title,
-    body: position.body,
-    start: position.start,
-    end: position.end,
-    snapshot: position.snapshot,
-    type: position.type
+    name: guide.title,
+    body: guide.body,
+    start: guide.start,
+    end: guide.end,
+    snapshot: guide.snapshot,
+    type: guide.type
   };
 
-  const { network } = position;
+  const { network } = guide;
   form.value.metadata = { network };
 }
 
@@ -163,7 +165,7 @@ onMounted(async () => {
   setPageTitle('page.title.space.create', { space: props.space.name });
   nameForm.value.focus();
 
-  if (props.from) await loadPosition();
+  if (props.from) await loadGuide();
 });
 
 watchEffect(async () => {
@@ -202,7 +204,7 @@ watchEffect(async () => {
       </Block>
       <div class="px-4 md:px-0 overflow-hidden">
         <router-link
-          :to="domain ? { path: '/' } : { name: 'positions' }"
+          :to="domain ? { path: '/' } : { name: 'guides' }"
           class="text-color"
         >
           <Icon name="back" size="22" class="!align-middle" />

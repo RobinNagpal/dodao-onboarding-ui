@@ -2,21 +2,21 @@ import { ref } from 'vue';
 import { subgraphRequest } from '@snapshot-labs/snapshot.js/src/utils';
 import { lsGet } from '@/helpers/utils';
 
-const positionIds = ref([]);
-const lastSeenPosition = ref({});
+const guideIds = ref([]);
+const lastSeenGuide = ref({});
 
 /**
- * Fixme: This will not work if one of the followed spaces has more than 100 position created before
- * other spaces had position.
+ * Fixme: This will not work if one of the followed spaces has more than 100 guide created before
+ * other spaces had guide.
  */
-export function useUnseenPositions() {
-  async function getPositionIds(followingSpaces) {
+export function useUnseenGuides() {
+  async function getGuideIds(followingSpaces) {
     if (followingSpaces[0]) {
       try {
-        const activePosition = await subgraphRequest(
+        const activeGuide = await subgraphRequest(
           `${import.meta.env.VITE_HUB_URL}/graphql`,
           {
-            position: {
+            guide: {
               __args: {
                 first: 100,
                 where: {
@@ -31,24 +31,24 @@ export function useUnseenPositions() {
             }
           }
         );
-        positionIds.value = activePosition.position;
+        guideIds.value = activeGuide.guide;
       } catch (e) {
         console.log(e);
       }
     }
   }
 
-  function updateLastSeenPosition(account) {
+  function updateLastSeenGuide(account) {
     if (account) {
       const walletId = account.slice(0, 8).toLowerCase();
-      lastSeenPosition.value = lsGet(`lastSeenPosition.${walletId}`) || {};
+      lastSeenGuide.value = lsGet(`lastSeenGuide.${walletId}`) || {};
     }
   }
 
   return {
-    getPositionIds,
-    updateLastSeenPosition,
-    positionIds,
-    lastSeenPosition
+    getGuideIds,
+    updateLastSeenGuide,
+    guideIds,
+    lastSeenGuide
   };
 }

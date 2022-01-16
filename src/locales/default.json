@@ -183,19 +183,19 @@
       "closed": "Closed"
     }
   },
-  "position": {
+  "guide": {
     "castVote": "Cast your vote",
     "vote": "Vote",
     "startDate": "Start date",
     "endDate": "End date",
     "votingSystem": "Voting system"
   },
-  "positions": {
-    "header": "Positions",
-    "new": "New position",
-    "noPositions": "There aren't any positions here yet!",
-    "createPosition": "Create position",
-    "createFirstPosition": "Let's create your first position",
+  "guides": {
+    "header": "Onboarding Guides",
+    "new": "New guide",
+    "noGuides": "There aren't any onboarding guides here yet!",
+    "createGuide": "Create",
+    "createFirstGuide": "Let's create your first onboarding guide",
     "states": {
       "all": "All",
       "core": "Core",
@@ -452,9 +452,9 @@
         "create": "Create {space} proposal",
         "about": "About {space}",
         "proposals": "{space} Proposals",
-        "positions": "{space} Positions",
+        "guides": "{space} Guides",
         "proposal": "{space} proposal: {proposal}",
-        "position": "{space} position: {position}",
+        "guide": "{space} guide: {guide}",
         "settings": "{space} Settings"
       },
       "strategy": "{key} strategy",

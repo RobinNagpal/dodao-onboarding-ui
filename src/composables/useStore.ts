@@ -3,12 +3,12 @@ import { reactive } from 'vue';
 const store = reactive({
   space: {
     proposals: [],
-    positions: [],
+    guides: [],
     filterBy: 'all'
   },
   timeline: {
     proposals: [],
-    positions: [],
+    guides: [],
     filterBy: 'all'
   }
 });

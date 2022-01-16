@@ -81,12 +81,11 @@ export function useClient() {
         plugins: JSON.stringify(plugins),
         metadata: JSON.stringify({})
       });
-    } else if (type === 'position') {
-      return clientEIP712.position(auth.web3, web3.value.account, {
+    } else if (type === 'guide') {
+      return clientEIP712.guide(auth.web3, web3.value.account, {
         space: space.id,
         title: payload.name,
         body: payload.body,
-        choices: payload.choices,
         start: payload.start,
         end: payload.end,
         network: space.network,
@@ -110,6 +109,8 @@ export function useClient() {
         space: space.id,
         settings: JSON.stringify(payload)
       });
+    } else {
+      throw new Error('Unknown type ' + type);
     }
   }
 
