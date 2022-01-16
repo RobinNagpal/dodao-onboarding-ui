@@ -44,6 +44,7 @@ export function useApp() {
       `${import.meta.env.VITE_HUB_URL}/api/explore`
     ).then(res => res.json());
 
+    console.log('getExplore', exploreObj);
     exploreObj.spaces = Object.fromEntries(
       Object.entries(exploreObj.spaces).map(([id, space]: any) => {
         // map manually selected categories for verified spaces that don't have set their categories yet

@@ -190,7 +190,8 @@
     "endDate": "End date",
     "votingSystem": "Voting system",
     "delete": "Delete",
-    "duplicate": "Duplicate"
+    "duplicate": "Duplicate",
+    "guideBy": "by {0}"
   },
   "guides": {
     "header": "Onboarding Guides",

@@ -43,6 +43,7 @@ async function loadGuides(skip = 0) {
   );
   stopLoadingMore.value = guidesObj?.length < loadBy;
   store.space.guides = store.space.guides.concat(guidesObj);
+  console.log('store.space.guides', store.space.guides);
 }
 
 function emitUpdateLastSeenGuide() {
@@ -69,18 +70,6 @@ async function load() {
   emitUpdateLastSeenGuide();
 }
 
-watch(
-  props.spaceId,
-  () => {
-    const firstGuide = store.space.guides[0];
-    if (firstGuide && firstGuide?.space.id !== props.spaceId) {
-      store.space.guides = [];
-      load();
-    }
-  },
-  { immediate: true }
-);
-
 function selectState(e) {
   store.space.filterBy = e;
   store.space.guides = [];
@@ -99,7 +88,7 @@ watch(store.space.guides, () => {
 
 const { explore } = useApp();
 const guidesCount = computed(() => {
-  const count = explore.value.spaces[props.space.id].guides;
+  const count = store.space.guides.length;
   return count ? count : 0;
 });
 

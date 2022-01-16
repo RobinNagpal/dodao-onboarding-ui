@@ -42,7 +42,7 @@ watchEffect(() => {
         <div class="mb-2">
           <Token :space="guide.space" size="28" />
           <span class="ml-2" v-text="guide.space.name" />
-          {{ $tc('guideBy', [username]) }}
+          {{ $tc('guide.guideBy', [username]) }}
           <Badges :address="guide.author" :members="guide.space.members" />
           <UiState :state="guide.state" class="inline-block float-right" />
         </div>
