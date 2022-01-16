@@ -13,6 +13,10 @@ import '@/style.scss';
 import { apolloClient } from '@/helpers/apollo';
 import { DefaultApolloClient } from '@vue/apollo-composable';
 import VueTippy from 'vue-tippy';
+import vuetify from './plugins/vuetify';
+import { loadFonts } from './plugins/webfontloader';
+
+loadFonts();
 
 const app = createApp({
   setup() {
@@ -20,6 +24,7 @@ const app = createApp({
   },
   render: () => h(App)
 })
+  .use(vuetify)
   .use(i18n)
   .use(router)
   .use(LockPlugin, options)
