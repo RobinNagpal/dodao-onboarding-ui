@@ -8,7 +8,6 @@ import { useProfiles } from '@/composables/useProfiles';
 import { useUnseenGuides } from '@/composables/useUnseenGuides';
 import { lsSet, setPageTitle } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
-import { useApp } from '@/composables/useApp';
 import { useStore } from '@/composables/useStore';
 
 const props = defineProps({ space: Object, spaceId: String });

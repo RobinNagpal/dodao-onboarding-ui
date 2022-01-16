@@ -1,13 +1,10 @@
 <script setup>
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { getAddress } from '@ethersproject/address';
 import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import { useSearchFilters } from '@/composables/useSearchFilters';
 import defaults from '@/locales/default';
-import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
 import { useClient } from '@/composables/useClient';
 
@@ -23,7 +20,6 @@ const props = defineProps({
 const basicValidation = { name: 'basic', params: {} };
 
 const { t } = useI18n();
-const { web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const notify = inject('notify');
 
@@ -58,9 +54,6 @@ const isOwner = true;
 const categoriesString = computed(() => {
   return form.value.categories ? form.value.categories.join(', ') : '';
 });
-
-const { filteredPlugins } = useSearchFilters();
-const plugins = computed(() => filteredPlugins());
 
 function slugify(string) {
   return string

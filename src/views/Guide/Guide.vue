@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { getGuide, getPower } from '@/helpers/snapshot';
 import { getIpfsUrl, ms, setPageTitle } from '@/helpers/utils';
-import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
 import { useProfiles } from '@/composables/useProfiles';
 import { useDomain } from '@/composables/useDomain';
@@ -12,7 +11,6 @@ import { useSharing } from '@/composables/useSharing';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useClient } from '@/composables/useClient';
 import { useApp } from '@/composables/useApp';
-import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useStore } from '@/composables/useStore';
 
 const props = defineProps({
