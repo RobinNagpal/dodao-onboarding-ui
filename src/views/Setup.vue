@@ -1,15 +1,12 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useModal } from '@/composables/useModal';
 import { setPageTitle } from '@/helpers/utils';
-import { useApolloQuery } from '@/composables/useApolloQuery';
-import { ENS_QUERY } from '@/helpers/queries';
 
 const router = useRouter();
 const { web3, web3Account } = useWeb3();
-const { ensApolloQuery } = useApolloQuery();
 const { modalAccountOpen } = useModal();
 
 onMounted(() => {
@@ -20,15 +17,9 @@ const ownedEnsDomains = ref([]);
 
 const loadOwnedEnsDomains = async () => {
   if (web3Account.value) {
-    const res = await ensApolloQuery({
-      query: ENS_QUERY,
-      variables: {
-        id: web3Account.value.toLowerCase()
-      }
-    });
-    ownedEnsDomains.value =  [{name: "robin.eth"}];
+    ownedEnsDomains.value = [{ name: 'robin.eth' }];
   } else {
-    ownedEnsDomains.value = [{name: "robin.eth"}];
+    ownedEnsDomains.value = [{ name: 'robin.eth' }];
   }
 };
 

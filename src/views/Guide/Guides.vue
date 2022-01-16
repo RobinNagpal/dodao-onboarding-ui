@@ -86,7 +86,6 @@ watch(store.space.guides, () => {
   loadProfiles(store.space.guides.map(guide => guide.author));
 });
 
-const { explore } = useApp();
 const guidesCount = computed(() => {
   const count = store.space.guides.length;
   return count ? count : 0;

@@ -53,14 +53,6 @@ const isValid = computed(() => {
   );
 });
 
-const textRecord = computed(() => {
-  const keyURI = encodeURIComponent(props.spaceId);
-  const address = web3Account.value
-    ? getAddress(web3Account.value)
-    : '<your-address>';
-  return `ipns://storage.snapshot.page/registry/${address}/${keyURI}`;
-});
-
 const isOwner = true;
 
 const categoriesString = computed(() => {
@@ -69,13 +61,6 @@ const categoriesString = computed(() => {
 
 const { filteredPlugins } = useSearchFilters();
 const plugins = computed(() => filteredPlugins());
-
-function pluginName(key) {
-  const plugin = plugins.value.find(obj => {
-    return obj.key === key;
-  });
-  return plugin?.name;
-}
 
 function slugify(string) {
   return string
@@ -93,7 +78,11 @@ async function handleSubmit() {
   if (isValid.value) {
     console.log('handleSubmit', JSON.stringify(form.value.name));
     if (form.value.filters.invalids) delete form.value.filters.invalids;
-    const result = await send({ id: form.value.name }, 'settings', form.value);
+    const result = await send(
+      { id: slugify(form.value.name) },
+      'settings',
+      form.value
+    );
     console.log('Result', result);
     if (result.id) {
       notify(['green', t('notify.saved')]);

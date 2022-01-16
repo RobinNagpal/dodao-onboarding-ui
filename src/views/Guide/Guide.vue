@@ -36,7 +36,6 @@ const id = route.params.id;
 const modalOpen = ref(false);
 const loading = ref(true);
 const guide = ref({});
-const results = ref({});
 const totalScore = ref(0);
 const scores = ref([]);
 
@@ -55,8 +54,7 @@ const threeDotItems = computed(() => {
 
 const browserHasHistory = computed(() => window.history.state.back);
 
-const { modalAccountOpen } = useModal();
-const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
+const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
 async function loadGuide() {
   guide.value = await getGuide(id);
@@ -66,12 +64,7 @@ async function loadGuide() {
   }
 
   loading.value = false;
-  if (loaded.value) loadResults();
 }
-
-async function loadResults() {}
-
-const { loadBy, loadingMore, loadMore } = useInfiniteLoader(10);
 
 async function loadPower() {
   if (
@@ -139,7 +132,6 @@ watch(web3Account, (val, prev) => {
 watch([loaded, web3Account], () => {
   if (web3.value.authLoading && !web3Account.value) return;
   if (!loaded.value) return;
-  loadResults();
   loadPower();
 });
 

@@ -2,18 +2,15 @@
 import { computed, onMounted } from 'vue';
 import { useApp } from '@/composables/useApp';
 import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
 import { formatSpace } from '@/helpers/utils';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 
 const route = useRoute();
-const router = useRouter();
 const { explore } = useApp();
 const { loadExtentedSpaces, extentedSpaces, spaceLoading } =
   useExtendedSpaces();
 
-
-const spaceId = computed(() =>  route.params.key);
+const spaceId = computed(() => route.params.key);
 const space = computed(
   () =>
     formatSpace(extentedSpaces.value?.find(s => s.id === spaceId.value)) ??

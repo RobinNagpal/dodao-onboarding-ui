@@ -50,12 +50,9 @@ const form = ref({
 });
 const modalOpen = ref(false);
 const selectedDate = ref('');
-const counter = ref(0);
 const nameForm = ref(null);
 const passValidation = ref([true]);
 const loadingSnapshot = ref(true);
-
-const guide = computed(() => Object.assign(form.value, {}));
 
 // Check if account passes space validation
 watchEffect(async () => {
