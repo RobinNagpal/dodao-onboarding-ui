@@ -188,7 +188,9 @@
     "vote": "Vote",
     "startDate": "Start date",
     "endDate": "End date",
-    "votingSystem": "Voting system"
+    "votingSystem": "Voting system",
+    "delete": "Delete",
+    "duplicate": "Duplicate"
   },
   "guides": {
     "header": "Onboarding Guides",

@@ -34,7 +34,7 @@ watchEffect(() => {
     <router-link
       class="p-4 block text-color"
       :to="{
-        name: 'spaceGuide',
+        name: 'guide',
         params: { key: guide.space.id, id: guide.id }
       }"
     >

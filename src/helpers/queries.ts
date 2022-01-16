@@ -68,14 +68,12 @@ export const GUIDE_QUERY = gql`
       ipfs
       title
       body
-      choices
       start
       end
       state
       author
       created
       network
-      type
       space {
         id
         name

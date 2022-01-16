@@ -47,7 +47,7 @@ const spaceRoutes = [
   },
   {
     path: 'guide/:id',
-    name: 'spaceGuide',
+    name: 'guide',
     component: Guide
   },
   {

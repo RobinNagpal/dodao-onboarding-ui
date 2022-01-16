@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, watch, onMounted, inject } from 'vue';
+import { computed, inject, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { getGuide, getPower } from '@/helpers/snapshot';
-import { setPageTitle, explorerUrl, ms, n, getIpfsUrl } from '@/helpers/utils';
+import { getIpfsUrl, ms, setPageTitle } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
 import { useProfiles } from '@/composables/useProfiles';
@@ -47,9 +47,9 @@ const isAdmin = computed(() => {
   return admins.includes(web3Account.value?.toLowerCase());
 });
 const threeDotItems = computed(() => {
-  const items = [{ text: t('duplicateGuide'), action: 'duplicate' }];
+  const items = [{ text: t('guide.duplicate'), action: 'duplicate' }];
   if (isAdmin.value || isCreator.value)
-    items.push({ text: t('deleteGuide'), action: 'delete' });
+    items.push({ text: t('guide.delete'), action: 'delete' });
   return items;
 });
 
@@ -61,7 +61,7 @@ const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
 async function loadGuide() {
   guide.value = await getGuide(id);
   // Redirect to guide spaceId if it doesn't match route key
-  if (route.name === 'spaceGuide' && props.spaceId !== guide.value.space.id) {
+  if (route.name === 'guide' && props.spaceId !== guide.value.space.id) {
     router.push({ name: 'error-404' });
   }
 
@@ -94,7 +94,7 @@ async function deleteGuide() {
     getExplore();
     store.space.guides = [];
     notify(['green', t('notify.guideDeleted')]);
-    router.push({ name: 'spaceGuides' });
+    router.push({ name: 'guide' });
   }
 }
 
@@ -161,7 +161,7 @@ onMounted(async () => {
           @click="
             browserHasHistory
               ? $router.go(-1)
-              : $router.push(domain ? { path: '/' } : { name: 'spaceGuides' })
+              : $router.push(domain ? { path: '/' } : { name: 'guide' })
           "
         >
           <Icon name="back" size="22" class="!align-middle" />
@@ -228,12 +228,6 @@ onMounted(async () => {
               #{{ guide.ipfs.slice(0, 7) }}
               <Icon name="external-link" class="ml-1" />
             </a>
-          </div>
-          <div>
-            <b>{{ $t('guide.votingSystem') }}</b>
-            <span class="float-right link-color">
-              {{ $t(`voting.${guide.type}`) }}
-            </span>
           </div>
           <div>
             <b>{{ $t('guide.startDate') }}</b>

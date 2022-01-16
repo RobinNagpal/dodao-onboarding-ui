@@ -34,7 +34,7 @@ watchEffect(() => {
     <router-link
       class="p-4 block text-color"
       :to="{
-        name: 'spaceGuide',
+        name: 'guide',
         params: { key: guide.space.id, id: guide.id }
       }"
     >
@@ -43,7 +43,7 @@ watchEffect(() => {
           <router-link
             class="text-color group"
             :to="{
-              name: 'spaceGuides',
+              name: 'guide',
               params: { key: guide.space.id }
             }"
           >
