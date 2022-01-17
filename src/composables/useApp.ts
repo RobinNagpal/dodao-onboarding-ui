@@ -26,7 +26,7 @@ export function useApp() {
   async function init() {
     const auth = getInstance();
     state.loading = true;
-    await Promise.all([getStrategies(), getExplore()]);
+    await Promise.all([getExplore()]);
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
     if (window?.parent === window)
@@ -39,19 +39,12 @@ export function useApp() {
     state.loading = false;
   }
 
-  async function getStrategies() {
-    const strategiesObj: any = await fetch(
-      `${import.meta.env.VITE_SCORES_URL}/api/strategies`
-    ).then(res => res.json());
-    strategies.value = strategiesObj;
-    return;
-  }
-
   async function getExplore() {
     const exploreObj: any = await fetch(
       `${import.meta.env.VITE_HUB_URL}/api/explore`
     ).then(res => res.json());
 
+    console.log('getExplore', exploreObj);
     exploreObj.spaces = Object.fromEntries(
       Object.entries(exploreObj.spaces).map(([id, space]: any) => {
         // map manually selected categories for verified spaces that don't have set their categories yet

@@ -50,7 +50,7 @@ onBeforeUnmount(() => window.removeEventListener('click', close));
           @click="handleClick(item.action)"
           :class="{ selected: item.selected }"
         >
-          <slot name="item" :item="item" :key="key">
+          <slot name="item" :item="item">
             <Icon
               v-if="item.icon"
               :name="item.icon"

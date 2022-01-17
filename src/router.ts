@@ -1,8 +1,11 @@
 import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
 import Home from '@/views/Home.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
+import Guide from '@/views/Guide/Guide.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
+import GuideCreate from '@/views/Guide/Create.vue';
 import Setup from '@/views/Setup.vue';
+import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Explore from '@/views/Explore.vue';
 import Strategy from '@/views/Strategy.vue';
@@ -11,7 +14,7 @@ import Delegate from '@/views/Delegate.vue';
 import Timeline from '@/views/Timeline.vue';
 import Space from '@/views/Space.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
-import SpaceProposals from '@/views/SpaceProposals.vue';
+import Guides from '@/views/Guide/Guides.vue';
 import { useDomain } from '@/composables/useDomain';
 
 // The frontend shows all spaces or just a single one, when being accessed
@@ -25,12 +28,32 @@ const spaceRoutes = [
   {
     path: '',
     name: 'spaceProposals',
-    component: SpaceProposals
+    component: Guides
+  },
+  {
+    path: '',
+    name: 'guides',
+    component: Guides
+  },
+  {
+    path: 'guides',
+    name: 'guides',
+    component: Guides
   },
   {
     path: 'proposal/:id',
     name: 'spaceProposal',
     component: SpaceProposal
+  },
+  {
+    path: 'guide/:id',
+    name: 'guide',
+    component: Guide
+  },
+  {
+    path: 'create/:from?',
+    name: 'guideCreate',
+    component: GuideCreate
   },
   {
     path: 'create/:from?',
@@ -76,6 +99,7 @@ if (domain) {
   routes.push(
     { path: '/', name: 'home', component: Home },
     { path: '/setup', name: 'setup', component: Setup },
+    { path: '/setup-space', name: 'setup-space', component: SetupSpace },
     { path: '/networks', name: 'networks', component: Explore },
     { path: '/strategies', name: 'strategies', component: Explore },
     { path: '/plugins', name: 'plugins', component: Explore },
@@ -98,18 +122,18 @@ routes.push({
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
+  scrollBehavior(to, from, savedGuide) {
+    if (savedGuide) {
+      return savedGuide;
     }
 
-    if (to.params.retainScrollPosition) {
+    if (to.params.retainScrollGuide) {
       return {};
     }
 
     if (to.hash) {
-      const position = { selector: to.hash };
-      return { el: position };
+      const guide = { selector: to.hash };
+      return { el: guide };
     }
 
     return { top: 0 };

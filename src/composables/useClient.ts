@@ -81,6 +81,16 @@ export function useClient() {
         plugins: JSON.stringify(plugins),
         metadata: JSON.stringify({})
       });
+    } else if (type === 'guide') {
+      return clientEIP712.guide(auth.web3, web3.value.account, {
+        space: space.id,
+        title: payload.name,
+        body: payload.body,
+        start: payload.start,
+        end: payload.end,
+        network: space.network,
+        metadata: JSON.stringify({})
+      });
     } else if (type === 'vote') {
       return clientEIP712.vote(auth.web3, web3.value.account, {
         space: space.id,
@@ -99,6 +109,8 @@ export function useClient() {
         space: space.id,
         settings: JSON.stringify(payload)
       });
+    } else {
+      throw new Error('Unknown type ' + type);
     }
   }
 

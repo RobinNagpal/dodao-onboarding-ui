@@ -79,9 +79,7 @@ const textRecord = computed(() => {
   return `ipns://storage.snapshot.page/registry/${address}/${keyURI}`;
 });
 
-const isOwner = computed(() => {
-  return currentTextRecord.value === textRecord.value;
-});
+const isOwner = true;
 
 const isAdmin = computed(() => {
   if (!props.space || !currentTextRecord.value) return false;

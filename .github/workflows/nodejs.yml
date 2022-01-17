@@ -11,7 +11,20 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          token: ${{ secrets.DODAO_ONBOARDING_SCHEMAS_ACCESS_TOKEN }}
+          persist-credentials: true
+#      - uses: actions/checkout@v1
+#        with:
+#          repository: RobinNagpal/dodao-onboarding-schemas
+#          token: ${{ secrets.DODAO_ONBOARDING_SCHEMAS_ACCESS_TOKEN }}
+#          persist-credentials: true
+#      - name: checkout submodule
+#        run: |
+#          git submodule init
+#          git submodule update
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

@@ -1,7 +1,7 @@
 import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
 import voting from '@snapshot-labs/snapshot.js/src/voting';
 import { apolloClient } from '@/helpers/apollo';
-import { PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
+import { GUIDE_QUERY, PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
 import cloneDeep from 'lodash/cloneDeep';
 
 export async function getProposalVotes(
@@ -24,6 +24,27 @@ export async function getProposalVotes(
     console.timeEnd('getProposalVotes');
     const votesResClone = cloneDeep(response);
     return votesResClone.data.votes;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+}
+
+export async function getGuide(id) {
+  try {
+    console.time('getGuide');
+    const response = await apolloClient.query({
+      query: GUIDE_QUERY,
+      variables: {
+        id
+      }
+    });
+    console.timeEnd('getGuides');
+
+    const positionResClone = cloneDeep(response);
+    const guide = positionResClone.data.guide;
+
+    return guide;
   } catch (e) {
     console.log(e);
     return e;

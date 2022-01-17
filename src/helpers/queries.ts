@@ -61,6 +61,27 @@ export const PROPOSAL_QUERY = gql`
   }
 `;
 
+export const GUIDE_QUERY = gql`
+  query Guide($id: String!) {
+    guide(id: $id) {
+      id
+      ipfs
+      title
+      body
+      start
+      end
+      state
+      author
+      created
+      network
+      space {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const PROPOSALS_QUERY = gql`
   query Proposals(
     $first: Int!
@@ -101,6 +122,45 @@ export const PROPOSALS_QUERY = gql`
       scores_total
       scores
       votes
+    }
+  }
+`;
+
+export const GUIDES_QUERY = gql`
+  query Guides(
+    $first: Int!
+    $skip: Int!
+    $state: String!
+    $space: String
+    $space_in: [String]
+    $author_in: [String]
+  ) {
+    guides(
+      first: $first
+      skip: $skip
+      where: {
+        space: $space
+        state: $state
+        space_in: $space_in
+        author_in: $author_in
+      }
+    ) {
+      id
+      ipfs
+      title
+      body
+      start
+      end
+      state
+      author
+      created
+      space {
+        id
+        name
+        members
+        avatar
+        symbol
+      }
     }
   }
 `;
