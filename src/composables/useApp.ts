@@ -40,9 +40,11 @@ export function useApp() {
   }
 
   async function getExplore() {
-    const exploreObj: any = await fetch(
-      `${import.meta.env.VITE_HUB_URL}/api/explore`
-    ).then(res => res.json());
+    const viteHubUrl = import.meta.env.VITE_HUB_URL;
+    console.log('viteHubUrl', viteHubUrl);
+    const exploreObj: any = await fetch(`${viteHubUrl}/api/explore`).then(res =>
+      res.json()
+    );
 
     console.log('getExplore', exploreObj);
     exploreObj.spaces = Object.fromEntries(
