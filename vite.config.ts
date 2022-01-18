@@ -6,7 +6,7 @@ import visualizer from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   build: {
-    sourcemap: 'inline',
+    sourcemap: true,
     minify: false
   },
   define: {
