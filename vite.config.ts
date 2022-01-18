@@ -5,6 +5,10 @@ import ViteComponents from 'unplugin-vue-components/vite';
 import visualizer from 'rollup-plugin-visualizer';
 
 export default defineConfig({
+  build: {
+    sourcemap: 'inline',
+    minify: false
+  },
   define: {
     'process.env': process.env
   },
@@ -27,6 +31,7 @@ export default defineConfig({
     },
     dedupe: ['@popperjs/core']
   },
+
   optimizeDeps: {
     include: ['color'],
     // @ts-ignore
