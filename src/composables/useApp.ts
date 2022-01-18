@@ -40,26 +40,33 @@ export function useApp() {
   }
 
   async function getExplore() {
-    const exploreObj: any = await fetch(
-      `${import.meta.env.VITE_HUB_URL}/api/explore`
-    ).then(res => res.json());
+    const viteHubUrl = import.meta.env.VITE_HUB_URL;
+    console.log('viteHubUrl', viteHubUrl);
+    try {
+      const exploreObj: any = await fetch(`${viteHubUrl}/api/explore`).then(
+        res => res.json()
+      );
 
-    console.log('getExplore', exploreObj);
-    exploreObj.spaces = Object.fromEntries(
-      Object.entries(exploreObj.spaces).map(([id, space]: any) => {
-        // map manually selected categories for verified spaces that don't have set their categories yet
-        // set to empty array if space.categories is missing
-        space.categories = space.categories?.length
-          ? space.categories
-          : verifiedSpacesCategories[id]?.length
-          ? verifiedSpacesCategories[id]
-          : [];
+      console.log('getExplore', exploreObj);
+      exploreObj.spaces = Object.fromEntries(
+        Object.entries(exploreObj.spaces).map(([id, space]: any) => {
+          // map manually selected categories for verified spaces that don't have set their categories yet
+          // set to empty array if space.categories is missing
+          space.categories = space.categories?.length
+            ? space.categories
+            : verifiedSpacesCategories[id]?.length
+            ? verifiedSpacesCategories[id]
+            : [];
 
-        return [id, { id, ...space }];
-      })
-    );
+          return [id, { id, ...space }];
+        })
+      );
+      explore.value = exploreObj;
+    } catch (e) {
+      console.error(e);
+      explore.value = {};
+    }
 
-    explore.value = exploreObj;
     return;
   }
 
