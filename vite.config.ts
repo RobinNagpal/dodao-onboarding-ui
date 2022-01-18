@@ -5,6 +5,10 @@ import ViteComponents from 'unplugin-vue-components/vite';
 import visualizer from 'rollup-plugin-visualizer';
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+    minify: false
+  },
   define: {
     'process.env': process.env
   },
