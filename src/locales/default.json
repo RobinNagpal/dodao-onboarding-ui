@@ -184,6 +184,12 @@
     }
   },
   "guide": {
+    "create": {
+      "name": "Name",
+      "excerpt": "Guide excerpt...",
+      "basicInfo": "Basic Information",
+      "stepByStep": "Step by Step Guide"
+    },
     "castVote": "Cast your vote",
     "vote": "Vote",
     "startDate": "Start date",

@@ -40,6 +40,7 @@ const route = useRoute();
 const blockNumber = ref(-1);
 const bodyLimit = ref(14400);
 const preview = ref(false);
+const showErrors = ref(false);
 const form = ref({
   name: '',
   body: '',
@@ -48,6 +49,7 @@ const form = ref({
   snapshot: '',
   metadata: {}
 });
+
 const modalOpen = ref(false);
 const selectedDate = ref('');
 const nameForm = ref(null);
@@ -158,6 +160,10 @@ async function loadGuide() {
   form.value.metadata = { network };
 }
 
+function inputError(field) {
+  return false;
+}
+
 onMounted(async () => {
   setPageTitle('page.title.space.create', { space: props.space.name });
   nameForm.value.focus();
@@ -177,119 +183,87 @@ watchEffect(async () => {
 
 <template>
   <Layout v-bind="$attrs">
-    <template #content-left>
-      <Block v-if="passValidation[0] === false">
-        <Icon name="warning" class="mr-1" />
-        <span v-if="passValidation[1] === 'basic'">
-          {{
-            space.validation?.params.minScore || space?.filters.minScore
-              ? $tc('create.validationWarning.basic.minScore', [
-                  n(space.filters.minScore),
-                  space.symbol
-                ])
-              : $t('create.validationWarning.basic.member')
-          }}
-        </span>
-        <span v-else>
-          {{
-            $t(
-              space.validation.params.rules ||
-                'create.validationWarning.customValidation'
-            )
-          }}
-        </span>
-      </Block>
-      <div class="px-4 md:px-0 overflow-hidden">
-        <router-link
-          :to="domain ? { path: '/' } : { name: 'guides' }"
-          class="text-color"
-        >
-          <Icon name="back" size="22" class="!align-middle" />
-          {{ space.name }}
-        </router-link>
-        <UiSidebarButton
-          v-if="!preview"
-          @click="preview = true"
-          class="float-right"
-        >
-          <Icon name="preview" size="18" />
-        </UiSidebarButton>
-        <UiSidebarButton
-          v-if="preview"
-          @click="preview = false"
-          class="float-right"
-        >
-          <Icon name="back" size="18" />
-        </UiSidebarButton>
-      </div>
-      <div class="px-4 md:px-0">
-        <div class="flex flex-col mb-6">
-          <h1 v-if="preview" v-text="form.name || 'Untitled'" class="mb-2" />
-          <input
-            v-if="!preview"
-            v-model="form.name"
-            maxlength="128"
-            class="text-2xl font-bold input mb-2"
-            :placeholder="$t('create.question')"
-            ref="nameForm"
-          />
-          <TextareaAutosize
-            v-if="!preview"
+    <div class="px-4 md:px-0 overflow-hidden">
+      <router-link
+        :to="domain ? { path: '/' } : { name: 'guides' }"
+        class="text-color"
+      >
+        <Icon name="back" size="22" class="!align-middle" />
+        {{ space.name }}
+      </router-link>
+      <UiSidebarButton
+        v-if="!preview"
+        @click="preview = true"
+        class="float-right"
+      >
+        <Icon name="preview" size="18" />
+      </UiSidebarButton>
+      <UiSidebarButton
+        v-if="preview"
+        @click="preview = false"
+        class="float-right"
+      >
+        <Icon name="back" size="18" />
+      </UiSidebarButton>
+    </div>
+    <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+      <div class="mb-2">
+        <UiInput v-model="form.name" :error="inputError('name')">
+          <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
+        </UiInput>
+        <UiButton class="block w-full px-3" style="height: auto">
+          <TextareaArray
             v-model="form.body"
-            class="input pt-0"
-            style="font-size: 22px"
-            :placeholder="$t('create.content')"
+            :placeholder="$t(`guide.create.excerpt`)"
+            class="input w-full text-left"
+            style="font-size: 18px"
           />
-          <div v-if="form.body && preview" class="mb-4">
-            <UiMarkdown :body="form.body" />
-          </div>
-          <p v-if="form.body.length > bodyLimit" class="!text-red mt-4">
-            -{{ n(-(bodyLimit - form.body.length)) }}
-          </p>
-        </div>
-      </div>
-    </template>
-    <template #sidebar-right v-if="!preview">
-      <Block :title="$t('actions')" :loading="spaceLoading">
-        <div class="mb-2">
-          <UiButton
-            @click="(modalOpen = true), (selectedDate = 'start')"
-            class="w-full mb-2"
-          >
-            <span v-if="!dateStart">{{ $t('create.startDate') }}</span>
-            <span v-else v-text="$d(dateStart * 1e3, 'short', 'en-US')" />
-          </UiButton>
-          <UiButton
-            @click="(modalOpen = true), (selectedDate = 'end')"
-            class="w-full mb-2"
-          >
-            <span v-if="!dateEnd">{{ $t('create.endDate') }}</span>
-            <span v-else v-text="$d(dateEnd * 1e3, 'short', 'en-US')" />
-          </UiButton>
-          <UiButton
-            v-if="route.query.snapshot"
-            :loading="loadingSnapshot"
-            class="w-full mb-2"
-          >
-            <input
-              v-model="form.snapshot"
-              type="number"
-              class="input w-full text-center"
-              :placeholder="$t('create.snapshotBlock')"
-            />
-          </UiButton>
-        </div>
-        <UiButton
-          @click="clickSubmit"
-          :disabled="!isValid"
-          :loading="clientLoading || queryLoading"
-          class="block w-full"
-          primary
-        >
-          {{ $t('create.publish') }}
         </UiButton>
-      </Block>
-    </template>
+      </div>
+    </Block>
+    <Block :title="$t('guide.create.stepByStep')">
+      <GuideStepper />
+    </Block>
+
+    <Block :title="$t('actions')" :loading="spaceLoading" v-if="!preview">
+      <div class="mb-2">
+        <UiButton
+          @click="(modalOpen = true), (selectedDate = 'start')"
+          class="w-full mb-2"
+        >
+          <span v-if="!dateStart">{{ $t('create.startDate') }}</span>
+          <span v-else v-text="$d(dateStart * 1e3, 'short', 'en-US')" />
+        </UiButton>
+        <UiButton
+          @click="(modalOpen = true), (selectedDate = 'end')"
+          class="w-full mb-2"
+        >
+          <span v-if="!dateEnd">{{ $t('create.endDate') }}</span>
+          <span v-else v-text="$d(dateEnd * 1e3, 'short', 'en-US')" />
+        </UiButton>
+        <UiButton
+          v-if="route.query.snapshot"
+          :loading="loadingSnapshot"
+          class="w-full mb-2"
+        >
+          <input
+            v-model="form.snapshot"
+            type="number"
+            class="input w-full text-center"
+            :placeholder="$t('create.snapshotBlock')"
+          />
+        </UiButton>
+      </div>
+      <UiButton
+        @click="clickSubmit"
+        :disabled="!isValid"
+        :loading="clientLoading || queryLoading"
+        class="block w-full"
+        primary
+      >
+        {{ $t('create.publish') }}
+      </UiButton>
+    </Block>
   </Layout>
   <teleport to="#modal">
     <ModalSelectDate
@@ -299,25 +273,5 @@ watchEffect(async () => {
       @close="modalOpen = false"
       @input="setDate"
     />
-    <ModalTerms
-      :open="modalTermsOpen"
-      :space="space"
-      @close="modalTermsOpen = false"
-      @accept="acceptTerms(), handleSubmit()"
-    />
   </teleport>
 </template>
-
-<style>
-.list-leave-active,
-.list-enter-active {
-  transition: all 0.3s;
-}
-.list-move {
-  transition: transform 0.3s;
-}
-.list-enter,
-.list-leave-to {
-  opacity: 0;
-}
-</style>

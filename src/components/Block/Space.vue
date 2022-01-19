@@ -103,6 +103,11 @@ watchEffect(() => {
           class="block px-4 py-2 sidenav-item"
         />
         <router-link
+          :to="{ name: 'guideCreate', params: { key: space.id } }"
+          v-text="$t('guides.new')"
+          class="block px-4 py-2 sidenav-item"
+        />
+        <router-link
           v-if="
             space.strategies?.find(strategy => strategy.name === 'delegation')
           "
