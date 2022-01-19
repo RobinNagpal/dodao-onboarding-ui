@@ -1,6 +1,5 @@
 <script>
 import Plugin from '@/../snapshot-plugins/src/plugins/safeSnap';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import {
   createBatch,
   getGnosisSafeBalances,
@@ -8,6 +7,7 @@ import {
   removeHexPrefix
 } from '@/helpers/abi/utils';
 import { shorten } from '@/helpers/utils';
+import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 
 const plugin = new Plugin();
 

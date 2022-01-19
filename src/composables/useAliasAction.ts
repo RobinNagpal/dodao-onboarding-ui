@@ -1,12 +1,12 @@
-import { computed, ref } from 'vue';
-import { lsGet, lsSet } from '@/helpers/utils';
+import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useWeb3 } from '@/composables/useWeb3';
+import client from '@/helpers/clientEIP712';
+import { ALIASES_QUERY } from '@/helpers/queries';
+import { lsGet, lsSet } from '@/helpers/utils';
+import { getDefaultProvider, Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { getDefaultProvider, Provider } from '@ethersproject/providers';
-import { ALIASES_QUERY } from '@/helpers/queries';
-import { useApolloQuery } from '@/composables/useApolloQuery';
-import client from '@/helpers/clientEIP712';
+import { computed, ref } from 'vue';
 
 const aliases = ref(lsGet('aliases') || {});
 const isValidAlias = ref(false);

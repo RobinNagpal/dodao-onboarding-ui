@@ -1,12 +1,12 @@
-import { ref, computed, reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import orderBy from 'lodash/orderBy';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useFollowSpace } from '@/composables/useFollowSpace';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import verified from '@/../snapshot-spaces/spaces/verified.json';
 import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.json';
+import verified from '@/../snapshot-spaces/spaces/verified.json';
+import { useFollowSpace } from '@/composables/useFollowSpace';
+import { useWeb3 } from '@/composables/useWeb3';
+import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import networks from '@snapshot-labs/snapshot.js/src/networks.json';
+import orderBy from 'lodash/orderBy';
+import { computed, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const state = reactive({
   init: false,

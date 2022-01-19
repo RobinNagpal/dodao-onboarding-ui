@@ -1,6 +1,6 @@
-import { useI18n } from 'vue-i18n';
 import { useCopy } from '@/composables/useCopy';
 import { useShare } from '@vueuse/core';
+import { useI18n } from 'vue-i18n';
 
 export function useSharing() {
   const { t } = useI18n();

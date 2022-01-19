@@ -1,7 +1,7 @@
-import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
-import voting from '@snapshot-labs/snapshot.js/src/voting';
 import { apolloClient } from '@/helpers/apollo';
 import { GUIDE_QUERY, PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
+import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
+import voting from '@snapshot-labs/snapshot.js/src/voting';
 import cloneDeep from 'lodash/cloneDeep';
 
 export async function getProposalVotes(

@@ -1,6 +1,6 @@
 <script>
+import { getSafeHash, validateSafeData } from '@/helpers/abi/utils';
 import { clone } from '@snapshot-labs/snapshot.js/src/utils';
-import { validateSafeData, getSafeHash } from '@/helpers/abi/utils';
 
 const isValidInput = input => {
   return input.safes.every(validateSafeData);

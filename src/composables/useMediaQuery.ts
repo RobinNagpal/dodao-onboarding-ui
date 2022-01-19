@@ -1,4 +1,4 @@
-import { onBeforeMount, onBeforeUnmount, ref, computed } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
 // Breakpoints from PrimerCSS
 export function useMediaQuery() {
   const width = ref(window.innerWidth);

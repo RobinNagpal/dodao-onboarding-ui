@@ -1,6 +1,6 @@
-import { computed, ref } from 'vue';
-import { shorten } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
+import { shorten } from '@/helpers/utils';
+import { computed, ref } from 'vue';
 
 export function useUsername() {
   const { web3Account } = useWeb3();

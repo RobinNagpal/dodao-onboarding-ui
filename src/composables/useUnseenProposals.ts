@@ -1,6 +1,6 @@
-import { ref } from 'vue';
-import { subgraphRequest } from '@snapshot-labs/snapshot.js/src/utils';
 import { lsGet } from '@/helpers/utils';
+import { subgraphRequest } from '@snapshot-labs/snapshot.js/src/utils';
+import { ref } from 'vue';
 
 const proposalIds = ref([]);
 const lastSeenProposals = ref({});

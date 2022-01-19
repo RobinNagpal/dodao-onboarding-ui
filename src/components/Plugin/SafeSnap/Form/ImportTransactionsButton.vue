@@ -1,8 +1,8 @@
 <script>
 import { ETHEREUM_COIN } from '@/helpers/abi/utils';
-import { parseEther } from '@ethersproject/units';
-import { isAddress } from '@ethersproject/address';
 import { FunctionFragment, Interface } from '@ethersproject/abi';
+import { isAddress } from '@ethersproject/address';
+import { parseEther } from '@ethersproject/units';
 
 export default {
   name: 'ImportTransactionsButton',

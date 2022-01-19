@@ -1,7 +1,7 @@
-import { computed, ref } from 'vue';
-import cloneDeep from 'lodash/cloneDeep';
 import { apolloClient } from '@/helpers/apollo';
 import { ensApolloClient } from '@/helpers/ens';
+import cloneDeep from 'lodash/cloneDeep';
+import { computed, ref } from 'vue';
 
 export function useApolloQuery() {
   const loading = ref(false);

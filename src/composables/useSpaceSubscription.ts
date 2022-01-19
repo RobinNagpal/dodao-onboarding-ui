@@ -1,12 +1,12 @@
-import { computed, ref } from 'vue';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useApolloQuery } from '@/composables/useApolloQuery';
-import { SUBSCRIPTIONS_QUERY } from '@/helpers/queries';
 import { useAliasAction } from '@/composables/useAliasAction';
+import { useApolloQuery } from '@/composables/useApolloQuery';
+import { useWeb3 } from '@/composables/useWeb3';
+import client from '@/helpers/clientEIP712';
+import { SUBSCRIPTIONS_QUERY } from '@/helpers/queries';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { beams } from '../helpers/beams';
 import { useNotifications } from './useNotifications';
-import { useI18n } from 'vue-i18n';
-import client from '@/helpers/clientEIP712';
 
 const subscriptions = ref<any[] | undefined>(undefined);
 

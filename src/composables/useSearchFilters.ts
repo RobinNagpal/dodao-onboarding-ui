@@ -1,9 +1,9 @@
-import { computed } from 'vue';
-import skins from '@/../snapshot-spaces/skins';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import plugins from '@/../snapshot-plugins/src/plugins';
-import validations from '@snapshot-labs/snapshot.js/src/validations';
+import skins from '@/../snapshot-spaces/skins';
 import { useApp } from '@/composables/useApp';
+import networks from '@snapshot-labs/snapshot.js/src/networks.json';
+import validations from '@snapshot-labs/snapshot.js/src/validations';
+import { computed } from 'vue';
 
 export function useSearchFilters() {
   const { strategies, explore } = useApp();

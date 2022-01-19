@@ -1,9 +1,9 @@
-import gql from 'graphql-tag';
 import {
   ApolloClient,
   createHttpLink,
   InMemoryCache
 } from '@apollo/client/core';
+import gql from 'graphql-tag';
 
 // HTTP connection to the API
 const httpLink = createHttpLink({

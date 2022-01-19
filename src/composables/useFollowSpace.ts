@@ -1,11 +1,11 @@
-import { computed, ref } from 'vue';
+import { useAliasAction } from '@/composables/useAliasAction';
+import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
-import { useApolloQuery } from '@/composables/useApolloQuery';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { FOLLOWS_QUERY } from '@/helpers/queries';
-import { useAliasAction } from '@/composables/useAliasAction';
 import client from '@/helpers/clientEIP712';
+import { FOLLOWS_QUERY } from '@/helpers/queries';
+import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { computed, ref } from 'vue';
 import { useSpaceSubscription } from './useSpaceSubscription';
 
 const following = ref([]);

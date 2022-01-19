@@ -1,6 +1,6 @@
-import { computed } from 'vue';
-import categories from '@/helpers/categories.json';
 import { useApp } from '@/composables/useApp';
+import categories from '@/helpers/categories.json';
+import { computed } from 'vue';
 
 export function useCategories() {
   const { orderedSpaces } = useApp();

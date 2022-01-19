@@ -1,5 +1,5 @@
+import { lsGet, lsSet } from '@/helpers/utils';
 import { ref } from 'vue';
-import { lsSet, lsGet } from '@/helpers/utils';
 
 export function useTerms(spaceKey) {
   const modalTermsOpen = ref(false);

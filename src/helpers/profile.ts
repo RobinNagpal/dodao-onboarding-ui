@@ -1,6 +1,6 @@
 import namehash from '@ensdomains/eth-ens-namehash';
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import { call } from '@snapshot-labs/snapshot.js/src/utils';
+import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 
 function ensReverseRecordRequest(addresses) {
   const network = '1';

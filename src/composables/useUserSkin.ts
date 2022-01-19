@@ -1,5 +1,5 @@
-import { ref, watch } from 'vue';
 import { lsGet, lsSet } from '@/helpers/utils';
+import { ref, watch } from 'vue';
 
 const NOT_SET = 'not-set';
 const DARK_MODE = 'dark-mode';

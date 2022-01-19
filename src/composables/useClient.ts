@@ -1,11 +1,11 @@
-import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import client from '@/helpers/client';
-import clientGnosisSafe from '@/helpers/clientGnosisSafe';
-import clientEIP712 from '@/helpers/clientEIP712';
-import { useWeb3 } from '@/composables/useWeb3';
 import { useNotifications } from '@/composables/useNotifications';
+import { useWeb3 } from '@/composables/useWeb3';
+import client from '@/helpers/client';
+import clientEIP712 from '@/helpers/clientEIP712';
+import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export function useClient() {
   const { t } = useI18n();

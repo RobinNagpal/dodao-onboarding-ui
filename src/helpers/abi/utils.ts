@@ -1,12 +1,8 @@
-import memoize from 'lodash/memoize';
-import { isAddress } from '@ethersproject/address';
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import SafeSnapPlugin, {
   ModuleTransaction
 } from '@/../snapshot-plugins/src/plugins/safeSnap';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { keccak256, pack } from '@ethersproject/solidity';
-import { hexDataLength, isHexString } from '@ethersproject/bytes';
+import { InterfaceDecoder } from '@/helpers/abi/decoder';
+import { parseAmount, parseValueInput } from '@/helpers/utils';
 import {
   FormatTypes,
   Fragment,
@@ -14,10 +10,14 @@ import {
   Interface,
   ParamType
 } from '@ethersproject/abi';
-import { BigNumberish } from '@ethersproject/bignumber';
 import { JsonFragment } from '@ethersproject/abi/src.ts/fragments';
-import { InterfaceDecoder } from '@/helpers/abi/decoder';
-import { parseAmount, parseValueInput } from '@/helpers/utils';
+import { isAddress } from '@ethersproject/address';
+import { BigNumberish } from '@ethersproject/bignumber';
+import { hexDataLength, isHexString } from '@ethersproject/bytes';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { keccak256, pack } from '@ethersproject/solidity';
+import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
+import memoize from 'lodash/memoize';
 
 interface Collectable {
   id: string;

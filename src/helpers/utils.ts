@@ -1,14 +1,14 @@
 import pkg from '@/../package.json';
-import { formatEther } from '@ethersproject/units';
+import i18n from '@/helpers/i18n';
 import { BigNumber } from '@ethersproject/bignumber';
+import { formatEther } from '@ethersproject/units';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import voting from '@snapshot-labs/snapshot.js/src/voting';
 import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
-import numeral from 'numeral';
-import { format } from 'timeago.js';
+import voting from '@snapshot-labs/snapshot.js/src/voting';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import i18n from '@/helpers/i18n';
+import numeral from 'numeral';
+import { format } from 'timeago.js';
 
 dayjs.extend(relativeTime);
 

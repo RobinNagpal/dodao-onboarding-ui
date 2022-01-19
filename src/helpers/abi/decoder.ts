@@ -1,7 +1,7 @@
 import {
+  Fragment,
   FunctionFragment,
   Interface,
-  Fragment,
   JsonFragment
 } from '@ethersproject/abi';
 import { Logger } from '@ethersproject/logger';

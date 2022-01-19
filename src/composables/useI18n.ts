@@ -1,10 +1,10 @@
-import { ref } from 'vue';
-import { lsGet, lsSet } from '@/helpers/utils';
 import i18n, {
   defaultLocale,
-  setI18nLanguage,
-  loadLocaleMessages
+  loadLocaleMessages,
+  setI18nLanguage
 } from '@/helpers/i18n';
+import { lsGet, lsSet } from '@/helpers/utils';
+import { ref } from 'vue';
 
 const currentLocale = ref(lsGet('locale', defaultLocale));
 

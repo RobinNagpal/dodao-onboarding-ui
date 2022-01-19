@@ -1,7 +1,7 @@
 <script>
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import Plugin from '@/../snapshot-plugins/src/plugins/quorum';
-import { shorten, n } from '@/helpers/utils';
+import { n, shorten } from '@/helpers/utils';
+import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 
 export default {
   setup() {

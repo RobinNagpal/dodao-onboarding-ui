@@ -1,7 +1,7 @@
 <script>
-import { formatUnits } from '@ethersproject/units';
 import { getAbiFirstFunctionName } from '@/helpers/abi/utils';
 import { shorten } from '@/helpers/utils';
+import { formatUnits } from '@ethersproject/units';
 
 const labels = {
   contractInteraction: 'Contract Interaction',

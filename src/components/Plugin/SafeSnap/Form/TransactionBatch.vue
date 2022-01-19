@@ -1,15 +1,15 @@
 <script>
-import { clone } from '@snapshot-labs/snapshot.js/src/utils';
-import { useSafesnap } from '@/composables/useSafesnap';
 import chevronIcon from '@/assets/icons/chevron.svg';
+import { useSafesnap } from '@/composables/useSafesnap';
 import {
   createBatch,
   ERC20ContractABI,
   ERC721ContractABI,
   removeHexPrefix
 } from '@/helpers/abi/utils';
-import { formatEther } from '@ethersproject/units';
 import { FunctionFragment, Interface } from '@ethersproject/abi';
+import { formatEther } from '@ethersproject/units';
+import { clone } from '@snapshot-labs/snapshot.js/src/utils';
 
 export default {
   props: ['modelValue', 'nonce', 'config'],

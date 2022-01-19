@@ -1,5 +1,5 @@
 <script>
-import { parseUnits, formatUnits } from '@ethersproject/units';
+import { formatUnits, parseUnits } from '@ethersproject/units';
 
 export default {
   props: ['modelValue', 'inputProps', 'label', 'disabled', 'decimals'],
