@@ -7,7 +7,7 @@ import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
 import { useUnseenProposals } from '@/composables/useUnseenProposals';
 import { lsSet, lsGet } from '@/helpers/utils';
-
+import dodaoLogo from '@/assets/icons/logo/logo.svg';
 const { explore } = useApp();
 const { web3Account } = useWeb3();
 const { loadFollows, followingSpaces } = useFollowSpace();
@@ -77,7 +77,12 @@ onMounted(() => {
     <div class="flex flex-col h-full overflow-auto no-scrollbar">
       <div class="min-h-[78px] h-[78px] flex items-center justify-center">
         <router-link :to="{ path: '/' }">
-          <Icon size="36" name="dodao" class="text-snapshot cursor-pointer" />
+          <img
+            :src="dodaoLogo"
+            alt="arrow"
+            class="arrow"
+            :style="{ width: `48px`, height: `48px` }"
+          />
         </router-link>
       </div>
       <div
