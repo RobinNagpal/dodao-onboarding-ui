@@ -31,7 +31,7 @@
       "
       class="my-4"
     >
-      <div class="text-base block-bg p-3 rounded-3xl border inline-block">
+      <div class="text-base block-bg p-3 rounded-lg border inline-block">
         <h5 class="text-center link-color">
           Reality oracle
           <a
@@ -154,17 +154,17 @@
 
 <script>
 import Plugin from '@/../snapshot-plugins/src/plugins/safeSnap';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { sleep } from '@snapshot-labs/snapshot.js/src/utils';
-import { BigNumber } from '@ethersproject/bignumber';
-import { formatBatchTransaction } from '@/helpers/abi/utils';
-import { formatUnits } from '@ethersproject/units';
-import { useSafesnap } from '@/composables/useSafesnap';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useTxStatus } from '@/composables/useTxStatus';
 import { useNotifications } from '@/composables/useNotifications';
+import { useSafesnap } from '@/composables/useSafesnap';
+import { useTxStatus } from '@/composables/useTxStatus';
+import { useWeb3 } from '@/composables/useWeb3';
+import { formatBatchTransaction } from '@/helpers/abi/utils';
 import { ms } from '@/helpers/utils';
+import { BigNumber } from '@ethersproject/bignumber';
+import { formatUnits } from '@ethersproject/units';
+import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import networks from '@snapshot-labs/snapshot.js/src/networks.json';
+import { sleep } from '@snapshot-labs/snapshot.js/src/utils';
 
 const { clearBatchError, setBatchError } = useSafesnap();
 const { web3 } = useWeb3();
