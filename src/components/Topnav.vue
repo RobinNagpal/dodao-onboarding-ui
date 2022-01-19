@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { shorten, getIpfsUrl } from '@/helpers/utils';
+import { getIpfsUrl, shorten } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
 import { useDomain } from '@/composables/useDomain';
 import { useApp } from '@/composables/useApp';
