@@ -145,6 +145,10 @@
   content: "\e6da";
 }
 
+.icondodao:before {
+  background-image: url("../icons/logo/logo.svg");
+}
+
 .iconstars:before {
   content: "\e6a3";
 }

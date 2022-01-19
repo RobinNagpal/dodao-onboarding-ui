@@ -19,8 +19,6 @@ const {
   updateLastSeenProposal
 } = useUnseenProposals();
 
-const modalAboutOpen = ref(false);
-const modalLangOpen = ref(false);
 const draggableSpaces = ref([]);
 
 function saveSpaceOrder() {
@@ -79,11 +77,7 @@ onMounted(() => {
     <div class="flex flex-col h-full overflow-auto no-scrollbar">
       <div class="min-h-[78px] h-[78px] flex items-center justify-center">
         <router-link :to="{ path: '/' }">
-          <Icon
-            size="36"
-            name="snapshot"
-            class="text-snapshot cursor-pointer"
-          />
+          <Icon size="36" name="dodao" class="text-snapshot cursor-pointer" />
         </router-link>
       </div>
       <div
@@ -128,19 +122,8 @@ onMounted(() => {
         </router-link>
         <div
           class="flex flex-col items-center space-y-2 justify-center !mb-2 !mt-auto py-2"
-        >
-          <UiSidebarButton @click="modalAboutOpen = true">
-            <span class="mt-1 link-color">?</span>
-          </UiSidebarButton>
-        </div>
+        ></div>
       </div>
     </div>
   </div>
-  <teleport to="#modal">
-    <ModalAbout
-      :open="modalAboutOpen"
-      @close="modalAboutOpen = false"
-      @openLang="modalLangOpen = true" />
-    <ModalSelectLanguage :open="modalLangOpen" @close="modalLangOpen = false"
-  /></teleport>
 </template>
