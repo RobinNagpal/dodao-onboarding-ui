@@ -26,7 +26,7 @@ const space = computed(() => {
 });
 
 function setTitle() {
-  document.title = space.value?.name ?? 'Snapshot';
+  document.title = space.value?.name ?? 'DoDAO';
 }
 
 async function handleLogin(connector) {
@@ -61,7 +61,7 @@ onMounted(() => setTitle());
               class="flex items-center"
               style="font-size: 24px; padding-top: 4px"
             >
-              snapshot
+              DoDAO
             </router-link>
           </div>
           <div :key="web3.account">

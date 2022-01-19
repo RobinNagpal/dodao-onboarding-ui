@@ -14,7 +14,7 @@
   "plugins": "Plugins",
   "information": "Information",
   "confirm": "Confirm",
-  "snapshot": "Snapshot",
+  "dodao": "DoDAO",
   "strategies": "Strategie(s)",
   "strategiesPage": "Strategies",
   "space": "Space",
@@ -141,7 +141,7 @@
     "startTime": "Select start time",
     "endTime": "Select end time",
     "publish": "Publish",
-    "snapshotBlock": "Snapshot block number",
+    "dodaoBlock": "DoDAO block number",
     "validationWarning": {
       "basic": {
         "member": "You need to be an author of the space in order to submit a proposal.",
@@ -446,7 +446,7 @@
   },
   "page": {
     "title": {
-      "home": "Snapshot",
+      "home": "DoDAO",
       "setup": "Create a space",
       "timeline": "Timeline",
       "explore": "Explore",

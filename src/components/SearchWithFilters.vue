@@ -17,14 +17,6 @@ const searchOptions = computed(() => [
   {
     text: t('networks'),
     action: 'networks'
-  },
-  {
-    text: t('strategiesPage'),
-    action: 'strategies'
-  },
-  {
-    text: t('plugins'),
-    action: 'plugins'
   }
 ]);
 
