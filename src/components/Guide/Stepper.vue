@@ -1,77 +1,32 @@
 <script setup>
-import { ref } from 'vue';
-
-const form = ref({
-  name: '',
-  body: ''
+const props = defineProps({
+  activeStepId: String,
+  steps: Array,
+  setActiveStep: Function
 });
-function inputError(field) {
-  return false;
-}
+console.log(props);
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
-        <li class="ob-nav-step" role="presentation">
-          <a href="#nav-stepper-1" class="step-link" role="menuitem">Step</a>
+        <li
+          @click="props.setActiveStep(step.id)"
+          class="ob-nav-step"
+          :class="step.id === activeStepId && 'active'"
+          role="presentation"
+          v-for="step in steps"
+          :key="step.id"
+        >
+          <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>
-        <li class="ob-nav-step active" role="presentation">
-          <a href="#nav-stepper-3" class="step-link" role="menuitem">Active</a>
-        </li>
-        <li class="ob-nav-step success" role="presentation">
-          <a href="#nav-stepper-3" class="step-link" role="menuitem">Success</a>
-        </li>
-        <li class="ob-nav-step success ob-feedback" role="presentation">
-          <a href="#nav-stepper-3" class="step-link" role="menuitem"
-            >Success & feedback</a
-          >
-        </li>
-        <li class="ob-nav-step" role="presentation" data-step-label="2">
-          <a href="#nav-stepper-3" class="step-link" role="menuitem">Custom</a>
-        </li>
-        <li class="ob-nav-step active disabled" role="presentation">
-          <a href="#nav-stepper-4" class="step-link" role="menuitem"
-            >Disabled</a
-          >
+
+        <li class="ob-nav-step" role="presentation" data-step-label="+">
+          <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
         </li>
       </ol>
     </div>
-    <vl />
-    <div class="w-full border-l-2 p-4">
-      <div class="h-40 mb-4" style="min-height: 40px">
-        <UiSidebarButton
-          class="float-right ml-2"
-          :aria-label="$t('toggleSkin')"
-        >
-          <Icon size="20" class="link-color" name="arrow-up" />
-        </UiSidebarButton>
-        <UiSidebarButton
-          class="float-right ml-2"
-          :aria-label="$t('toggleSkin')"
-        >
-          <Icon size="20" class="link-color" name="arrow-down" />
-        </UiSidebarButton>
-
-        <UiSidebarButton
-          class="float-right ml-2"
-          :aria-label="$t('toggleSkin')"
-        >
-          <Icon size="20" class="link-color" name="check1" />
-        </UiSidebarButton>
-      </div>
-      <UiInput v-model="form.name" :error="inputError('name')">
-        <template v-slot:label>{{ $t(`guide.step.name`) }}*</template>
-      </UiInput>
-      <UiButton class="w-full h-96" style="height: max-content">
-        <TextareaArray
-          v-model="form.body"
-          :placeholder="$t(`guide.step.contents`)"
-          class="input w-full text-left"
-          style="font-size: 18px"
-        />
-      </UiButton>
-    </div>
+    <GuideStepperItem />
   </div>
 </template>
 <style scoped lang="scss">

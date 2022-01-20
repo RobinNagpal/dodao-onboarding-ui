@@ -109,6 +109,17 @@ const form = ref({
   metadata: {}
 });
 
+const steps = computed(() => {
+  return form.value.steps;
+});
+
+const minOrder = Math.min(...steps.value.map(step => step.order));
+const activeStepId = ref(steps.value.find(step => step.order === minOrder).id);
+
+function setActiveStep(id) {
+  activeStepId.value = id;
+}
+
 const passValidation = ref([true]);
 
 // Check if account passes space validation
@@ -243,7 +254,11 @@ onMounted(async () => {
       </div>
     </Block>
     <Block :title="$t('guide.create.stepByStep')" :slim="true">
-      <GuideStepper />
+      <GuideStepper
+        :activeStepId="activeStepId"
+        :steps="steps"
+        :setActiveStep="setActiveStep"
+      />
     </Block>
 
     <UiButton
