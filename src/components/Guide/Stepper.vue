@@ -39,7 +39,7 @@ function inputError(field) {
     </div>
     <vl />
     <div class="w-full border-l-2 p-4">
-      <div class="h-40 mb-4">
+      <div class="h-40 mb-4" style="min-height: 40px">
         <UiSidebarButton
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"

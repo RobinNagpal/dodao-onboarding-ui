@@ -2,8 +2,6 @@
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
-import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { clone } from '@snapshot-labs/snapshot.js/src/utils';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { useModal } from '@/composables/useModal';
@@ -17,7 +15,7 @@ import { useClient } from '@/composables/useClient';
 import { useApp } from '@/composables/useApp';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useStore } from '@/composables/useStore';
-import { n, setPageTitle } from '@/helpers/utils';
+import { setPageTitle } from '@/helpers/utils';
 
 const props = defineProps({
   spaceId: String,
@@ -37,24 +35,18 @@ const { store } = useStore();
 const notify = inject('notify');
 
 const route = useRoute();
-const blockNumber = ref(-1);
 const bodyLimit = ref(14400);
 const preview = ref(false);
-const showErrors = ref(false);
+
 const form = ref({
-  name: '',
-  body: '',
-  start: 0,
-  end: 0,
-  snapshot: '',
+  id: 'some_id',
+  name: 'Guide Name',
+  body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+
   metadata: {}
 });
 
-const modalOpen = ref(false);
-const selectedDate = ref('');
-const nameForm = ref(null);
 const passValidation = ref([true]);
-const loadingSnapshot = ref(true);
 
 // Check if account passes space validation
 watchEffect(async () => {
@@ -73,39 +65,18 @@ watchEffect(async () => {
   }
 });
 
-const dateStart = computed(() => {
-  return form.value.start;
-});
-
-const dateEnd = computed(() => {
-  return form.value.end;
-});
-
 const isValid = computed(() => {
-  // const ts = (Date.now() / 1e3).toFixed();
-  const endDateValid = dateEnd.value ? dateEnd.value > dateStart.value : true;
   return (
     !clientLoading.value &&
     form.value.name &&
     form.value.body.length <= bodyLimit.value &&
-    dateStart.value &&
-    // form.value.start >= ts &&
-    endDateValid &&
     passValidation.value[0] &&
     !web3.value.authLoading
   );
 });
 
-function setDate(ts) {
-  if (selectedDate.value) {
-    form.value[selectedDate.value] = ts;
-  }
-}
-
 async function handleSubmit() {
   form.value.metadata.network = props.space.network;
-  form.value.start = dateStart.value;
-  form.value.end = dateEnd.value;
   console.log('Send', form.value);
   const result = await send(props.space, 'guide', form.value);
   console.log('Result', result);
@@ -150,9 +121,6 @@ async function loadGuide() {
   form.value = {
     name: guide.title,
     body: guide.body,
-    start: guide.start,
-    end: guide.end,
-    snapshot: guide.snapshot,
     type: guide.type
   };
 
@@ -166,18 +134,8 @@ function inputError(field) {
 
 onMounted(async () => {
   setPageTitle('page.title.space.create', { space: props.space.name });
-  nameForm.value.focus();
 
   if (props.from) await loadGuide();
-});
-
-watchEffect(async () => {
-  loadingSnapshot.value = true;
-  if (props.space.network) {
-    blockNumber.value = await getBlockNumber(getProvider(props.space.network));
-    form.value.snapshot = blockNumber.value;
-    loadingSnapshot.value = false;
-  }
 });
 </script>
 
@@ -212,7 +170,7 @@ watchEffect(async () => {
           <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
         </UiInput>
         <UiButton class="block w-full px-3" style="height: auto">
-          <TextareaArray
+          <TextareaAutosize
             v-model="form.body"
             :placeholder="$t(`guide.create.excerpt`)"
             class="input w-full text-left"
