@@ -111,12 +111,7 @@ function inputError(field) {
       right: 0;
       bottom: 0;
       left: 0;
-      //border-width: 0;
-      border-left-style: solid;
-      border-left-width: 2px;
-      border-top-style: solid;
       border-color: #069;
-      z-index: -1;
     }
     &:hover {
       &::before {
@@ -174,9 +169,10 @@ function inputError(field) {
       content: attr(data-step-label);
     }
   }
-  .ob-step-link {
+  .step-link {
     display: block;
     text-decoration: none;
+    margin-top: 8px;
   }
   &:not(.ob-nav-stepper-sm) {
     &:not(.ob-nav-stepper-lg) {
@@ -220,7 +216,7 @@ function inputError(field) {
         left: 0;
       }
       &::after {
-        border-left-width: 1px;
+        border-left-width: 4px;
       }
       &:not(:first-child) {
         padding-top: 16px;
@@ -278,10 +274,10 @@ function inputError(field) {
 .ob-nav-stepper.ob-nav-stepper-lg {
   .ob-nav-step {
     &::before {
-      font-size: 16px;
+      font-size: 20px;
       width: 38px;
       height: 38px;
-      line-height: 37px;
+      line-height: 40px;
     }
   }
   .ob-step-link {
