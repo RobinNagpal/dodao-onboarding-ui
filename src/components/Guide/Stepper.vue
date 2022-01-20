@@ -1,9 +1,17 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+
+const form = ref({
+  name: '',
+  body: ''
+});
+function inputError(field) {
+  return false;
+}
+</script>
 <template>
-  <div
-    class="stepper-container border border-skin-border transition-colors bg-transparent text-skin-link rounded-lg outline-none leading-[46px] text-left w-full flex focus-within:border-skin-link hover:border-skin-link"
-  >
-    <div>
+  <div class="w-full flex flex-row">
+    <div class="p-4">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li class="ob-nav-step" role="presentation">
           <a href="#nav-stepper-1" class="step-link" role="menuitem">Step</a>
@@ -28,6 +36,41 @@
           >
         </li>
       </ol>
+    </div>
+    <vl />
+    <div class="w-full border-l-2 p-4">
+      <div class="h-40 mb-4">
+        <UiSidebarButton
+          class="float-right ml-2"
+          :aria-label="$t('toggleSkin')"
+        >
+          <Icon size="20" class="link-color" name="arrow-up" />
+        </UiSidebarButton>
+        <UiSidebarButton
+          class="float-right ml-2"
+          :aria-label="$t('toggleSkin')"
+        >
+          <Icon size="20" class="link-color" name="arrow-down" />
+        </UiSidebarButton>
+
+        <UiSidebarButton
+          class="float-right ml-2"
+          :aria-label="$t('toggleSkin')"
+        >
+          <Icon size="20" class="link-color" name="check1" />
+        </UiSidebarButton>
+      </div>
+      <UiInput v-model="form.name" :error="inputError('name')">
+        <template v-slot:label>{{ $t(`guide.step.name`) }}*</template>
+      </UiInput>
+      <UiButton class="w-full h-96" style="height: max-content">
+        <TextareaArray
+          v-model="form.body"
+          :placeholder="$t(`guide.step.contents`)"
+          class="input w-full text-left"
+          style="font-size: 18px"
+        />
+      </UiButton>
     </div>
   </div>
 </template>

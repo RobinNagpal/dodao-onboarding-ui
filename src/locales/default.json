@@ -184,20 +184,24 @@
     }
   },
   "guide": {
+    "castVote": "Cast your vote",
     "create": {
       "name": "Name",
       "excerpt": "Guide excerpt...",
       "basicInfo": "Basic Information",
       "stepByStep": "Step by Step Guide"
     },
-    "castVote": "Cast your vote",
     "vote": "Vote",
     "startDate": "Start date",
     "endDate": "End date",
-    "votingSystem": "Voting system",
     "delete": "Delete",
     "duplicate": "Duplicate",
-    "guideBy": "by {0}"
+    "guideBy": "by {0}",
+    "votingSystem": "Voting system",
+    "step": {
+      "name": "Step Name",
+      "contents": "Contents"
+    }
   },
   "guides": {
     "header": "Onboarding Guides",

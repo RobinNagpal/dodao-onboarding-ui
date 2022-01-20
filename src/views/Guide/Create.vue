@@ -221,57 +221,18 @@ watchEffect(async () => {
         </UiButton>
       </div>
     </Block>
-    <Block :title="$t('guide.create.stepByStep')">
+    <Block :title="$t('guide.create.stepByStep')" :slim="true">
       <GuideStepper />
     </Block>
 
-    <Block :title="$t('actions')" :loading="spaceLoading" v-if="!preview">
-      <div class="mb-2">
-        <UiButton
-          @click="(modalOpen = true), (selectedDate = 'start')"
-          class="w-full mb-2"
-        >
-          <span v-if="!dateStart">{{ $t('create.startDate') }}</span>
-          <span v-else v-text="$d(dateStart * 1e3, 'short', 'en-US')" />
-        </UiButton>
-        <UiButton
-          @click="(modalOpen = true), (selectedDate = 'end')"
-          class="w-full mb-2"
-        >
-          <span v-if="!dateEnd">{{ $t('create.endDate') }}</span>
-          <span v-else v-text="$d(dateEnd * 1e3, 'short', 'en-US')" />
-        </UiButton>
-        <UiButton
-          v-if="route.query.snapshot"
-          :loading="loadingSnapshot"
-          class="w-full mb-2"
-        >
-          <input
-            v-model="form.snapshot"
-            type="number"
-            class="input w-full text-center"
-            :placeholder="$t('create.snapshotBlock')"
-          />
-        </UiButton>
-      </div>
-      <UiButton
-        @click="clickSubmit"
-        :disabled="!isValid"
-        :loading="clientLoading || queryLoading"
-        class="block w-full"
-        primary
-      >
-        {{ $t('create.publish') }}
-      </UiButton>
-    </Block>
+    <UiButton
+      @click="clickSubmit"
+      :disabled="!isValid"
+      :loading="clientLoading || queryLoading"
+      class="block w-full"
+      primary
+    >
+      {{ $t('create.publish') }}
+    </UiButton>
   </Layout>
-  <teleport to="#modal">
-    <ModalSelectDate
-      :value="form[selectedDate]"
-      :selectedDate="selectedDate"
-      :open="modalOpen"
-      @close="modalOpen = false"
-      @input="setDate"
-    />
-  </teleport>
 </template>
