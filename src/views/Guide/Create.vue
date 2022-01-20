@@ -42,7 +42,70 @@ const form = ref({
   id: 'some_id',
   name: 'Guide Name',
   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+  steps: [
+    {
+      id: 'step1_id',
+      name: 'Introduction',
+      content: `
+      Some basic Git commands are:
+      \`\`\`
+      git status
+      git add
+      git commit
+      \`\`\`
+      `,
+      order: 1
+    },
+    {
+      id: 'step2_id',
+      name: 'Introduction Evaluation',
+      content: ``,
+      questions: [
+        {
+          id: 'question_1',
+          description: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
+          choices: [
+            {
+              key: 'dog_and_cat',
+              content: 'Dog And Cat'
+            },
+            {
+              key: 'dog_or_cat',
+              content: 'Dog Or Cat'
+            },
+            {
+              key: 'only_dog',
+              content: 'Only Dog'
+            },
+            {
+              key: 'only_cat',
+              content: 'Only Cat'
+            }
+          ],
+          answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
+          type: 'MultipleChoice'
+        },
+        {
+          id: 'question_2',
+          description: 'True or False',
+          choices: [
+            {
+              key: 'true',
+              content: 'True'
+            },
+            {
+              key: 'false',
+              content: 'False'
+            }
+          ],
+          answerKeys: ['true'],
+          type: 'SingleChoice'
+        }
+      ],
 
+      order: 2
+    }
+  ],
   metadata: {}
 });
 
