@@ -29,10 +29,12 @@ const questions = computed(() => {
   return props.step.questions;
 });
 
-const disableChoiceEdit = false;
+function newChoiceKey() {
+  return uuidv4().split('-')[0];
+}
 
 function addChoice(questionId) {
-  const key = uuidv4().split('-')[0];
+  const key = newChoiceKey();
   const questions = props.step.questions.map(question => {
     if (question.id === questionId) {
       return {
@@ -89,6 +91,27 @@ function updateAnswers(questionId, choiceKey, selected) {
     emit('update:step', { ...props.step, questions });
   }
 }
+
+function addQuestion() {
+  const question = {
+    id: uuidv4(),
+    description: '',
+    choices: [
+      {
+        key: newChoiceKey(),
+        content: ''
+      },
+      {
+        key: newChoiceKey(),
+        content: ''
+      }
+    ],
+    answerKeys: [],
+    type: 'SingleChoice'
+  };
+  const questions = [...(props.step.questions || []), question];
+  emit('update:step', { ...props.step, questions });
+}
 </script>
 <template>
   <div class="w-full border-l-2 p-4">
@@ -100,7 +123,11 @@ function updateAnswers(questionId, choiceKey, selected) {
         <Icon size="20" class="link-color" name="arrow-down" />
       </UiSidebarButton>
 
-      <UiSidebarButton class="float-right ml-2" :aria-label="$t('toggleSkin')">
+      <UiSidebarButton
+        class="float-right ml-2"
+        :aria-label="$t('toggleSkin')"
+        @click="addQuestion"
+      >
         <Icon size="20" class="link-color" name="check1" />
       </UiSidebarButton>
     </div>
@@ -121,49 +148,13 @@ function updateAnswers(questionId, choiceKey, selected) {
       />
     </UiButton>
     <template v-for="question in questions" :key="question.id">
-      <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
-        <UiButton class="w-full h-96 mb-4" style="height: max-content">
-          <TextareaAutosize
-            :value="question.description"
-            :placeholder="$t(`guide.step.contents`)"
-            class="input w-full text-left"
-            style="font-size: 18px"
-            @update:modelValue="updateStepContent"
-          />
-        </UiButton>
-        <template v-for="choice in question.choices" :key="choice.key">
-          <div class="flex">
-            <Checkbox
-              @update:modelValue="
-                updateAnswers(question.id, choice.key, $event)
-              "
-              :modelValue="question.answerKeys.includes(choice.key)"
-            />
-            <UiInput
-              :modelValue="choice.content"
-              maxlength="64"
-              :disabled="disableChoiceEdit"
-            >
-              <template v-slot:info>
-                <span
-                  v-if="!disableChoiceEdit"
-                  class="cursor-pointer"
-                  @click="removeChoice(question.id, choice.key)"
-                >
-                  <Icon name="close" size="12" />
-                </span>
-              </template>
-            </UiInput>
-          </div>
-        </template>
-        <UiButton
-          v-if="!disableChoiceEdit"
-          @click="addChoice(question.id)"
-          class="block w-full"
-        >
-          {{ $t('create.addChoice') }}
-        </UiButton>
-      </div>
+      <GuideQuestion
+        :addChoice="addChoice"
+        :question="question"
+        :removeChoice="removeChoice"
+        :updateStepContent="updateStepContent"
+        :updateAnswers="updateAnswers"
+      ></GuideQuestion>
     </template>
   </div>
 </template>
