@@ -16,6 +16,7 @@ import { useApp } from '@/composables/useApp';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useStore } from '@/composables/useStore';
 import { setPageTitle } from '@/helpers/utils';
+import orderBy from 'lodash/orderBy';
 
 const props = defineProps({
   spaceId: String,
@@ -54,7 +55,7 @@ const form = ref({
       git commit
       \`\`\`
       `,
-      order: 1
+      order: 0
     },
     {
       id: 'step2_id',
@@ -103,7 +104,7 @@ const form = ref({
         }
       ],
 
-      order: 2
+      order: 1
     }
   ],
   metadata: {}
@@ -128,6 +129,22 @@ function updateStep(step) {
       return s;
     }
   });
+}
+
+function moveStepUp(stepId) {
+  const stepIndex = form.value.steps.findIndex(s => s.id === stepId);
+  form.value.steps[stepIndex - 1].order = stepIndex;
+  form.value.steps[stepIndex].order = stepIndex - 1;
+
+  form.value.steps = orderBy(form.value.steps, 'order');
+}
+
+function moveStepDown(stepId) {
+  const stepIndex = form.value.steps.findIndex(s => s.id === stepId);
+  form.value.steps[stepIndex + 1].order = stepIndex;
+  form.value.steps[stepIndex].order = stepIndex + 1;
+
+  form.value.steps = orderBy(form.value.steps, 'order');
 }
 
 function addStep() {
@@ -277,10 +294,13 @@ onMounted(async () => {
     <Block :title="$t('guide.create.stepByStep')" :slim="true">
       <GuideStepper
         :activeStepId="activeStepId"
+        :guide="form"
         :steps="steps"
         :setActiveStep="setActiveStep"
         :updateStep="updateStep"
         :addStep="addStep"
+        :moveStepUp="moveStepUp"
+        :moveStepDown="moveStepDown"
       />
     </Block>
 

@@ -3,10 +3,13 @@ import { computed } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
+  guide: Object,
   steps: Array,
   setActiveStep: Function,
   updateStep: Function,
-  addStep: Function
+  addStep: Function,
+  moveStepUp: Function,
+  moveStepDown: Function
 });
 
 const activeStep = computed(() =>
@@ -38,7 +41,13 @@ const activeStep = computed(() =>
         </li>
       </ol>
     </div>
-    <GuideStepperItem :step="activeStep" @update:step="props.updateStep" />
+    <GuideStepperItem
+      :guide="guide"
+      :step="activeStep"
+      @update:step="props.updateStep"
+      :moveStepUp="moveStepUp"
+      :moveStepDown="moveStepDown"
+    />
   </div>
 </template>
 <style scoped lang="scss">

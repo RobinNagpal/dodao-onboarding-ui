@@ -3,15 +3,13 @@ import { computed, ref } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 
 const props = defineProps({
-  step: Object
+  guide: Object,
+  step: Object,
+  moveStepUp: Function,
+  moveStepDown: Function
 });
 
 const emit = defineEmits(['update:step']);
-
-const form = ref({
-  name: '',
-  body: ''
-});
 
 function inputError(field) {
   return false;
@@ -142,10 +140,20 @@ function addQuestion() {
 <template>
   <div class="w-full border-l-2 p-4">
     <div class="h-40 mb-4" style="min-height: 40px">
-      <UiSidebarButton class="float-right ml-2" :aria-label="$t('toggleSkin')">
+      <UiSidebarButton
+        class="float-right ml-2"
+        :aria-label="$t('toggleSkin')"
+        :disabled="step.order === 0"
+        @click="moveStepUp(step.id)"
+      >
         <Icon size="20" class="link-color" name="arrow-up" />
       </UiSidebarButton>
-      <UiSidebarButton class="float-right ml-2" :aria-label="$t('toggleSkin')">
+      <UiSidebarButton
+        class="float-right ml-2"
+        :aria-label="$t('toggleSkin')"
+        :disabled="step.order + 1 === guide.steps.length"
+        @click="moveStepDown(step.id)"
+      >
         <Icon size="20" class="link-color" name="arrow-down" />
       </UiSidebarButton>
 
