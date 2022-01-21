@@ -197,6 +197,9 @@
     "delete": "Delete",
     "duplicate": "Duplicate",
     "guideBy": "by {0}",
+    "question": {
+      "description": "Question description"
+    },
     "votingSystem": "Voting system",
     "step": {
       "name": "Step Name",

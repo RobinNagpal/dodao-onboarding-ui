@@ -25,6 +25,43 @@ function updateStepContent(content) {
   emit('update:step', { ...props.step, content });
 }
 
+function updateQuestionDescription(questionId, description) {
+  const questions = props.step.questions.map(question => {
+    if (question.id === questionId) {
+      return {
+        ...question,
+        description
+      };
+    } else {
+      return question;
+    }
+  });
+
+  emit('update:step', { ...props.step, questions });
+}
+
+function updateChoiceContent(questionId, choiceKey, content) {
+  const questions = props.step.questions.map(question => {
+    if (question.id === questionId) {
+      const choices = question.choices.map(choice => {
+        if (choice.key === choiceKey) {
+          return { ...choice, content };
+        } else {
+          return choice;
+        }
+      });
+      return {
+        ...question,
+        choices
+      };
+    } else {
+      return question;
+    }
+  });
+
+  emit('update:step', { ...props.step, questions });
+}
+
 const questions = computed(() => {
   return props.step.questions;
 });
@@ -65,31 +102,20 @@ function removeChoice(questionId, choiceKey) {
 }
 
 function updateAnswers(questionId, choiceKey, selected) {
-  if (selected) {
-    const questions = props.step.questions.map(question => {
-      if (question.id === questionId) {
-        return {
-          ...question,
-          answerKeys: [...question.answerKeys, choiceKey]
-        };
-      } else {
-        return question;
-      }
-    });
-    emit('update:step', { ...props.step, questions });
-  } else {
-    const questions = props.step.questions.map(question => {
-      if (question.id === questionId) {
-        return {
-          ...question,
-          answerKeys: question.answerKeys.filter(answer => answer !== choiceKey)
-        };
-      } else {
-        return question;
-      }
-    });
-    emit('update:step', { ...props.step, questions });
-  }
+  const questions = props.step.questions.map(question => {
+    if (question.id === questionId) {
+      const answerKeys = selected
+        ? [...question.answerKeys, choiceKey]
+        : question.answerKeys.filter(answer => answer !== choiceKey);
+      return {
+        ...question,
+        answerKeys
+      };
+    } else {
+      return question;
+    }
+  });
+  emit('update:step', { ...props.step, questions });
 }
 
 function addQuestion() {
@@ -152,7 +178,8 @@ function addQuestion() {
         :addChoice="addChoice"
         :question="question"
         :removeChoice="removeChoice"
-        :updateStepContent="updateStepContent"
+        :updateChoiceContent="updateChoiceContent"
+        :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
       ></GuideQuestion>
     </template>
