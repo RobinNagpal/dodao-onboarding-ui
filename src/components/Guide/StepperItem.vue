@@ -79,22 +79,24 @@ function removeChoice(key) {}
           />
         </UiButton>
         <template v-for="choice in question.choices" :key="choice.key">
-          <Toggle />
-          <UiInput
-            :modelValue="choice.content"
-            maxlength="64"
-            :disabled="disableChoiceEdit"
-          >
-            <template v-slot:info>
-              <span
-                v-if="!disableChoiceEdit"
-                class="cursor-pointer"
-                @click="removeChoice(choice.key)"
-              >
-                <Icon name="close" size="12" />
-              </span>
-            </template>
-          </UiInput>
+          <div class="flex">
+            <Checkbox />
+            <UiInput
+              :modelValue="choice.content"
+              maxlength="64"
+              :disabled="disableChoiceEdit"
+            >
+              <template v-slot:info>
+                <span
+                  v-if="!disableChoiceEdit"
+                  class="cursor-pointer"
+                  @click="removeChoice(choice.key)"
+                >
+                  <Icon name="close" size="12" />
+                </span>
+              </template>
+            </UiInput>
+          </div>
         </template>
         <UiButton
           v-if="!disableChoiceEdit"
