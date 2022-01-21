@@ -423,7 +423,7 @@ onMounted(() => {
                 <template v-slot:label> {{ $t(`settings.terms`) }} </template>
               </UiInput>
               <div class="flex items-center space-x-2 px-2">
-                <Checkbox v-model="form.private" />
+                <Toggle v-model="form.private" />
                 <span>{{ $t('settings.hideSpace') }}</span>
               </div>
             </div>
@@ -551,7 +551,7 @@ onMounted(() => {
                   }}</template>
                 </UiInput>
                 <div class="flex items-center space-x-2 px-2">
-                  <Checkbox v-model="form.filters.onlyMembers" />
+                  <Toggle v-model="form.filters.onlyMembers" />
                   <span>{{ $t('settings.allowOnlyAuthors') }}</span>
                 </div>
               </div>
@@ -612,7 +612,7 @@ onMounted(() => {
               </template>
             </UiInput>
             <div class="flex items-center space-x-2 px-2">
-              <Checkbox v-model="form.voting.hideAbstain" />
+              <Toggle v-model="form.voting.hideAbstain" />
               <span>{{ $t('settings.hideAbstain') }}</span>
             </div>
           </Block>
