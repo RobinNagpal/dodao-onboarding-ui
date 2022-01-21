@@ -1,6 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 
+const props = defineProps({
+  step: Object
+});
+
+const emit = defineEmits(['update:step']);
+
 const form = ref({
   name: '',
   body: ''
@@ -8,6 +14,14 @@ const form = ref({
 
 function inputError(field) {
   return false;
+}
+
+function updateStepName(name) {
+  emit('update:step', { ...props.step, name });
+}
+
+function updateStepContent(content) {
+  emit('update:step', { ...props.step, content });
 }
 </script>
 <template>
@@ -24,15 +38,20 @@ function inputError(field) {
         <Icon size="20" class="link-color" name="check1" />
       </UiSidebarButton>
     </div>
-    <UiInput v-model="form.name" :error="inputError('name')">
+    <UiInput
+      :modelValue="props.step.name"
+      :error="inputError('name')"
+      @update:modelValue="updateStepName"
+    >
       <template v-slot:label>{{ $t(`guide.step.name`) }}*</template>
     </UiInput>
     <UiButton class="w-full h-96" style="height: max-content">
       <TextareaAutosize
-        v-model="form.body"
+        :value="props.step.content"
         :placeholder="$t(`guide.step.contents`)"
         class="input w-full text-left"
         style="font-size: 18px"
+        @update:modelValue="updateStepContent"
       />
     </UiButton>
   </div>

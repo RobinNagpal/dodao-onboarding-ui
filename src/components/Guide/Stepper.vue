@@ -1,10 +1,16 @@
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   activeStepId: String,
   steps: Array,
-  setActiveStep: Function
+  setActiveStep: Function,
+  updateStep: Function
 });
-console.log(props);
+
+const activeStep = computed(() =>
+  props.steps.find(step => step.id === props.activeStepId)
+);
 </script>
 <template>
   <div class="w-full flex flex-row">
@@ -26,7 +32,7 @@ console.log(props);
         </li>
       </ol>
     </div>
-    <GuideStepperItem />
+    <GuideStepperItem :step="activeStep" @update:step="props.updateStep" />
   </div>
 </template>
 <style scoped lang="scss">

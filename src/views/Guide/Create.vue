@@ -120,6 +120,16 @@ function setActiveStep(id) {
   activeStepId.value = id;
 }
 
+function updateStep(step) {
+  form.value.steps = form.value.steps.map(s => {
+    if (s.id === step.id) {
+      return step;
+    } else {
+      return s;
+    }
+  });
+}
+
 const passValidation = ref([true]);
 
 // Check if account passes space validation
@@ -258,6 +268,7 @@ onMounted(async () => {
         :activeStepId="activeStepId"
         :steps="steps"
         :setActiveStep="setActiveStep"
+        :updateStep="updateStep"
       />
     </Block>
 
