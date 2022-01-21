@@ -31,11 +31,64 @@ const questions = computed(() => {
 
 const disableChoiceEdit = false;
 
-function addChoice() {
-  const key = uuidv4();
+function addChoice(questionId) {
+  const key = uuidv4().split('-')[0];
+  const questions = props.step.questions.map(question => {
+    if (question.id === questionId) {
+      return {
+        ...question,
+        choices: [...question.choices, { key, content: '' }]
+      };
+    } else {
+      return question;
+    }
+  });
+
+  emit('update:step', { ...props.step, questions });
 }
 
-function removeChoice(key) {}
+function removeChoice(questionId, choiceKey) {
+  const questions = props.step.questions.map(question => {
+    if (question.id === questionId) {
+      return {
+        ...question,
+        choices: question.choices.filter(choice => choice.key !== choiceKey)
+      };
+    } else {
+      return question;
+    }
+  });
+
+  emit('update:step', { ...props.step, questions });
+}
+
+function updateAnswers(questionId, choiceKey, selected) {
+  if (selected) {
+    const questions = props.step.questions.map(question => {
+      if (question.id === questionId) {
+        return {
+          ...question,
+          answerKeys: [...question.answerKeys, choiceKey]
+        };
+      } else {
+        return question;
+      }
+    });
+    emit('update:step', { ...props.step, questions });
+  } else {
+    const questions = props.step.questions.map(question => {
+      if (question.id === questionId) {
+        return {
+          ...question,
+          answerKeys: question.answerKeys.filter(answer => answer !== choiceKey)
+        };
+      } else {
+        return question;
+      }
+    });
+    emit('update:step', { ...props.step, questions });
+  }
+}
 </script>
 <template>
   <div class="w-full border-l-2 p-4">
@@ -80,7 +133,12 @@ function removeChoice(key) {}
         </UiButton>
         <template v-for="choice in question.choices" :key="choice.key">
           <div class="flex">
-            <Checkbox />
+            <Checkbox
+              @update:modelValue="
+                updateAnswers(question.id, choice.key, $event)
+              "
+              :modelValue="question.answerKeys.includes(choice.key)"
+            />
             <UiInput
               :modelValue="choice.content"
               maxlength="64"
@@ -90,7 +148,7 @@ function removeChoice(key) {}
                 <span
                   v-if="!disableChoiceEdit"
                   class="cursor-pointer"
-                  @click="removeChoice(choice.key)"
+                  @click="removeChoice(question.id, choice.key)"
                 >
                   <Icon name="close" size="12" />
                 </span>
@@ -100,7 +158,7 @@ function removeChoice(key) {}
         </template>
         <UiButton
           v-if="!disableChoiceEdit"
-          @click="addChoice(1)"
+          @click="addChoice(question.id)"
           class="block w-full"
         >
           {{ $t('create.addChoice') }}

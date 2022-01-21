@@ -10,12 +10,16 @@ const emit = defineEmits(['update:modelValue']);
 const input = ref(props.modelValue || undefined);
 
 watch(input, () => emit('update:modelValue', input.value));
+
+function checkboxClicked() {
+  input.value = !input.value;
+}
 </script>
 
 <template>
   <div class="p-2 mt-2 checkmark-container">
-    <input type="checkbox" v-model="input" />
-    <span class="checkmark"></span>
+    <input type="checkbox" v-model="input" :checked="props.modelValue" />
+    <span class="checkmark" @click="checkboxClicked"></span>
   </div>
 </template>
 <style scoped lang="scss">
