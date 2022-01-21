@@ -130,6 +130,18 @@ function updateStep(step) {
   });
 }
 
+function addStep() {
+  form.value.steps = [
+    ...form.value.steps,
+    {
+      id: `step ${form.value.steps.length + 1}_id`,
+      name: `Step ${form.value.steps.length + 1}`,
+      content: ``,
+      order: form.value.steps.length
+    }
+  ];
+}
+
 const passValidation = ref([true]);
 
 // Check if account passes space validation
@@ -161,9 +173,8 @@ const isValid = computed(() => {
 
 async function handleSubmit() {
   form.value.metadata.network = props.space.network;
-  console.log('Send', form.value);
   const result = await send(props.space, 'guide', form.value);
-  console.log('Result', result);
+  console.log(result);
   if (result.id) {
     getExplore();
     store.space.guides = [];
@@ -269,6 +280,7 @@ onMounted(async () => {
         :steps="steps"
         :setActiveStep="setActiveStep"
         :updateStep="updateStep"
+        :addStep="addStep"
       />
     </Block>
 

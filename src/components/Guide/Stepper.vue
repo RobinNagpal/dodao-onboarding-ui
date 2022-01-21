@@ -5,7 +5,8 @@ const props = defineProps({
   activeStepId: String,
   steps: Array,
   setActiveStep: Function,
-  updateStep: Function
+  updateStep: Function,
+  addStep: Function
 });
 
 const activeStep = computed(() =>
@@ -27,7 +28,12 @@ const activeStep = computed(() =>
           <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>
 
-        <li class="ob-nav-step" role="presentation" data-step-label="+">
+        <li
+          class="ob-nav-step"
+          role="presentation"
+          data-step-label="+"
+          @click="props.addStep"
+        >
           <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
         </li>
       </ol>
