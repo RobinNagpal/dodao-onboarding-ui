@@ -41,6 +41,7 @@ export function useClient() {
         const clientPersonalSign = isGnosisSafe.value
           ? clientGnosisSafe
           : client;
+        // @ts-ignore
         return await clientPersonalSign.broadcast(
           auth.web3,
           web3.value.account,
@@ -84,10 +85,13 @@ export function useClient() {
     } else if (type === 'guide') {
       return clientEIP712.guide(auth.web3, web3.value.account, {
         space: space.id,
-        title: payload.name,
-        body: payload.body,
-        start: payload.start,
-        end: payload.end,
+        name: payload.name,
+        content: payload.content,
+        steps: payload.steps.map(step => ({
+          id: step.id,
+          name: step.name,
+          content: step.content
+        })),
         network: space.network,
         metadata: JSON.stringify({})
       });

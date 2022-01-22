@@ -36,13 +36,14 @@ const { store } = useStore();
 const notify = inject('notify');
 
 const route = useRoute();
-const bodyLimit = ref(14400);
+const contentLimit = ref(14400);
 const preview = ref(false);
 
 const form = ref({
   id: 'some_id',
   name: 'Guide Name',
-  body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+  content:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
   steps: [
     {
       id: 'step1_id',
@@ -182,7 +183,7 @@ const isValid = computed(() => {
   return (
     !clientLoading.value &&
     form.value.name &&
-    form.value.body.length <= bodyLimit.value &&
+    form.value.content.length <= contentLimit.value &&
     passValidation.value[0] &&
     !web3.value.authLoading
   );
@@ -232,7 +233,7 @@ async function loadGuide() {
 
   form.value = {
     name: guide.title,
-    body: guide.body,
+    content: guide.content,
     type: guide.type
   };
 
@@ -283,7 +284,7 @@ onMounted(async () => {
         </UiInput>
         <UiButton class="block w-full px-3" style="height: auto">
           <TextareaAutosize
-            v-model="form.body"
+            v-model="form.content"
             :placeholder="$t(`guide.create.excerpt`)"
             class="input w-full text-left"
             style="font-size: 18px"
