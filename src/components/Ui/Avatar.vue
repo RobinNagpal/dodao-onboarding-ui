@@ -40,3 +40,15 @@ const error = ref(false);
     />
   </span>
 </template>
+
+<style scoped lang="scss">
+.big_tile > span {
+  width: 100%;
+}
+.big_tile img {
+  width: 424px !important;
+  height: 260px !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+</style>

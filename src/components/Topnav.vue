@@ -53,8 +53,8 @@ onMounted(() => setTitle());
     >
       {{ $t('demoSite') }}
     </div>
-    <nav id="topnav" class="border-b w-full bg-black">
-      <Container>
+    <nav id="topnav" class="w-full header-nav max-w-[1248px]">
+      <Container class="max-w-[100%]">
         <div class="flex items-center" style="height: 78px">
           <div class="flex-auto flex items-center">
             <router-link
@@ -65,7 +65,7 @@ onMounted(() => setTitle());
               <img
                 :src="dodaoLogo"
                 alt="arrow"
-                class="arrow"
+                class="logo arrow"
                 :style="{ height: `56px` }"
               />
             </router-link>
@@ -135,3 +135,22 @@ onMounted(() => setTitle());
     </teleport>
   </Sticky>
 </template>
+
+<style scoped lang="scss">
+.header-nav {
+  margin-top: 24px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 24px 0px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 16px 0 rgb(26 27 30 / 3%);
+}
+.logo {
+  width: 190px;
+  transition: transform 300ms ease, -webkit-transform 300ms ease;
+}
+.logo:hover {
+  transform: scale(0.94);
+}
+</style>

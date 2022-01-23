@@ -54,7 +54,7 @@ watchEffect(() => {
 
 <template>
   <div style="position: fixed; width: 240px">
-    <Block :slim="true" class="overflow-hidden">
+    <Block :slim="true" class="overflow-hidden bg-white">
       <div class="text-center border-b bg-skin-header-bg">
         <Token :space="space" symbolIndex="space" size="80" class="mt-3 mb-2" />
         <h3 class="mb-[2px] mx-2">
