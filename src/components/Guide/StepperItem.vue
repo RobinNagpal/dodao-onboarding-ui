@@ -23,12 +23,12 @@ function updateStepContent(content) {
   emit('update:step', { ...props.step, content });
 }
 
-function updateQuestionDescription(questionId, description) {
+function updateQuestionDescription(questionId, content) {
   const questions = props.step.questions.map(question => {
     if (question.id === questionId) {
       return {
         ...question,
-        description
+        content
       };
     } else {
       return question;
@@ -119,7 +119,7 @@ function updateAnswers(questionId, choiceKey, selected) {
 function addQuestion() {
   const question = {
     id: uuidv4(),
-    description: '',
+    content: '',
     choices: [
       {
         key: newChoiceKey(),

@@ -15,8 +15,8 @@ const disableChoiceEdit = false;
   <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
-        :value="question.description"
-        :placeholder="$t(`guide.question.description`)"
+        :value="question.content"
+        :placeholder="$t(`guide.question.content`)"
         class="input w-full text-left"
         style="font-size: 18px"
         @update:modelValue="updateQuestionDescription(question.id, $event)"

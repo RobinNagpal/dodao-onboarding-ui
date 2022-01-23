@@ -1,10 +1,17 @@
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { Guide, GuideStep } from '@/models/Guide';
+import { computed, PropType } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
-  guide: Object,
-  steps: Array,
+  guide: {
+    type: Object as PropType<Guide>,
+    required: true
+  },
+  steps: {
+    type: Array as PropType<Array<GuideStep>>,
+    required: true
+  },
   setActiveStep: Function,
   updateStep: Function,
   addStep: Function,

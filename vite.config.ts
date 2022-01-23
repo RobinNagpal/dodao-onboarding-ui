@@ -1,8 +1,8 @@
-import path from 'path';
-import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import ViteComponents from 'unplugin-vue-components/vite';
+import path from 'path';
 import visualizer from 'rollup-plugin-visualizer';
+import ViteComponents from 'unplugin-vue-components/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {

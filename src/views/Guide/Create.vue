@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -17,6 +17,7 @@ import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useStore } from '@/composables/useStore';
 import { setPageTitle } from '@/helpers/utils';
 import orderBy from 'lodash/orderBy';
+import { Guide, GuideStep, QuestionType } from '@/models/Guide';
 
 const props = defineProps({
   spaceId: String,
@@ -33,22 +34,17 @@ const { getExplore } = useApp();
 const { spaceLoading } = useExtendedSpaces();
 const { send, clientLoading } = useClient();
 const { store } = useStore();
-const notify = inject('notify');
+const notify = inject('notify') as any;
 
 const route = useRoute();
 const contentLimit = ref(14400);
 const preview = ref(false);
 
-const form = ref({
-  id: 'some_id',
-  name: 'Guide Name',
-  content:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-  steps: [
-    {
-      id: 'step1_id',
-      name: 'Introduction',
-      content: `
+const guideSteps: GuideStep[] = [
+  {
+    id: 'step1_id',
+    name: 'Introduction',
+    content: `
       Some basic Git commands are:
       \`\`\`
       git status
@@ -56,67 +52,84 @@ const form = ref({
       git commit
       \`\`\`
       `,
-      order: 0
-    },
-    {
-      id: 'step2_id',
-      name: 'Introduction Evaluation',
-      content: ``,
-      questions: [
-        {
-          id: 'question_1',
-          description: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
-          choices: [
-            {
-              key: 'dog_and_cat',
-              content: 'Dog And Cat'
-            },
-            {
-              key: 'dog_or_cat',
-              content: 'Dog Or Cat'
-            },
-            {
-              key: 'only_dog',
-              content: 'Only Dog'
-            },
-            {
-              key: 'only_cat',
-              content: 'Only Cat'
-            }
-          ],
-          answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
-          type: 'MultipleChoice'
-        },
-        {
-          id: 'question_2',
-          description: 'True or False',
-          choices: [
-            {
-              key: 'true',
-              content: 'True'
-            },
-            {
-              key: 'false',
-              content: 'False'
-            }
-          ],
-          answerKeys: ['true'],
-          type: 'SingleChoice'
-        }
-      ],
+    questions: [],
+    order: 0
+  },
+  {
+    id: 'step2_id',
+    name: 'Introduction Evaluation',
+    content: ``,
+    questions: [
+      {
+        id: 'question_1',
+        content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
+        choices: [
+          {
+            key: 'dog_and_cat',
+            content: 'Dog And Cat',
+            order: 0
+          },
+          {
+            key: 'dog_or_cat',
+            content: 'Dog Or Cat',
+            order: 1
+          },
+          {
+            key: 'only_dog',
+            content: 'Only Dog',
+            order: 2
+          },
+          {
+            key: 'only_cat',
+            content: 'Only Cat',
+            order: 3
+          }
+        ],
+        answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
+        questionType: QuestionType.MultipleChoice,
+        order: 0
+      },
+      {
+        id: 'question_2',
+        content: 'True or False',
+        choices: [
+          {
+            key: 'true',
+            content: 'True',
+            order: 0
+          },
+          {
+            key: 'false',
+            content: 'False',
+            order: 1
+          }
+        ],
+        answerKeys: ['true'],
+        questionType: QuestionType.MultipleChoice,
+        order: 1
+      }
+    ],
 
-      order: 1
-    }
-  ],
+    order: 1
+  }
+];
+const guide: Guide = {
+  id: 'some_id',
+  name: 'Guide Name',
+  content:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+  steps: guideSteps,
   metadata: {}
-});
+} as Guide;
+
+const form = ref(guide);
 
 const steps = computed(() => {
   return form.value.steps;
 });
 
 const minOrder = Math.min(...steps.value.map(step => step.order));
-const activeStepId = ref(steps.value.find(step => step.order === minOrder).id);
+const activeStepId = ref(steps.value.find(step => step.order === minOrder)!.id);
 
 function setActiveStep(id) {
   activeStepId.value = id;
@@ -154,8 +167,9 @@ function addStep() {
     {
       id: `step ${form.value.steps.length + 1}_id`,
       name: `Step ${form.value.steps.length + 1}`,
-      content: ``,
-      order: form.value.steps.length
+      content: '',
+      order: form.value.steps.length,
+      questions: []
     }
   ];
 }
@@ -165,8 +179,8 @@ const passValidation = ref([true]);
 // Check if account passes space validation
 watchEffect(async () => {
   if (web3Account.value && auth.isAuthenticated.value) {
-    const validationName = props.space.validation?.name ?? 'basic';
-    const validationParams = props.space.validation?.params ?? {};
+    const validationName = props.space?.validation?.name ?? 'basic';
+    const validationParams = props.space?.validation?.params ?? {};
     const isValid = await validations[validationName](
       web3Account.value,
       clone(props.space),
@@ -190,7 +204,7 @@ const isValid = computed(() => {
 });
 
 async function handleSubmit() {
-  form.value.metadata.network = props.space.network;
+  form.value.metadata.network = props.space?.network;
   const result = await send(props.space, 'guide', form.value);
   console.log(result);
   if (result.id) {
@@ -213,7 +227,7 @@ const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
 function clickSubmit() {
   !web3Account.value
     ? (modalAccountOpen.value = true)
-    : !termsAccepted.value && props.space.terms
+    : !termsAccepted.value && props.space?.terms
     ? (modalTermsOpen.value = true)
     : handleSubmit();
 }
@@ -231,12 +245,6 @@ async function loadGuide() {
     'guide'
   );
 
-  form.value = {
-    name: guide.title,
-    content: guide.content,
-    type: guide.type
-  };
-
   const { network } = guide;
   form.value.metadata = { network };
 }
@@ -246,7 +254,7 @@ function inputError(field) {
 }
 
 onMounted(async () => {
-  setPageTitle('page.title.space.create', { space: props.space.name });
+  setPageTitle('page.title.space.create', { space: props.space?.name });
 
   if (props.from) await loadGuide();
 });
