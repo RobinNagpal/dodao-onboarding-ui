@@ -45,3 +45,10 @@ defineEmits(['submit']);
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.dao-block > div {
+  padding: 0;
+  height: 100%;
+}
+</style>

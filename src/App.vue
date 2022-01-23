@@ -51,14 +51,16 @@ watch(modalOpen, val => {
 <template>
   <div
     :class="skin"
-    class="overflow-hidden pb-6 font-serif text-base min-h-screen bg-skin-bg text-skin-text antialiased"
+    class="overflow-hidden pb-6 font-serif text-base min-h-screen text-skin-text antialiased"
   >
     <UiLoading v-if="app.loading || !app.init" class="overlay big" />
     <div v-else>
-      <Scroller />
-      <div :class="{ 'sm:ml-[68px]': !domain }">
+      <div>
         <Topnav />
-        <router-view :key="$route.path" class="flex-auto" />
+        <div class="flex">
+          <Scroller />
+          <router-view :key="$route.path" class="flex-auto" />
+        </div>
       </div>
     </div>
     <div id="modal" />

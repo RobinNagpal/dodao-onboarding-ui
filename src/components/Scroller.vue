@@ -7,7 +7,6 @@ import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
 import { useUnseenProposals } from '@/composables/useUnseenProposals';
 import { lsSet, lsGet } from '@/helpers/utils';
-import dodaoLogo from '@/assets/icons/logo/logo.svg';
 const { explore } = useApp();
 const { web3Account } = useWeb3();
 const { loadFollows, followingSpaces } = useFollowSpace();
@@ -70,28 +69,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    v-if="!domain"
-    class="w-[68px] h-screen hidden sm:block fixed m-0 border-r bg-skin-block-bg"
-  >
+  <div v-if="!domain" class="w-[68px] h-screen hidden sm:block fixed m-0">
     <div class="flex flex-col h-full overflow-auto no-scrollbar">
-      <div class="min-h-[78px] h-[78px] flex items-center justify-center">
-        <router-link :to="{ path: '/' }">
-          <img
-            :src="dodaoLogo"
-            alt="arrow"
-            class="arrow"
-            :style="{ width: `48px`, height: `48px` }"
-          />
-        </router-link>
-      </div>
+      <div class="min-h-[78px] h-[78px] flex items-center justify-center"></div>
       <div
         class="flex flex-col h-[calc(100%-78px)] items-center space-y-2 pt-2"
       >
         <div class="flex items-center justify-center relative w-full">
           <UiUnreadIndicator v-if="hasUnseenProposals()" />
           <router-link :to="{ name: 'timeline' }">
-            <UiSidebarButton>
+            <UiSidebarButton class="bg-white">
               <Icon size="20" name="feed" />
             </UiSidebarButton>
           </router-link>
@@ -123,7 +110,9 @@ onMounted(() => {
           </template>
         </draggable>
         <router-link :to="{ name: 'setup-space' }">
-          <UiSidebarButton><Icon size="20" name="plus" /></UiSidebarButton>
+          <UiSidebarButton class="bg-white"
+            ><Icon size="20" name="plus"
+          /></UiSidebarButton>
         </router-link>
         <div
           class="flex flex-col items-center space-y-2 justify-center !mb-2 !mt-auto py-2"

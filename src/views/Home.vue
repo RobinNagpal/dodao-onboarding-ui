@@ -32,7 +32,7 @@ onMounted(() => {
 <template>
   <div class="mt-4">
     <Container class="flex items-center mb-4">
-      <UiButton class="pl-3 pr-0 w-full max-w-[420px]">
+      <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
         <SearchWithFilters />
       </UiButton>
       <UiDropdown
@@ -94,34 +94,37 @@ onMounted(() => {
           >
             <!-- Added mb-0 to remove mb-4 added by block component -->
             <Block
-              class="text-center extra-icon-container mb-0 hover-border"
-              style="height: 266px"
+              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] bg-white dao-block overflow-hidden"
             >
-              <div class="relative inline-block mb-2">
-                <Token
-                  :space="space"
-                  symbolIndex="space"
-                  size="82"
-                  class="mb-1"
-                />
-                <UiCounter
-                  v-if="space.activeProposals"
-                  :counter="space.activeProposals"
-                  class="absolute top-0 right-0 !bg-green"
-                />
+              <div class="flex flex-col">
+                <div class="relative mb-2">
+                  <Token
+                    :space="space"
+                    symbolIndex="space"
+                    size="82"
+                    class="mb-1 big_tile"
+                  />
+                  <UiCounter
+                    v-if="space.activeProposals"
+                    :counter="space.activeProposals"
+                    class="absolute top-0 right-0 !bg-green"
+                  />
+                </div>
+                <div>
+                  <h3
+                    v-text="shorten(space.name, 16)"
+                    class="mt-4 mb-0 pb-0 text-[22px] !h-[32px] overflow-hidden"
+                  />
+                  <div class="mb-[12px] text-color">
+                    {{
+                      $tc('members', space.followers, {
+                        count: n(space.followers)
+                      })
+                    }}
+                  </div>
+                  <FollowButton class="!mb-0" :space="space" />
+                </div>
               </div>
-              <h3
-                v-text="shorten(space.name, 16)"
-                class="mb-0 pb-0 mt-0 text-[22px] !h-[32px] overflow-hidden"
-              />
-              <div class="mb-[12px] text-color">
-                {{
-                  $tc('members', space.followers, {
-                    count: n(space.followers)
-                  })
-                }}
-              </div>
-              <FollowButton class="!mb-0" :space="space" />
             </Block>
           </router-link>
         </div>
