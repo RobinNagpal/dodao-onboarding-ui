@@ -3,6 +3,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
+import { GuideStep } from '@/models/Guide';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -83,18 +84,33 @@ export function useClient() {
         metadata: JSON.stringify({})
       });
     } else if (type === 'guide') {
-      return clientEIP712.guide(auth.web3, web3.value.account, {
+      const guideMessage = {
+        id: payload.id,
         space: space.id,
         name: payload.name,
         content: payload.content,
-        steps: payload.steps.map(step => ({
+        steps: payload.steps.map((step: GuideStep) => ({
           id: step.id,
           name: step.name,
-          content: step.content
+          content: step.content,
+          questions: (step.questions || []).map(question => ({
+            id: question.id,
+            content: question.content,
+            choices: (question.choices || []).map(choice => ({
+              key: choice.key,
+              content: choice.content,
+              order: choice.order
+            })),
+            answerKeys: question.answerKeys,
+            questionType: question.questionType,
+            order: question.order
+          }))
         })),
         network: space.network,
         metadata: JSON.stringify({})
-      });
+      };
+      console.log('guideMessage', guideMessage);
+      return clientEIP712.guide(auth.web3, web3.value.account, guideMessage);
     } else if (type === 'vote') {
       return clientEIP712.vote(auth.web3, web3.value.account, {
         space: space.id,
