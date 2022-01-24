@@ -3,7 +3,6 @@ import {
   createHttpLink,
   InMemoryCache
 } from '@apollo/client/core';
-import gql from 'graphql-tag';
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -21,6 +20,5 @@ export const apolloClient = new ApolloClient({
     query: {
       fetchPolicy: 'no-cache'
     }
-  },
-  typeDefs: gql``
+  }
 });
