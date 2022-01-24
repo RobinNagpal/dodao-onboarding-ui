@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { useApolloQuery } from '@/composables/useApolloQuery';
-import { GUIDES_QUERY } from '@/helpers/queries';
+import { GuidesQuery } from './guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
 import { useUnseenGuides } from '@/composables/useUnseenGuides';
 import { lsSet, setPageTitle } from '@/helpers/utils';
@@ -29,7 +29,7 @@ const { apolloQuery } = useApolloQuery();
 async function loadGuides(skip = 0) {
   const guidesObj = await apolloQuery(
     {
-      query: GUIDES_QUERY,
+      query: GuidesQuery,
       variables: {
         first: loadBy,
         skip,

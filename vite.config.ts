@@ -1,3 +1,4 @@
+import graphql from '@rollup/plugin-graphql';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import visualizer from 'rollup-plugin-visualizer';
@@ -19,7 +20,8 @@ export default defineConfig({
       filename: './dist/stats.html',
       template: 'sunburst',
       gzipSize: true
-    })
+    }),
+    graphql()
   ],
   resolve: {
     alias: {

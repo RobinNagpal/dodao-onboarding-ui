@@ -1308,6 +1308,22 @@
   resolved "https://registry.yarnpkg.com/@pusher/push-notifications-web/-/push-notifications-web-1.1.0.tgz#bd5bab25971eab523e0b2d0fb519beeae56aec1c"
   integrity sha512-qR9RZNpH9E54GEpn9uqag9VbLG3kk13DPtf0v4ScsbIZhLFrc1vVWoylzh9zPKiJx3LLwnSxZQA/DkF13OBYXw==
 
+"@rollup/plugin-graphql@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-graphql/-/plugin-graphql-1.1.0.tgz#492f579816f65bc21ce26394f2f140d95192622d"
+  integrity sha512-X+H6oFlprDlnO3D0UiEytdW97AMphPXO0C7KunS7i/rBXIGQRQVDU5WKTXnBu2tfyYbjCTtfhXMSGI0i885PNg==
+  dependencies:
+    "@rollup/pluginutils" "^4.0.0"
+    graphql-tag "^2.2.2"
+
+"@rollup/pluginutils@^4.0.0":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.1.2.tgz#ed5821c15e5e05e32816f5fb9ec607cdf5a75751"
+  integrity sha512-ROn4qvkxP9SyPeHaf7uQC/GPFY6L/OWy9+bd9AwcjOAWQwxRscoEyAUD8qCY5o5iL4jqQwoLk2kaTKJPb/HwzQ==
+  dependencies:
+    estree-walker "^2.0.1"
+    picomatch "^2.2.2"
+
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.1.1.tgz#1d4da86dd4eded15656a57d933fda2b9a08d47ec"
@@ -4883,7 +4899,7 @@ graphql-tag@2.12.4:
   dependencies:
     tslib "^2.1.0"
 
-graphql-tag@^2.10.1, graphql-tag@^2.12.3, graphql-tag@^2.12.6:
+graphql-tag@^2.10.1, graphql-tag@^2.12.3, graphql-tag@^2.12.6, graphql-tag@^2.2.2:
   version "2.12.6"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.6.tgz#d441a569c1d2537ef10ca3d1633b48725329b5f1"
   integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==

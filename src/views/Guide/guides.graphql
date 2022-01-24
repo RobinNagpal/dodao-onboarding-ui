@@ -1,4 +1,33 @@
-query Guide($id: String!) {
+query GuidesQuery(
+    $space: String
+    $space_in: [String]
+    $author_in: [String]
+) {
+    guides(
+        where: {
+            space: $space
+            space_in: $space_in
+            author_in: $author_in
+        }
+    ) {
+        id
+        ipfs
+        author
+        name
+        content
+        created
+        space {
+            id
+            name
+            members
+            avatar
+            symbol
+        }
+    }
+}
+
+
+query GuideQuery($id: String!) {
     guide(id: $id) {
         author
         content
