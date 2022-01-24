@@ -22,10 +22,5 @@ export const apolloClient = new ApolloClient({
       fetchPolicy: 'no-cache'
     }
   },
-  typeDefs: gql`
-    enum OrderDirection {
-      asc
-      desc
-    }
-  `
+  typeDefs: gql``
 });

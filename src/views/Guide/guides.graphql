@@ -1,0 +1,40 @@
+query Guide($id: String!) {
+    guide(id: $id) {
+        author
+        content
+        created
+        from
+        id
+        ipfs
+        name
+        network
+        space {
+            id
+            name
+        }
+        steps {
+            content
+            created
+            id
+            name
+            order
+            questions {
+                answerKeys
+                choices {
+                    content
+                    key
+                    order
+                }
+                content
+                order
+                questionType
+                uuid
+            }
+            uuid
+        }
+        uuid
+        link
+
+    }
+}
+
