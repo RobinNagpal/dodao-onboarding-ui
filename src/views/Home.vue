@@ -30,8 +30,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mt-4">
-    <Container class="flex items-center mb-4">
+  <div class="mt-4 max-w-[1012px] mx-auto">
+    <Container class="flex items-center mb-4 mx-0">
       <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
         <SearchWithFilters />
       </UiButton>
@@ -83,7 +83,7 @@ onMounted(() => {
         {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
       </div>
     </Container>
-    <Container :slim="true">
+    <Container :slim="true" class="mx-0">
       <div class="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
         <div
           v-for="space in orderedSpacesByCategory.slice(0, limit)"
@@ -94,7 +94,8 @@ onMounted(() => {
           >
             <!-- Added mb-0 to remove mb-4 added by block component -->
             <Block
-              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] bg-white dao-block overflow-hidden"
+              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] bg-white overflow-hidden"
+              slim
             >
               <div class="flex flex-col">
                 <div class="relative mb-2">
@@ -102,7 +103,8 @@ onMounted(() => {
                     :space="space"
                     symbolIndex="space"
                     size="82"
-                    class="mb-1 big_tile"
+                    class="mb-1"
+                    big_tile
                   />
                   <UiCounter
                     v-if="space.activeProposals"

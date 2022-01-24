@@ -6,7 +6,8 @@ import { getUrl } from '@snapshot-labs/snapshot.js/src/utils.ts';
 const props = defineProps({
   space: Object,
   size: String,
-  symbolIndex: [String, Number]
+  symbolIndex: [String, Number],
+  big_tile: Boolean
 });
 
 const spaceId = computed(() => props.space.id);
@@ -30,6 +31,7 @@ const spaceAddress = computed(() => {
       :imgsrc="url"
       :address="spaceAddress"
       :size="size"
+      :big_tile="big_tile"
     />
   </div>
 </template>

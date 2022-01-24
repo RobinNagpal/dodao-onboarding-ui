@@ -5,14 +5,15 @@ defineProps({
   address: String,
   size: String,
   imgsrc: String,
-  space: Object
+  space: Object,
+  big_tile: Boolean
 });
 
 const error = ref(false);
 </script>
 
 <template>
-  <span class="flex-shrink-0">
+  <span class="flex-shrink-0" :class="{ 'w-[100%]': big_tile }">
     <img
       v-if="imgsrc && !error"
       :src="imgsrc"
@@ -21,34 +22,23 @@ const error = ref(false);
         height: `${parseInt(size) || 22}px`
       }"
       @error="error = true"
+      class="rounded-full inline-block !align-middle leading-none"
       :class="[
         space?.skin ? `${space?.skin} bg-[color:var(--bg-color)]` : 'bg-white'
       ]"
       :alt="space?.name"
-      class="rounded-full inline-block !align-middle leading-none"
     />
     <UiBlockie
       v-else-if="!!address"
       :seed="address"
-      class="inline-block !align-middle rounded-full"
       :style="{
-        'line-height': 0,
-        width: `${parseInt(size) || 22}px`,
-        height: `${parseInt(size) || 22}px`
+        'object-fit': `${big_tile ? 'cover' : 'null'}`,
+        'border-radius': `${big_tile ? 0 : 'null'}`,
+        width: `${big_tile ? '424' : parseInt(size) || 22}px`,
+        height: `${big_tile ? '260' : parseInt(size) || 22}px`
       }"
+      class="inline-block !align-middle rounded-full"
       :alt="space?.name"
     />
   </span>
 </template>
-
-<style scoped lang="scss">
-.big_tile > span {
-  width: 100%;
-}
-.big_tile img {
-  width: 424px !important;
-  height: 260px !important;
-  object-fit: cover !important;
-  border-radius: 0 !important;
-}
-</style>

@@ -69,7 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="!domain" class="w-[68px] h-screen hidden sm:block fixed m-0">
+  <div v-if="!domain" class="w-[68px] h-screen hidden sm:block m-0 fixed">
     <div class="flex flex-col h-full overflow-auto no-scrollbar">
       <div class="min-h-[78px] h-[78px] flex items-center justify-center"></div>
       <div
@@ -78,7 +78,7 @@ onMounted(() => {
         <div class="flex items-center justify-center relative w-full">
           <UiUnreadIndicator v-if="hasUnseenProposals()" />
           <router-link :to="{ name: 'timeline' }">
-            <UiSidebarButton class="bg-white">
+            <UiSidebarButton>
               <Icon size="20" name="feed" />
             </UiSidebarButton>
           </router-link>
@@ -110,9 +110,7 @@ onMounted(() => {
           </template>
         </draggable>
         <router-link :to="{ name: 'setup-space' }">
-          <UiSidebarButton class="bg-white"
-            ><Icon size="20" name="plus"
-          /></UiSidebarButton>
+          <UiSidebarButton><Icon size="20" name="plus" /></UiSidebarButton>
         </router-link>
         <div
           class="flex flex-col items-center space-y-2 justify-center !mb-2 !mt-auto py-2"
