@@ -53,7 +53,10 @@ onMounted(() => setTitle());
     >
       {{ $t('demoSite') }}
     </div>
-    <nav id="topnav" class="w-full header-nav max-w-[1248px]">
+    <nav
+      id="topnav"
+      class="w-full header-nav max-w-[1012px] mt-4 mx-auto p-4 rounded-md bg-white"
+    >
       <Container class="max-w-[100%]">
         <div class="flex items-center" style="height: 78px">
           <div class="flex-auto flex items-center">
@@ -65,7 +68,7 @@ onMounted(() => setTitle());
               <img
                 :src="dodaoLogo"
                 alt="arrow"
-                class="logo arrow"
+                class="logo arrow w-[190px]"
                 :style="{ height: `56px` }"
               />
             </router-link>
@@ -138,16 +141,9 @@ onMounted(() => setTitle());
 
 <style scoped lang="scss">
 .header-nav {
-  margin-top: 24px;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 24px 0px;
-  border-radius: 14px;
-  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 16px 0 rgb(26 27 30 / 3%);
 }
 .logo {
-  width: 190px;
   transition: transform 300ms ease, -webkit-transform 300ms ease;
 }
 .logo:hover {
