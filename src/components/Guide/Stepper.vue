@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const activeStep = computed(() =>
-  props.steps.find(step => step.id === props.activeStepId)
+  props.steps.find(step => step.uuid === props.activeStepId)
 );
 </script>
 <template>
@@ -28,12 +28,12 @@ const activeStep = computed(() =>
     <div class="p-4">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
-          @click="props.setActiveStep(step.id)"
+          @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
-          :class="step.id === activeStepId && 'active'"
+          :class="step.uuid === activeStepId && 'active'"
           role="presentation"
           v-for="step in steps"
-          :key="step.id"
+          :key="step.uuid"
         >
           <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>
@@ -42,7 +42,7 @@ const activeStep = computed(() =>
           class="ob-nav-step"
           role="presentation"
           data-step-label="+"
-          @click="props.addStep"
+          @click="addStep"
         >
           <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
         </li>
@@ -51,7 +51,7 @@ const activeStep = computed(() =>
     <GuideStepperItem
       :guide="guide"
       :step="activeStep"
-      @update:step="props.updateStep"
+      @update:step="updateStep"
       :moveStepUp="moveStepUp"
       :moveStepDown="moveStepDown"
     />

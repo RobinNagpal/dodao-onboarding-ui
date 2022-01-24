@@ -14,7 +14,6 @@ export const guideTypes = {
   ],
   Step: [
     { name: 'content', type: 'string' },
-    { name: 'id', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'order', type: 'uint64' },
     { name: 'questions', type: 'Question[]' },
@@ -23,7 +22,6 @@ export const guideTypes = {
   Guide: [
     { name: 'content', type: 'string' },
     { name: 'from', type: 'address' },
-    { name: 'id', type: 'string' },
     { name: 'metadata', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'network', type: 'string' },

@@ -31,7 +31,7 @@ export interface Guide {
   content: string;
   from?: string;
   id?: string;
-  metadata: string;
+  metadata: string | { network: string };
   name: string;
   network: string;
   space: string;

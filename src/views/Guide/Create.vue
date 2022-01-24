@@ -18,6 +18,7 @@ import { useStore } from '@/composables/useStore';
 import { setPageTitle } from '@/helpers/utils';
 import orderBy from 'lodash/orderBy';
 import { Guide, GuideStep, QuestionType } from '@/models/Guide';
+import { v4 as uuidv4 } from 'uuid';
 
 const props = defineProps({
   spaceId: String,
@@ -42,7 +43,7 @@ const preview = ref(false);
 
 const guideSteps: GuideStep[] = [
   {
-    id: 'step1_id',
+    uuid: uuidv4(),
     name: 'Introduction',
     content: `
       Some basic Git commands are:
@@ -56,12 +57,12 @@ const guideSteps: GuideStep[] = [
     order: 0
   },
   {
-    id: 'step2_id',
+    uuid: uuidv4(),
     name: 'Introduction Evaluation',
     content: ``,
     questions: [
       {
-        id: 'question_1',
+        uuid: uuidv4(),
         content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
         choices: [
           {
@@ -90,7 +91,7 @@ const guideSteps: GuideStep[] = [
         order: 0
       },
       {
-        id: 'question_2',
+        uuid: uuidv4(),
         content: 'True or False',
         choices: [
           {
@@ -114,7 +115,7 @@ const guideSteps: GuideStep[] = [
   }
 ];
 const guide: Guide = {
-  id: 'some_id',
+  uuid: uuidv4(),
   name: 'Guide Name',
   content:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
@@ -129,15 +130,17 @@ const steps = computed(() => {
 });
 
 const minOrder = Math.min(...steps.value.map(step => step.order));
-const activeStepId = ref(steps.value.find(step => step.order === minOrder)!.id);
+const activeStepId = ref(
+  steps.value.find(step => step.order === minOrder)!.uuid
+);
 
-function setActiveStep(id) {
-  activeStepId.value = id;
+function setActiveStep(uuid) {
+  activeStepId.value = uuid;
 }
 
 function updateStep(step) {
   form.value.steps = form.value.steps.map(s => {
-    if (s.id === step.id) {
+    if (s.uuid === step.uuid) {
       return step;
     } else {
       return s;
@@ -145,16 +148,16 @@ function updateStep(step) {
   });
 }
 
-function moveStepUp(stepId) {
-  const stepIndex = form.value.steps.findIndex(s => s.id === stepId);
+function moveStepUp(stepUuid) {
+  const stepIndex = form.value.steps.findIndex(s => s.uuid === stepUuid);
   form.value.steps[stepIndex - 1].order = stepIndex;
   form.value.steps[stepIndex].order = stepIndex - 1;
 
   form.value.steps = orderBy(form.value.steps, 'order');
 }
 
-function moveStepDown(stepId) {
-  const stepIndex = form.value.steps.findIndex(s => s.id === stepId);
+function moveStepDown(stepUuid) {
+  const stepIndex = form.value.steps.findIndex(s => s.uuid === stepUuid);
   form.value.steps[stepIndex + 1].order = stepIndex;
   form.value.steps[stepIndex].order = stepIndex + 1;
 
@@ -165,7 +168,7 @@ function addStep() {
   form.value.steps = [
     ...form.value.steps,
     {
-      id: `step ${form.value.steps.length + 1}_id`,
+      uuid: uuidv4(),
       name: `Step ${form.value.steps.length + 1}`,
       content: '',
       order: form.value.steps.length,
@@ -204,7 +207,7 @@ const isValid = computed(() => {
 });
 
 async function handleSubmit() {
-  form.value.metadata.network = props.space?.network;
+  form.value.metadata['network'] = props.space?.network;
   const result = await send(props.space, 'guide', form.value);
   console.log(result);
   if (result.id) {

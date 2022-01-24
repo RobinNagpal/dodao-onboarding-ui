@@ -1,10 +1,14 @@
-<script setup>
-import { computed, ref } from 'vue';
+<script setup lang="ts">
+import { Guide, GuideStep, QuestionType } from '@/models/Guide';
 import { v4 as uuidv4 } from 'uuid';
+import { computed, PropType } from 'vue';
 
 const props = defineProps({
-  guide: Object,
-  step: Object,
+  guide: { type: Object as PropType<Guide>, required: true },
+  step: {
+    type: Object as PropType<GuideStep>,
+    required: true
+  },
   moveStepUp: Function,
   moveStepDown: Function
 });
@@ -25,7 +29,7 @@ function updateStepContent(content) {
 
 function updateQuestionDescription(questionId, content) {
   const questions = props.step.questions.map(question => {
-    if (question.id === questionId) {
+    if (question.uuid === questionId) {
       return {
         ...question,
         content
@@ -40,7 +44,7 @@ function updateQuestionDescription(questionId, content) {
 
 function updateChoiceContent(questionId, choiceKey, content) {
   const questions = props.step.questions.map(question => {
-    if (question.id === questionId) {
+    if (question.uuid === questionId) {
       const choices = question.choices.map(choice => {
         if (choice.key === choiceKey) {
           return { ...choice, content };
@@ -71,7 +75,7 @@ function newChoiceKey() {
 function addChoice(questionId) {
   const key = newChoiceKey();
   const questions = props.step.questions.map(question => {
-    if (question.id === questionId) {
+    if (question.uuid === questionId) {
       return {
         ...question,
         choices: [...question.choices, { key, content: '' }]
@@ -86,7 +90,7 @@ function addChoice(questionId) {
 
 function removeChoice(questionId, choiceKey) {
   const questions = props.step.questions.map(question => {
-    if (question.id === questionId) {
+    if (question.uuid === questionId) {
       return {
         ...question,
         choices: question.choices.filter(choice => choice.key !== choiceKey)
@@ -101,7 +105,7 @@ function removeChoice(questionId, choiceKey) {
 
 function updateAnswers(questionId, choiceKey, selected) {
   const questions = props.step.questions.map(question => {
-    if (question.id === questionId) {
+    if (question.uuid === questionId) {
       const answerKeys = selected
         ? [...question.answerKeys, choiceKey]
         : question.answerKeys.filter(answer => answer !== choiceKey);
@@ -118,20 +122,23 @@ function updateAnswers(questionId, choiceKey, selected) {
 
 function addQuestion() {
   const question = {
-    id: uuidv4(),
+    uuid: uuidv4(),
     content: '',
     choices: [
       {
         key: newChoiceKey(),
-        content: ''
+        content: '',
+        order: 0
       },
       {
         key: newChoiceKey(),
-        content: ''
+        content: '',
+        order: 1
       }
     ],
     answerKeys: [],
-    type: 'SingleChoice'
+    order: props.step.questions.length,
+    questionType: QuestionType.MultipleChoice
   };
   const questions = [...(props.step.questions || []), question];
   emit('update:step', { ...props.step, questions });
@@ -144,7 +151,7 @@ function addQuestion() {
         class="float-right ml-2"
         :aria-label="$t('toggleSkin')"
         :disabled="step.order === 0"
-        @click="moveStepUp(step.id)"
+        @click="moveStepUp(step.uuid)"
       >
         <Icon size="20" class="link-color" name="arrow-up" />
       </UiSidebarButton>
@@ -152,7 +159,7 @@ function addQuestion() {
         class="float-right ml-2"
         :aria-label="$t('toggleSkin')"
         :disabled="step.order + 1 === guide.steps.length"
-        @click="moveStepDown(step.id)"
+        @click="moveStepDown(step.uuid)"
       >
         <Icon size="20" class="link-color" name="arrow-down" />
       </UiSidebarButton>
@@ -166,7 +173,7 @@ function addQuestion() {
       </UiSidebarButton>
     </div>
     <UiButtonInput
-      :modelValue="props.step.name"
+      :modelValue="step.name"
       :error="inputError('name')"
       @update:modelValue="updateStepName"
     >
@@ -174,14 +181,14 @@ function addQuestion() {
     </UiButtonInput>
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
-        :value="props.step.content"
+        :value="step.content"
         :placeholder="$t(`guide.step.contents`)"
         class="input w-full text-left"
         style="font-size: 18px"
         @update:modelValue="updateStepContent"
       />
     </UiButton>
-    <template v-for="question in questions" :key="question.id">
+    <template v-for="question in questions" :key="question.uuid">
       <GuideQuestion
         :addChoice="addChoice"
         :question="question"

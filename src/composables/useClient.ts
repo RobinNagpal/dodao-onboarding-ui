@@ -85,17 +85,17 @@ export function useClient() {
       });
     } else if (type === 'guide') {
       const guideMessage = {
-        id: payload.id,
+        uuid: payload.uuid,
         space: space.id,
         name: payload.name,
         content: payload.content,
         steps: payload.steps.map((step: GuideStep) => ({
-          id: step.id,
+          uuid: step.uuid,
           name: step.name,
           content: step.content,
           order: step.order,
           questions: (step.questions || []).map(question => ({
-            id: question.id,
+            uuid: question.uuid,
             content: question.content,
             choices: (question.choices || []).map(choice => ({
               key: choice.key,

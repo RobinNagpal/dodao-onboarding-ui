@@ -1,7 +1,13 @@
-<script setup>
+<script setup lang="ts">
+import { GuideQuestion } from '@/models/Guide';
+import { PropType } from 'vue';
+
 const props = defineProps({
   addChoice: Function,
-  question: Object,
+  question: {
+    type: Object as PropType<GuideQuestion>,
+    required: true
+  },
   removeChoice: Function,
   updateChoiceContent: Function,
   updateQuestionDescription: Function,
@@ -19,13 +25,13 @@ const disableChoiceEdit = false;
         :placeholder="$t(`guide.question.content`)"
         class="input w-full text-left"
         style="font-size: 18px"
-        @update:modelValue="updateQuestionDescription(question.id, $event)"
+        @update:modelValue="updateQuestionDescription(question.uuid, $event)"
       />
     </UiButton>
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex">
         <Checkbox
-          @update:modelValue="updateAnswers(question.id, choice.key, $event)"
+          @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
         />
         <UiInput
@@ -33,14 +39,14 @@ const disableChoiceEdit = false;
           maxlength="64"
           :disabled="disableChoiceEdit"
           @update:modelValue="
-            updateChoiceContent(question.id, choice.key, $event)
+            updateChoiceContent(question.uuid, choice.key, $event)
           "
         >
           <template v-slot:info>
             <span
               v-if="!disableChoiceEdit && question.choices.length > 1"
               class="cursor-pointer"
-              @click="removeChoice(question.id, choice.key)"
+              @click="removeChoice(question.uuid, choice.key)"
             >
               <Icon name="close" size="12" />
             </span>
@@ -50,7 +56,7 @@ const disableChoiceEdit = false;
     </template>
     <UiButton
       v-if="!disableChoiceEdit"
-      @click="addChoice(question.id)"
+      @click="addChoice(question.uuid)"
       class="block w-full"
     >
       {{ $t('create.addChoice') }}
