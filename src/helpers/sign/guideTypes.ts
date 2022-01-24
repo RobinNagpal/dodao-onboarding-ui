@@ -1,23 +1,24 @@
 export const guideTypes = {
   QuestionChoice: [
-    { name: 'key', type: 'string' },
     { name: 'content', type: 'string' },
+    { name: 'key', type: 'string' },
     { name: 'order', type: 'uint64' }
   ],
   Question: [
-    { name: 'id', type: 'string' },
-    { name: 'content', type: 'string' },
-    { name: 'choices', type: 'QuestionChoice[]' },
     { name: 'answerKeys', type: 'string[]' },
+    { name: 'choices', type: 'QuestionChoice[]' },
+    { name: 'content', type: 'string' },
+    { name: 'order', type: 'uint64' },
     { name: 'questionType', type: 'string' },
-    { name: 'order', type: 'uint64' }
+    { name: 'uuid', type: 'string' }
   ],
   Step: [
+    { name: 'content', type: 'string' },
     { name: 'id', type: 'string' },
     { name: 'name', type: 'string' },
-    { name: 'content', type: 'string' },
+    { name: 'order', type: 'uint64' },
     { name: 'questions', type: 'Question[]' },
-    { name: 'order', type: 'uint64' }
+    { name: 'uuid', type: 'string' }
   ],
   Guide: [
     { name: 'content', type: 'string' },
@@ -28,6 +29,7 @@ export const guideTypes = {
     { name: 'network', type: 'string' },
     { name: 'space', type: 'string' },
     { name: 'steps', type: 'Step[]' },
-    { name: 'timestamp', type: 'uint64' }
+    { name: 'timestamp', type: 'uint64' },
+    { name: 'uuid', type: 'string' }
   ]
 };

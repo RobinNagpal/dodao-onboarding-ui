@@ -93,6 +93,7 @@ export function useClient() {
           id: step.id,
           name: step.name,
           content: step.content,
+          order: step.order,
           questions: (step.questions || []).map(question => ({
             id: question.id,
             content: question.content,
