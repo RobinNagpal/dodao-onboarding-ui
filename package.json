@@ -11,7 +11,7 @@
     "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts  --localSchemaFile=schema.graphql --includes='src/**/*.graphql' --target typescript --outputFlat"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.7",
+    "@apollo/client": "^3.5.8",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/address": "^5.4.0",
