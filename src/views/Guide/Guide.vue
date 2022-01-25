@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import { GuideQuery_guide } from '@/graphql/generated/graphqlDocs';
+import { Ref } from '@vue/reactivity';
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -27,20 +29,22 @@ const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const { store } = useStore();
-const notify = inject('notify');
+const notify = inject('notify') as Function;
 
 const id = route.params.id;
 
 const modalOpen = ref(false);
 const loading = ref(true);
-const guide = ref({});
+const guide: Ref<GuideQuery_guide | undefined> = ref<
+  GuideQuery_guide | undefined
+>();
 const totalScore = ref(0);
 const scores = ref([]);
 
-const isCreator = computed(() => guide.value.author === web3Account.value);
+const isCreator = computed(() => guide.value?.author === web3Account.value);
 const loaded = computed(() => !props.spaceLoading && !loading.value);
 const isAdmin = computed(() => {
-  const admins = (props.space.admins || []).map(admin => admin.toLowerCase());
+  const admins = (props.space?.admins || []).map(admin => admin.toLowerCase());
   return admins.includes(web3Account.value?.toLowerCase());
 });
 const threeDotItems = computed(() => {
@@ -57,7 +61,7 @@ const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 async function loadGuide() {
   guide.value = await getGuide(id);
   // Redirect to guide spaceId if it doesn't match route key
-  if (route.name === 'guide' && props.spaceId !== guide.value.space.id) {
+  if (route.name === 'guide' && props.spaceId !== guide.value?.space?.id) {
     router.push({ name: 'error-404' });
   }
 
@@ -65,12 +69,7 @@ async function loadGuide() {
 }
 
 async function loadPower() {
-  if (
-    !web3Account.value ||
-    !guide.value.author ||
-    guide.value.state === 'closed'
-  )
-    return;
+  if (!web3Account.value || !guide.value?.author) return;
   const response = await getPower(props.space, web3Account.value, guide.value);
   totalScore.value = response.totalScore;
   scores.value = response.scores;
@@ -84,7 +83,7 @@ async function deleteGuide() {
   if (result.id) {
     getExplore();
     store.space.guides = [];
-    notify(['green', t('notify.guideDeleted')]);
+    notify?.(['green', t('notify.guideDeleted')]);
     router.push({ name: 'guide' });
   }
 }
@@ -104,8 +103,8 @@ function selectFromThreedotDropdown(e) {
     router.push({
       name: 'spaceCreate',
       params: {
-        key: guide.value.space.id,
-        from: guide.value.id
+        key: guide.value?.space?.id,
+        from: guide.value?.id
       }
     });
 }
@@ -120,7 +119,7 @@ function selectFromShareDropdown(e) {
 const { profiles, loadProfiles } = useProfiles();
 
 watch(guide, () => {
-  loadProfiles([guide.value.author]);
+  guide.value?.author && loadProfiles([guide.value.author]);
 });
 
 watch(web3Account, (val, prev) => {
@@ -136,10 +135,24 @@ watch([loaded, web3Account], () => {
 onMounted(async () => {
   await loadGuide();
   setPageTitle('page.title.space.guide', {
-    guide: guide.value.title,
-    space: props.space.name
+    guide: guide.value?.name,
+    space: props.space?.name
   });
 });
+
+const steps = computed(() => {
+  return guide.value?.steps || [];
+});
+
+const minOrder = Math.min(...steps.value?.map(step => step!.order));
+const activeStepId = ref(
+  steps.value.find(step => step?.order === minOrder)?.uuid ||
+    steps.value?.[0]?.uuid
+);
+
+function setActiveStep(uuid) {
+  activeStepId.value = uuid;
+}
 </script>
 
 <template>
@@ -160,9 +173,8 @@ onMounted(async () => {
       </div>
       <div class="px-4 md:px-0">
         <template v-if="loaded">
-          <h1 v-text="guide.title" class="mb-2" />
+          <h1 v-text="guide?.name" class="mb-2" />
           <div class="mb-4">
-            <UiState :state="guide.state" class="inline-block" />
             <UiDropdown
               top="2.5rem"
               right="1.5rem"
@@ -190,7 +202,14 @@ onMounted(async () => {
               </div>
             </UiDropdown>
           </div>
-          <UiMarkdown :body="guide.body" class="mb-6" />
+          <UiMarkdown :body="guide?.content" class="mb-6" />
+          <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+            <GuideViewStepper
+              :activeStepId="activeStepId"
+              :steps="steps"
+              :setActiveStep="setActiveStep"
+            />
+          </Block>
         </template>
         <PageLoading v-else />
       </div>
@@ -218,26 +237,6 @@ onMounted(async () => {
               #{{ guide.ipfs.slice(0, 7) }}
               <Icon name="external-link" class="ml-1" />
             </a>
-          </div>
-          <div>
-            <b>{{ $t('guide.startDate') }}</b>
-            <span
-              v-text="$d(guide.start * 1e3, 'short', 'en-US')"
-              v-tippy="{
-                content: ms(guide.start)
-              }"
-              class="float-right link-color"
-            />
-          </div>
-          <div>
-            <b>{{ $t('guide.endDate') }}</b>
-            <span
-              v-text="$d(guide.end * 1e3, 'short', 'en-US')"
-              v-tippy="{
-                content: ms(guide.end)
-              }"
-              class="link-color float-right"
-            />
           </div>
         </div>
       </Block>

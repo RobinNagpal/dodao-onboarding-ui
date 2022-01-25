@@ -1,14 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
-import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { clone } from '@snapshot-labs/snapshot.js/src/utils';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
-import { GUIDE_QUERY } from '@/helpers/queries';
+import { GuideQuery } from '@/graphql/guides.graphql';
 import validations from '@snapshot-labs/snapshot.js/src/validations';
 import { useDomain } from '@/composables/useDomain';
 import { useApolloQuery } from '@/composables/useApolloQuery';
@@ -17,7 +15,10 @@ import { useClient } from '@/composables/useClient';
 import { useApp } from '@/composables/useApp';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useStore } from '@/composables/useStore';
-import { n, setPageTitle } from '@/helpers/utils';
+import { setPageTitle } from '@/helpers/utils';
+import orderBy from 'lodash/orderBy';
+import { Guide, GuideStep, QuestionType } from '@/models/Guide';
+import { v4 as uuidv4 } from 'uuid';
 
 const props = defineProps({
   spaceId: String,
@@ -34,31 +35,155 @@ const { getExplore } = useApp();
 const { spaceLoading } = useExtendedSpaces();
 const { send, clientLoading } = useClient();
 const { store } = useStore();
-const notify = inject('notify');
+const notify = inject('notify') as any;
 
 const route = useRoute();
-const blockNumber = ref(-1);
-const bodyLimit = ref(14400);
+const contentLimit = ref(14400);
 const preview = ref(false);
-const form = ref({
-  name: '',
-  body: '',
-  start: 0,
-  end: 0,
-  snapshot: '',
+
+const guideSteps: GuideStep[] = [
+  {
+    uuid: uuidv4(),
+    name: 'Introduction',
+    content: `
+      Some basic Git commands are:
+      \`\`\`
+      git status
+      git add
+      git commit
+      \`\`\`
+      `,
+    questions: [],
+    order: 0
+  },
+  {
+    uuid: uuidv4(),
+    name: 'Introduction Evaluation',
+    content: ``,
+    questions: [
+      {
+        uuid: uuidv4(),
+        content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
+        choices: [
+          {
+            key: 'dog_and_cat',
+            content: 'Dog And Cat',
+            order: 0
+          },
+          {
+            key: 'dog_or_cat',
+            content: 'Dog Or Cat',
+            order: 1
+          },
+          {
+            key: 'only_dog',
+            content: 'Only Dog',
+            order: 2
+          },
+          {
+            key: 'only_cat',
+            content: 'Only Cat',
+            order: 3
+          }
+        ],
+        answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
+        questionType: QuestionType.MultipleChoice,
+        order: 0
+      },
+      {
+        uuid: uuidv4(),
+        content: 'True or False',
+        choices: [
+          {
+            key: 'true',
+            content: 'True',
+            order: 0
+          },
+          {
+            key: 'false',
+            content: 'False',
+            order: 1
+          }
+        ],
+        answerKeys: ['true'],
+        questionType: QuestionType.MultipleChoice,
+        order: 1
+      }
+    ],
+
+    order: 1
+  }
+];
+const guide: Guide = {
+  uuid: uuidv4(),
+  name: 'Guide Name',
+  content:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+  steps: guideSteps,
   metadata: {}
+} as Guide;
+
+const form = ref(guide);
+
+const steps = computed(() => {
+  return form.value.steps;
 });
-const modalOpen = ref(false);
-const selectedDate = ref('');
-const nameForm = ref(null);
+
+const minOrder = Math.min(...steps.value.map(step => step.order));
+const activeStepId = ref(
+  steps.value.find(step => step.order === minOrder)?.uuid
+);
+
+function setActiveStep(uuid) {
+  activeStepId.value = uuid;
+}
+
+function updateStep(step) {
+  form.value.steps = form.value.steps.map(s => {
+    if (s.uuid === step.uuid) {
+      return step;
+    } else {
+      return s;
+    }
+  });
+}
+
+function moveStepUp(stepUuid) {
+  const stepIndex = form.value.steps.findIndex(s => s.uuid === stepUuid);
+  form.value.steps[stepIndex - 1].order = stepIndex;
+  form.value.steps[stepIndex].order = stepIndex - 1;
+
+  form.value.steps = orderBy(form.value.steps, 'order');
+}
+
+function moveStepDown(stepUuid) {
+  const stepIndex = form.value.steps.findIndex(s => s.uuid === stepUuid);
+  form.value.steps[stepIndex + 1].order = stepIndex;
+  form.value.steps[stepIndex].order = stepIndex + 1;
+
+  form.value.steps = orderBy(form.value.steps, 'order');
+}
+
+function addStep() {
+  form.value.steps = [
+    ...form.value.steps,
+    {
+      uuid: uuidv4(),
+      name: `Step ${form.value.steps.length + 1}`,
+      content: '',
+      order: form.value.steps.length,
+      questions: []
+    }
+  ];
+}
+
 const passValidation = ref([true]);
-const loadingSnapshot = ref(true);
 
 // Check if account passes space validation
 watchEffect(async () => {
   if (web3Account.value && auth.isAuthenticated.value) {
-    const validationName = props.space.validation?.name ?? 'basic';
-    const validationParams = props.space.validation?.params ?? {};
+    const validationName = props.space?.validation?.name ?? 'basic';
+    const validationParams = props.space?.validation?.params ?? {};
     const isValid = await validations[validationName](
       web3Account.value,
       clone(props.space),
@@ -71,42 +196,20 @@ watchEffect(async () => {
   }
 });
 
-const dateStart = computed(() => {
-  return form.value.start;
-});
-
-const dateEnd = computed(() => {
-  return form.value.end;
-});
-
 const isValid = computed(() => {
-  // const ts = (Date.now() / 1e3).toFixed();
-  const endDateValid = dateEnd.value ? dateEnd.value > dateStart.value : true;
   return (
     !clientLoading.value &&
     form.value.name &&
-    form.value.body.length <= bodyLimit.value &&
-    dateStart.value &&
-    // form.value.start >= ts &&
-    endDateValid &&
+    form.value.content.length <= contentLimit.value &&
     passValidation.value[0] &&
     !web3.value.authLoading
   );
 });
 
-function setDate(ts) {
-  if (selectedDate.value) {
-    form.value[selectedDate.value] = ts;
-  }
-}
-
 async function handleSubmit() {
-  form.value.metadata.network = props.space.network;
-  form.value.start = dateStart.value;
-  form.value.end = dateEnd.value;
-  console.log('Send', form.value);
+  form.value.metadata['network'] = props.space?.network;
   const result = await send(props.space, 'guide', form.value);
-  console.log('Result', result);
+  console.log(result);
   if (result.id) {
     getExplore();
     store.space.guides = [];
@@ -127,7 +230,7 @@ const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
 function clickSubmit() {
   !web3Account.value
     ? (modalAccountOpen.value = true)
-    : !termsAccepted.value && props.space.terms
+    : !termsAccepted.value && props.space?.terms
     ? (modalTermsOpen.value = true)
     : handleSubmit();
 }
@@ -137,7 +240,7 @@ const { apolloQuery, queryLoading } = useApolloQuery();
 async function loadGuide() {
   const guide = await apolloQuery(
     {
-      query: GUIDE_QUERY,
+      query: GuideQuery,
       variables: {
         id: props.from
       }
@@ -145,179 +248,82 @@ async function loadGuide() {
     'guide'
   );
 
-  form.value = {
-    name: guide.title,
-    body: guide.body,
-    start: guide.start,
-    end: guide.end,
-    snapshot: guide.snapshot,
-    type: guide.type
-  };
-
   const { network } = guide;
   form.value.metadata = { network };
 }
 
+function inputError(field) {
+  return false;
+}
+
 onMounted(async () => {
-  setPageTitle('page.title.space.create', { space: props.space.name });
-  nameForm.value.focus();
+  setPageTitle('page.title.space.create', { space: props.space?.name });
 
   if (props.from) await loadGuide();
-});
-
-watchEffect(async () => {
-  loadingSnapshot.value = true;
-  if (props.space.network) {
-    blockNumber.value = await getBlockNumber(getProvider(props.space.network));
-    form.value.snapshot = blockNumber.value;
-    loadingSnapshot.value = false;
-  }
 });
 </script>
 
 <template>
   <Layout v-bind="$attrs">
-    <template #content-left>
-      <Block v-if="passValidation[0] === false">
-        <Icon name="warning" class="mr-1" />
-        <span v-if="passValidation[1] === 'basic'">
-          {{
-            space.validation?.params.minScore || space?.filters.minScore
-              ? $tc('create.validationWarning.basic.minScore', [
-                  n(space.filters.minScore),
-                  space.symbol
-                ])
-              : $t('create.validationWarning.basic.member')
-          }}
-        </span>
-        <span v-else>
-          {{
-            $t(
-              space.validation.params.rules ||
-                'create.validationWarning.customValidation'
-            )
-          }}
-        </span>
-      </Block>
-      <div class="px-4 md:px-0 overflow-hidden">
-        <router-link
-          :to="domain ? { path: '/' } : { name: 'guides' }"
-          class="text-color"
-        >
-          <Icon name="back" size="22" class="!align-middle" />
-          {{ space.name }}
-        </router-link>
-        <UiSidebarButton
-          v-if="!preview"
-          @click="preview = true"
-          class="float-right"
-        >
-          <Icon name="preview" size="18" />
-        </UiSidebarButton>
-        <UiSidebarButton
-          v-if="preview"
-          @click="preview = false"
-          class="float-right"
-        >
-          <Icon name="back" size="18" />
-        </UiSidebarButton>
-      </div>
-      <div class="px-4 md:px-0">
-        <div class="flex flex-col mb-6">
-          <h1 v-if="preview" v-text="form.name || 'Untitled'" class="mb-2" />
-          <input
-            v-if="!preview"
-            v-model="form.name"
-            maxlength="128"
-            class="text-2xl font-bold input mb-2"
-            :placeholder="$t('create.question')"
-            ref="nameForm"
-          />
+    <div class="px-4 md:px-0 overflow-hidden">
+      <router-link
+        :to="domain ? { path: '/' } : { name: 'guides' }"
+        class="text-color"
+      >
+        <Icon name="back" size="22" class="!align-middle" />
+        {{ space.name }}
+      </router-link>
+      <UiSidebarButton
+        v-if="!preview"
+        @click="preview = true"
+        class="float-right"
+      >
+        <Icon name="preview" size="18" />
+      </UiSidebarButton>
+      <UiSidebarButton
+        v-if="preview"
+        @click="preview = false"
+        class="float-right"
+      >
+        <Icon name="back" size="18" />
+      </UiSidebarButton>
+    </div>
+    <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+      <div class="mb-2">
+        <UiInput v-model="form.name" :error="inputError('name')">
+          <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
+        </UiInput>
+        <UiButton class="block w-full px-3" style="height: auto">
           <TextareaAutosize
-            v-if="!preview"
-            v-model="form.body"
-            class="input pt-0"
-            style="font-size: 22px"
-            :placeholder="$t('create.content')"
+            v-model="form.content"
+            :placeholder="$t(`guide.create.excerpt`)"
+            class="input w-full text-left"
+            style="font-size: 18px"
           />
-          <div v-if="form.body && preview" class="mb-4">
-            <UiMarkdown :body="form.body" />
-          </div>
-          <p v-if="form.body.length > bodyLimit" class="!text-red mt-4">
-            -{{ n(-(bodyLimit - form.body.length)) }}
-          </p>
-        </div>
-      </div>
-    </template>
-    <template #sidebar-right v-if="!preview">
-      <Block :title="$t('actions')" :loading="spaceLoading">
-        <div class="mb-2">
-          <UiButton
-            @click="(modalOpen = true), (selectedDate = 'start')"
-            class="w-full mb-2"
-          >
-            <span v-if="!dateStart">{{ $t('create.startDate') }}</span>
-            <span v-else v-text="$d(dateStart * 1e3, 'short', 'en-US')" />
-          </UiButton>
-          <UiButton
-            @click="(modalOpen = true), (selectedDate = 'end')"
-            class="w-full mb-2"
-          >
-            <span v-if="!dateEnd">{{ $t('create.endDate') }}</span>
-            <span v-else v-text="$d(dateEnd * 1e3, 'short', 'en-US')" />
-          </UiButton>
-          <UiButton
-            v-if="route.query.snapshot"
-            :loading="loadingSnapshot"
-            class="w-full mb-2"
-          >
-            <input
-              v-model="form.snapshot"
-              type="number"
-              class="input w-full text-center"
-              :placeholder="$t('create.snapshotBlock')"
-            />
-          </UiButton>
-        </div>
-        <UiButton
-          @click="clickSubmit"
-          :disabled="!isValid"
-          :loading="clientLoading || queryLoading"
-          class="block w-full"
-          primary
-        >
-          {{ $t('create.publish') }}
         </UiButton>
-      </Block>
-    </template>
-  </Layout>
-  <teleport to="#modal">
-    <ModalSelectDate
-      :value="form[selectedDate]"
-      :selectedDate="selectedDate"
-      :open="modalOpen"
-      @close="modalOpen = false"
-      @input="setDate"
-    />
-    <ModalTerms
-      :open="modalTermsOpen"
-      :space="space"
-      @close="modalTermsOpen = false"
-      @accept="acceptTerms(), handleSubmit()"
-    />
-  </teleport>
-</template>
+      </div>
+    </Block>
+    <Block :title="$t('guide.create.stepByStep')" :slim="true">
+      <GuideCreateStepper
+        :activeStepId="activeStepId"
+        :guide="form"
+        :steps="steps"
+        :setActiveStep="setActiveStep"
+        :updateStep="updateStep"
+        :addStep="addStep"
+        :moveStepUp="moveStepUp"
+        :moveStepDown="moveStepDown"
+      />
+    </Block>
 
-<style>
-.list-leave-active,
-.list-enter-active {
-  transition: all 0.3s;
-}
-.list-move {
-  transition: transform 0.3s;
-}
-.list-enter,
-.list-leave-to {
-  opacity: 0;
-}
-</style>
+    <UiButton
+      @click="clickSubmit"
+      :disabled="!isValid"
+      :loading="clientLoading || queryLoading"
+      class="block w-full"
+      primary
+    >
+      {{ $t('create.publish') }}
+    </UiButton>
+  </Layout>
+</template>

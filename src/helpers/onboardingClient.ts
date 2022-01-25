@@ -1,4 +1,4 @@
-import { Guide, guideTypes } from '@/helpers/sign/types';
+import { Guide, guideTypes } from '@/helpers/sign/guideTypes';
 import { Web3Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import Client from '@snapshot-labs/snapshot.js/src/sign';

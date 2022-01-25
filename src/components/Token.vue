@@ -6,7 +6,8 @@ import { getUrl } from '@snapshot-labs/snapshot.js/src/utils.ts';
 const props = defineProps({
   space: Object,
   size: String,
-  symbolIndex: [String, Number]
+  symbolIndex: [String, Number],
+  big_tile: Boolean
 });
 
 const spaceId = computed(() => props.space.id);
@@ -24,12 +25,13 @@ const spaceAddress = computed(() => {
 </script>
 
 <template>
-  <span class="inline-block align-middle leading-none">
+  <div class="align-middle leading-none">
     <UiAvatar
       :space="space"
       :imgsrc="url"
       :address="spaceAddress"
       :size="size"
+      :big_tile="big_tile"
     />
-  </span>
+  </div>
 </template>

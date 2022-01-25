@@ -66,11 +66,6 @@ export const GUIDE_QUERY = gql`
     guide(id: $id) {
       id
       ipfs
-      title
-      body
-      start
-      end
-      state
       author
       created
       network
@@ -147,11 +142,6 @@ export const GUIDES_QUERY = gql`
     ) {
       id
       ipfs
-      title
-      body
-      start
-      end
-      state
       author
       created
       space {
@@ -236,16 +226,6 @@ export const SPACES_QUERY = gql`
       filters {
         minScore
         onlyMembers
-      }
-    }
-  }
-`;
-
-export const ENS_QUERY = gql`
-  query Domain($id: String!) {
-    account(id: $id) {
-      domains {
-        name
       }
     }
   }
