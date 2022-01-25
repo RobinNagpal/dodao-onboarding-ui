@@ -136,7 +136,7 @@ watch([loaded, web3Account], () => {
 onMounted(async () => {
   await loadGuide();
   setPageTitle('page.title.space.guide', {
-    guide: guide.value.title,
+    guide: guide.value.name,
     space: props.space.name
   });
 });
@@ -160,9 +160,8 @@ onMounted(async () => {
       </div>
       <div class="px-4 md:px-0">
         <template v-if="loaded">
-          <h1 v-text="guide.title" class="mb-2" />
+          <h1 v-text="guide.name" class="mb-2" />
           <div class="mb-4">
-            <UiState :state="guide.state" class="inline-block" />
             <UiDropdown
               top="2.5rem"
               right="1.5rem"
@@ -190,7 +189,7 @@ onMounted(async () => {
               </div>
             </UiDropdown>
           </div>
-          <UiMarkdown :body="guide.body" class="mb-6" />
+          <UiMarkdown :body="guide.content" class="mb-6" />
         </template>
         <PageLoading v-else />
       </div>
@@ -218,26 +217,6 @@ onMounted(async () => {
               #{{ guide.ipfs.slice(0, 7) }}
               <Icon name="external-link" class="ml-1" />
             </a>
-          </div>
-          <div>
-            <b>{{ $t('guide.startDate') }}</b>
-            <span
-              v-text="$d(guide.start * 1e3, 'short', 'en-US')"
-              v-tippy="{
-                content: ms(guide.start)
-              }"
-              class="float-right link-color"
-            />
-          </div>
-          <div>
-            <b>{{ $t('guide.endDate') }}</b>
-            <span
-              v-text="$d(guide.end * 1e3, 'short', 'en-US')"
-              v-tippy="{
-                content: ms(guide.end)
-              }"
-              class="link-color float-right"
-            />
           </div>
         </div>
       </Block>
