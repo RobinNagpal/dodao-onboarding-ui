@@ -131,7 +131,7 @@ const steps = computed(() => {
 
 const minOrder = Math.min(...steps.value.map(step => step.order));
 const activeStepId = ref(
-  steps.value.find(step => step.order === minOrder)!.uuid
+  steps.value.find(step => step.order === minOrder)?.uuid
 );
 
 function setActiveStep(uuid) {
@@ -304,7 +304,7 @@ onMounted(async () => {
       </div>
     </Block>
     <Block :title="$t('guide.create.stepByStep')" :slim="true">
-      <GuideStepper
+      <GuideCreateStepper
         :activeStepId="activeStepId"
         :guide="form"
         :steps="steps"

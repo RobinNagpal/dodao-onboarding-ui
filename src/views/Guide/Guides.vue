@@ -41,7 +41,7 @@ async function loadGuides(skip = 0) {
     'guides'
   );
   stopLoadingMore.value = guidesObj?.length < loadBy;
-  store.space.guides = store.space.guides.concat(guidesObj);
+  store.space.guides = guidesObj;
   console.log('store.space.guides', store.space.guides);
 }
 

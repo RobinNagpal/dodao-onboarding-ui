@@ -48,7 +48,7 @@ const activeStep = computed(() =>
         </li>
       </ol>
     </div>
-    <GuideStepperItem
+    <GuideCreateStepperItem
       :guide="guide"
       :step="activeStep"
       @update:step="updateStep"

@@ -189,14 +189,14 @@ function addQuestion() {
       />
     </UiButton>
     <template v-for="question in questions" :key="question.uuid">
-      <GuideQuestion
+      <GuideCreateQuestion
         :addChoice="addChoice"
         :question="question"
         :removeChoice="removeChoice"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
-      ></GuideQuestion>
+      ></GuideCreateQuestion>
     </template>
   </div>
 </template>
