@@ -32,7 +32,6 @@ query GuideQuery($id: String!) {
         author
         content
         created
-        from
         id
         ipfs
         name

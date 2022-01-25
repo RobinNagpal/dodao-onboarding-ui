@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { useApolloQuery } from '@/composables/useApolloQuery';
-import { GuidesQuery } from './guides.graphql';
+import { GuidesQuery } from '@/graphql/guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
 import { useUnseenGuides } from '@/composables/useUnseenGuides';
 import { lsSet, setPageTitle } from '@/helpers/utils';

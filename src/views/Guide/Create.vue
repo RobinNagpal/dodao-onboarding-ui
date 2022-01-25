@@ -6,7 +6,7 @@ import { clone } from '@snapshot-labs/snapshot.js/src/utils';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
-import { GUIDE_QUERY } from '@/helpers/queries';
+import { GuideQuery } from '@/graphql/guides.graphql';
 import validations from '@snapshot-labs/snapshot.js/src/validations';
 import { useDomain } from '@/composables/useDomain';
 import { useApolloQuery } from '@/composables/useApolloQuery';
@@ -240,7 +240,7 @@ const { apolloQuery, queryLoading } = useApolloQuery();
 async function loadGuide() {
   const guide = await apolloQuery(
     {
-      query: GUIDE_QUERY,
+      query: GuideQuery,
       variables: {
         id: props.from
       }

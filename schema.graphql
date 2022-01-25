@@ -295,7 +295,6 @@ type Guide {
   author: String!
   content: String!
   created: Int!
-  from: String!
   id: String!
   ipfs: String
   name: String!

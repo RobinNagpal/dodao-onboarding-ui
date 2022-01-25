@@ -1,5 +1,6 @@
+import { GuideQuery } from '@/graphql/guides.graphql';
 import { apolloClient } from '@/helpers/apollo';
-import { GUIDE_QUERY, PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
+import { PROPOSAL_QUERY, VOTES_QUERY } from '@/helpers/queries';
 import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
 import voting from '@snapshot-labs/snapshot.js/src/voting';
 import cloneDeep from 'lodash/cloneDeep';
@@ -34,7 +35,7 @@ export async function getGuide(id) {
   try {
     console.time('getGuide');
     const response = await apolloClient.query({
-      query: GUIDE_QUERY,
+      query: GuideQuery,
       variables: {
         id
       }

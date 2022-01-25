@@ -8,7 +8,7 @@
     "lint": "eslint \"./src/*/**/*.{ts,vue,json}\" --fix",
     "postinstall": "patch-package && husky install",
     "init-submodules": "git submodule update --init",
-    "build:graphql": "apollo codegen:generate src/generated/graphql/graphqlDocs.ts  --localSchemaFile=schema.graphql --includes='src/**/*.graphql' --target typescript --outputFlat"
+    "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts  --localSchemaFile=schema.graphql --includes='src/**/*.graphql' --target typescript --outputFlat"
   },
   "dependencies": {
     "@apollo/client": "^3.5.7",
