@@ -55,7 +55,7 @@ onMounted(() => setTitle());
     </div>
     <nav
       id="topnav"
-      class="w-full header-nav max-w-[1012px] mt-4 mx-auto p-4 rounded-md bg-white"
+      class="w-full header-nav max-w-[1012px] mt-4 mx-auto p-4 rounded-md hover-border bg-skin-bg border border-skin-border"
     >
       <Container class="max-w-[100%]">
         <div class="flex items-center" style="height: 78px">
