@@ -30,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mt-4 max-w-[1012px] mx-auto">
+  <div class="mt-4 sm:max-w-[544px] md:max-w-[768px] lg:max-w-[1012px] mx-auto">
     <Container class="flex items-center mb-4 mx-0">
       <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
         <SearchWithFilters />
@@ -94,7 +94,7 @@ onMounted(() => {
           >
             <!-- Added mb-0 to remove mb-4 added by block component -->
             <Block
-              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] bg-white overflow-hidden"
+              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] overflow-hidden bg-skin-bg"
               slim
             >
               <div class="flex flex-col">
