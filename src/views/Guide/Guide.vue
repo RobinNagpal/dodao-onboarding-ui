@@ -3,7 +3,7 @@ import {
   GuideQuery_guide,
   GuideQuery_guide_steps
 } from '@/graphql/generated/graphqlDocs';
-import { GuideStep } from '@/models/Guide';
+import { GuideStep } from '@/models/GuideModel';
 import { Ref } from '@vue/reactivity';
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -55,6 +55,7 @@ const threeDotItems = computed(() => {
   const items = [{ text: t('guide.duplicate'), action: 'duplicate' }];
   if (isAdmin.value || isCreator.value)
     items.push({ text: t('guide.delete'), action: 'delete' });
+  items.push({ text: t('guide.edit'), action: 'edit' });
   return items;
 });
 
@@ -97,7 +98,7 @@ async function deleteGuide() {
 }
 
 async function editGuide() {
-  router.push({ name: 'guideEdit', params: { id: guide.value?.uuid } });
+  router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
 }
 
 const {
@@ -111,6 +112,7 @@ const {
 
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
+  if (e === 'edit') editGuide();
   if (e === 'duplicate')
     router.push({
       name: 'spaceCreate',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GuideQuestion } from '@/models/Guide';
+import { GuideQuestion } from '@/models/GuideModel';
 import { PropType } from 'vue';
 
 const props = defineProps({

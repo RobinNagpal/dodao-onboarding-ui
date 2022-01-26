@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, watchEffect } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import { clone } from '@snapshot-labs/snapshot.js/src/utils';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { useModal } from '@/composables/useModal';
-import { useTerms } from '@/composables/useTerms';
-import { GuideQuery } from '@/graphql/guides.graphql';
-import validations from '@snapshot-labs/snapshot.js/src/validations';
-import { useDomain } from '@/composables/useDomain';
 import { useApolloQuery } from '@/composables/useApolloQuery';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useClient } from '@/composables/useClient';
 import { useApp } from '@/composables/useApp';
+import { useClient } from '@/composables/useClient';
+import { useDomain } from '@/composables/useDomain';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
+import { useModal } from '@/composables/useModal';
 import { useStore } from '@/composables/useStore';
+import { useTerms } from '@/composables/useTerms';
+import { useWeb3 } from '@/composables/useWeb3';
+import { GuideQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
+import { GuideModel, GuideStep, QuestionType } from '@/models/GuideModel';
+import { emptyGuide } from '@/views/Guide/EmptyGuide';
+import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { clone } from '@snapshot-labs/snapshot.js/src/utils';
+import validations from '@snapshot-labs/snapshot.js/src/validations';
 import orderBy from 'lodash/orderBy';
-import { Guide, GuideStep, QuestionType } from '@/models/Guide';
 import { v4 as uuidv4 } from 'uuid';
+import { computed, inject, onMounted, ref, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
   space: Object,
-  from: String
+  from: String,
+  uuid: String
 });
 
 const router = useRouter();
@@ -38,90 +40,13 @@ const { store } = useStore();
 const notify = inject('notify') as any;
 
 const route = useRoute();
+
+const uuid = route.params.uuid;
+
 const contentLimit = ref(14400);
 const preview = ref(false);
 
-const guideSteps: GuideStep[] = [
-  {
-    uuid: uuidv4(),
-    name: 'Introduction',
-    content: `
-      Some basic Git commands are:
-      \`\`\`
-      git status
-      git add
-      git commit
-      \`\`\`
-      `,
-    questions: [],
-    order: 0
-  },
-  {
-    uuid: uuidv4(),
-    name: 'Introduction Evaluation',
-    content: ``,
-    questions: [
-      {
-        uuid: uuidv4(),
-        content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
-        choices: [
-          {
-            key: 'dog_and_cat',
-            content: 'Dog And Cat',
-            order: 0
-          },
-          {
-            key: 'dog_or_cat',
-            content: 'Dog Or Cat',
-            order: 1
-          },
-          {
-            key: 'only_dog',
-            content: 'Only Dog',
-            order: 2
-          },
-          {
-            key: 'only_cat',
-            content: 'Only Cat',
-            order: 3
-          }
-        ],
-        answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
-        questionType: QuestionType.MultipleChoice,
-        order: 0
-      },
-      {
-        uuid: uuidv4(),
-        content: 'True or False',
-        choices: [
-          {
-            key: 'true',
-            content: 'True',
-            order: 0
-          },
-          {
-            key: 'false',
-            content: 'False',
-            order: 1
-          }
-        ],
-        answerKeys: ['true'],
-        questionType: QuestionType.MultipleChoice,
-        order: 1
-      }
-    ],
-
-    order: 1
-  }
-];
-const guide: Guide = {
-  uuid: uuidv4(),
-  name: 'Guide Name',
-  content:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-  steps: guideSteps,
-  metadata: {}
-} as Guide;
+const guide: GuideModel = emptyGuide(props.space) as GuideModel;
 
 const form = ref(guide);
 

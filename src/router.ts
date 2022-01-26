@@ -15,16 +15,21 @@ import SpaceProposal from '@/views/SpaceProposal.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Strategy from '@/views/Strategy.vue';
 import Timeline from '@/views/Timeline.vue';
-import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteLocation,
+  RouteRecordRaw
+} from 'vue-router';
 
 // The frontend shows all spaces or just a single one, when being accessed
 // through that space's custom domain.
 const { domain, alias } = useDomain();
-const routes: any[] = [];
+const routes: RouteRecordRaw[] = [];
 
 // These routes get prefixed with the respective space's ENS domain (/:key)
 // or they get mounted at "/" in the single space scenario.
-const spaceRoutes = [
+const spaceRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'spaceProposals',
