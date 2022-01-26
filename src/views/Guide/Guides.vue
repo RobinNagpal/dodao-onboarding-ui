@@ -69,12 +69,6 @@ async function load() {
   emitUpdateLastSeenGuide();
 }
 
-function selectState(e) {
-  store.space.filterBy = e;
-  store.space.guides = [];
-  load();
-}
-
 const { endElement } = useScrollMonitor(() =>
   loadMore(() => loadGuides(store.space.guides.length), loading.value)
 );

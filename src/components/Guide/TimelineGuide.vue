@@ -22,7 +22,7 @@ watchEffect(() => {
       class="p-4 block text-color"
       :to="{
         name: 'guide',
-        params: { key: guide.space.id, id: guide.id }
+        params: { key: guide.space.id, uuid: guide.uuid }
       }"
     >
       <div>

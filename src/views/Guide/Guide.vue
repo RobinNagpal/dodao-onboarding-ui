@@ -35,7 +35,7 @@ const { getExplore } = useApp();
 const { store } = useStore();
 const notify = inject('notify') as Function;
 
-const id = route.params.id;
+const uuid = route.params.uuid;
 
 const modalOpen = ref(false);
 const loading = ref(true);
@@ -65,7 +65,7 @@ const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 const activeStepId = ref();
 
 async function loadGuide() {
-  guide.value = await getGuide(id);
+  guide.value = await getGuide(uuid);
   // Redirect to guide spaceId if it doesn't match route key
   if (route.name === 'guide' && props.spaceId !== guide.value?.space?.id) {
     router.push({ name: 'error-404' });
@@ -94,6 +94,10 @@ async function deleteGuide() {
     notify?.(['green', t('notify.guideDeleted')]);
     router.push({ name: 'guide' });
   }
+}
+
+async function editGuide() {
+  router.push({ name: 'guideEdit', params: { id: guide.value?.uuid } });
 }
 
 const {

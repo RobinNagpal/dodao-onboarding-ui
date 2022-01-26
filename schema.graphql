@@ -1,9 +1,5 @@
 scalar Any
 
-enum OrderDirection {
-  asc
-  desc
-}
 # Queries
 
 type Query {
@@ -17,7 +13,7 @@ type Query {
     orderDirection: OrderDirection
   ): [Space]
 
-  guide(id: String): Guide
+  guide(uuid: String): Guide
 
   guides(
     first: Int
@@ -221,6 +217,11 @@ input SubscriptionWhere {
   created_gte: Int
   created_lt: Int
   created_lte: Int
+}
+
+enum OrderDirection {
+  asc
+  desc
 }
 
 # Types
