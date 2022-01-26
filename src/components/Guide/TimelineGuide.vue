@@ -1,27 +1,14 @@
 <script setup>
-import { watchEffect, computed } from 'vue';
-import { shorten, ms, n } from '@/helpers/utils';
+import { watchEffect } from 'vue';
+import { shorten } from '@/helpers/utils';
 import { useUsername } from '@/composables/useUsername';
-import removeMd from 'remove-markdown';
 
 const props = defineProps({
   guide: Object,
   profiles: Object
 });
 
-const body = computed(() => removeMd(props.guide.body));
-
-const winningChoice = computed(() =>
-  props.guide.scores.indexOf(Math.max(...props.guide.scores))
-);
-
-const period = computed(() => {
-  if (props.guide.state === 'closed') return 'endedAgo';
-  if (props.guide.state === 'active') return 'endIn';
-  return 'startIn';
-});
-
-const { address, profile, username } = useUsername();
+const { address, profile } = useUsername();
 
 watchEffect(() => {
   address.value = props.guide.author;
