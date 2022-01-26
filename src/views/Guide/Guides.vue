@@ -108,23 +108,6 @@ const loadingData = computed(() => {
             <h2>{{ $t('guides.header') }}</h2>
           </div>
         </div>
-        <UiDropdown
-          top="3.5rem"
-          right="1.25rem"
-          @select="selectState"
-          :items="[
-            { text: $t('guides.states.all'), action: 'all' },
-            { text: $t('guides.states.active'), action: 'active' },
-            { text: $t('guides.states.pending'), action: 'pending' },
-            { text: $t('guides.states.closed'), action: 'closed' },
-            { text: $t('guides.states.core'), action: 'core' }
-          ]"
-        >
-          <UiButton class="pr-3">
-            {{ $t(`guides.states.${store.space.filterBy}`) }}
-            <Icon size="14" name="arrow-down" class="mt-1 mr-1" />
-          </UiButton>
-        </UiDropdown>
       </div>
 
       <NoResults

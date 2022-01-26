@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { GuideQuery_guide } from '@/graphql/generated/graphqlDocs';
+import {
+  GuideQuery_guide,
+  GuideQuery_guide_steps
+} from '@/graphql/generated/graphqlDocs';
+import { GuideStep } from '@/models/Guide';
 import { Ref } from '@vue/reactivity';
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -58,12 +62,16 @@ const browserHasHistory = computed(() => window.history.state.back);
 
 const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
+const activeStepId = ref();
+
 async function loadGuide() {
   guide.value = await getGuide(id);
   // Redirect to guide spaceId if it doesn't match route key
   if (route.name === 'guide' && props.spaceId !== guide.value?.space?.id) {
     router.push({ name: 'error-404' });
   }
+
+  activeStepId.value = guide.value?.steps[0]?.uuid;
 
   loading.value = false;
 }
@@ -144,14 +152,12 @@ const steps = computed(() => {
   return guide.value?.steps || [];
 });
 
-const minOrder = Math.min(...steps.value?.map(step => step!.order));
-const activeStepId = ref(
-  steps.value.find(step => step?.order === minOrder)?.uuid ||
-    steps.value?.[0]?.uuid
-);
-
-function setActiveStep(uuid) {
-  activeStepId.value = uuid;
+function goToNextStep(currentStep: GuideQuery_guide_steps) {
+  currentStep.order;
+  const nextStep = steps.value.find(
+    step => step?.order === currentStep.order + 1
+  );
+  activeStepId.value = nextStep?.uuid;
 }
 </script>
 
@@ -207,7 +213,7 @@ function setActiveStep(uuid) {
             <GuideViewStepper
               :activeStepId="activeStepId"
               :steps="steps"
-              :setActiveStep="setActiveStep"
+              :goToNextStep="goToNextStep"
             />
           </Block>
         </template>

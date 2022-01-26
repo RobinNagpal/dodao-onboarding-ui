@@ -8,7 +8,7 @@ const props = defineProps({
     type: Array as PropType<Array<GuideStep>>,
     required: true
   },
-  setActiveStep: Function
+  goToNextStep: Function
 });
 
 const activeStep = computed(
@@ -16,24 +16,29 @@ const activeStep = computed(
     props.steps.find(step => step.uuid === props.activeStepId) ||
     props.steps?.[0]
 );
+
+console.log(activeStep);
+console.log(props.activeStepId);
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
-          @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
-          :class="step.uuid === activeStepId && 'active'"
+          :class="step.uuid === activeStepId ? 'active' : 'disabled'"
           role="presentation"
           v-for="step in steps"
           :key="step.uuid"
         >
           <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>
+        <li class="ob-nav-step disabled" role="presentation">
+          <span class="step-link" role="menuitem">Done </span>
+        </li>
       </ol>
     </div>
-    <GuideViewStepperItem :step="activeStep" />
+    <GuideViewStepperItem :step="activeStep" :goToNextStep="goToNextStep" />
   </div>
 </template>
 <style scoped lang="scss">

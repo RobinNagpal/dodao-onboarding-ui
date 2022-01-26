@@ -6,7 +6,8 @@ const props = defineProps({
   step: {
     type: Object as PropType<GuideStep>,
     required: true
-  }
+  },
+  goToNextStep: Function
 });
 
 const emit = defineEmits(['update:step']);
@@ -29,6 +30,18 @@ function selectAnswer(questionId, choiceKey, selected) {
         :selectAnswer="selectAnswer"
       ></GuideViewQuestion>
     </template>
+    <UiButton
+      :aria-label="$t('next')"
+      class="float-right"
+      @click="goToNextStep(step)"
+    >
+      <span class="sm:block" v-text="$t('next')" />
+      <Icon
+        name="login"
+        size="20"
+        class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
+      />
+    </UiButton>
   </div>
 </template>
 <style scoped lang="scss"></style>
