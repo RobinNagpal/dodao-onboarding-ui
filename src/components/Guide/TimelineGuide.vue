@@ -39,32 +39,11 @@ watchEffect(() => {
       }"
     >
       <div>
-        <div class="mb-2">
-          <Token :space="guide.space" size="28" />
-          <span class="ml-2" v-text="guide.space.name" />
-          {{ $tc('guide.guideBy', [username]) }}
-          <Badges :address="guide.author" :members="guide.space.members" />
-          <UiState :state="guide.state" class="inline-block float-right" />
-        </div>
-        <h3 v-text="guide.title" class="my-1" />
-        <p v-text="shorten(body, 140)" class="break-words mb-2 text-md" />
-        <div>
-          <span
-            v-if="guide.scores_state !== 'final'"
-            v-text="$tc(period, [ms(guide.start), ms(guide.end)])"
-          />
-          <span
-            v-if="guide.scores_state === 'final'"
-            class="mt-2 flex space-x-1 items-center"
-          >
-            <Icon size="20" name="check1" class="text-green" />
-            <span class="mt-1"
-              >{{ shorten(guide.choices[winningChoice], 64) }} -
-              {{ n(guide.scores[winningChoice]) }}
-              {{ guide.space.symbol }}</span
-            >
-          </span>
-        </div>
+        <h3 v-text="guide.name" class="my-1" />
+        <p
+          v-text="shorten(guide.content, 140)"
+          class="break-words mb-2 text-md"
+        />
       </div>
     </router-link>
   </Block>
