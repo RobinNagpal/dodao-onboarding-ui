@@ -36,13 +36,13 @@ export async function getProposalVotes(
   }
 }
 
-export async function getGuide(id): Promise<GuideQuery_guide> {
+export async function getGuide(uuid): Promise<GuideQuery_guide> {
   try {
     console.time('getGuide');
     const response = await apolloClient.query<GuideQuery, GuideQueryVariables>({
       query: query,
       variables: {
-        id
+        uuid
       }
     });
 

@@ -14,7 +14,7 @@ export interface GuideQuestion {
   choices: QuestionChoice[];
   content: string;
   order: number;
-  questionType: QuestionType;
+  questionType: QuestionType | string;
   uuid: string;
 }
 
@@ -27,12 +27,15 @@ export interface GuideStep {
   uuid: string;
 }
 
-export interface Guide {
+export interface GuideModel {
   content: string;
+  author: string;
   from?: string;
   id?: string;
+  // TODO: check if this is really needed
   metadata: string | { network: string };
   name: string;
+  // TODO: check if this is really needed
   network: string;
   space: string;
   steps: GuideStep[];

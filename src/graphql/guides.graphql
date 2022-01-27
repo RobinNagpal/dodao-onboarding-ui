@@ -23,12 +23,13 @@ query GuidesQuery(
             avatar
             symbol
         }
+        uuid
     }
 }
 
 
-query GuideQuery($id: String!) {
-    guide(id: $id) {
+query GuideQuery($uuid: String!) {
+    guide(uuid: $uuid) {
         author
         content
         created

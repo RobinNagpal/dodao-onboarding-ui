@@ -42,7 +42,6 @@ async function loadGuides(skip = 0) {
   );
   stopLoadingMore.value = guidesObj?.length < loadBy;
   store.space.guides = guidesObj;
-  console.log('store.space.guides', store.space.guides);
 }
 
 function emitUpdateLastSeenGuide() {
@@ -67,12 +66,6 @@ async function load() {
   await loadGuides();
   loading.value = false;
   emitUpdateLastSeenGuide();
-}
-
-function selectState(e) {
-  store.space.filterBy = e;
-  store.space.guides = [];
-  load();
 }
 
 const { endElement } = useScrollMonitor(() =>

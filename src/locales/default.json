@@ -196,6 +196,7 @@
     "endDate": "End date",
     "delete": "Delete",
     "duplicate": "Duplicate",
+    "edit": "Edit",
     "guideBy": "by {0}",
     "question": {
       "description": "Question description"

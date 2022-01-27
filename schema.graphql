@@ -1,9 +1,5 @@
 scalar Any
 
-enum OrderDirection {
-  asc
-  desc
-}
 # Queries
 
 type Query {
@@ -17,7 +13,7 @@ type Query {
     orderDirection: OrderDirection
   ): [Space]
 
-  guide(id: String): Guide
+  guide(uuid: String): Guide
 
   guides(
     first: Int
@@ -223,6 +219,11 @@ input SubscriptionWhere {
   created_lte: Int
 }
 
+enum OrderDirection {
+  asc
+  desc
+}
+
 # Types
 
 type Space {
@@ -268,16 +269,16 @@ type SpaceVoting {
 type QuestionChoice {
   content: String!
   key: String!
-  order: String!
+  order: Int!
 }
 
 type GuideQuestion {
-  answerKeys: [String]!
-  choices: [QuestionChoice]!
+  answerKeys: [String!]!
+  choices: [QuestionChoice!]!
   content: String!
   order: Int!
-  questionType: String
-  uuid: String
+  questionType: String!
+  uuid: String!
 }
 
 type GuideStep {
@@ -286,9 +287,8 @@ type GuideStep {
   id: String!
   name: String!
   order: Int!
-  questions: [GuideQuestion]!
+  questions: [GuideQuestion!]!
   uuid: String!
-
 }
 
 type Guide {
@@ -296,11 +296,11 @@ type Guide {
   content: String!
   created: Int!
   id: String!
-  ipfs: String
+  ipfs: String!
   name: String!
   network: String!
-  space: Space
-  steps: [GuideStep]!
+  space: Space!
+  steps: [GuideStep!]!
   uuid: String!
   link: String
 }

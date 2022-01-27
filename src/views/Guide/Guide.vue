@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import {
-  GuideQuery_guide,
-  GuideQuery_guide_steps
-} from '@/graphql/generated/graphqlDocs';
-import { GuideStep } from '@/models/Guide';
-import { Ref } from '@vue/reactivity';
-import { computed, inject, onMounted, ref, watch } from 'vue';
+import { useGuide } from '@/composables/useGuide';
+import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
+import { SpaceModel } from '@/models/SpaceModel';
+import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { getGuide, getPower } from '@/helpers/snapshot';
-import { getIpfsUrl, ms, setPageTitle } from '@/helpers/utils';
+import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { useTerms } from '@/composables/useTerms';
 import { useProfiles } from '@/composables/useProfiles';
 import { useDomain } from '@/composables/useDomain';
@@ -21,7 +17,7 @@ import { useStore } from '@/composables/useStore';
 
 const props = defineProps({
   spaceId: String,
-  space: Object,
+  space: Object as PropType<SpaceModel>,
   spaceLoading: Boolean
 });
 
@@ -31,22 +27,22 @@ const { domain } = useDomain();
 const { t } = useI18n();
 const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
-const { getExplore } = useApp();
+const { getExplore, explore } = useApp();
 const { store } = useStore();
 const notify = inject('notify') as Function;
 
-const id = route.params.id;
+const uuid = route.params.uuid;
 
 const modalOpen = ref(false);
-const loading = ref(true);
-const guide: Ref<GuideQuery_guide | undefined> = ref<
-  GuideQuery_guide | undefined
->();
-const totalScore = ref(0);
-const scores = ref([]);
+
+const {
+  guideRef: guide,
+  guideLoaded,
+  initialize
+} = useGuide(uuid as string, props.space!, notify);
 
 const isCreator = computed(() => guide.value?.author === web3Account.value);
-const loaded = computed(() => !props.spaceLoading && !loading.value);
+const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
 const isAdmin = computed(() => {
   const admins = (props.space?.admins || []).map(admin => admin.toLowerCase());
   return admins.includes(web3Account.value?.toLowerCase());
@@ -55,6 +51,7 @@ const threeDotItems = computed(() => {
   const items = [{ text: t('guide.duplicate'), action: 'duplicate' }];
   if (isAdmin.value || isCreator.value)
     items.push({ text: t('guide.delete'), action: 'delete' });
+  items.push({ text: t('guide.edit'), action: 'edit' });
   return items;
 });
 
@@ -63,25 +60,6 @@ const browserHasHistory = computed(() => window.history.state.back);
 const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
 const activeStepId = ref();
-
-async function loadGuide() {
-  guide.value = await getGuide(id);
-  // Redirect to guide spaceId if it doesn't match route key
-  if (route.name === 'guide' && props.spaceId !== guide.value?.space?.id) {
-    router.push({ name: 'error-404' });
-  }
-
-  activeStepId.value = guide.value?.steps[0]?.uuid;
-
-  loading.value = false;
-}
-
-async function loadPower() {
-  if (!web3Account.value || !guide.value?.author) return;
-  const response = await getPower(props.space, web3Account.value, guide.value);
-  totalScore.value = response.totalScore;
-  scores.value = response.scores;
-}
 
 async function deleteGuide() {
   const result = await send(props.space, 'delete-guide', {
@@ -96,6 +74,10 @@ async function deleteGuide() {
   }
 }
 
+async function editGuide() {
+  router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
+}
+
 const {
   shareToTwitter,
   shareToFacebook,
@@ -107,11 +89,12 @@ const {
 
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
+  if (e === 'edit') editGuide();
   if (e === 'duplicate')
     router.push({
       name: 'spaceCreate',
       params: {
-        key: guide.value?.space?.id,
+        key: props.spaceId,
         from: guide.value?.id
       }
     });
@@ -130,18 +113,13 @@ watch(guide, () => {
   guide.value?.author && loadProfiles([guide.value.author]);
 });
 
-watch(web3Account, (val, prev) => {
-  if (val?.toLowerCase() !== prev) loadPower();
-});
-
 watch([loaded, web3Account], () => {
   if (web3.value.authLoading && !web3Account.value) return;
   if (!loaded.value) return;
-  loadPower();
 });
 
 onMounted(async () => {
-  await loadGuide();
+  await initialize();
   setPageTitle('page.title.space.guide', {
     guide: guide.value?.name,
     space: props.space?.name
@@ -253,10 +231,9 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
       v-if="loaded"
       :open="modalOpen"
       @close="modalOpen = false"
-      @reload="loadGuide"
       :space="space"
       :guide="guide"
-      :id="id"
+      :id="spaceId"
     />
     <ModalTerms
       :open="modalTermsOpen"

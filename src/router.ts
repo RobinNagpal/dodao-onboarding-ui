@@ -1,30 +1,35 @@
-import { createRouter, createWebHashHistory, RouteLocation } from 'vue-router';
-import Home from '@/views/Home.vue';
-import SpaceProposal from '@/views/SpaceProposal.vue';
-import Guide from '@/views/Guide/Guide.vue';
-import SpaceCreate from '@/views/SpaceCreate.vue';
-import GuideCreate from '@/views/Guide/Create.vue';
-import Setup from '@/views/Setup.vue';
-import SetupSpace from '@/views/Space/SetupSpace.vue';
-import SpaceSettings from '@/views/SpaceSettings.vue';
-import Explore from '@/views/Explore.vue';
-import Strategy from '@/views/Strategy.vue';
-import Playground from '@/views/Playground.vue';
-import Delegate from '@/views/Delegate.vue';
-import Timeline from '@/views/Timeline.vue';
-import Space from '@/views/Space.vue';
-import SpaceAbout from '@/views/SpaceAbout.vue';
-import Guides from '@/views/Guide/Guides.vue';
 import { useDomain } from '@/composables/useDomain';
+import Delegate from '@/views/Delegate.vue';
+import Explore from '@/views/Explore.vue';
+import GuideCreate from '@/views/Guide/Create.vue';
+import Guide from '@/views/Guide/Guide.vue';
+import Guides from '@/views/Guide/Guides.vue';
+import Home from '@/views/Home.vue';
+import Playground from '@/views/Playground.vue';
+import Setup from '@/views/Setup.vue';
+import Space from '@/views/Space.vue';
+import SetupSpace from '@/views/Space/SetupSpace.vue';
+import SpaceAbout from '@/views/SpaceAbout.vue';
+import SpaceCreate from '@/views/SpaceCreate.vue';
+import SpaceProposal from '@/views/SpaceProposal.vue';
+import SpaceSettings from '@/views/SpaceSettings.vue';
+import Strategy from '@/views/Strategy.vue';
+import Timeline from '@/views/Timeline.vue';
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteLocation,
+  RouteRecordRaw
+} from 'vue-router';
 
 // The frontend shows all spaces or just a single one, when being accessed
 // through that space's custom domain.
 const { domain, alias } = useDomain();
-const routes: any[] = [];
+const routes: RouteRecordRaw[] = [];
 
 // These routes get prefixed with the respective space's ENS domain (/:key)
 // or they get mounted at "/" in the single space scenario.
-const spaceRoutes = [
+const spaceRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'spaceProposals',
@@ -46,13 +51,18 @@ const spaceRoutes = [
     component: SpaceProposal
   },
   {
-    path: 'guide/:id',
+    path: 'guide/view/:uuid',
     name: 'guide',
     component: Guide
   },
   {
-    path: 'create/:from?',
+    path: 'guide/create',
     name: 'guideCreate',
+    component: GuideCreate
+  },
+  {
+    path: 'guide/edit/:uuid',
+    name: 'guideEdit',
     component: GuideCreate
   },
   {
