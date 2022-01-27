@@ -3,4 +3,5 @@ export interface SpaceModel {
   name: string;
   network: string;
   admins?: string[];
+  terms?: string;
 }

@@ -18,17 +18,15 @@ export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
   const { getExplore } = useApp();
   const { store } = useStore();
 
-  const guideRef = ref<GuideModel>(emptyGuide(space));
+  const emptyGuideModel = emptyGuide(space);
+  const guideRef = ref<GuideModel>(emptyGuideModel);
   const guideLoaded = ref<boolean>(false);
 
   const steps = computed(() => {
     return guideRef.value.steps;
   });
 
-  const minOrder = Math.min(...steps.value.map(step => step.order));
-  const activeStepId = ref(
-    steps.value.find(step => step.order === minOrder)?.uuid
-  );
+  const activeStepId = ref();
 
   async function initialize() {
     if (uuid) {
@@ -38,8 +36,14 @@ export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
         metadata: { network: space.network },
         space: space.id
       };
+      const minOrder = Math.min(...steps.value.map(step => step.order));
+      activeStepId.value = steps.value.find(
+        step => step.order === minOrder
+      )?.uuid;
+
       guideLoaded.value = true;
     } else {
+      activeStepId.value = emptyGuideModel.steps[0].uuid;
       guideLoaded.value = true;
     }
   }
@@ -105,6 +109,7 @@ export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
   }
 
   return {
+    activeStepId,
     addStep,
     guideLoaded,
     guideRef,
