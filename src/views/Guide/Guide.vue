@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useGuide } from '@/composables/useGuide';
-import {
-  GuideQuery_guide_steps
-} from '@/graphql/generated/graphqlDocs';
+import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import { SpaceModel } from '@/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
