@@ -1,14 +1,10 @@
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
-import { useDomain } from '@/composables/useDomain';
-import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useStore } from '@/composables/useStore';
-import { useWeb3 } from '@/composables/useWeb3';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideModel } from '@/models/GuideModel';
 import { SpaceModel } from '@/models/SpaceModel';
 import { emptyGuide } from '@/views/Guide/EmptyGuide';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
@@ -16,18 +12,14 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
-  const { send, clientLoading } = useClient();
+  const { send } = useClient();
   const router = useRouter();
   const { t } = useI18n();
-  const auth = getInstance();
-  const { domain } = useDomain();
-  const { web3, web3Account } = useWeb3();
   const { getExplore } = useApp();
-  const { spaceLoading } = useExtendedSpaces();
   const { store } = useStore();
 
   const guideRef = ref<GuideModel>(emptyGuide(space));
-  const loading = ref<boolean>(true);
+  const guideLoaded = ref<boolean>(false);
 
   const steps = computed(() => {
     return guideRef.value.steps;
@@ -46,8 +38,9 @@ export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
         metadata: { network: space.network },
         space: space.id
       };
+      guideLoaded.value = true;
     } else {
-      loading.value = false;
+      guideLoaded.value = true;
     }
   }
   function setActiveStep(uuid) {
@@ -113,6 +106,7 @@ export function useGuide(uuid: string | null, space: SpaceModel, notify: any) {
 
   return {
     addStep,
+    guideLoaded,
     guideRef,
     handleSubmit,
     initialize,

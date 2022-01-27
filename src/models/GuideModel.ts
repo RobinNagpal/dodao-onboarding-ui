@@ -29,6 +29,7 @@ export interface GuideStep {
 
 export interface GuideModel {
   content: string;
+  author: string;
   from?: string;
   id?: string;
   // TODO: check if this is really needed
