@@ -3,9 +3,9 @@ import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
-export const emptyGuide = (author: string, space: SpaceModel): GuideInput => {
+export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
   return {
-    author,
+    from,
     uuid: uuidv4(),
     name: 'Guide Name',
     content:

@@ -39,7 +39,7 @@ export function useEditGuide(
       const guide = await getGuide(uuid);
       guideRef.value = {
         ...guide,
-        author: web3.value.account,
+        from: web3.value.account,
         space: space.id
       };
       const minOrder = Math.min(...steps.value.map(step => step.order));
