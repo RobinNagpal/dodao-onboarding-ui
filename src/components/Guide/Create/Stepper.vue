@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { GuideModel, GuideStep } from '@/models/GuideModel';
+import {
+  GuideInput,
+  GuideStepInput
+} from '@dodao/onboarding-schemas/inputs/GuideInput';
+import {
+  GuideModel,
+  GuideStep
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
   guide: {
-    type: Object as PropType<GuideModel>,
+    type: Object as PropType<GuideInput>,
     required: true
   },
   steps: {
-    type: Array as PropType<Array<GuideStep>>,
+    type: Array as PropType<Array<GuideStepInput>>,
     required: true
   },
   setActiveStep: Function,

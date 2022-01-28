@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useGuide } from '@/composables/useGuide';
+import { useViewGuide } from '@/composables/useViewGuide';
 import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
-import { SpaceModel } from '@/models/SpaceModel';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -27,7 +27,7 @@ const { domain } = useDomain();
 const { t } = useI18n();
 const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
-const { getExplore, explore } = useApp();
+const { getExplore } = useApp();
 const { store } = useStore();
 const notify = inject('notify') as Function;
 
@@ -39,9 +39,12 @@ const {
   guideRef: guide,
   guideLoaded,
   initialize
-} = useGuide(uuid as string, props.space!, notify);
+} = useViewGuide(uuid as string);
 
-const isCreator = computed(() => guide.value?.author === web3Account.value);
+const isCreator = computed(() =>
+  guide.value?.authors.includes(web3Account.value)
+);
+
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
 const isAdmin = computed(() => {
   const admins = (props.space?.admins || []).map(admin => admin.toLowerCase());
@@ -110,7 +113,7 @@ function selectFromShareDropdown(e) {
 const { profiles, loadProfiles } = useProfiles();
 
 watch(guide, () => {
-  guide.value?.author && loadProfiles([guide.value.author]);
+  guide.value?.authors && loadProfiles([...guide.value.authors]);
 });
 
 watch([loaded, web3Account], () => {
@@ -203,13 +206,15 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
         <div class="space-y-1">
           <div>
             <b>{{ $t('author') }}</b>
-            <User
-              :address="guide.author"
-              :profile="profiles[guide.author]"
-              :space="space"
-              :guide="guide"
-              class="float-right"
-            />
+            <template v-for="author in guide.authors" :key="author">
+              <User
+                :address="author"
+                :profile="profiles[author]"
+                :space="space"
+                :guide="guide"
+                class="float-right"
+              />
+            </template>
           </div>
           <div>
             <b>IPFS</b>

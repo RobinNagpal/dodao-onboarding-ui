@@ -20,11 +20,9 @@ export const guideTypes = {
     { name: 'uuid', type: 'string' }
   ],
   Guide: [
-    { name: 'content', type: 'string' },
     { name: 'from', type: 'address' },
-    { name: 'metadata', type: 'string' },
+    { name: 'content', type: 'string' },
     { name: 'name', type: 'string' },
-    { name: 'network', type: 'string' },
     { name: 'space', type: 'string' },
     { name: 'steps', type: 'Step[]' },
     { name: 'timestamp', type: 'uint64' },

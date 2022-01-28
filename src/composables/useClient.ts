@@ -3,7 +3,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
-import { GuideStep } from '@/models/GuideModel';
+import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -106,9 +106,7 @@ export function useClient() {
             questionType: question.questionType,
             order: question.order
           }))
-        })),
-        network: space.network,
-        metadata: JSON.stringify({})
+        }))
       };
       console.log('guideMessage', guideMessage);
       return clientEIP712.guide(auth.web3, web3.value.account, guideMessage);

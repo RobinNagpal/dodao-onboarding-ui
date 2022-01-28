@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
-import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
-import { useGuide } from '@/composables/useGuide';
+import { useEditGuide } from '@/composables/useEditGuide';
 import { useModal } from '@/composables/useModal';
-import { useStore } from '@/composables/useStore';
 import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
-import { SpaceModel } from '@/models/SpaceModel';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -21,14 +17,9 @@ const props = defineProps({
   uuid: String
 });
 
-const router = useRouter();
-const { t } = useI18n();
-const auth = getInstance();
 const { domain } = useDomain();
 const { web3, web3Account } = useWeb3();
-const { spaceLoading } = useExtendedSpaces();
-const { send, clientLoading } = useClient();
-const { store } = useStore();
+const { clientLoading } = useClient();
 const notify = inject('notify') as any;
 
 const route = useRoute();
@@ -49,7 +40,7 @@ const {
   moveStepDown,
   setActiveStep,
   updateStep
-} = useGuide(uuid as string, props.space!, notify);
+} = useEditGuide(uuid as string, props.space!, notify);
 
 const form = ref(guide);
 

@@ -1,9 +1,11 @@
-import { GuideModel, QuestionType } from '@/models/GuideModel';
-import { SpaceModel } from '@/models/SpaceModel';
+import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
-export const emptyGuide = (space: SpaceModel): GuideModel => {
+export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
   return {
+    from,
     uuid: uuidv4(),
     name: 'Guide Name',
     content:
@@ -81,10 +83,6 @@ export const emptyGuide = (space: SpaceModel): GuideModel => {
         order: 1
       }
     ],
-    space: space.id,
-    metadata: {
-      network: space.network
-    },
-    network: space.network
+    space: space.id
   };
 };
