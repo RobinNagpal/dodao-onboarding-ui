@@ -27,7 +27,7 @@ const { domain } = useDomain();
 const { t } = useI18n();
 const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
-const { getExplore, explore } = useApp();
+const { getExplore } = useApp();
 const { store } = useStore();
 const notify = inject('notify') as Function;
 
