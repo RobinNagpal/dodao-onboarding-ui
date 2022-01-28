@@ -12,7 +12,7 @@ query GuidesQuery(
     ) {
         id
         ipfs
-        author
+        authors
         name
         content
         created
@@ -30,13 +30,14 @@ query GuidesQuery(
 
 query GuideQuery($uuid: String!) {
     guide(uuid: $uuid) {
-        author
+        authors
         content
         created
         id
         ipfs
+        link
         name
-        network
+        previousId
         space {
             id
             name
@@ -62,8 +63,7 @@ query GuideQuery($uuid: String!) {
             uuid
         }
         uuid
-        link
-
+        version
     }
 }
 

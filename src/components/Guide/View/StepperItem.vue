@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GuideStep } from '@/models/GuideModel';
+import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({

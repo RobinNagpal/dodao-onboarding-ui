@@ -13,9 +13,11 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "baseUrl": ".",
+    "outDir": "./build",
     "types": ["vite/client"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@dodao/onboarding-schemas/*": ["dodao-onboarding-schemas/src/*"]
     },
     "noImplicitAny": false,
     "skipLibCheck": true

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useGuide } from '@/composables/useGuide';
+import { useViewGuide } from '@/composables/useViewGuide';
 import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
-import { SpaceModel } from '@/models/SpaceModel';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -39,9 +39,12 @@ const {
   guideRef: guide,
   guideLoaded,
   initialize
-} = useGuide(uuid as string, props.space!, notify);
+} = useViewGuide(uuid as string);
 
-const isCreator = computed(() => guide.value?.author === web3Account.value);
+const isCreator = computed(() =>
+  guide.value?.authors.includes(web3Account.value)
+);
+
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
 const isAdmin = computed(() => {
   const admins = (props.space?.admins || []).map(admin => admin.toLowerCase());
@@ -110,7 +113,7 @@ function selectFromShareDropdown(e) {
 const { profiles, loadProfiles } = useProfiles();
 
 watch(guide, () => {
-  guide.value?.author && loadProfiles([guide.value.author]);
+  guide.value?.authors && loadProfiles([...guide.value.authors]);
 });
 
 watch([loaded, web3Account], () => {
