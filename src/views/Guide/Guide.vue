@@ -206,13 +206,15 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
         <div class="space-y-1">
           <div>
             <b>{{ $t('author') }}</b>
-            <User
-              :address="guide.author"
-              :profile="profiles[guide.author]"
-              :space="space"
-              :guide="guide"
-              class="float-right"
-            />
+            <template v-for="author in guide.authors">
+              <User
+                :address="author"
+                :profile="profiles[author]"
+                :space="space"
+                :guide="guide"
+                class="float-right"
+              />
+            </template>
           </div>
           <div>
             <b>IPFS</b>
