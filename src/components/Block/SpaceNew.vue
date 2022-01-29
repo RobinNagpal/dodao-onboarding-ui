@@ -93,43 +93,46 @@ watchEffect(() => {
       </p>
     </div>
 
-    <div class="px-3 flex">
+    <div class="px-3 flex nav-links">
       <router-link
         :to="{ name: 'guides', params: { key: space.id } }"
-        v-text="$t('guides.header')"
         :class="$route.name === 'guides' && 'router-link-exact-active'"
-        class="block px-4 py-2 integration-tab-link"
-      />
-      <router-link
-        :to="{ name: 'spaceCreate', params: { key: space.id } }"
-        v-text="$t('proposals.new')"
-        class="block px-4 py-2 integration-tab-link"
-      />
-      <router-link
-        :to="{ name: 'guideCreate', params: { key: space.id } }"
-        v-text="$t('guides.new')"
-        class="block px-4 py-2 integration-tab-link"
-      />
-      <router-link
-        v-if="
-          space.strategies?.find(strategy => strategy.name === 'delegation')
-        "
-        :to="{ name: 'delegate', params: { key: space.id } }"
-        v-text="$t('delegate.header')"
-        class="block px-4 py-2 integration-tab-link"
-      />
+      >
+        <UiButton>
+          {{ $t('guides.header') }}
+        </UiButton>
+      </router-link>
+      <router-link :to="{ name: 'spaceCreate', params: { key: space.id } }"
+        ><UiButton>
+          {{ $t('proposals.new') }}
+        </UiButton>
+      </router-link>
+      <router-link :to="{ name: 'guideCreate', params: { key: space.id } }">
+        <UiButton>
+          {{ $t('guides.new') }}
+        </UiButton>
+      </router-link>
+
       <router-link
         :to="{ name: 'spaceAbout', params: { key: space.id } }"
-        v-text="$t('about')"
         :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
-        class="block px-4 py-2 integration-tab-link"
-      />
-      <router-link
-        v-if="isAdmin"
-        :to="{ name: 'spaceSettings' }"
-        v-text="$t('settings.header')"
-        class="block px-4 py-2 integration-tab-link"
-      />
+      >
+        <UiButton>
+          {{ $t('about') }}
+        </UiButton>
+      </router-link>
+      <router-link v-if="isAdmin" :to="{ name: 'spaceSettings' }">
+        <UiButton>
+          {{ $t('settings.header') }}
+        </UiButton>
+      </router-link>
     </div>
   </div>
 </template>
+<style lang="scss" scoped>
+.nav-links {
+  a {
+    margin: 8px;
+  }
+}
+</style>
