@@ -143,94 +143,96 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
 </script>
 
 <template>
-  <Layout v-bind="$attrs">
-    <template #content-left>
-      <div class="px-4 md:px-0 mb-3">
-        <a
-          class="text-color"
-          @click="
-            browserHasHistory
-              ? $router.go(-1)
-              : $router.push(domain ? { path: '/' } : { name: 'guide' })
-          "
-        >
-          <Icon name="back" size="22" class="!align-middle" />
-          {{ browserHasHistory ? $t('back') : space.name }}
-        </a>
-      </div>
-      <div class="px-4 md:px-0">
+  <LayoutSingle v-bind="$attrs">
+    <template #content>
+      <template v-if="loaded">
+        <div class="px-4 md:px-0 mb-3">
+          <a
+            class="text-color"
+            @click="
+              browserHasHistory
+                ? $router.go(-1)
+                : $router.push(domain ? { path: '/' } : { name: 'guide' })
+            "
+          >
+            <Icon name="back" size="22" class="!align-middle" />
+            {{ browserHasHistory ? $t('back') : space.name }}
+          </a>
+        </div>
+        <div class="px-4 md:px-0">
+          <template v-if="loaded">
+            <h1 v-text="guide?.name" class="mb-2" />
+            <div class="mb-4">
+              <UiDropdown
+                top="2.5rem"
+                right="1.5rem"
+                class="float-right mr-2"
+                @select="selectFromShareDropdown"
+                @clickedNoDropdown="startShare(space, guide)"
+                :items="sharingItems"
+                :hideDropdown="sharingIsSupported"
+              >
+                <div class="pr-1 select-none">
+                  <Icon name="upload" size="25" class="!align-text-bottom" />
+                  Share
+                </div>
+              </UiDropdown>
+              <UiDropdown
+                top="2.5rem"
+                right="1.3rem"
+                class="float-right mr-2"
+                @select="selectFromThreedotDropdown"
+                :items="threeDotItems"
+              >
+                <div class="pr-3">
+                  <UiLoading v-if="clientLoading" />
+                  <Icon v-else name="threedots" size="25" />
+                </div>
+              </UiDropdown>
+            </div>
+            <UiMarkdown :body="guide?.content" class="mb-6" />
+            <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+              <GuideViewStepper
+                :activeStepId="activeStepId"
+                :steps="steps"
+                :goToNextStep="goToNextStep"
+              />
+            </Block>
+          </template>
+        </div>
         <template v-if="loaded">
-          <h1 v-text="guide?.name" class="mb-2" />
-          <div class="mb-4">
-            <UiDropdown
-              top="2.5rem"
-              right="1.5rem"
-              class="float-right mr-2"
-              @select="selectFromShareDropdown"
-              @clickedNoDropdown="startShare(space, guide)"
-              :items="sharingItems"
-              :hideDropdown="sharingIsSupported"
-            >
-              <div class="pr-1 select-none">
-                <Icon name="upload" size="25" class="!align-text-bottom" />
-                Share
+          <Block :title="$t('information')">
+            <div class="space-y-1">
+              <div>
+                <b>{{ $t('author') }}</b>
+                <template v-for="author in guide.authors" :key="author">
+                  <User
+                    :address="author"
+                    :profile="profiles[author]"
+                    :space="space"
+                    :guide="guide"
+                    class="float-right"
+                  />
+                </template>
               </div>
-            </UiDropdown>
-            <UiDropdown
-              top="2.5rem"
-              right="1.3rem"
-              class="float-right mr-2"
-              @select="selectFromThreedotDropdown"
-              :items="threeDotItems"
-            >
-              <div class="pr-3">
-                <UiLoading v-if="clientLoading" />
-                <Icon v-else name="threedots" size="25" />
+              <div>
+                <b>IPFS</b>
+                <a
+                  :href="getIpfsUrl(guide.ipfs)"
+                  target="_blank"
+                  class="float-right"
+                >
+                  #{{ guide.ipfs.slice(0, 7) }}
+                  <Icon name="external-link" class="ml-1" />
+                </a>
               </div>
-            </UiDropdown>
-          </div>
-          <UiMarkdown :body="guide?.content" class="mb-6" />
-          <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
-            <GuideViewStepper
-              :activeStepId="activeStepId"
-              :steps="steps"
-              :goToNextStep="goToNextStep"
-            />
+            </div>
           </Block>
         </template>
-        <PageLoading v-else />
-      </div>
+      </template>
+      <PageLoading v-else />
     </template>
-    <template #sidebar-right v-if="loaded">
-      <Block :title="$t('information')">
-        <div class="space-y-1">
-          <div>
-            <b>{{ $t('author') }}</b>
-            <template v-for="author in guide.authors" :key="author">
-              <User
-                :address="author"
-                :profile="profiles[author]"
-                :space="space"
-                :guide="guide"
-                class="float-right"
-              />
-            </template>
-          </div>
-          <div>
-            <b>IPFS</b>
-            <a
-              :href="getIpfsUrl(guide.ipfs)"
-              target="_blank"
-              class="float-right"
-            >
-              #{{ guide.ipfs.slice(0, 7) }}
-              <Icon name="external-link" class="ml-1" />
-            </a>
-          </div>
-        </div>
-      </Block>
-    </template>
-  </Layout>
+  </LayoutSingle>
   <teleport to="#modal">
     <ModalConfirm
       v-if="loaded"

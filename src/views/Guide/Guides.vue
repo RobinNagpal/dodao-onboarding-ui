@@ -89,35 +89,37 @@ const loadingData = computed(() => {
 </script>
 
 <template>
-  <SpaceLayout>
+  <LayoutTopAndBottom>
     <template #top-content>
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>
-      <NoResults
-        :block="true"
-        v-if="!loadingData && guidesCount && store.space.guides.length < 1"
-      />
-      <GuideNoGuides
-        v-else-if="!guidesCount && !loadingData"
-        class="mt-2"
-        :space="space"
-      />
-      <div v-else class="mt-6">
-        <GuideTimelineGuide
-          v-for="(guide, i) in store.space.guides"
-          :key="i"
-          :guide="guide"
-          :profiles="profiles"
+      <div class="mt-6">
+        <NoResults
+          :block="true"
+          v-if="!loadingData && guidesCount && store.space.guides.length < 1"
         />
+        <GuideNoGuides
+          v-else-if="!guidesCount && !loadingData"
+          class="mt-2"
+          :space="space"
+        />
+        <div v-else>
+          <GuideTimelineGuide
+            v-for="(guide, i) in store.space.guides"
+            :key="i"
+            :guide="guide"
+            :profiles="profiles"
+          />
+        </div>
+        <div
+          style="height: 10px; width: 10px; position: absolute"
+          ref="endElement"
+        />
+        <Block v-if="loadingData" :slim="true">
+          <RowLoading class="my-2" />
+        </Block>
       </div>
-      <div
-        style="height: 10px; width: 10px; position: absolute"
-        ref="endElement"
-      />
-      <Block v-if="loadingData" :slim="true">
-        <RowLoading class="my-2" />
-      </Block>
     </template>
-  </SpaceLayout>
+  </LayoutTopAndBottom>
 </template>

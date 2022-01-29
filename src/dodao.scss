@@ -351,12 +351,9 @@
 }
 
 .badge {
-  position: absolute;
-
   &.post-category {
+    margin-left: 8px;
     left: auto;
-    top: 32px;
-    right: 32px;
     bottom: auto;
     padding: 14px 20px;
     border-radius: 10px;
