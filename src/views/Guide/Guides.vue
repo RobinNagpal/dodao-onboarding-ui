@@ -89,7 +89,7 @@ const loadingData = computed(() => {
 </script>
 
 <template>
-  <SpaceLayout>
+  <LayoutTopAndBottom>
     <template #top-content>
       <BlockSpaceNew :space="space" />
     </template>
@@ -121,5 +121,5 @@ const loadingData = computed(() => {
         </Block>
       </div>
     </template>
-  </SpaceLayout>
+  </LayoutTopAndBottom>
 </template>

@@ -83,69 +83,71 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Layout v-bind="$attrs">
-    <div class="px-4 md:px-0 overflow-hidden">
-      <router-link
-        :to="domain ? { path: '/' } : { name: 'guides' }"
-        class="text-color"
-      >
-        <Icon name="back" size="22" class="!align-middle" />
-        {{ space.name }}
-      </router-link>
-      <UiSidebarButton
-        v-if="!preview && guideLoaded"
-        @click="preview = true"
-        class="float-right"
-      >
-        <Icon name="preview" size="18" />
-      </UiSidebarButton>
-      <UiSidebarButton
-        v-if="preview"
-        @click="preview = false"
-        class="float-right"
-      >
-        <Icon name="back" size="18" />
-      </UiSidebarButton>
-    </div>
-    <template v-if="guideLoaded">
-      <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
-        <div class="mb-2">
-          <UiInput v-model="form.name" :error="inputError('name')">
-            <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
-          </UiInput>
-          <UiButton class="block w-full px-3" style="height: auto">
-            <TextareaAutosize
-              v-model="form.content"
-              :placeholder="$t(`guide.create.excerpt`)"
-              class="input w-full text-left"
-              style="font-size: 18px"
-            />
-          </UiButton>
-        </div>
-      </Block>
-      <Block :title="$t('guide.create.stepByStep')" :slim="true">
-        <GuideCreateStepper
-          :activeStepId="activeStepId"
-          :guide="form"
-          :steps="steps"
-          :setActiveStep="setActiveStep"
-          :updateStep="updateStep"
-          :addStep="addStep"
-          :moveStepUp="moveStepUp"
-          :moveStepDown="moveStepDown"
-        />
-      </Block>
+  <LayoutSingle v-bind="$attrs">
+    <template #content>
+      <div class="px-4 md:px-0 overflow-hidden">
+        <router-link
+          :to="domain ? { path: '/' } : { name: 'guides' }"
+          class="text-color"
+        >
+          <Icon name="back" size="22" class="!align-middle" />
+          {{ space.name }}
+        </router-link>
+        <UiSidebarButton
+          v-if="!preview && guideLoaded"
+          @click="preview = true"
+          class="float-right"
+        >
+          <Icon name="preview" size="18" />
+        </UiSidebarButton>
+        <UiSidebarButton
+          v-if="preview"
+          @click="preview = false"
+          class="float-right"
+        >
+          <Icon name="back" size="18" />
+        </UiSidebarButton>
+      </div>
+      <template v-if="guideLoaded">
+        <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+          <div class="mb-2">
+            <UiInput v-model="form.name" :error="inputError('name')">
+              <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
+            </UiInput>
+            <UiButton class="block w-full px-3" style="height: auto">
+              <TextareaAutosize
+                v-model="form.content"
+                :placeholder="$t(`guide.create.excerpt`)"
+                class="input w-full text-left"
+                style="font-size: 18px"
+              />
+            </UiButton>
+          </div>
+        </Block>
+        <Block :title="$t('guide.create.stepByStep')" :slim="true">
+          <GuideCreateStepper
+            :activeStepId="activeStepId"
+            :guide="form"
+            :steps="steps"
+            :setActiveStep="setActiveStep"
+            :updateStep="updateStep"
+            :addStep="addStep"
+            :moveStepUp="moveStepUp"
+            :moveStepDown="moveStepDown"
+          />
+        </Block>
 
-      <UiButton
-        @click="clickSubmit"
-        :disabled="!isValid"
-        :loading="clientLoading || !guideLoaded"
-        class="block w-full"
-        primary
-      >
-        {{ $t('create.publish') }}
-      </UiButton>
+        <UiButton
+          @click="clickSubmit"
+          :disabled="!isValid"
+          :loading="clientLoading || !guideLoaded"
+          class="block w-full"
+          primary
+        >
+          {{ $t('create.publish') }}
+        </UiButton>
+      </template>
+      <PageLoading v-else />
     </template>
-    <PageLoading v-else />
-  </Layout>
+  </LayoutSingle>
 </template>
