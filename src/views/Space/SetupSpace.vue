@@ -7,6 +7,9 @@ import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import defaults from '@/locales/default';
 import { setPageTitle } from '@/helpers/utils';
 import { useClient } from '@/composables/useClient';
+import { useModal } from '@/composables/useModal';
+import { useTerms } from '@/composables/useTerms';
+import { useWeb3 } from '@/composables/useWeb3';
 
 const props = defineProps({
   spaceId: String,
@@ -31,6 +34,7 @@ const modalValidationOpen = ref(false);
 const loaded = ref(false);
 const uploadLoading = ref(false);
 const showErrors = ref(false);
+const { web3, web3Account } = useWeb3();
 const form = ref({
   name: undefined,
   categories: [],
@@ -67,6 +71,9 @@ function slugify(string) {
     .replace(/-+$/, '');
 }
 
+const { modalAccountOpen } = useModal();
+const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
+
 async function handleSubmit() {
   if (isValid.value) {
     console.log('handleSubmit', JSON.stringify(form.value.name));
@@ -85,6 +92,14 @@ async function handleSubmit() {
     console.log('Invalid schema', validate.value);
     showErrors.value = true;
   }
+}
+
+async function clickSubmit() {
+  !web3Account.value
+    ? (modalAccountOpen.value = true)
+    : !termsAccepted.value && props.space?.terms
+    ? (modalTermsOpen.value = true)
+    : handleSubmit();
 }
 
 function inputError(field) {
@@ -302,7 +317,7 @@ onMounted(() => {
               </UiButton>
               <UiButton
                 :disabled="uploadLoading"
-                @click="handleSubmit"
+                @click="clickSubmit"
                 :loading="clientLoading"
                 class="block w-full"
                 primary

@@ -96,10 +96,10 @@ onMounted(() => {
             class="card blog-card w-inline-block"
           >
             <div class="image-wrapper blog-card-thumbnail">
-              <Token
+              <UiThumbnail
                 :space="space"
                 symbolIndex="space"
-                size="82"
+                size="350"
                 class="mb-1"
                 big_tile
               />
@@ -125,12 +125,14 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div
-              class="flex justify-end absolute top-4 right-4"
-              v-for="category in space.categories || []"
-              :key="category"
-            >
-              <div class="badge post-category">{{ category }}</div>
+            <div class="flex justify-end absolute top-4 right-4">
+              <div
+                class="badge post-category"
+                v-for="category in space.categories || []"
+                :key="category"
+              >
+                {{ category }}
+              </div>
             </div>
           </router-link>
           <NoResults
