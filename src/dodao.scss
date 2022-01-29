@@ -476,38 +476,16 @@
     background-color: var(--header-main-bg);
     box-shadow: var(--box-shadow);
     border-color: var(--border-color);
-  }
-
-  &.blog-card {
-    position: relative;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    height: 100%;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-pack: start;
-    -webkit-justify-content: flex-start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    border-radius: 16px;
-    -webkit-transition: -webkit-transform 300ms ease;
-    transition: -webkit-transform 300ms ease;
     transition: transform 300ms ease;
     transition: transform 300ms ease, -webkit-transform 300ms ease;
-    text-decoration: none;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-
+    position: relative;
+    transition: -webkit-transform 300ms ease;
     &:hover {
       -webkit-transform: scale3d(0.94, 0.94, 0.01);
       transform: scale3d(0.94, 0.94, 0.01);
     }
   }
+
   &.integration-card {
     display: block;
     padding: 40px 30px;
