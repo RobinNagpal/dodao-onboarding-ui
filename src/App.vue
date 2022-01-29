@@ -55,7 +55,7 @@ watch(modalOpen, val => {
   >
     <UiLoading v-if="app.loading || !app.init" class="overlay big" />
     <div v-else>
-      <div>
+      <div class="page-wrapper">
         <Topnav />
         <div class="flex">
           <Scroller />

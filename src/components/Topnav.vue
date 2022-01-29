@@ -45,21 +45,20 @@ onMounted(() => setTitle());
 </script>
 
 <template>
-  <Sticky>
-    <div
-      v-if="env === 'develop'"
-      class="p-3 text-center bg-blue"
-      style="color: white; font-size: 20px"
-    >
-      {{ $t('demoSite') }}
-    </div>
-    <nav
-      id="topnav"
-      class="w-full header-nav max-w-[1012px] mt-4 mx-auto p-4 rounded-md hover-border bg-skin-bg border border-skin-border"
-    >
-      <Container class="max-w-[100%]">
-        <div class="flex items-center" style="height: 78px">
-          <div class="flex-auto flex items-center">
+  <div
+    v-if="env === 'develop'"
+    class="p-3 text-center bg-blue header-main-wrapper"
+    style="color: white; font-size: 20px"
+  >
+    {{ $t('demoSite') }}
+  </div>
+  <div id="topnav" class="header w-nav">
+    <div class="header-main-wrapper">
+      <Container class="max-w-[100%] container-default w-container">
+        <div class="flex items-center header-wrapper" style="height: 78px">
+          <div
+            class="flex-auto flex items-center header-logo-wrapper w-nav-brand w--current"
+          >
             <router-link
               :to="{ path: '/' }"
               class="flex items-center"
@@ -124,19 +123,19 @@ onMounted(() => setTitle());
           </div>
         </div>
       </Container>
-    </nav>
-    <div class="bg-blue text-white text-center py-2" v-if="pendingCount > 0">
-      <UiLoading :fill-white="true" class="mr-2" />
-      {{ $tc('delegate.pendingTransaction', pendingCount) }}
     </div>
-    <teleport to="#modal">
-      <ModalAccount
-        :open="modalAccountOpen"
-        @close="modalAccountOpen = false"
-        @login="handleLogin"
-      />
-    </teleport>
-  </Sticky>
+  </div>
+  <div class="bg-blue text-white text-center py-2" v-if="pendingCount > 0">
+    <UiLoading :fill-white="true" class="mr-2" />
+    {{ $tc('delegate.pendingTransaction', pendingCount) }}
+  </div>
+  <teleport to="#modal">
+    <ModalAccount
+      :open="modalAccountOpen"
+      @close="modalAccountOpen = false"
+      @login="handleLogin"
+    />
+  </teleport>
 </template>
 
 <style scoped lang="scss">

@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'dodao';
+
 [data-color-scheme='dark'] {
   color-scheme: dark;
   --primary-color: #384aff;
