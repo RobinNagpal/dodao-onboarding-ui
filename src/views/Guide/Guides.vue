@@ -103,7 +103,7 @@ const loadingData = computed(() => {
         class="mt-2"
         :space="space"
       />
-      <div v-else>
+      <div v-else class="mt-6">
         <GuideTimelineGuide
           v-for="(guide, i) in store.space.guides"
           :key="i"
