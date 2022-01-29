@@ -83,6 +83,59 @@ onMounted(() => {
         {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
       </div>
     </Container>
+    <Container
+      :slim="true"
+      class="_3-column-grid blog-post-cards-grid w-dyn-items"
+    >
+      <div
+        role="listitem"
+        class="w-dyn-item"
+        v-for="space in orderedSpacesByCategory.slice(0, limit)"
+        :key="space.id"
+      >
+        <router-link
+          :to="{ name: 'spaceProposals', params: { key: space.id } }"
+          class="card blog-card w-inline-block"
+        >
+          <div class="image-wrapper blog-card-thumbnail">
+            <Token
+              :space="space"
+              symbolIndex="space"
+              size="82"
+              class="mb-1"
+              big_tile
+            />
+          </div>
+          <div class="split-content">
+            <div class="mb-[12px] text-color">
+              {{
+                $tc('members', space.followers, {
+                  count: n(space.followers)
+                })
+              }}
+            </div>
+            <h3
+              class="title h4-size blog-card-title"
+              style="color: rgb(26, 27, 30)"
+            >
+              How to track leads in Google Analytics via CRM
+            </h3>
+            <div class="read-more-text">
+              Read more<span
+                class="button-arrow"
+                style="
+                  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1)
+                    rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+                  transform-style: preserve-3d;
+                "
+                ></span
+              >
+            </div>
+          </div>
+          <div class="badge post-category">Guides</div>
+        </router-link>
+      </div>
+    </Container>
     <Container :slim="true" class="mx-0">
       <div class="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
         <div
