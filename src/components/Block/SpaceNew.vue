@@ -54,16 +54,16 @@ watchEffect(() => {
 
 <template>
   <div
-    class="image-wrapper integration-icon-wrapper flex flex-col items-center mr-32"
+    class="image-wrapper integration-icon-wrapper flex flex-col items-center px-8"
   >
     <Token :space="space" symbolIndex="space" size="80" class="mt-3 mb-2" />
     <div class="mt-2 text-color">
       {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
     </div>
     <div class="flex mt-2">
-      <FollowButton :space="space" />
+      <FollowButton :space="space" class="px-2" />
       <UiSidebarButton
-        class="inline"
+        class="inline px-2"
         v-if="isFollowing"
         @click="toggleSubscription()"
       >

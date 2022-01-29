@@ -1,12 +1,12 @@
 <template>
-  <div class="section">
-    <div class="container-default mt-24">
+  <div class="section mt-16">
+    <div class="container-default">
       <div class="card integration-main-card">
         <div class="integration-content">
           <slot />
           <div class="top-content integration-card-top-content">
             <div
-              class="split integration-top-content"
+              class="flex integration-top-content"
               v-if="$slots['top-content']"
             >
               <slot name="top-content" />
