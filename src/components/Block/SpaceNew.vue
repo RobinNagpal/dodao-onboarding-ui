@@ -54,14 +54,19 @@ watchEffect(() => {
 
 <template>
   <div
-    class="image-wrapper integration-icon-wrapper flex flex-col items-center px-8"
+    class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
   >
-    <Token :space="space" symbolIndex="space" size="80" class="mt-3 mb-2" />
+    <UiThumbnail
+      :space="space"
+      symbolIndex="space"
+      size="80"
+      class="mt-3 mb-2"
+    />
     <div class="mt-2 text-color">
       {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
     </div>
     <div class="flex mt-2">
-      <FollowButton :space="space" class="px-2" />
+      <FollowButton :space="space" :class="'mx-2'" />
       <UiSidebarButton
         class="inline px-2"
         v-if="isFollowing"
@@ -72,8 +77,11 @@ watchEffect(() => {
       </UiSidebarButton>
     </div>
   </div>
-  <div class="split-content integration-details">
-    <div class="integration-title-wrapper">
+  <div
+    class="split-content integration-details border-l-2 mb-2"
+    style="border-color: #c0c4d1"
+  >
+    <div class="integration-title-wrapper" style="height: 128px">
       <h1>
         {{ space.name }}
         <Icon
@@ -98,17 +106,17 @@ watchEffect(() => {
         :to="{ name: 'guides', params: { key: space.id } }"
         :class="$route.name === 'guides' && 'router-link-exact-active'"
       >
-        <UiButton>
+        <UiButton class="whitespace-nowrap">
           {{ $t('guides.header') }}
         </UiButton>
       </router-link>
       <router-link :to="{ name: 'spaceCreate', params: { key: space.id } }"
-        ><UiButton>
+        ><UiButton class="whitespace-nowrap">
           {{ $t('proposals.new') }}
         </UiButton>
       </router-link>
       <router-link :to="{ name: 'guideCreate', params: { key: space.id } }">
-        <UiButton>
+        <UiButton class="whitespace-nowrap">
           {{ $t('guides.new') }}
         </UiButton>
       </router-link>
@@ -117,12 +125,12 @@ watchEffect(() => {
         :to="{ name: 'spaceAbout', params: { key: space.id } }"
         :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
       >
-        <UiButton>
+        <UiButton class="whitespace-nowrap">
           {{ $t('about') }}
         </UiButton>
       </router-link>
       <router-link v-if="isAdmin" :to="{ name: 'spaceSettings' }">
-        <UiButton>
+        <UiButton class="whitespace-nowrap">
           {{ $t('settings.header') }}
         </UiButton>
       </router-link>
