@@ -1,9 +1,10 @@
 @import './assets/fonts/iconfont.css';
-@import "dodao";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'dodao';
 
 [data-color-scheme='dark'] {
   color-scheme: dark;

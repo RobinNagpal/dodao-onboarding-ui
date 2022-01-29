@@ -52,80 +52,79 @@ onMounted(() => setTitle());
   >
     {{ $t('demoSite') }}
   </div>
-  <nav
-    id="topnav"
-    class="w-full header-nav max-w-[1012px] mt-4 mx-auto p-4 rounded-md hover-border bg-skin-bg border border-skin-border"
-  >
-    <Container class="max-w-[100%]">
-      <div class="flex items-center header-wrapper" style="height: 78px">
-        <div
-          class="flex-auto flex items-center header-logo-wrapper w-nav-brand w--current"
-        >
-          <router-link
-            :to="{ path: '/' }"
-            class="flex items-center"
-            style="font-size: 24px; padding-top: 4px"
+  <div id="topnav" class="header w-nav">
+    <div class="header-main-wrapper">
+      <Container class="max-w-[100%] container-default w-container">
+        <div class="flex items-center header-wrapper" style="height: 78px">
+          <div
+            class="flex-auto flex items-center header-logo-wrapper w-nav-brand w--current"
           >
-            <img
-              :src="dodaoLogo"
-              alt="arrow"
-              class="logo arrow w-[190px]"
-              :style="{ height: `56px` }"
-            />
-          </router-link>
-        </div>
-        <div :key="web3.account">
-          <template v-if="$auth.isAuthenticated.value">
-            <UiButton
-              @click="modalAccountOpen = true"
-              :loading="web3.authLoading"
-              class="flex items-center float-left"
+            <router-link
+              :to="{ path: '/' }"
+              class="flex items-center"
+              style="font-size: 24px; padding-top: 4px"
             >
-              <UiAvatar
-                :imgsrc="
-                  web3.profile?.image ? getIpfsUrl(web3.profile.image) : ''
-                "
-                :address="web3.account"
-                size="18"
-                class="-mr-1 sm:mr-2 md:mr-2 lg:mr-2 xl:mr-2 -ml-1"
+              <img
+                :src="dodaoLogo"
+                alt="arrow"
+                class="logo arrow w-[190px]"
+                :style="{ height: `56px` }"
               />
-              <span
-                v-if="web3.profile?.name || web3.profile?.ens"
-                v-text="web3.profile.name || web3.profile.ens"
-                class="hidden sm:block"
-              />
-              <span
-                v-else
-                v-text="shorten(web3.account)"
-                class="hidden sm:block"
+            </router-link>
+          </div>
+          <div :key="web3.account">
+            <template v-if="$auth.isAuthenticated.value">
+              <UiButton
+                @click="modalAccountOpen = true"
+                :loading="web3.authLoading"
+                class="flex items-center float-left"
+              >
+                <UiAvatar
+                  :imgsrc="
+                    web3.profile?.image ? getIpfsUrl(web3.profile.image) : ''
+                  "
+                  :address="web3.account"
+                  size="18"
+                  class="-mr-1 sm:mr-2 md:mr-2 lg:mr-2 xl:mr-2 -ml-1"
+                />
+                <span
+                  v-if="web3.profile?.name || web3.profile?.ens"
+                  v-text="web3.profile.name || web3.profile.ens"
+                  class="hidden sm:block"
+                />
+                <span
+                  v-else
+                  v-text="shorten(web3.account)"
+                  class="hidden sm:block"
+                />
+              </UiButton>
+            </template>
+            <UiButton
+              v-if="!$auth.isAuthenticated.value"
+              @click="modalAccountOpen = true"
+              :loading="loading || web3.authLoading"
+              :aria-label="$t('connectWallet')"
+            >
+              <span class="hidden sm:block" v-text="$t('connectWallet')" />
+              <Icon
+                name="login"
+                size="20"
+                class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
               />
             </UiButton>
-          </template>
-          <UiButton
-            v-if="!$auth.isAuthenticated.value"
-            @click="modalAccountOpen = true"
-            :loading="loading || web3.authLoading"
-            :aria-label="$t('connectWallet')"
-          >
-            <span class="hidden sm:block" v-text="$t('connectWallet')" />
-            <Icon
-              name="login"
-              size="20"
-              class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
-            />
-          </UiButton>
-          <UiSidebarButton
-            v-if="!domain"
-            @click="toggleSkin"
-            class="float-right ml-2"
-            :aria-label="$t('toggleSkin')"
-          >
-            <Icon size="20" class="link-color" :name="getSkinIcon()" />
-          </UiSidebarButton>
+            <UiSidebarButton
+              v-if="!domain"
+              @click="toggleSkin"
+              class="float-right ml-2"
+              :aria-label="$t('toggleSkin')"
+            >
+              <Icon size="20" class="link-color" :name="getSkinIcon()" />
+            </UiSidebarButton>
+          </div>
         </div>
-      </div>
-    </Container>
-  </nav>
+      </Container>
+    </div>
+  </div>
   <div class="bg-blue text-white text-center py-2" v-if="pendingCount > 0">
     <UiLoading :fill-white="true" class="mr-2" />
     {{ $tc('delegate.pendingTransaction', pendingCount) }}

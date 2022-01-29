@@ -30,146 +30,90 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mt-4 sm:max-w-[544px] md:max-w-[768px] lg:max-w-[1012px] mx-auto">
-    <Container class="flex items-center mb-4 mx-0">
-      <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
-        <SearchWithFilters />
-      </UiButton>
-      <UiDropdown
-        class="ml-2 mr-auto z-10"
-        top="3.5rem"
-        right="1.25rem"
-        @select="selectCategory($event)"
-        :items="[
-          {
-            text: $tc('explore.categories.all'),
-            action: '',
-            count: orderedSpaces.length,
-            selected: !selectedCategory
-          },
-          ...categoriesOrderedBySpaceCount
-            .filter(c => spacesPerCategory[c])
-            .map(c => ({
-              text: $tc('explore.categories.' + c),
-              action: c,
-              count: spacesPerCategory[c],
-              selected: selectedCategory === c
-            }))
-        ]"
-      >
-        <UiButton
-          class="pr-3 whitespace-nowrap"
-          :disabled="!orderedSpaces.length"
-        >
-          <Icon size="14" name="apps" class="mt-1 mr-2" />
-          <span v-if="selectedCategory">
-            {{ $tc('explore.categories.' + selectedCategory) }}
-          </span>
-          <span v-else>
-            {{ $tc('explore.categories.all') }}
-          </span>
-          <Icon size="14" name="arrow-down" class="mt-1 mx-1" />
+  <div class="flex items-center section relative wf-section mt-4 mx-auto">
+    <div class="container-default w-container">
+      <div class="flex items-center mb-4 mx-0">
+        <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
+          <SearchWithFilters />
         </UiButton>
-        <template v-slot:item="{ item }">
-          <div class="flex">
-            <span class="mr-3">{{ item.text }}</span>
-            <span class="flex ml-auto mt-[-3px]">
-              <UiCounter :counter="item.count" class="my-auto" />
-            </span>
-          </div>
-        </template>
-      </UiDropdown>
-      <div class="ml-3 text-right hidden md:block whitespace-nowrap">
-        {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
-      </div>
-    </Container>
-    <Container
-      :slim="true"
-      class="_3-column-grid blog-post-cards-grid w-dyn-items"
-    >
-      <div
-        role="listitem"
-        class="w-dyn-item"
-        v-for="space in orderedSpacesByCategory.slice(0, limit)"
-        :key="space.id"
-      >
-        <router-link
-          :to="{ name: 'spaceProposals', params: { key: space.id } }"
-          class="card blog-card w-inline-block"
+        <UiDropdown
+          class="ml-2 mr-auto z-10"
+          top="3.5rem"
+          right="1.25rem"
+          @select="selectCategory($event)"
+          :items="[
+            {
+              text: $tc('explore.categories.all'),
+              action: '',
+              count: orderedSpaces.length,
+              selected: !selectedCategory
+            },
+            ...categoriesOrderedBySpaceCount
+              .filter(c => spacesPerCategory[c])
+              .map(c => ({
+                text: $tc('explore.categories.' + c),
+                action: c,
+                count: spacesPerCategory[c],
+                selected: selectedCategory === c
+              }))
+          ]"
         >
-          <div class="image-wrapper blog-card-thumbnail">
-            <Token
-              :space="space"
-              symbolIndex="space"
-              size="82"
-              class="mb-1"
-              big_tile
-            />
-          </div>
-          <div class="split-content">
-            <div class="mb-[12px] text-color">
-              {{
-                $tc('members', space.followers, {
-                  count: n(space.followers)
-                })
-              }}
+          <UiButton
+            class="pr-3 whitespace-nowrap"
+            :disabled="!orderedSpaces.length"
+          >
+            <Icon size="14" name="apps" class="mt-1 mr-2" />
+            <span v-if="selectedCategory">
+              {{ $tc('explore.categories.' + selectedCategory) }}
+            </span>
+            <span v-else>
+              {{ $tc('explore.categories.all') }}
+            </span>
+            <Icon size="14" name="arrow-down" class="mt-1 mx-1" />
+          </UiButton>
+          <template v-slot:item="{ item }">
+            <div class="flex">
+              <span class="mr-3">{{ item.text }}</span>
+              <span class="flex ml-auto mt-[-3px]">
+                <UiCounter :counter="item.count" class="my-auto" />
+              </span>
             </div>
-            <h3
-              class="title h4-size blog-card-title"
-              style="color: rgb(26, 27, 30)"
-            >
-              How to track leads in Google Analytics via CRM
-            </h3>
-            <div class="read-more-text">
-              Read more<span
-                class="button-arrow"
-                style="
-                  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1)
-                    rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
-                  transform-style: preserve-3d;
-                "
-                ></span
-              >
-            </div>
-          </div>
-          <div class="badge post-category">Guides</div>
-        </router-link>
+          </template>
+        </UiDropdown>
+        <div class="ml-3 text-right hidden md:block whitespace-nowrap">
+          {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
+        </div>
       </div>
-    </Container>
-    <Container :slim="true" class="mx-0">
-      <div class="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
+      <div class="_3-column-grid features-grid">
         <div
+          role="listitem"
+          class="card feature-card"
           v-for="space in orderedSpacesByCategory.slice(0, limit)"
           :key="space.id"
         >
           <router-link
             :to="{ name: 'spaceProposals', params: { key: space.id } }"
+            class="card blog-card w-inline-block"
           >
-            <!-- Added mb-0 to remove mb-4 added by block component -->
-            <Block
-              class="text-center extra-icon-container mb-0 hover-border h-[424px] w-[320px] overflow-hidden bg-skin-bg"
-              slim
-            >
+            <div class="image-wrapper blog-card-thumbnail">
+              <Token
+                :space="space"
+                symbolIndex="space"
+                size="82"
+                class="mb-1"
+                big_tile
+              />
+              <UiCounter
+                v-if="space.activeProposals"
+                :counter="space.activeProposals"
+                class="absolute top-0 right-0 !bg-green"
+              />
+            </div>
+            <div class="p-4">
+              <h3 v-text="shorten(space.name, 16)" class="" />
+
               <div class="flex flex-col">
-                <div class="relative mb-2">
-                  <Token
-                    :space="space"
-                    symbolIndex="space"
-                    size="82"
-                    class="mb-1"
-                    big_tile
-                  />
-                  <UiCounter
-                    v-if="space.activeProposals"
-                    :counter="space.activeProposals"
-                    class="absolute top-0 right-0 !bg-green"
-                  />
-                </div>
                 <div>
-                  <h3
-                    v-text="shorten(space.name, 16)"
-                    class="mt-4 mb-0 pb-0 text-[22px] !h-[32px] overflow-hidden"
-                  />
                   <div class="mb-[12px] text-color">
                     {{
                       $tc('members', space.followers, {
@@ -180,15 +124,17 @@ onMounted(() => {
                   <FollowButton class="!mb-0" :space="space" />
                 </div>
               </div>
-            </Block>
+            </div>
+            <div class="badge post-category">Guides</div>
           </router-link>
+          <NoResults
+            :block="true"
+            v-if="Object.keys(orderedSpacesByCategory).length < 1"
+          />
         </div>
       </div>
-      <NoResults
-        :block="true"
-        v-if="Object.keys(orderedSpacesByCategory).length < 1"
-      />
-    </Container>
-    <div ref="endElement" />
+
+      <div ref="endElement" />
+    </div>
   </div>
 </template>
