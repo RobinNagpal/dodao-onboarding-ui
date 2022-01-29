@@ -125,7 +125,13 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div class="badge post-category">Guides</div>
+            <div
+              class="flex justify-end absolute top-4 right-4"
+              v-for="category in space.categories || []"
+              :key="category"
+            >
+              <div class="badge post-category">{{ category }}</div>
+            </div>
           </router-link>
           <NoResults
             :block="true"
