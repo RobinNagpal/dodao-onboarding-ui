@@ -27,6 +27,13 @@ export function useWeb3() {
     if (auth.provider.value) {
       auth.web3 = new Web3Provider(auth.provider.value, 'any');
       await loadProvider();
+
+      auth.provider.value.on('chainChanged', () => {
+        window.location.reload();
+      });
+      auth.provider.value.on('accountsChanged', () => {
+        window.location.reload();
+      });
     }
     state.authLoading = false;
   }

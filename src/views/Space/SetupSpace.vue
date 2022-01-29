@@ -10,20 +10,26 @@ import { useClient } from '@/composables/useClient';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
+import { useApp } from '@/composables/useApp';
+import { useRouter } from 'vue-router';
+import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 
 const props = defineProps({
   spaceId: String,
   space: Object,
   from: String,
   spaceFrom: Object,
-  spaceLoading: Boolean,
-  loadExtentedSpaces: Function
+  spaceLoading: Boolean
 });
 
 const basicValidation = { name: 'basic', params: {} };
 
 const { t } = useI18n();
 const { send, clientLoading } = useClient();
+const { getExplore } = useApp();
+const router = useRouter();
+const { loadExtentedSpaces } = useExtendedSpaces();
+
 const notify = inject('notify');
 
 const currentSettings = ref({});
@@ -86,7 +92,11 @@ async function handleSubmit() {
     console.log('Result', result);
     if (result.id) {
       notify(['green', t('notify.saved')]);
-      props.loadExtentedSpaces([props.spaceId]);
+      await loadExtentedSpaces([result.id]);
+      await getExplore();
+      await router.push({
+        name: 'home'
+      });
     }
   } else {
     console.log('Invalid schema', validate.value);
