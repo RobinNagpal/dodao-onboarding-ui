@@ -89,20 +89,11 @@ const loadingData = computed(() => {
 </script>
 
 <template>
-  <Layout>
-    <template #sidebar-left>
-      <BlockSpace :space="space" />
+  <SpaceLayout>
+    <template #top-content>
+      <BlockSpaceNew :space="space" />
     </template>
-    <template #content-right>
-      <div class="px-4 md:px-0 mb-3 flex">
-        <div class="flex-auto">
-          <div v-text="space.name" />
-          <div class="flex items-center flex-auto">
-            <h2>{{ $t('guides.header') }}</h2>
-          </div>
-        </div>
-      </div>
-
+    <template #content-bottom>
       <NoResults
         :block="true"
         v-if="!loadingData && guidesCount && store.space.guides.length < 1"
@@ -128,5 +119,5 @@ const loadingData = computed(() => {
         <RowLoading class="my-2" />
       </Block>
     </template>
-  </Layout>
+  </SpaceLayout>
 </template>
