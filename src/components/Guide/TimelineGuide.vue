@@ -19,7 +19,7 @@ watchEffect(() => {
 <template>
   <Block
     :slim="true"
-    class="timeline-guide transition-colors card feature-card"
+    class="timeline-guide transition-colors card feature-card py-2 px-4"
   >
     <div class="">
       <router-link
@@ -32,7 +32,7 @@ watchEffect(() => {
         <div>
           <h3 v-text="guide.name" class="my-1" />
           <p
-            v-text="shorten(guide.content, 140)"
+            v-text="shorten(guide.content, 300)"
             class="break-words mb-2 text-md"
           />
         </div>
