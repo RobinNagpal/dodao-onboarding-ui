@@ -226,7 +226,7 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
     <template v-if="loaded">
       <Block
         :title="$t('information')"
-        class="bg-skin-bg mt-4 w-[280px] info-bar"
+        class="bg-skin-bg mt-4 w-[280px] info-bar border-none"
       >
         <div class="space-y-1">
           <div>
