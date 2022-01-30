@@ -28,17 +28,25 @@ const address = computed(() => {
   if (spaceId.value) return formatBytes32String(spaceId.value.slice(0, 24));
   return '';
 });
+
+const bigTileStyle = {
+  'object-fit': `${props.big_tile ? 'cover' : 'null'}`,
+  'border-radius': `${props.big_tile ? 0 : 'null'}`,
+  width: `${
+    props.big_tile ? '424' : (props.size && parseInt(props.size)) || 22
+  }px`,
+  height: `${
+    props.big_tile ? '350' : (props.size && parseInt(props.size)) || 22
+  }px`
+};
 </script>
 
 <template>
-  <spadivn class="flex justify-center mb-0" :class="{ 'w-[100%]': big_tile }">
+  <spadivn class="flex justify-center" :class="{ 'w-[100%]': big_tile }">
     <img
       v-if="imgsrc && !error"
       :src="imgsrc"
-      :style="{
-        width: `${parseInt(size) || 22}px`,
-        height: `${parseInt(size) || 22}px`
-      }"
+      :style="bigTileStyle"
       @error="error = true"
       class="inline-block !align-middle leading-none"
       :class="[
@@ -49,12 +57,7 @@ const address = computed(() => {
     <UiBlockie
       v-else-if="!!address"
       :seed="address"
-      :style="{
-        'object-fit': `${big_tile ? 'cover' : 'null'}`,
-        'border-radius': `${big_tile ? 0 : 'null'}`,
-        width: `${big_tile ? '424' : parseInt(size) || 22}px`,
-        height: `${big_tile ? '260' : parseInt(size) || 22}px`
-      }"
+      :style="bigTileStyle"
       class="inline-block !align-middle rounded-full"
       :alt="space?.name"
     />
