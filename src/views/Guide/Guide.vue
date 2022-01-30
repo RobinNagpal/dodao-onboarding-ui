@@ -130,7 +130,17 @@ onMounted(async () => {
 });
 
 const steps = computed(() => {
-  return guide.value?.steps || [];
+  const guildSteps = guide.value?.steps || [];
+  const steps = [
+    ...guildSteps,
+    {
+      content: 'The guide has been completed successfully!',
+      name: 'Completed',
+      order: guildSteps.length,
+      uuid: 'UUID'
+    }
+  ];
+  return steps;
 });
 
 function goToNextStep(currentStep: GuideQuery_guide_steps) {

@@ -30,9 +30,6 @@ const activeStep = computed(
         >
           <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>
-        <li class="ob-nav-step disabled" role="presentation">
-          <span class="step-link" role="menuitem">Done </span>
-        </li>
       </ol>
     </div>
     <GuideViewStepperItem :step="activeStep" :goToNextStep="goToNextStep" />

@@ -3,10 +3,6 @@ import {
   GuideInput,
   GuideStepInput
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import {
-  GuideModel,
-  GuideStep
-} from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
