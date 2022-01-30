@@ -224,7 +224,10 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
       </template>
     </LayoutSingle>
     <template v-if="loaded">
-      <Block :title="$t('information')" class="bg-skin-bg mt-4 w-[280px]">
+      <Block
+        :title="$t('information')"
+        class="bg-skin-bg mt-4 w-[280px] info-bar"
+      >
         <div class="space-y-1">
           <div>
             <b>{{ $t('author') }}</b>
@@ -270,3 +273,10 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
     />
   </teleport>
 </template>
+
+<style scoped lang="scss">
+.info-bar {
+  box-shadow: var(--box-shadow);
+  border-color: var(--border-color);
+}
+</style>

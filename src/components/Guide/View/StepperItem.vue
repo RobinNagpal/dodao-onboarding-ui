@@ -21,18 +21,20 @@ function selectAnswer(questionId, choiceKey, selected) {
 }
 </script>
 <template>
-  <div class="w-full border-l-2 p-4">
-    <div>{{ step.name }}</div>
-    <UiMarkdown :body="step.content" class="mb-6" />
-    <template v-for="question in questions" :key="question.uuid">
-      <GuideViewQuestion
-        :question="question"
-        :selectAnswer="selectAnswer"
-      ></GuideViewQuestion>
-    </template>
+  <div class="w-full border-l-2 p-4 flex flex-col justify-between">
+    <div>
+      <div>{{ step.name }}</div>
+      <UiMarkdown :body="step.content" class="mb-6" />
+      <template v-for="question in questions" :key="question.uuid">
+        <GuideViewQuestion
+          :question="question"
+          :selectAnswer="selectAnswer"
+        ></GuideViewQuestion>
+      </template>
+    </div>
     <UiButton
       :aria-label="$t('next')"
-      class="float-right"
+      class="float-right self-end"
       @click="goToNextStep(step)"
     >
       <span class="sm:block" v-text="$t('next')" />
