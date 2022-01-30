@@ -31,7 +31,7 @@ const address = computed(() => {
 </script>
 
 <template>
-  <spadivn class="flex justify-center" :class="{ 'w-[100%]': big_tile }">
+  <spadivn class="flex justify-center mb-0" :class="{ 'w-[100%]': big_tile }">
     <img
       v-if="imgsrc && !error"
       :src="imgsrc"

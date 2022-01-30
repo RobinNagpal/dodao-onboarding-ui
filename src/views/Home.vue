@@ -109,8 +109,8 @@ onMounted(() => {
                 class="absolute top-0 right-0 !bg-green"
               />
             </div>
-            <div class="p-4">
-              <h3 v-text="shorten(space.name, 16)" class="" />
+            <div class="p-4 text-center">
+              <h2 v-text="shorten(space.name, 16)" />
 
               <div class="flex flex-col">
                 <div>
