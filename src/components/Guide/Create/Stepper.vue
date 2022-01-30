@@ -32,7 +32,6 @@ const activeStep = computed(() =>
 </script>
 <template>
   <div class="w-full flex flex-row">
-    {{ 'activeStepId = ' + props.activeStepId }}
     <div class="p-4">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
