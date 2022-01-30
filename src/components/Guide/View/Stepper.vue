@@ -16,9 +16,6 @@ const activeStep = computed(
     props.steps.find(step => step.uuid === props.activeStepId) ||
     props.steps?.[0]
 );
-
-console.log(activeStep);
-console.log(props.activeStepId);
 </script>
 <template>
   <div class="w-full flex flex-row">
@@ -26,7 +23,7 @@ console.log(props.activeStepId);
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
           class="ob-nav-step"
-          :class="step.uuid === activeStepId ? 'active' : 'disabled'"
+          :class="step.uuid === activeStep.uuid ? 'active' : 'disabled'"
           role="presentation"
           v-for="step in steps"
           :key="step.uuid"
