@@ -222,7 +222,6 @@
       "closed": "Closed"
     }
   },
-
   "settings": {
     "header": "Settings",
     "seeENS": "See on ENS",
@@ -262,7 +261,8 @@
     "quorum": "Quorum",
     "type": "Type",
     "anyType": "Any",
-    "hideAbstain": "Ignore abstain votes in basic voting results"
+    "hideAbstain": "Ignore abstain votes in basic voting results",
+    "missionStatement": "Mission Statement"
   },
   "setupSpace": {
     "header": "Setup Space",

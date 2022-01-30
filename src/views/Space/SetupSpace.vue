@@ -82,7 +82,6 @@ const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
 
 async function handleSubmit() {
   if (isValid.value) {
-    console.log('handleSubmit', JSON.stringify(form.value.name));
     if (form.value.filters.invalids) delete form.value.filters.invalids;
     const result = await send(
       { id: slugify(form.value.name) },
@@ -125,16 +124,6 @@ function inputError(field) {
     if (errorFound)
       return t(`errors.${errorFound.keyword}`, [errorFound?.params.limit]);
   }
-}
-
-function handleReset() {
-  if (props.from) return (form.value = clone(props.spaceFrom));
-  if (currentSettings.value) return (form.value = currentSettings.value);
-  form.value = {
-    categories: [],
-    plugins: {},
-    filters: {}
-  };
 }
 
 function handleSubmitAddCategories(categories) {
@@ -212,9 +201,19 @@ onMounted(() => {
                 <UiInput v-model="form.name" :error="inputError('name')">
                   <template v-slot:label>{{ $t(`settings.name`) }}*</template>
                 </UiInput>
-                <UiInput v-model="form.about" :error="inputError('about')">
-                  <template v-slot:label> {{ $t(`settings.about`) }} </template>
-                </UiInput>
+                <UiInput
+                  v-model="form.mission"
+                  :error="inputError('mission')"
+                  :placeholder="$t(`settings.missionStatement`) + ' *'"
+                />
+                <UiButton class="block w-full px-3 mb-2" style="height: auto">
+                  <TextareaAutosize
+                    v-model="form.about"
+                    :placeholder="$t(`settings.about`)"
+                    class="input w-full text-left"
+                    style="font-size: 18px"
+                  />
+                </UiButton>
                 <UiInput
                   v-model="form.avatar"
                   placeholder="e.g. https://example.com/space.png"
@@ -321,20 +320,15 @@ onMounted(() => {
                 />
               </UiButton>
             </Block>
-            <Block :title="$t('actions')">
-              <UiButton @click="handleReset" class="block w-full mb-2">
-                {{ $t('reset') }}
-              </UiButton>
-              <UiButton
-                :disabled="uploadLoading"
-                @click="clickSubmit"
-                :loading="clientLoading"
-                class="block w-full"
-                primary
-              >
-                {{ $t('save') }}
-              </UiButton>
-            </Block>
+            <UiButton
+              :disabled="uploadLoading"
+              @click="clickSubmit"
+              :loading="clientLoading"
+              class="block w-full"
+              primary
+            >
+              {{ $t('save') }}
+            </UiButton>
           </div>
         </template>
       </div></template

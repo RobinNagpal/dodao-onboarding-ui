@@ -3,6 +3,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
+import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
@@ -124,9 +125,25 @@ export function useClient() {
         proposal: payload.proposal.id
       });
     } else if (type === 'settings') {
-      return clientEIP712.space(auth.web3, web3.value.account, {
+      const spaceSettingsInput: SpaceSettingsInput = {
+        ...payload,
+        about: payload.about || '',
+        admins: payload.admins || [],
+        avatar: payload.avatar || '',
+        creator: web3.value.account,
+        categories: payload.categories || [],
+        members: payload.members || [],
+        github: payload.github || '',
+        mission: payload.mission || '',
+        network: payload.network || '',
+        terms: payload.terms || '',
+        twitter: payload.twitter || ''
+      };
+      return clientEIP712.spaceNew(auth.web3, web3.value.account, {
         space: space.id,
-        settings: JSON.stringify(payload)
+        from: web3.value.account,
+        settings: spaceSettingsInput,
+        timestamp: parseInt((Date.now() / 1e3).toFixed())
       });
     } else {
       throw new Error('Unknown type ' + type);
