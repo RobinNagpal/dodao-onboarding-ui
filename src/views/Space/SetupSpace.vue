@@ -40,7 +40,7 @@ const modalValidationOpen = ref(false);
 const loaded = ref(false);
 const uploadLoading = ref(false);
 const showErrors = ref(false);
-const { web3, web3Account } = useWeb3();
+const { web3Account } = useWeb3();
 const form = ref({
   name: undefined,
   categories: [],
@@ -78,7 +78,7 @@ function slugify(string) {
 }
 
 const { modalAccountOpen } = useModal();
-const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
+const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 async function handleSubmit() {
   if (isValid.value) {

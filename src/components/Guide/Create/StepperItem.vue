@@ -22,7 +22,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:step']);
 
-function inputError(field) {
+function inputError() {
   return false;
 }
 
