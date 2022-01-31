@@ -390,3 +390,16 @@ input[type='number']::-webkit-outer-spin-button {
 .s-label {
   @apply block mb-1;
 }
+
+
+/* Theme defined stylse */
+ol {
+  margin-left: 20px;
+  list-style: decimal;
+}
+
+/* Theme defined stylse */
+ul {
+  margin-left: 20px;
+  list-style: auto;
+}
