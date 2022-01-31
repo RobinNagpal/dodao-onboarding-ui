@@ -199,6 +199,7 @@
     "edit": "Edit",
     "guideBy": "by {0}",
     "question": {
+      "content": "Question?",
       "description": "Question description"
     },
     "votingSystem": "Voting system",

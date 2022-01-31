@@ -83,9 +83,10 @@ function addChoice(questionId) {
   const key = newChoiceKey();
   const questions = props.step.questions.map(question => {
     if (question.uuid === questionId) {
+      const choices = [...question.choices, { key, content: '' }];
       return {
         ...question,
-        choices: [...question.choices, { key, content: '' }]
+        choices: choices.map((choice, index) => ({ ...choice, order: index }))
       };
     } else {
       return question;
