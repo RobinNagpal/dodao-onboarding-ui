@@ -32,6 +32,7 @@ console.log('uuid', uuid);
 const {
   activeStepId,
   addStep,
+  guideCreating,
   guideLoaded,
   guideRef: guide,
   handleSubmit,
@@ -140,7 +141,7 @@ onMounted(async () => {
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"
-          :loading="clientLoading || !guideLoaded"
+          :loading="clientLoading || !guideLoaded || guideCreating"
           class="block w-full"
           primary
         >

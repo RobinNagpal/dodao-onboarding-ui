@@ -34,6 +34,8 @@ export function useEditGuide(
 
   const activeStepId = ref();
 
+  const guideCreating = ref(false);
+
   async function initialize() {
     if (uuid) {
       const guide = await getGuide(uuid);
@@ -97,6 +99,7 @@ export function useEditGuide(
   }
 
   async function handleSubmit() {
+    guideCreating.value = true;
     const result = await send(space, 'guide', guideRef.value);
     console.log(result);
     if (result.id) {
@@ -111,11 +114,13 @@ export function useEditGuide(
         }
       });
     }
+    guideCreating.value = false;
   }
 
   return {
     activeStepId,
     addStep,
+    guideCreating,
     guideLoaded,
     guideRef,
     handleSubmit,

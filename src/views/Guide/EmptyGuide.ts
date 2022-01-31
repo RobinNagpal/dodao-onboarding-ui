@@ -8,20 +8,14 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
     from,
     uuid: uuidv4(),
     name: 'Guide Name',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+    content: 'New Guide',
     steps: [
       {
         uuid: uuidv4(),
         name: 'Introduction',
         content: `
-      Some basic Git commands are:
-      \`\`\`
-      git status
-      git add
-      git commit
-      \`\`\`
-      `,
+            Introduction Comments 
+        `,
         questions: [],
         order: 0
       },
@@ -58,28 +52,8 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
             answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
             questionType: QuestionType.MultipleChoice,
             order: 0
-          },
-          {
-            uuid: uuidv4(),
-            content: 'True or False',
-            choices: [
-              {
-                key: 'true',
-                content: 'True',
-                order: 0
-              },
-              {
-                key: 'false',
-                content: 'False',
-                order: 1
-              }
-            ],
-            answerKeys: ['true'],
-            questionType: QuestionType.MultipleChoice,
-            order: 1
           }
         ],
-
         order: 1
       }
     ],
