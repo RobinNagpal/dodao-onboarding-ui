@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import { marked } from 'marked';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
@@ -16,6 +17,8 @@ const questions = computed(() => {
   return props.step.questions;
 });
 
+const stepContents = computed(() => marked.parse(props.step.content));
+
 function selectAnswer(questionId, choiceKey, selected) {
   console.log(questionId, choiceKey, selected);
 }
@@ -24,7 +27,7 @@ function selectAnswer(questionId, choiceKey, selected) {
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">
     <div>
       <div>{{ step.name }}</div>
-      <UiMarkdown :body="step.content" class="mb-6" />
+      <div v-html="stepContents" />
       <template v-for="question in questions" :key="question.uuid">
         <GuideViewQuestion
           :question="question"

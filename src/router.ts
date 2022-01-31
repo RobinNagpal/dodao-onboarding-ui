@@ -2,7 +2,6 @@ import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GuideCreate from '@/views/Guide/Create.vue';
-import Guide from '@/views/Guide/Guide.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
@@ -53,7 +52,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'guide/view/:uuid',
     name: 'guide',
-    component: Guide
+    component: () => import('@/views/Guide/Guide.vue')
   },
   {
     path: 'guide/create',
