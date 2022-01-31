@@ -104,7 +104,7 @@ onMounted(() => {
                 big_tile
               />
               <UiCounter
-                v-if="space.activeGuidesProposals"
+                v-if="space.activeProposals"
                 :counter="space.activeProposals"
                 class="absolute top-0 right-0 !bg-green"
               />
