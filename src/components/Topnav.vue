@@ -8,7 +8,7 @@ import { useApp } from '@/composables/useApp';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useTxStatus } from '@/composables/useTxStatus';
 import { useUserSkin } from '@/composables/useUserSkin';
-import dodaoLogo from '@/assets/icons/logo/rectangular.svg';
+import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
 
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
@@ -64,12 +64,7 @@ onMounted(() => setTitle());
               class="flex items-center"
               style="font-size: 24px; padding-top: 4px"
             >
-              <img
-                :src="dodaoLogo"
-                alt="arrow"
-                class="logo arrow w-[190px]"
-                :style="{ height: `56px` }"
-              />
+              <img :src="dodaoLogo" alt="arrow" class="logo arrow w-[190px]" />
             </router-link>
           </div>
           <div :key="web3.account">
