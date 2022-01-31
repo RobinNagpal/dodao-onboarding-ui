@@ -508,6 +508,13 @@
     box-shadow: var(--box-shadow);
     border-color: var(--border-color);
   }
+
+  &.guide-right-side-card {
+    padding: 24px;
+    background-color: var(--header-main-bg);
+    box-shadow: var(--box-shadow);
+    border-color: var(--border-color);
+  }
 }
 
 .image-wrapper {

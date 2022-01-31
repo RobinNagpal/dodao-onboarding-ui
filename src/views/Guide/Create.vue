@@ -12,7 +12,7 @@ import { useRoute } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
-  space: Object as PropType<SpaceModel>,
+  space: { type: Object as PropType<SpaceModel>, required: true },
   from: String,
   uuid: String
 });
@@ -32,6 +32,7 @@ console.log('uuid', uuid);
 const {
   activeStepId,
   addStep,
+  guideCreating,
   guideLoaded,
   guideRef: guide,
   handleSubmit,
@@ -40,7 +41,7 @@ const {
   moveStepDown,
   setActiveStep,
   updateStep
-} = useEditGuide(uuid as string, props.space!, notify);
+} = useEditGuide(uuid as string, props.space, notify);
 
 const form = ref(guide);
 
@@ -61,7 +62,7 @@ const isValid = computed(() => {
 });
 
 const { modalAccountOpen } = useModal();
-const { modalTermsOpen, termsAccepted, acceptTerms } = useTerms(props.spaceId);
+const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 function clickSubmit() {
   !web3Account.value
@@ -71,7 +72,7 @@ function clickSubmit() {
     : handleSubmit();
 }
 
-function inputError(field) {
+function inputError() {
   return false;
 }
 
@@ -140,7 +141,7 @@ onMounted(async () => {
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"
-          :loading="clientLoading || !guideLoaded"
+          :loading="clientLoading || !guideLoaded || guideCreating"
           class="block w-full"
           primary
         >

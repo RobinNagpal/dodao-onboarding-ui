@@ -3,7 +3,10 @@ import {
   GuideInput,
   GuideStepInput
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuideQuestion,
+  QuestionType
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, PropType } from 'vue';
 
@@ -19,7 +22,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:step']);
 
-function inputError(field) {
+function inputError() {
   return false;
 }
 
@@ -105,6 +108,21 @@ function removeChoice(questionId, choiceKey) {
   });
 
   emit('update:step', { ...props.step, questions });
+}
+
+function removeQuestion(questionId) {
+  const filteredQuestions = props.step.questions.filter(
+    question => question.uuid !== questionId
+  );
+
+  const questionsWithIndex: GuideQuestion[] = filteredQuestions.map(
+    (question, index) => ({
+      ...question,
+      order: index
+    })
+  );
+
+  emit('update:step', { ...props.step, questions: questionsWithIndex });
 }
 
 function updateAnswers(questionId, choiceKey, selected) {
@@ -197,6 +215,7 @@ function addQuestion() {
         :addChoice="addChoice"
         :question="question"
         :removeChoice="removeChoice"
+        :removeQuestion="removeQuestion"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"

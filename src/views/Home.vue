@@ -111,7 +111,7 @@ onMounted(() => {
             </div>
             <div class="p-4 text-center">
               <h2 v-text="shorten(space.name, 16)" />
-
+              <div>{{ space.mission }}</div>
               <div class="flex flex-col">
                 <div>
                   <div class="mb-[12px] text-color">

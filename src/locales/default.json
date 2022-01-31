@@ -205,7 +205,8 @@
     "step": {
       "name": "Step Name",
       "contents": "Contents"
-    }
+    },
+    "onboardingSteps": "Onboarding Steps"
   },
   "guides": {
     "header": "Onboarding Guides",

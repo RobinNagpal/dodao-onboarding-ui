@@ -233,28 +233,30 @@ enum QuestionType {
 
 type Space {
   id: String!
-  name: String
-  private: Boolean
   about: String
+  admins: [String!]!
   avatar: String
-  terms: String
-  location: String
-  website: String
-  twitter: String
+  categories: [String]
+  creator: String!
+  domain: String
+  filters: SpaceFilters
   github: String
-  email: String
-  network: String
+  location: String
+  members: [String!]!
+  mission: String!
+  name: String
+  plugins: Any
+  private: Boolean
   symbol: String
   skin: String
-  domain: String
   strategies: [Strategy]
-  admins: [String]
-  members: [String]
-  filters: SpaceFilters
-  plugins: Any
-  voting: SpaceVoting
-  categories: [String]
+  terms: String
+  twitter: String
   validation: Strategy
+  voting: SpaceVoting
+  website: String
+  email: String
+  network: String
 }
 
 type SpaceFilters {

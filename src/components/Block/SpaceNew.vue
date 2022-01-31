@@ -110,11 +110,6 @@ watchEffect(() => {
           {{ $t('guides.header') }}
         </UiButton>
       </router-link>
-      <router-link :to="{ name: 'spaceCreate', params: { key: space.id } }"
-        ><UiButton class="whitespace-nowrap">
-          {{ $t('proposals.new') }}
-        </UiButton>
-      </router-link>
       <router-link :to="{ name: 'guideCreate', params: { key: space.id } }">
         <UiButton class="whitespace-nowrap">
           {{ $t('guides.new') }}

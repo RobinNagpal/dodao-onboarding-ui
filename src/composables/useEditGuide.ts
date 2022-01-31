@@ -34,6 +34,8 @@ export function useEditGuide(
 
   const activeStepId = ref();
 
+  const guideCreating = ref(false);
+
   async function initialize() {
     if (uuid) {
       const guide = await getGuide(uuid);
@@ -97,25 +99,28 @@ export function useEditGuide(
   }
 
   async function handleSubmit() {
+    guideCreating.value = true;
     const result = await send(space, 'guide', guideRef.value);
     console.log(result);
     if (result.id) {
-      getExplore();
+      await getExplore();
       store.space.guides = [];
       notify(['green', t('notify.guideCreated')]);
-      router.push({
+      await router.push({
         name: 'guide',
         params: {
           key: space.id,
-          id: result.id
+          uuid: result.uuid
         }
       });
     }
+    guideCreating.value = false;
   }
 
   return {
     activeStepId,
     addStep,
+    guideCreating,
     guideLoaded,
     guideRef,
     handleSubmit,

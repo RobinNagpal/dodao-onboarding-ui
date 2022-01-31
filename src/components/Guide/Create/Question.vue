@@ -2,13 +2,14 @@
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   addChoice: Function,
   question: {
     type: Object as PropType<GuideQuestion>,
     required: true
   },
   removeChoice: Function,
+  removeQuestion: Function,
   updateChoiceContent: Function,
   updateQuestionDescription: Function,
   updateAnswers: Function
@@ -18,6 +19,13 @@ const disableChoiceEdit = false;
 </script>
 
 <template>
+  <UiSidebarButton
+    class="float-right my-2 mr-4"
+    :aria-label="$t('toggleSkin')"
+    @click="removeQuestion(question.uuid)"
+  >
+    <Icon size="20" class="link-color" name="close" />
+  </UiSidebarButton>
   <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
