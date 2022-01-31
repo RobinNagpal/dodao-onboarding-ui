@@ -23,10 +23,12 @@ const isVerified = verified[props.space.id] || 0;
 const isAdmin = computed(() => {
   const admins = props.space?.admins?.map(address => address.toLowerCase());
 
+  const isCreator = props.space.creator === web3Account?.value?.toLowerCase();
+
   return (
     auth.isAuthenticated.value &&
     web3Account.value &&
-    admins?.includes(web3Account.value.toLowerCase())
+    (admins?.includes(web3Account.value.toLowerCase()) || isCreator)
   );
 });
 
@@ -96,8 +98,7 @@ watchEffect(() => {
         <Icon v-if="isVerified === -1" name="warning" size="20" />
       </h1>
       <p class="paragraph integration-about-excerpt">
-        Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod
-        dolore temporit incididunt ut labore.
+        {{ space.mission }}
       </p>
     </div>
 
