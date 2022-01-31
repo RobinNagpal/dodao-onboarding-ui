@@ -25,15 +25,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <Layout>
-    <template #sidebar-left>
-      <BlockSpace :space="space" />
+  <LayoutTopAndBottom>
+    <template #top-content>
+      <BlockSpaceNew :space="space" />
     </template>
-    <template #content-right>
-      <div class="px-4 md:px-0 mb-3 flex">
-        <h2>{{ space.name }}</h2>
-      </div>
-      <Block :loading="spaceLoading">
+    <template #content-bottom>
+      <Block :loading="spaceLoading" class="mt-6">
         <div v-if="space.about" class="mb-3">
           <h4 class="link-color mb-2">{{ $t('settings.about') }}</h4>
           <UiText :text="space.about" />
@@ -42,26 +39,6 @@ onMounted(() => {
         <div class="mb-3">
           <h4 class="link-color mb-2">{{ $t('settings.network') }}</h4>
           <div>{{ network.name }}</div>
-        </div>
-
-        <div class="mb-3">
-          <h4 class="link-color mb-2">
-            {{ $t('settings.proposalValidation') }}
-          </h4>
-          {{ space.validation?.name || 'basic' }}
-        </div>
-
-        <div
-          v-if="
-            (!space.validation || space.validation?.name === 'basic') &&
-            space.filters?.minScore
-          "
-          class="last:mb-0 mb-3"
-        >
-          <h4 class="link-color mb-2">
-            {{ $t('settings.proposalThreshold') }}
-          </h4>
-          {{ n(space.filters.minScore) }} {{ space.symbol }}
         </div>
 
         <div v-if="space.terms" class="last:mb-0 mb-3">
@@ -117,5 +94,5 @@ onMounted(() => {
         </div>
       </Block>
     </template>
-  </Layout>
+  </LayoutTopAndBottom>
 </template>

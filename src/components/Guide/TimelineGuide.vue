@@ -17,28 +17,23 @@ watchEffect(() => {
 </script>
 
 <template>
-  <Block
-    :slim="true"
-    class="timeline-guide transition-colors card feature-card py-2 px-4"
+  <router-link
+    :to="{
+      name: 'guide',
+      params: { key: guide.space.id, uuid: guide.uuid }
+    }"
   >
-    <div class="">
-      <router-link
-        class="card blog-card w-inline-block p-4"
-        :to="{
-          name: 'guide',
-          params: { key: guide.space.id, uuid: guide.uuid }
-        }"
-      >
-        <div>
-          <h3 v-text="guide.name" class="my-1" />
-          <p
-            v-text="shorten(guide.content, 300)"
-            class="break-words mb-2 text-md"
-          />
-        </div>
-      </router-link>
-    </div>
-  </Block>
+    <Block
+      :slim="true"
+      class="timeline-guide transition-colors card w-inline-block feature-card py-4 px-4"
+    >
+      <h3 v-text="guide.name" class="my-1" />
+      <p
+        v-text="shorten(guide.content, 300)"
+        class="break-words mb-2 text-md"
+      />
+    </Block>
+  </router-link>
 </template>
 
 <style scoped lang="scss">

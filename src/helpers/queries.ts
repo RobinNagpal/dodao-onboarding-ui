@@ -61,22 +61,6 @@ export const PROPOSAL_QUERY = gql`
   }
 `;
 
-export const GUIDE_QUERY = gql`
-  query Guide($id: String!) {
-    guide(id: $id) {
-      id
-      ipfs
-      author
-      created
-      network
-      space {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const PROPOSALS_QUERY = gql`
   query Proposals(
     $first: Int!
@@ -121,40 +105,6 @@ export const PROPOSALS_QUERY = gql`
   }
 `;
 
-export const GUIDES_QUERY = gql`
-  query Guides(
-    $first: Int!
-    $skip: Int!
-    $state: String!
-    $space: String
-    $space_in: [String]
-    $author_in: [String]
-  ) {
-    guides(
-      first: $first
-      skip: $skip
-      where: {
-        space: $space
-        state: $state
-        space_in: $space_in
-        author_in: $author_in
-      }
-    ) {
-      id
-      ipfs
-      author
-      created
-      space {
-        id
-        name
-        members
-        avatar
-        symbol
-      }
-    }
-  }
-`;
-
 export const FOLLOWS_QUERY = gql`
   query Follows($space_in: [String], $follower_in: [String]) {
     follows(where: { space_in: $space_in, follower_in: $follower_in }) {
@@ -192,8 +142,10 @@ export const SPACES_QUERY = gql`
   query Spaces($id_in: [String]) {
     spaces(where: { id_in: $id_in }) {
       id
-      name
       about
+      creator
+      mission
+      name
       network
       symbol
       network

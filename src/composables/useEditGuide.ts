@@ -100,14 +100,14 @@ export function useEditGuide(
     const result = await send(space, 'guide', guideRef.value);
     console.log(result);
     if (result.id) {
-      getExplore();
+      await getExplore();
       store.space.guides = [];
       notify(['green', t('notify.guideCreated')]);
-      router.push({
+      await router.push({
         name: 'guide',
         params: {
           key: space.id,
-          id: result.id
+          uuid: result.uuid
         }
       });
     }

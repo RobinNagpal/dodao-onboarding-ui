@@ -104,14 +104,14 @@ onMounted(() => {
                 big_tile
               />
               <UiCounter
-                v-if="space.activeProposals"
+                v-if="space.activeGuidesProposals"
                 :counter="space.activeProposals"
                 class="absolute top-0 right-0 !bg-green"
               />
             </div>
             <div class="p-4 text-center">
               <h2 v-text="shorten(space.name, 16)" />
-
+              <div>{{ space.mission }}</div>
               <div class="flex flex-col">
                 <div>
                   <div class="mb-[12px] text-color">

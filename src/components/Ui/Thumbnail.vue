@@ -42,13 +42,13 @@ const bigTileStyle = {
 </script>
 
 <template>
-  <spadivn class="flex justify-center" :class="{ 'w-[100%]': big_tile }">
+  <div class="flex justify-center" :class="{ 'w-[100%]': big_tile }">
     <img
       v-if="imgsrc && !error"
       :src="imgsrc"
       :style="bigTileStyle"
       @error="error = true"
-      class="inline-block !align-middle leading-none"
+      class="inline-block !align-middle leading-none rounded-lg"
       :class="[
         space?.skin ? `${space?.skin} bg-[color:var(--bg-color)]` : 'bg-white'
       ]"
@@ -58,8 +58,8 @@ const bigTileStyle = {
       v-else-if="!!address"
       :seed="address"
       :style="bigTileStyle"
-      class="inline-block !align-middle rounded-full"
+      class="inline-block !align-middle rounded-lg"
       :alt="space?.name"
     />
-  </spadivn>
+  </div>
 </template>

@@ -175,7 +175,7 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
               <h1 v-text="guide?.name" class="mb-2" />
               <div class="mb-4">
                 <div class="flex justify-between">
-                  <UiMarkdown :body="guide?.content" class="mb-6 w-[60%]" />
+                  <UiMarkdown :body="guide?.content" class="mb-6 w-[80%]" />
                   <div>
                     <UiDropdown
                       top="2.5rem"
@@ -210,7 +210,7 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
                   </div>
                 </div>
               </div>
-              <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
+              <Block :title="$t('guide.onboardingSteps')" :class="`mt-4`">
                 <GuideViewStepper
                   :activeStepId="activeStepId"
                   :steps="steps"
@@ -224,10 +224,10 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
       </template>
     </LayoutSingle>
     <template v-if="loaded">
-      <Block
-        :title="$t('information')"
-        class="bg-skin-bg mt-4 w-[280px] info-bar border-none"
+      <div
+        class="bg-skin-bg mt-4 w-[280px] h-[280px] info-bar card guide-right-side-card"
       >
+        <h3>{{ $t('information') }}</h3>
         <div class="space-y-1">
           <div>
             <b>{{ $t('author') }}</b>
@@ -253,7 +253,7 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
             </a>
           </div>
         </div>
-      </Block>
+      </div>
     </template>
   </div>
   <teleport to="#modal">
