@@ -5,16 +5,26 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { getGuide } from '@/helpers/snapshot';
 import { emptyGuide } from '@/views/Guide/EmptyGuide';
 import {
+  ChoiceError,
   GuideError,
   GuideInput,
-  GuideStepInput
+  GuideStepInput,
+  QuestionError,
+  StepError
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import {
+  GuideQuestion,
+  QuestionChoice
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+
+const contentLimit = 14400;
+const nameLimit = 1000;
 
 export function useEditGuide(
   uuid: string | null,
@@ -104,20 +114,57 @@ export function useEditGuide(
   }
 
   function validateGuide(guide: GuideInput) {
-    if (!guide.name) {
+    guideErrors.value.name = undefined;
+    if (!guide.name || guide.name.length > nameLimit) {
       guideErrors.value.name = true;
     }
+    guideErrors.value.content = undefined;
+    if (guide.content?.length > contentLimit) {
+      guideErrors.value.content = true;
+    }
+    guideErrors.value.steps = undefined;
     guide.steps.forEach((step: GuideStepInput) => {
-      if (!step.name) {
+      const stepError: StepError = {};
+      if (!step.name || step.name.length > nameLimit) {
+        stepError.name = true;
+      }
+      if (step.content?.length > contentLimit) {
+        stepError.content = true;
+      }
+      step.questions.forEach((question: GuideQuestion) => {
+        const questionError: QuestionError = {};
+        if (!question.content || question.content.length > contentLimit) {
+          questionError.content = true;
+        }
+        question.choices.forEach((choice: QuestionChoice) => {
+          const choiceError: ChoiceError = {};
+          if (!choice.content || choice.content.length > contentLimit) {
+            choiceError.content = true;
+          }
+          if (Object.keys(choiceError).length > 0) {
+            if (!questionError.choices) {
+              questionError.choices = {};
+            }
+            questionError.choices[choice.order] = choiceError;
+          }
+        });
+        if (Object.keys(questionError).length > 0) {
+          if (!stepError.questions) {
+            stepError.questions = {};
+          }
+          stepError.questions[question.order] = questionError;
+        } else {
+          delete stepError.questions;
+        }
+      });
+      if (Object.keys(stepError).length > 0) {
         if (!guideErrors.value.steps) {
           guideErrors.value.steps = {};
         }
-        guideErrors.value.steps[step.order] = {
-          name: true
-        };
+        guideErrors.value.steps[step.order] = stepError;
       }
     });
-    return Object.keys(guideErrors).length > 0;
+    return Object.values(guideErrors).filter(v => !!v).length > 0;
   }
 
   async function handleSubmit() {
@@ -126,7 +173,6 @@ export function useEditGuide(
     }
     guideCreating.value = true;
     const result = await send(space, 'guide', guideRef.value);
-    console.log(result);
     if (result.id) {
       await getExplore();
       store.space.guides = [];

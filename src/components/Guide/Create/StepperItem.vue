@@ -8,7 +8,7 @@ import {
   QuestionType
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, PropType } from 'vue';
+import { computed, PropType, unref } from 'vue';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },
@@ -23,7 +23,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:step']);
 
-function inputError(field) {
+function inputError(field: string) {
   return props.stepErrors?.[field];
 }
 
@@ -226,6 +226,7 @@ function addQuestion() {
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
+        :questionErrors="stepErrors?.questions?.[question.order]"
       ></GuideCreateQuestion>
     </template>
   </div>

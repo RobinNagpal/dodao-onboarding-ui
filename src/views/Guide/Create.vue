@@ -26,7 +26,6 @@ const route = useRoute();
 
 const uuid = route.params.uuid;
 
-const contentLimit = ref(14400);
 const preview = ref(false);
 
 const {
@@ -50,16 +49,8 @@ const steps = computed(() => {
   return form.value.steps;
 });
 
-const passValidation = ref([true]);
-
 const isValid = computed(() => {
-  return (
-    !clientLoading.value &&
-    form.value.name &&
-    form.value.content.length <= contentLimit.value &&
-    passValidation.value[0] &&
-    !web3.value.authLoading
-  );
+  return !clientLoading.value && !web3.value.authLoading;
 });
 
 const { modalAccountOpen } = useModal();
@@ -142,7 +133,7 @@ onMounted(async () => {
           />
         </Block>
         <div
-          v-if="Object.keys(errors).length"
+          v-if="Object.values(guideErrors).filter(v => !!v).length"
           class="!text-red flex text-center justify-center mb-2 align-baseline"
         >
           <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
