@@ -7,7 +7,7 @@ import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, inject, onMounted, PropType, ref } from 'vue';
+import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
@@ -28,13 +28,14 @@ const uuid = route.params.uuid;
 
 const contentLimit = ref(14400);
 const preview = ref(false);
-console.log('uuid', uuid);
+
 const {
   activeStepId,
   addStep,
   guideCreating,
   guideLoaded,
   guideRef: guide,
+  guideErrors,
   handleSubmit,
   initialize,
   moveStepUp,
@@ -72,8 +73,10 @@ function clickSubmit() {
     : handleSubmit();
 }
 
-function inputError() {
-  return false;
+const errors = unref(guideErrors);
+
+function inputError(field: string) {
+  return errors[field];
 }
 
 onMounted(async () => {
@@ -129,6 +132,7 @@ onMounted(async () => {
           <GuideCreateStepper
             :activeStepId="activeStepId"
             :guide="form"
+            :guideErrors="guideErrors"
             :steps="steps"
             :setActiveStep="setActiveStep"
             :updateStep="updateStep"
@@ -137,7 +141,13 @@ onMounted(async () => {
             :moveStepDown="moveStepDown"
           />
         </Block>
-
+        <div
+          v-if="Object.keys(errors).length"
+          class="!text-red flex text-center justify-center mb-2 align-baseline"
+        >
+          <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
+          <span class="ml-1">Fix errors to proceed</span>
+        </div>
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"

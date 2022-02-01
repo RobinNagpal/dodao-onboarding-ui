@@ -16,14 +16,15 @@ const props = defineProps({
     type: Object as PropType<GuideStepInput>,
     required: true
   },
+  stepErrors: Object,
   moveStepUp: Function,
   moveStepDown: Function
 });
 
 const emit = defineEmits(['update:step']);
 
-function inputError() {
-  return false;
+function inputError(field) {
+  return props.stepErrors?.[field];
 }
 
 function updateStepName(name) {

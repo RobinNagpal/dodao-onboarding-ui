@@ -25,7 +25,11 @@ function handleInput(e) {
 </script>
 
 <template>
-  <UiButton class="w-full h-96 mb-4" style="height: max-content">
+  <UiButton
+    class="flex w-full h-96 mb-4 px-[16px]"
+    style="height: max-content"
+    :class="{ '!border-red': error }"
+  >
     <div
       v-if="$slots.selected"
       class="flex-auto whitespace-nowrap overflow-x-auto"

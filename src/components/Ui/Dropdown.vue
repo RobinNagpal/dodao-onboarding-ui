@@ -110,6 +110,10 @@ li:hover {
   display: none;
 }
 
+.sub-menu {
+  margin-left: 0;
+}
+
 .sub-menu::before {
   content: '';
   position: absolute;

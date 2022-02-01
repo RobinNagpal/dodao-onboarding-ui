@@ -4,7 +4,11 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuide } from '@/helpers/snapshot';
 import { emptyGuide } from '@/views/Guide/EmptyGuide';
-import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import {
+  GuideError,
+  GuideInput,
+  GuideStepInput
+} from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,6 +30,7 @@ export function useEditGuide(
 
   const emptyGuideModel = emptyGuide(web3.value.account, space);
   const guideRef = ref<GuideInput>(emptyGuideModel);
+  const guideErrors = ref<GuideError>({});
   const guideLoaded = ref<boolean>(false);
 
   const steps = computed(() => {
@@ -98,7 +103,27 @@ export function useEditGuide(
     ];
   }
 
+  function validateGuide(guide: GuideInput) {
+    if (!guide.name) {
+      guideErrors.value.name = true;
+    }
+    guide.steps.forEach((step: GuideStepInput) => {
+      if (!step.name) {
+        if (!guideErrors.value.steps) {
+          guideErrors.value.steps = {};
+        }
+        guideErrors.value.steps[step.order] = {
+          name: true
+        };
+      }
+    });
+    return Object.keys(guideErrors).length > 0;
+  }
+
   async function handleSubmit() {
+    if (!validateGuide(guideRef.value)) {
+      return;
+    }
     guideCreating.value = true;
     const result = await send(space, 'guide', guideRef.value);
     console.log(result);
@@ -123,6 +148,7 @@ export function useEditGuide(
     guideCreating,
     guideLoaded,
     guideRef,
+    guideErrors,
     handleSubmit,
     initialize,
     moveStepUp,
