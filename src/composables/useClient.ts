@@ -109,7 +109,6 @@ export function useClient() {
           }))
         }))
       };
-      console.log('guideMessage', guideMessage);
       return clientEIP712.guide(auth.web3, web3.value.account, guideMessage);
     } else if (type === 'vote') {
       return clientEIP712.vote(auth.web3, web3.value.account, {

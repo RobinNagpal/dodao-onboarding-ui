@@ -3,7 +3,7 @@ import {
   GuideInput,
   GuideStepInput
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { computed, PropType } from 'vue';
+import { computed, PropType, unref } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
@@ -11,6 +11,7 @@ const props = defineProps({
     type: Object as PropType<GuideInput>,
     required: true
   },
+  guideErrors: Object,
   steps: {
     type: Array as PropType<Array<GuideStepInput>>,
     required: true
@@ -21,6 +22,8 @@ const props = defineProps({
   moveStepUp: Function,
   moveStepDown: Function
 });
+
+const errors = unref(props.guideErrors);
 
 const activeStep = computed(() =>
   props.steps.find(step => step.uuid === props.activeStepId)
@@ -33,7 +36,10 @@ const activeStep = computed(() =>
         <li
           @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
-          :class="step.uuid === activeStep.uuid && 'active'"
+          :class="{
+            active: step.uuid === activeStep.uuid,
+            error: errors.steps?.[step.order]
+          }"
           role="presentation"
           v-for="step in steps"
           :key="step.uuid"
@@ -54,6 +60,7 @@ const activeStep = computed(() =>
     <GuideCreateStepperItem
       :guide="guide"
       :step="activeStep"
+      :stepErrors="errors.steps?.[activeStep.order]"
       @update:step="updateStep"
       :moveStepUp="moveStepUp"
       :moveStepDown="moveStepDown"
@@ -134,6 +141,9 @@ const activeStep = computed(() =>
         background-color: #c3e8cd;
       }
     }
+  }
+  .ob-nav-step.error::before {
+    border: 1px solid rgba(255, 56, 86, var(--tw-border-opacity));
   }
   .ob-nav-step.disabled {
     &::before {

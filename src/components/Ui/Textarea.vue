@@ -29,7 +29,7 @@ watch(modelValue, value => (input.value = value));
     <textarea
       v-model="input"
       v-bind="textareaProps"
-      :class="{ 'border-red': error }"
+      :class="{ '!border-red': error }"
       :disabled="disabled"
       class="input w-full textarea"
       @input="handleInput()"

@@ -2,12 +2,13 @@
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
-defineProps({
+const props = defineProps({
   addChoice: Function,
   question: {
     type: Object as PropType<GuideQuestion>,
     required: true
   },
+  questionErrors: Object,
   removeChoice: Function,
   removeQuestion: Function,
   updateChoiceContent: Function,
@@ -27,7 +28,11 @@ const disableChoiceEdit = false;
     <Icon size="20" class="link-color" name="close" />
   </UiSidebarButton>
   <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
-    <UiButton class="w-full h-96 mb-4" style="height: max-content">
+    <UiButton
+      class="w-full h-96 mb-4 px-[16px] flex items-center"
+      style="height: max-content"
+      :class="{ '!border-red': questionErrors?.content }"
+    >
       <TextareaAutosize
         :value="question.content"
         :placeholder="$t(`guide.question.content`)"
@@ -35,6 +40,11 @@ const disableChoiceEdit = false;
         style="font-size: 18px"
         @update:modelValue="updateQuestionDescription(question.uuid, $event)"
       />
+      <i
+        class="iconfont iconwarning !text-red"
+        data-v-abc9f7ae=""
+        v-if="questionErrors?.content"
+      ></i>
     </UiButton>
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex">
@@ -49,6 +59,7 @@ const disableChoiceEdit = false;
           @update:modelValue="
             updateChoiceContent(question.uuid, choice.key, $event)
           "
+          :error="questionErrors?.choices?.[choice.order]?.content"
         >
           <template v-slot:info>
             <span
