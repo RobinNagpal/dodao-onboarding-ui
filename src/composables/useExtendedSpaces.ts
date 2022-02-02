@@ -1,14 +1,15 @@
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { SPACES_QUERY } from '@/helpers/queries';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, ref } from 'vue';
 
-const extentedSpaces = ref([]);
+const extentedSpaces = ref<SpaceModel[]>([]);
 const loading = ref(false);
 
 export function useExtendedSpaces() {
   const { apolloQuery } = useApolloQuery();
 
-  async function loadExtentedSpaces(id_in = []) {
+  async function loadExtentedSpaces(id_in: string[] = []) {
     loading.value = true;
     try {
       const response = await apolloQuery(

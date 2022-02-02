@@ -109,6 +109,12 @@ if (domain) {
     { path: '/', name: 'home', component: Home },
     { path: '/setup', name: 'setup', component: Setup },
     { path: '/setup-space', name: 'setup-space', component: SetupSpace },
+    {
+      path: '/space/edit/:spaceId',
+      name: 'spaceEdit',
+      props: true,
+      component: SetupSpace
+    },
     { path: '/networks', name: 'networks', component: Explore },
     { path: '/strategies', name: 'strategies', component: Explore },
     { path: '/plugins', name: 'plugins', component: Explore },
