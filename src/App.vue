@@ -59,7 +59,7 @@ watch(modalOpen, val => {
         <Topnav />
         <div class="flex mt-16">
           <Scroller />
-          <router-view :key="$route.path" class="flex-auto" />
+          <router-view :key="$route.path" class="flex-auto route-view" />
         </div>
       </div>
     </div>
