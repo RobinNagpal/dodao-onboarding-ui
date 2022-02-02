@@ -86,15 +86,13 @@ function resize() {
   return this;
 }
 
-watch(modelValue, v => {
-  val.value = v;
-});
-
-watch(val, v => {
-  nextTick(resize);
-  emit('update:modelValue', v);
-  if (v) resize();
-});
+function handleInput(e) {
+  const input = e.target.value;
+  if (props.number) {
+    return emit('update:modelValue', !input ? undefined : parseFloat(input));
+  }
+  emit('update:modelValue', input);
+}
 
 watch([minHeight, maxHeight], () => {
   nextTick(resize);
@@ -107,7 +105,8 @@ onMounted(() => resize());
   <textarea
     ref="textarea"
     :style="computedStyles"
-    v-model="val"
+    :value="modelValue"
+    @input="handleInput"
     @focus="resize"
   ></textarea>
 </template>
