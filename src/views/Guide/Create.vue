@@ -59,11 +59,7 @@ const { modalAccountOpen } = useModal();
 const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 function clickSubmit() {
-  !web3Account.value
-    ? (modalAccountOpen.value = true)
-    : !termsAccepted.value && props.space?.terms
-    ? (modalTermsOpen.value = true)
-    : handleSubmit();
+  !web3Account.value ? (modalAccountOpen.value = true) : handleSubmit();
 }
 
 const errors = unref(guideErrors);
