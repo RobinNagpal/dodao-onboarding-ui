@@ -79,7 +79,10 @@ export function useApp() {
   const orderedSpaces = computed(() => {
     const network = route.query.network || '';
     const q = route.query.q?.toString() || '';
-    const list = Object.keys(explore.value.spaces)
+    const list = (
+      (explore.value.spaces && Object.keys(explore.value.spaces)) ||
+      []
+    )
       .map(key => {
         const following = followingSpaces.value.some(s => s === key);
         const followers = explore.value.spaces[key].followers ?? 0;
