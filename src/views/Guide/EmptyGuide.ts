@@ -8,6 +8,7 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
     from,
     uuid: uuidv4(),
     name: 'Guide Name',
+    categories: [],
     content: 'New Guide',
     steps: [
       {

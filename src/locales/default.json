@@ -191,23 +191,24 @@
       "basicInfo": "Basic Information",
       "stepByStep": "Step by Step Guide"
     },
-    "vote": "Vote",
-    "startDate": "Start date",
-    "endDate": "End date",
     "delete": "Delete",
     "duplicate": "Duplicate",
     "edit": "Edit",
+    "endDate": "End date",
     "guideBy": "by {0}",
+    "onboardingSteps": "Onboarding Steps",
     "question": {
       "content": "Question?",
       "description": "Question description"
     },
-    "votingSystem": "Voting system",
+    "startDate": "Start date",
     "step": {
       "name": "Step Name",
       "contents": "Contents"
     },
-    "onboardingSteps": "Onboarding Steps"
+    "thumbnail": "Thumbnail Image",
+    "vote": "Vote",
+    "votingSystem": "Voting system"
   },
   "guides": {
     "header": "Onboarding Guides",

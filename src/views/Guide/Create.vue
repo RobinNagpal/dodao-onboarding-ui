@@ -28,6 +28,8 @@ const uuid = route.params.uuid;
 
 const preview = ref(false);
 
+const modalCategoryOpen = ref(false);
+
 const {
   activeStepId,
   addStep,
@@ -65,6 +67,24 @@ function clickSubmit() {
 }
 
 const errors = unref(guideErrors);
+
+const uploadLoading = ref(false);
+
+const categoriesString = computed(() => {
+  return form.value.categories ? form.value.categories.join(', ') : '';
+});
+
+function handleSubmitAddCategories(categories) {
+  guide.value.categories = categories;
+}
+
+function setThumbnailUrl(url) {
+  if (typeof url === 'string') form.value.thumbnail = url;
+}
+
+function setUploadLoading(s) {
+  uploadLoading.value = s;
+}
 
 function inputError(field: string) {
   return errors[field];
@@ -109,6 +129,34 @@ onMounted(async () => {
             <UiInput v-model="form.name" :error="inputError('name')">
               <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
             </UiInput>
+            <UiInput
+              v-model="form.thumbnail"
+              placeholder="e.g. https://example.com/guide.png"
+              :error="inputError('avatar')"
+            >
+              <template v-slot:label>
+                {{ $t('guide.thumbnail') }}
+              </template>
+              <template v-slot:info>
+                <Upload
+                  class="!ml-2"
+                  @input="setThumbnailUrl"
+                  @loading="setUploadLoading"
+                >
+                  {{ $t('upload') }}
+                </Upload>
+              </template>
+            </UiInput>
+            <UiInput @click="modalCategoryOpen = true">
+              <template v-slot:label>
+                {{ $t(`settings.categories`) }}
+              </template>
+              <template v-slot:selected>
+                <span class="capitalize">
+                  {{ categoriesString }}
+                </span>
+              </template>
+            </UiInput>
             <UiButton class="block w-full px-3" style="height: auto">
               <TextareaAutosize
                 v-model="form.content"
@@ -152,4 +200,12 @@ onMounted(async () => {
       <PageLoading v-else />
     </template>
   </LayoutSingle>
+  <teleport to="#modal">
+    <ModalGuideCategory
+      :open="modalCategoryOpen"
+      :categories="guide.categories"
+      @close="modalCategoryOpen = false"
+      @add="handleSubmitAddCategories"
+    />
+  </teleport>
 </template>

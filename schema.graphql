@@ -300,12 +300,14 @@ type GuideStep {
 
 type Guide {
   authors: [String!]!
+  categories: [String!]!
   content: String!
   created: Int!
   id: String!
   ipfs: String!
   name: String!
   previousId: String
+  thumbnail: String
   space: Space!
   steps: [GuideStep!]!
   uuid: String!

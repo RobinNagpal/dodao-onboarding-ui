@@ -61,6 +61,7 @@ function handleClose() {
       <Block
         @click="selectCategoriesHandler(category)"
         v-for="(category, i) in categories"
+        :slim="true"
         :key="i"
         :class="[
           {
@@ -73,11 +74,13 @@ function handleClose() {
           'relative capitalize'
         ]"
       >
-        <h3 v-text="category" />
-        <i
-          v-if="hasCategory(category)"
-          class="iconfont iconcheck1 absolute top-2 right-2 text-lg"
-        />
+        <div class="p-2 pl-4">
+          <h3 v-text="category" />
+          <i
+            v-if="hasCategory(category)"
+            class="iconfont iconcheck1 absolute top-3 right-2 text-lg"
+          />
+        </div>
       </Block>
     </div>
     <template v-slot:footer>

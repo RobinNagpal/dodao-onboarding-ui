@@ -173,7 +173,7 @@ export function useEditGuide(
     }
     guideCreating.value = true;
     const result = await send(space, 'guide', guideRef.value);
-    if (result.id) {
+    if (result?.id) {
       await getExplore();
       store.space.guides = [];
       notify(['green', t('notify.guideCreated')]);
