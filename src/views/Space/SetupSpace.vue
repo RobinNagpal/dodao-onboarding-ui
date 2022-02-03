@@ -1,5 +1,6 @@
-<script setup>
-import { computed, inject, onMounted, ref, watchEffect } from 'vue';
+<script setup lang="ts">
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { computed, inject, onMounted, PropType, ref, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
@@ -13,13 +14,30 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';
 import { useRouter } from 'vue-router';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
+import { ErrorObject } from 'ajv';
+const { explore } = useApp();
+const { loadExtentedSpaces, extentedSpaces } = useExtendedSpaces();
+
+export interface SpaceForm {
+  avatar?: string;
+  about?: string;
+  admins?: string[];
+  creator?: string;
+  categories?: string[];
+  github?: string;
+  members?: string[];
+  mission?: string;
+  name?: string;
+  network?: string;
+  terms?: string;
+  twitter?: string;
+  validation: any;
+}
 
 const props = defineProps({
   spaceId: String,
-  space: Object,
   from: String,
-  spaceFrom: Object,
-  spaceLoading: Boolean
+  spaceFrom: Object
 });
 
 const basicValidation = { name: 'basic', params: {} };
@@ -28,9 +46,8 @@ const { t } = useI18n();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const router = useRouter();
-const { loadExtentedSpaces } = useExtendedSpaces();
 
-const notify = inject('notify');
+const notify: Function = inject('notify')!;
 
 const currentSettings = ref({});
 const modalNetworksOpen = ref(false);
@@ -40,16 +57,29 @@ const modalValidationOpen = ref(false);
 const loaded = ref(false);
 const uploadLoading = ref(false);
 const showErrors = ref(false);
+const space = ref<SpaceModel | undefined>();
+const spaceLoading = ref<boolean>(false);
 const { web3Account } = useWeb3();
-const form = ref({
-  name: undefined,
+
+console.log('props.spaceId', props.spaceId);
+
+const form = ref<SpaceForm>({
+  about: undefined,
+  admins: [],
+  avatar: undefined,
   categories: [],
-  filters: {},
+  creator: undefined,
+  members: [],
+  github: undefined,
+  mission: undefined,
+  name: undefined,
+  network: undefined,
+  terms: undefined,
+  twitter: undefined,
   validation: basicValidation
 });
 
 const validate = computed(() => {
-  if (form.value.terms === '') delete form.value.terms;
   return validateSchema(spaceSchema, form.value);
 });
 
@@ -82,14 +112,13 @@ const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 async function handleSubmit() {
   if (isValid.value) {
-    if (form.value.filters.invalids) delete form.value.filters.invalids;
     const result = await send(
       { id: slugify(form.value.name) },
       'settings',
       form.value
     );
     console.log('Result', result);
-    if (result.id) {
+    if (result?.id) {
       notify(['green', t('notify.saved')]);
       await loadExtentedSpaces([result.id]);
       await getExplore();
@@ -104,17 +133,13 @@ async function handleSubmit() {
 }
 
 async function clickSubmit() {
-  !web3Account.value
-    ? (modalAccountOpen.value = true)
-    : !termsAccepted.value && props.space?.terms
-    ? (modalTermsOpen.value = true)
-    : handleSubmit();
+  !web3Account.value ? (modalAccountOpen.value = true) : await handleSubmit();
 }
 
 function inputError(field) {
   if (!isValid.value && !clientLoading.value && showErrors.value) {
     const errors = Object.keys(defaults.errors);
-    const errorFound = validate.value.find(
+    const errorFound = (validate.value as ErrorObject[]).find(
       error =>
         (errors.includes(error.keyword) &&
           error.params.missingProperty === field) ||
@@ -156,13 +181,12 @@ function formatSpace(spaceRaw) {
   return space;
 }
 
+function updateAdmins(value) {
+  form.value.admins = value;
+}
+
 watchEffect(async () => {
-  if (!props.spaceLoading) {
-    const spaceClone = formatSpace(props.space);
-    if (spaceClone) {
-      form.value = spaceClone;
-      currentSettings.value = clone(spaceClone);
-    }
+  if (!spaceLoading.value) {
     if (props.from) {
       const fromClone = formatSpace(props.spaceFrom);
       if (fromClone) {
@@ -173,10 +197,40 @@ watchEffect(async () => {
   }
 });
 
-onMounted(() => {
-  props.space
-    ? setPageTitle('page.title.space.settings', { space: props.space.name })
-    : setPageTitle('page.title.setup');
+onMounted(async () => {
+  try {
+    if (props.spaceId) {
+      spaceLoading.value = true;
+      if (
+        !extentedSpaces.value?.find(s => s.id === props.spaceId?.toString())
+      ) {
+        await loadExtentedSpaces([props.spaceId]);
+      }
+      const space = extentedSpaces.value.find(
+        s => s.id === props.spaceId?.toString()
+      );
+      form.value.about = space?.about || undefined;
+      form.value.admins = space?.admins;
+      form.value.avatar = space?.avatar || undefined;
+      form.value.categories = space?.categories;
+      form.value.creator = space?.creator || undefined;
+      form.value.members = space?.members;
+      form.value.github = space?.github || undefined;
+      form.value.mission = space?.mission || undefined;
+      form.value.name = space?.name || undefined;
+      form.value.network = space?.network || undefined;
+      form.value.terms = space?.terms || undefined;
+      form.value.twitter = space?.twitter || undefined;
+
+      space
+        ? setPageTitle('page.title.space.settings', { space: space.name })
+        : setPageTitle('page.title.setup');
+
+      spaceLoading.value = false;
+    }
+  } catch (e) {
+    console.log(e);
+  }
 });
 </script>
 
@@ -298,25 +352,7 @@ onMounted(() => {
                   :placeholder="`0x8C28Cf33d9Fd3D0293f963b1cd27e3FF422B425c\n0xeF8305E140ac520225DAf050e2f71d5fBcC543e7`"
                   class="input w-full text-left"
                   style="font-size: 18px"
-                />
-              </UiButton>
-            </Block>
-            <Block :title="$t('setupSpace.authors')">
-              <Block
-                :style="`border-color: red !important`"
-                v-if="inputError('members')"
-              >
-                <Icon name="warning" class="mr-2 !text-red" />
-                <span class="!text-red">
-                  {{ inputError('members') }}&nbsp;</span
-                >
-              </Block>
-              <UiButton class="block w-full px-3" style="height: auto">
-                <TextareaArray
-                  v-model="form.members"
-                  :placeholder="`0x8C28Cf33d9Fd3D0293f963b1cd27e3FF422B425c\n0xeF8305E140ac520225DAf050e2f71d5fBcC543e7`"
-                  class="input w-full text-left"
-                  style="font-size: 18px"
+                  @update:modelValue="updateAdmins($event)"
                 />
               </UiButton>
             </Block>

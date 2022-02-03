@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { n } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
@@ -23,7 +23,9 @@ const isVerified = verified[props.space.id] || 0;
 const isAdmin = computed(() => {
   const admins = props.space?.admins?.map(address => address.toLowerCase());
 
-  const isCreator = props.space.creator === web3Account?.value?.toLowerCase();
+  const isCreator =
+    props.space?.creator &&
+    props.space?.creator?.toLowerCase() === web3Account?.value?.toLowerCase();
 
   return (
     auth.isAuthenticated.value &&
@@ -125,7 +127,10 @@ watchEffect(() => {
           {{ $t('about') }}
         </UiButton>
       </router-link>
-      <router-link v-if="isAdmin" :to="{ name: 'spaceSettings' }">
+      <router-link
+        v-if="isAdmin"
+        :to="{ name: 'spaceEdit', params: { spaceId: space.id, space: space } }"
+      >
         <UiButton class="whitespace-nowrap">
           {{ $t('settings.header') }}
         </UiButton>

@@ -37,6 +37,7 @@
   max-width: 1248px;
   margin-right: auto;
   margin-left: auto;
+  //margin-left: 50px;
 }
 
 .header-logo {
@@ -550,6 +551,7 @@
   }
   .header {
     top: 0px;
+    margin-left: 50px;
   }
   .header-navigation {
     -webkit-box-orient: vertical;
@@ -618,6 +620,10 @@
     -ms-grid-columns: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
+
+  .route-view {
+    margin-left: 50px;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -639,6 +645,7 @@
   }
   .header {
     max-width: none;
+    margin-left: 50px;
   }
   .nav-item-wrapper.mobile {
     display: block;
@@ -657,10 +664,6 @@
   }
   .nav-menu {
     padding-top: 150px;
-  }
-  .section {
-    padding-top: 80px;
-    padding-bottom: 80px;
   }
 
   .card {
@@ -713,6 +716,9 @@
   .hamburger-menu-icon {
     width: 24px;
     font-size: 21px;
+  }
+  .route-view {
+    margin-left: 50px;
   }
 }
 
@@ -788,5 +794,9 @@
   ._4-column-grid {
     grid-column-gap: 22px;
     grid-row-gap: 22px;
+  }
+
+  .route-view {
+    margin-left: 0;
   }
 }

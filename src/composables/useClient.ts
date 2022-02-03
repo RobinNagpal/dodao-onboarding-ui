@@ -5,6 +5,7 @@ import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -35,7 +36,7 @@ export function useClient() {
       connectorName.value === 'gnosis'
   );
 
-  async function send(space, type, payload) {
+  async function send(space, type, payload): Promise<MsgResponse | undefined> {
     loading.value = true;
     try {
       if (usePersonalSign.value) {
@@ -65,12 +66,16 @@ export function useClient() {
     }
   }
 
-  async function sendEIP712(space, type, payload) {
+  async function sendEIP712(
+    space,
+    type,
+    payload
+  ): Promise<MsgResponse | undefined> {
     if (type === 'proposal') {
       let plugins = {};
       if (Object.keys(payload.metadata?.plugins).length !== 0)
         plugins = payload.metadata.plugins;
-      return clientEIP712.proposal(auth.web3, web3.value.account, {
+      return (await clientEIP712.proposal(auth.web3, web3.value.account, {
         space: space.id,
         type: payload.type,
         title: payload.name,
@@ -83,7 +88,7 @@ export function useClient() {
         strategies: JSON.stringify(space.strategies),
         plugins: JSON.stringify(plugins),
         metadata: JSON.stringify({})
-      });
+      })) as MsgResponse;
     } else if (type === 'guide') {
       const guideMessage = {
         uuid: payload.uuid,
@@ -109,20 +114,24 @@ export function useClient() {
           }))
         }))
       };
-      return clientEIP712.guide(auth.web3, web3.value.account, guideMessage);
+      return (await clientEIP712.guide(
+        auth.web3,
+        web3.value.account,
+        guideMessage
+      )) as MsgResponse;
     } else if (type === 'vote') {
-      return clientEIP712.vote(auth.web3, web3.value.account, {
+      return (await clientEIP712.vote(auth.web3, web3.value.account, {
         space: space.id,
         proposal: payload.proposal.id,
         type: payload.proposal.type,
         choice: payload.choice,
         metadata: JSON.stringify({})
-      });
+      })) as MsgResponse;
     } else if (type === 'delete-proposal') {
-      return clientEIP712.cancelProposal(auth.web3, web3.value.account, {
+      return (await clientEIP712.cancelProposal(auth.web3, web3.value.account, {
         space: space.id,
         proposal: payload.proposal.id
-      });
+      })) as MsgResponse;
     } else if (type === 'settings') {
       const spaceSettingsInput: SpaceSettingsInput = {
         ...payload,
@@ -138,12 +147,12 @@ export function useClient() {
         terms: payload.terms || '',
         twitter: payload.twitter || ''
       };
-      return clientEIP712.spaceNew(auth.web3, web3.value.account, {
+      return (await clientEIP712.spaceNew(auth.web3, web3.value.account, {
         space: space.id,
         from: web3.value.account,
         settings: spaceSettingsInput,
         timestamp: parseInt((Date.now() / 1e3).toFixed())
-      });
+      })) as MsgResponse;
     } else {
       throw new Error('Unknown type ' + type);
     }
