@@ -1,21 +1,21 @@
-<script setup>
-import { ref, computed, toRefs, watchEffect } from 'vue';
-import { useCategories } from '@/composables/useCategories';
+<script setup lang="ts">
+import { ref, computed, toRefs, watchEffect, PropType } from 'vue';
 
 const props = defineProps({
   open: Boolean,
-  categories: Array
+  checkedCategories: Array as PropType<string[]>,
+  categories: { type: Array as PropType<string[]>, required: true }
 });
-
-const { categories } = useCategories();
 
 const emit = defineEmits(['add', 'close']);
 
 const { open } = toRefs(props);
 
-const checkedCategories = computed(() => props.categories);
+const checkedCategories = computed<string[]>(
+  () => props.checkedCategories || []
+);
 
-const selectedCategories = ref([]);
+const selectedCategories = ref<string[]>([]);
 
 watchEffect(() => {
   selectedCategories.value = checkedCategories.value;
