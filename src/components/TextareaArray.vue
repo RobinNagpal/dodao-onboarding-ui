@@ -1,5 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import { onBeforeUpdate } from '@vue/runtime-core';
 
 const props = defineProps({
   modelValue: Array
@@ -7,24 +8,24 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const input = ref('');
+const input = ref(props.modelValue?.join('\n') || '');
 
-function handleInput() {
-  const inputString = input.value
+onBeforeUpdate(() => {
+  input.value = input.value || props.modelValue?.join('\n');
+});
+
+function updateModel(inputString) {
+  const inputStrings = inputString
     .replace(/\n/g, ' ')
     .replace(/,/g, ' ')
     .replace(/;/g, ' ')
     .split(' ')
     .map(item => item.trim())
     .filter(item => !!item);
-  emit('update:modelValue', inputString);
+  emit('update:modelValue', inputStrings);
 }
-
-watch(input, () => handleInput());
-
-if (props.modelValue) input.value = props.modelValue.join('\n');
 </script>
 
 <template>
-  <TextareaAutosize v-model="input" />
+  <TextareaAutosize v-model="input" @update:modelValue="updateModel($event)" />
 </template>

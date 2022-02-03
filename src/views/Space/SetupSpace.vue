@@ -181,6 +181,10 @@ function formatSpace(spaceRaw) {
   return space;
 }
 
+function updateAdmins(value) {
+  form.value.admins = value;
+}
+
 watchEffect(async () => {
   if (!spaceLoading.value) {
     if (props.from) {
@@ -348,25 +352,7 @@ onMounted(async () => {
                   :placeholder="`0x8C28Cf33d9Fd3D0293f963b1cd27e3FF422B425c\n0xeF8305E140ac520225DAf050e2f71d5fBcC543e7`"
                   class="input w-full text-left"
                   style="font-size: 18px"
-                />
-              </UiButton>
-            </Block>
-            <Block :title="$t('setupSpace.authors')">
-              <Block
-                :style="`border-color: red !important`"
-                v-if="inputError('members')"
-              >
-                <Icon name="warning" class="mr-2 !text-red" />
-                <span class="!text-red">
-                  {{ inputError('members') }}&nbsp;</span
-                >
-              </Block>
-              <UiButton class="block w-full px-3" style="height: auto">
-                <TextareaArray
-                  v-model="form.members"
-                  :placeholder="`0x8C28Cf33d9Fd3D0293f963b1cd27e3FF422B425c\n0xeF8305E140ac520225DAf050e2f71d5fBcC543e7`"
-                  class="input w-full text-left"
-                  style="font-size: 18px"
+                  @update:modelValue="updateAdmins($event)"
                 />
               </UiButton>
             </Block>
