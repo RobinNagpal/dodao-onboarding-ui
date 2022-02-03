@@ -3,14 +3,16 @@ import { useClient } from '@/composables/useClient';
 import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuide } from '@/helpers/snapshot';
-import { emptyGuide } from '@/views/Guide/EmptyGuide';
 import {
   ChoiceError,
   GuideError,
-  GuideInput,
-  GuideStepInput,
   QuestionError,
   StepError
+} from '@/types/error';
+import { emptyGuide } from '@/views/Guide/EmptyGuide';
+import {
+  GuideInput,
+  GuideStepInput
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
