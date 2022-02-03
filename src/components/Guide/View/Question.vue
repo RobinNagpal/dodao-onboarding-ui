@@ -20,8 +20,7 @@ defineProps({
           @update:modelValue="selectAnswer(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
         />
-        <div class="mt-2">{{ choice.content }} </div>
-
+        <div class="mt-2">{{ choice.content }}</div>
       </div>
     </template>
   </div>
