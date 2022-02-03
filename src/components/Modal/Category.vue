@@ -1,21 +1,21 @@
-<script setup>
-import { ref, computed, toRefs, watchEffect } from 'vue';
-import { useCategories } from '@/composables/useCategories';
+<script setup lang="ts">
+import { ref, computed, toRefs, watchEffect, PropType } from 'vue';
 
 const props = defineProps({
   open: Boolean,
-  categories: Array
+  checkedCategories: Array as PropType<string[]>,
+  categories: { type: Array as PropType<string[]>, required: true }
 });
-
-const { categories } = useCategories();
 
 const emit = defineEmits(['add', 'close']);
 
 const { open } = toRefs(props);
 
-const checkedCategories = computed(() => props.categories);
+const checkedCategories = computed<string[]>(
+  () => props.checkedCategories || []
+);
 
-const selectedCategories = ref([]);
+const selectedCategories = ref<string[]>([]);
 
 watchEffect(() => {
   selectedCategories.value = checkedCategories.value;
@@ -61,6 +61,7 @@ function handleClose() {
       <Block
         @click="selectCategoriesHandler(category)"
         v-for="(category, i) in categories"
+        :slim="true"
         :key="i"
         :class="[
           {
@@ -73,11 +74,13 @@ function handleClose() {
           'relative capitalize'
         ]"
       >
-        <h3 v-text="category" />
-        <i
-          v-if="hasCategory(category)"
-          class="iconfont iconcheck1 absolute top-2 right-2 text-lg"
-        />
+        <div class="p-2 pl-4">
+          <h3 v-text="category" />
+          <i
+            v-if="hasCategory(category)"
+            class="iconfont iconcheck1 absolute top-3 right-2 text-lg"
+          />
+        </div>
       </Block>
     </div>
     <template v-slot:footer>

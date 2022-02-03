@@ -113,7 +113,7 @@ const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 async function handleSubmit() {
   if (isValid.value) {
     const result = await send(
-      { id: slugify(form.value.name) },
+      { id: slugify(form.value.name) + '-' + form.value.network },
       'settings',
       form.value
     );
@@ -209,23 +209,25 @@ onMounted(async () => {
       const space = extentedSpaces.value.find(
         s => s.id === props.spaceId?.toString()
       );
-      form.value.about = space?.about || undefined;
-      form.value.admins = space?.admins;
-      form.value.avatar = space?.avatar || undefined;
-      form.value.categories = space?.categories;
-      form.value.creator = space?.creator || undefined;
-      form.value.members = space?.members;
-      form.value.github = space?.github || undefined;
-      form.value.mission = space?.mission || undefined;
-      form.value.name = space?.name || undefined;
-      form.value.network = space?.network || undefined;
-      form.value.terms = space?.terms || undefined;
-      form.value.twitter = space?.twitter || undefined;
 
-      space
-        ? setPageTitle('page.title.space.settings', { space: space.name })
-        : setPageTitle('page.title.setup');
+      if (space) {
+        form.value.about = space?.about || undefined;
+        form.value.admins = space.admins;
+        form.value.avatar = space?.avatar || undefined;
+        form.value.categories = space.categories;
+        form.value.creator = space?.creator || undefined;
+        form.value.members = space?.members;
+        form.value.github = space?.github || undefined;
+        form.value.mission = space.mission;
+        form.value.name = space.name || undefined;
+        form.value.network = space.network;
+        form.value.terms = space?.terms || undefined;
+        form.value.twitter = space?.twitter || undefined;
 
+        space
+          ? setPageTitle('page.title.space.settings', { space: space.name })
+          : setPageTitle('page.title.setup');
+      }
       spaceLoading.value = false;
     }
   } catch (e) {
@@ -381,7 +383,7 @@ onMounted(async () => {
       :open="modalSkinsOpen"
       @close="modalSkinsOpen = false"
     />
-    <ModalCategory
+    <ModalSpaceCategory
       :open="modalCategoryOpen"
       :categories="form.categories"
       @close="modalCategoryOpen = false"

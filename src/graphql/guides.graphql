@@ -1,69 +1,61 @@
-query GuidesQuery(
-    $space: String
-    $space_in: [String]
-    $author_in: [String]
-) {
-    guides(
-        where: {
-            space: $space
-            space_in: $space_in
-            author_in: $author_in
-        }
-    ) {
-        id
-        ipfs
-        authors
-        name
-        content
-        created
-        space {
-            id
-            name
-            members
-            avatar
-            symbol
-        }
-        uuid
+query GuidesQuery($space: String, $space_in: [String], $author_in: [String]) {
+  guides(where: { space: $space, space_in: $space_in, author_in: $author_in }) {
+    id
+    ipfs
+    authors
+    name
+    categories
+    content
+    created
+    space {
+      id
+      name
+      members
+      avatar
+      symbol
     }
+    thumbnail
+    uuid
+  }
 }
-
 
 query GuideQuery($uuid: String!) {
-    guide(uuid: $uuid) {
-        authors
-        content
-        created
-        id
-        ipfs
-        link
-        name
-        previousId
-        space {
-            id
-            name
-        }
-        steps {
-            content
-            created
-            id
-            name
-            order
-            questions {
-                answerKeys
-                choices {
-                    content
-                    key
-                    order
-                }
-                content
-                order
-                questionType
-                uuid
-            }
-            uuid
-        }
-        uuid
-        version
+  guide(uuid: $uuid) {
+    authors
+    categories
+    content
+    created
+    id
+    ipfs
+    link
+    name
+    previousId
+    space {
+      id
+      name
     }
+    steps {
+      content
+      created
+      id
+      name
+      order
+      questions {
+        answerKeys
+        choices {
+          content
+          key
+          order
+        }
+        content
+        order
+        questionType
+        uuid
+      }
+      uuid
+    }
+    thumbnail
+    uuid
+    version
+  }
 }
-
