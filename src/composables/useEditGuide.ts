@@ -59,7 +59,8 @@ export function useEditGuide(
       guideRef.value = {
         ...guide,
         from: web3.value.account,
-        space: space.id
+        space: space.id,
+        thumbnail: guide.thumbnail || undefined
       };
       const minOrder = Math.min(...steps.value.map(step => step.order));
       activeStepId.value = steps.value.find(
