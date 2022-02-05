@@ -3,6 +3,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
+import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
@@ -90,11 +91,13 @@ export function useClient() {
         metadata: JSON.stringify({})
       })) as MsgResponse;
     } else if (type === 'guide') {
-      const guideMessage = {
+      const guideMessage: GuideInput = {
         uuid: payload.uuid,
-        space: space.id,
-        name: payload.name,
+        categories: payload.categories || [],
         content: payload.content,
+        from: web3.value.account,
+        name: payload.name,
+        space: space.id,
         steps: payload.steps.map((step: GuideStep) => ({
           uuid: step.uuid,
           name: step.name,
@@ -112,7 +115,8 @@ export function useClient() {
             questionType: question.questionType,
             order: question.order
           }))
-        }))
+        })),
+        thumbnail: payload.thumbnail || ''
       };
       return (await clientEIP712.guide(
         auth.web3,
