@@ -1,5 +1,5 @@
 <template>
-  <div class="section mt-16">
+  <div class="section mt-4">
     <div class="container-default">
       <div class="card integration-main-card">
         <div class="integration-content">
