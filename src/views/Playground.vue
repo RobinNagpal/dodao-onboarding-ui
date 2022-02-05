@@ -166,7 +166,7 @@ onMounted(async () => {
           </UiInput>
           <UiInput v-model="form.snapshot" @update:modelValue="handleURLUpdate">
             <template v-slot:label>
-              {{ $t('snapshot') }}
+              {{ $t('dodao') }}
             </template>
           </UiInput>
           <Block

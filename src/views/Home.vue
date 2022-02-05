@@ -30,9 +30,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center wf-section mt-4 mx-auto">
+  <div class="flex items-center wf-section mt-6 mx-auto">
     <div class="container-default w-container">
-      <div class="flex items-center mb-4 mx-0">
+      <div class="flex items-center mb-6 mx-0">
         <UiButton class="pl-3 pr-0 w-full max-w-[420px] background-white">
           <SearchWithFilters />
         </UiButton>

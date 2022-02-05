@@ -399,7 +399,7 @@ onMounted(async () => {
             />
           </div>
           <div>
-            <b>{{ $t('snapshot') }}</b>
+            <b>{{ $t('dodao') }}</b>
             <a
               :href="explorerUrl(proposal.network, proposal.snapshot, 'block')"
               target="_blank"
