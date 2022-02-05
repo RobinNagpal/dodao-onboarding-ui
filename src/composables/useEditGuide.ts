@@ -166,13 +166,13 @@ export function useEditGuide(
         guideErrors.value.steps[step.order] = stepError;
       }
     });
-    return Object.values(guideErrors).filter(v => !!v).length > 0;
+    return Object.values(guideErrors.value).filter(v => !!v).length === 0;
   }
 
   async function handleSubmit() {
     const valid = validateGuide(guideRef.value);
     if (!valid) {
-      console.log('Guide invalid', valid);
+      console.log('Guide invalid', valid, guideErrors);
       return;
     }
     guideCreating.value = true;

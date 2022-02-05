@@ -15,7 +15,7 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
         uuid: uuidv4(),
         name: 'Introduction',
         content: `
-            Introduction Comments 
+Introduction Comments 
         `,
         questions: [],
         order: 0
