@@ -23,16 +23,34 @@ watchEffect(() => {
       params: { key: guide.space.id, uuid: guide.uuid }
     }"
   >
-    <Block
-      :slim="true"
-      class="timeline-guide transition-colors card w-inline-block feature-card py-4 px-4"
-    >
-      <h3 v-text="guide.name" class="my-1" />
-      <p
-        v-text="shorten(guide.content, 300)"
-        class="break-words mb-2 text-md"
-      />
-    </Block>
+    <div role="listitem" class="card feature-card">
+      <div class="image-wrapper blog-card-thumbnail">
+        <UiThumbnail
+          :src="guide.thumbnail"
+          :entityId="guide.uuid"
+          :title="guide.name"
+          size="350"
+          class="mb-1"
+          big_tile
+        />
+      </div>
+      <div class="p-4 text-center">
+        <h2 v-text="shorten(guide.name, 32)" />
+        <p
+          v-text="shorten(guide.content, 300)"
+          class="break-words mb-2 text-md"
+        />
+      </div>
+      <div class="flex justify-end absolute top-4 right-4">
+        <div
+          class="badge post-category"
+          v-for="category in guide.categories || []"
+          :key="category"
+        >
+          {{ category }}
+        </div>
+      </div>
+    </div>
   </router-link>
 </template>
 

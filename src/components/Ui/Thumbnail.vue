@@ -1,31 +1,35 @@
 <script setup lang="ts">
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, PropType, ref } from 'vue';
-import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
 import { formatBytes32String } from '@ethersproject/strings';
+import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   big_tile: Boolean,
   size: String,
-  space: {
-    type: Object as PropType<SpaceModel>,
+  src: {
+    type: String,
     required: true
   },
-  symbolIndex: [String, Number]
+  entityId: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  }
 });
 
 const error = ref(false);
 
-const spaceId = computed(() => props.space.id);
-
 const imgsrc = computed(() => {
-  const url = getUrl(props.space.avatar);
+  const url = getUrl(props.src);
   if (!url) return '';
   return `https://worker.snapshot.org/mirror?img=${encodeURIComponent(url)}`;
 });
 
 const address = computed(() => {
-  if (spaceId.value) return formatBytes32String(spaceId.value.slice(0, 24));
+  if (props.entityId) return formatBytes32String(props.entityId.slice(0, 24));
   return '';
 });
 
@@ -41,7 +45,7 @@ const bigTileStyle = {
 };
 </script>
 
-<template>
+<template v-if="src">
   <div class="flex justify-center" :class="{ 'w-[100%]': big_tile }">
     <img
       v-if="imgsrc && !error"
@@ -49,17 +53,14 @@ const bigTileStyle = {
       :style="bigTileStyle"
       @error="error = true"
       class="inline-block !align-middle leading-none rounded-lg"
-      :class="[
-        space?.skin ? `${space?.skin} bg-[color:var(--bg-color)]` : 'bg-white'
-      ]"
-      :alt="space?.name"
+      :alt="title"
     />
     <UiBlockie
       v-else-if="!!address"
       :seed="address"
       :style="bigTileStyle"
       class="inline-block !align-middle rounded-lg"
-      :alt="space?.name"
+      :alt="title"
     />
   </div>
 </template>

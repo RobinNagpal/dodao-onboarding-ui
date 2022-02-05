@@ -30,7 +30,7 @@ onMounted(() => {
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>
-      <Block :loading="spaceLoading" class="mt-6">
+      <div v-if="!spaceLoading" class="card integration-main-card mt-6">
         <div v-if="space.about" class="mb-3">
           <h4 class="link-color mb-2">{{ $t('settings.about') }}</h4>
           <UiText :text="space.about" />
@@ -62,7 +62,7 @@ onMounted(() => {
             <div>{{ i }}</div>
           </div>
         </div>
-      </Block>
+      </div>
       <Block
         :title="$t('settings.admins')"
         v-if="space.admins?.length"

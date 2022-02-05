@@ -61,7 +61,9 @@ watchEffect(() => {
     class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
   >
     <UiThumbnail
-      :space="space"
+      :src="space.avatar"
+      :entityId="space.id"
+      :title="space.name"
       symbolIndex="space"
       size="80"
       class="mt-3 mb-2"

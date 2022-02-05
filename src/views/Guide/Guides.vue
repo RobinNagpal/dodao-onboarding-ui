@@ -105,12 +105,14 @@ const loadingData = computed(() => {
           :space="space"
         />
         <div v-else>
-          <GuideTimelineGuide
-            v-for="(guide, i) in store.space.guides"
-            :key="i"
-            :guide="guide"
-            :profiles="profiles"
-          />
+          <div class="_3-column-grid features-grid">
+            <GuideTimelineGuide
+              v-for="(guide, i) in store.space.guides"
+              :key="i"
+              :guide="guide"
+              :profiles="profiles"
+            />
+          </div>
         </div>
         <div
           style="height: 10px; width: 10px; position: absolute"

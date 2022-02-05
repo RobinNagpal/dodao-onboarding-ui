@@ -97,8 +97,9 @@ onMounted(() => {
           >
             <div class="image-wrapper blog-card-thumbnail">
               <UiThumbnail
-                :space="space"
-                symbolIndex="space"
+                :src="space.avatar"
+                :entityId="space.id"
+                :title="space.name"
                 size="350"
                 class="mb-1"
                 big_tile
@@ -110,7 +111,7 @@ onMounted(() => {
               />
             </div>
             <div class="p-4 text-center">
-              <h2 v-text="shorten(space.name, 16)" />
+              <h2 v-text="shorten(space.name, 32)" />
               <div>{{ space.mission }}</div>
               <div class="flex flex-col">
                 <div>
