@@ -51,6 +51,7 @@ const disableChoiceEdit = false;
         <Checkbox
           @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
+          :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
         />
         <UiInput
           :modelValue="choice.content"
