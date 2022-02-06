@@ -213,7 +213,7 @@ function addQuestion() {
         :value="step.content"
         :placeholder="$t(`guide.step.contents`)"
         class="input w-full text-left"
-        style="font-size: 18px; max-height: 67px"
+        style="font-size: 18px"
         @update:modelValue="updateStepContent"
       />
     </UiButton>

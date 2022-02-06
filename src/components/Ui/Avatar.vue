@@ -34,8 +34,8 @@ const error = ref(false);
       :style="{
         'object-fit': `${big_tile ? 'cover' : 'null'}`,
         'border-radius': `${big_tile ? 0 : 'null'}`,
-        width: `${big_tile ? '424' : parseInt(size) || 22}px`,
-        height: `${big_tile ? '260' : parseInt(size) || 22}px`
+        width: `${big_tile ? '350' : parseInt(size) || 22}px`,
+        height: `${big_tile ? '300' : parseInt(size) || 22}px`
       }"
       class="inline-block !align-middle rounded-full"
       :alt="space?.name"

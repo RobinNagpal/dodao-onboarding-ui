@@ -46,13 +46,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="markdown-body break-words" v-html="markdown" />
+  <div
+    class="markdown-body break-words"
+    style="margin-bottom: 2rem"
+    v-html="markdown"
+  />
 </template>
 
 <style lang="scss">
 .markdown-body {
-  font-size: 22px;
-  line-height: 1.4;
+  font-size: 18px;
+  line-height: 1;
   word-wrap: break-word;
 }
 
