@@ -17,7 +17,7 @@ function checkboxClicked() {
 </script>
 
 <template>
-  <div class="p-2 mt-2 checkmark-container">
+  <div class="p-2 checkmark-container mt-2">
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
     <span class="checkmark" @click="checkboxClicked"></span>
   </div>

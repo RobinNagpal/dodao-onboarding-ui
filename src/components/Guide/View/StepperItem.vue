@@ -8,7 +8,8 @@ const props = defineProps({
     type: Object as PropType<GuideStep>,
     required: true
   },
-  goToNextStep: Function
+  goToNextStep: Function,
+  goToPreviousStep: Function
 });
 
 const emit = defineEmits(['update:step']);
@@ -26,8 +27,8 @@ function selectAnswer(questionId, choiceKey, selected) {
 <template>
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">
     <div>
-      <div>{{ step.name }}</div>
-      <div v-html="stepContents" />
+      <div class="mb-2 font-bold">{{ step.name }}</div>
+      <div v-html="stepContents" class="step-content" />
       <template v-for="question in questions" :key="question.uuid">
         <GuideViewQuestion
           :question="question"
@@ -35,18 +36,39 @@ function selectAnswer(questionId, choiceKey, selected) {
         ></GuideViewQuestion>
       </template>
     </div>
-    <UiButton
-      :aria-label="$t('next')"
-      class="float-right self-end"
-      @click="goToNextStep(step)"
-    >
-      <span class="sm:block" v-text="$t('next')" />
-      <Icon
-        name="login"
-        size="20"
-        class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
-      />
-    </UiButton>
+    <div class="flex align-center justify-between mt-2">
+      <UiButton
+        :aria-label="$t('previous')"
+        class="float-right self-start"
+        @click="goToPreviousStep(step)"
+      >
+        <span class="sm:block" v-text="$t('previous')" />
+        <Icon
+          name="login"
+          size="20"
+          class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
+        />
+      </UiButton>
+      <UiButton
+        :aria-label="$t('next')"
+        class="float-right self-end"
+        @click="goToNextStep(step)"
+      >
+        <span class="sm:block" v-text="$t('next')" />
+        <Icon
+          name="login"
+          size="20"
+          class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
+        />
+      </UiButton>
+    </div>
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style lang="scss">
+.step-content li {
+  margin-bottom: 0.5rem;
+}
+.step-content p {
+  margin-bottom: 1rem;
+}
+</style>

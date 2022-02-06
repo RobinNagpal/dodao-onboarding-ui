@@ -8,7 +8,8 @@ const props = defineProps({
     type: Array as PropType<Array<GuideStep>>,
     required: true
   },
-  goToNextStep: Function
+  goToNextStep: Function,
+  goToPreviousStep: Function
 });
 
 const activeStep = computed(
@@ -32,7 +33,11 @@ const activeStep = computed(
         </li>
       </ol>
     </div>
-    <GuideViewStepperItem :step="activeStep" :goToNextStep="goToNextStep" />
+    <GuideViewStepperItem
+      :step="activeStep"
+      :goToNextStep="goToNextStep"
+      :goToPreviousStep="goToPreviousStep"
+    />
   </div>
 </template>
 <style scoped lang="scss">

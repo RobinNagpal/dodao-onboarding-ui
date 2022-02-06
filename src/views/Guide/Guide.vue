@@ -150,6 +150,18 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
   );
   activeStepId.value = nextStep?.uuid;
 }
+
+function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
+  currentStep.order;
+  const nextStep = steps.value.find(
+    step => step?.order === currentStep.order - 1
+  );
+  if (nextStep && nextStep?.uuid) {
+    activeStepId.value = nextStep?.uuid;
+  } else {
+    activeStepId.value = steps.value[steps.value?.length - 1]?.uuid;
+  }
+}
 </script>
 
 <template>
@@ -215,6 +227,7 @@ function goToNextStep(currentStep: GuideQuery_guide_steps) {
                   :activeStepId="activeStepId"
                   :steps="steps"
                   :goToNextStep="goToNextStep"
+                  :goToPreviousStep="goToPreviousStep"
                 />
               </Block>
             </template>
