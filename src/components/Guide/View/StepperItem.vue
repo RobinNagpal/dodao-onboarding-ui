@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import GuideViewQuestion from '@/components/Guide/View/Question.vue';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
 import { UserGuideStepResponse } from '@/composables/useViewGuide';
 import {
   GuideModel,
   GuideStep
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
-import { computed, onBeforeUpdate, PropType } from 'vue';
-import GuideViewQuestion from '@/components/Guide/View/Question.vue';
+import { computed, PropType, ref } from 'vue';
 
 const props = defineProps({
   step: {
@@ -34,13 +36,28 @@ const questions = computed(() => {
 const stepContents = computed(() => marked.parse(props.step.content));
 
 function selectAnswer(questionId: string, selectedAnswers: string[]) {
-  console.log(questionId, selectedAnswers);
-
   emit('update:questionResponse', props.step.uuid, questionId, selectedAnswers);
 }
 
-onBeforeUpdate(() => {
-  console.log('StepperItem - before update', props);
+const nextButtonClicked = ref<boolean>(false);
+
+function isEveryQuestionAnswered(): boolean {
+  return props.step.questions.every(
+    question => props.stepResponse[question.uuid]?.length > 0
+  );
+}
+
+function navigateToNextStep() {
+  nextButtonClicked.value = true;
+
+  if (isEveryQuestionAnswered()) {
+    nextButtonClicked.value = false;
+    props.goToNextStep?.(props.step);
+  }
+}
+
+const showQuestionsCompletionWarning = computed<boolean>(() => {
+  return nextButtonClicked.value && !isEveryQuestionAnswered();
 });
 </script>
 <template>
@@ -57,12 +74,18 @@ onBeforeUpdate(() => {
         ></GuideViewQuestion>
       </template>
     </div>
+    <div v-if="showQuestionsCompletionWarning">
+      <div class="float-left mb-2 !text-red">
+        <i class="iconfont iconwarning" data-v-abc9f7ae=""></i>
+        <span class="ml-1">Answer all questions to proceed</span>
+      </div>
+    </div>
     <div class="mt-2">
       <UiButton
         :aria-label="$t('previous')"
         class="float-left"
         @click="goToPreviousStep(step)"
-        v-if="step.order !== 0"
+        v-if="step.order !== 0 && guide.steps.length - 1 !== step.order"
       >
         <span class="sm:block" v-text="$t('previous')" />
         <Icon
@@ -74,9 +97,15 @@ onBeforeUpdate(() => {
       <UiButton
         :aria-label="$t('next')"
         class="float-right"
-        @click="goToNextStep(step)"
+        @click="navigateToNextStep"
+        v-if="guide.steps.length - 1 !== step.order"
       >
-        <span class="sm:block" v-text="$t('next')" />
+        <span
+          class="sm:block"
+          v-text="
+            $t(guide.steps.length - 2 === step.order ? 'complete' : 'next')
+          "
+        />
         <Icon
           name="login"
           size="20"
@@ -84,13 +113,6 @@ onBeforeUpdate(() => {
         />
       </UiButton>
     </div>
-    <div>
-      <div v-if="true" class="float-right mb-2 text-sm">
-        <i class="iconfont iconwarning" data-v-abc9f7ae=""></i>
-        <span class="ml-1">Answer all questions to proceed</span>
-      </div>
-    </div>
-    <div>Step response - {{ JSON.stringify(stepResponse) }}</div>
   </div>
 </template>
 <style lang="scss">

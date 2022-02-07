@@ -65,13 +65,6 @@ export function useViewGuide(uuid: string) {
     questionUuid: string,
     selectedAnswers: string[]
   ) {
-    console.log(
-      'useViewGuide - selectAnswer',
-      stepUuid,
-      questionUuid,
-      selectedAnswers
-    );
-
     guideResponseRef.value = {
       ...guideResponseRef.value,
       [stepUuid]: {
@@ -79,7 +72,6 @@ export function useViewGuide(uuid: string) {
         [questionUuid]: selectedAnswers
       }
     };
-    console.log(guideResponseRef);
   }
 
   return {

@@ -31,10 +31,6 @@ const activeStep = computed<GuideStep>(
     props.guide.steps.find(step => step.uuid === props.activeStepId) ||
     props.guide.steps[0]!
 );
-
-onBeforeUpdate(() => {
-  console.log('Stepper - before update', props);
-});
 </script>
 <template>
   <div class="w-full flex flex-row">
