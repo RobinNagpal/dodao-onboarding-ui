@@ -50,7 +50,8 @@ const {
   guideLoaded,
   guideResponseRef,
   initialize,
-  selectAnswer
+  selectAnswer,
+  submitGuideResponse
 } = useViewGuide(uuid as string, notify, props.space);
 
 const isCreator = computed(() =>
@@ -208,6 +209,7 @@ onMounted(async () => {
                   :guide="guide"
                   :guideResponse="guideResponseRef"
                   :selectAnswer="selectAnswer"
+                  :submitGuideResponse="submitGuideResponse"
                 />
               </Block>
             </template>

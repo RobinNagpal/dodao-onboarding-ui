@@ -24,6 +24,10 @@ const props = defineProps({
   stepResponse: {
     type: Object as PropType<UserGuideStepResponse>,
     required: true
+  },
+  submitGuideResponse: {
+    type: Function,
+    required: true
   }
 });
 
@@ -47,15 +51,6 @@ function isEveryQuestionAnswered(): boolean {
   );
 }
 
-function navigateToNextStep() {
-  nextButtonClicked.value = true;
-
-  if (isEveryQuestionAnswered()) {
-    nextButtonClicked.value = false;
-    props.goToNextStep?.(props.step);
-  }
-}
-
 const showQuestionsCompletionWarning = computed<boolean>(() => {
   return nextButtonClicked.value && !isEveryQuestionAnswered();
 });
@@ -69,6 +64,18 @@ const isLastStep = computed(
 const isGuideCompletedStep = computed(
   () => props.guide.steps.length - 1 === props.step.order
 );
+
+async function navigateToNextStep() {
+  nextButtonClicked.value = true;
+
+  if (isEveryQuestionAnswered()) {
+    nextButtonClicked.value = false;
+    if (isLastStep.value) {
+      await props.submitGuideResponse();
+    }
+    props.goToNextStep?.(props.step);
+  }
+}
 </script>
 <template>
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">

@@ -23,6 +23,10 @@ const props = defineProps({
   selectAnswer: {
     type: Function,
     required: true
+  },
+  submitGuideResponse: {
+    type: Function,
+    required: true
   }
 });
 
@@ -53,6 +57,7 @@ const activeStep = computed<GuideStep>(
       :guide="guide"
       :step="activeStep"
       :stepResponse="guideResponse[activeStep.uuid] ?? {}"
+      :submitGuideResponse="submitGuideResponse"
       @update:questionResponse="selectAnswer"
     />
   </div>
