@@ -2,7 +2,7 @@
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   addChoice: Function,
   question: {
     type: Object as PropType<GuideQuestion>,
@@ -51,6 +51,7 @@ const disableChoiceEdit = false;
         <Checkbox
           @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
+          :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
         />
         <UiInput
           :modelValue="choice.content"

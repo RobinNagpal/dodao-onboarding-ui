@@ -5,6 +5,7 @@ export interface ChoiceError {
 export interface QuestionError {
   content?: boolean;
   choices?: Record<string, ChoiceError>;
+  answerKeys?: boolean;
 }
 
 export interface StepError {

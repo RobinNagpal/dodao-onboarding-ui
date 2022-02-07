@@ -56,7 +56,6 @@ const isValid = computed(() => {
 });
 
 const { modalAccountOpen } = useModal();
-const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 function clickSubmit() {
   !web3Account.value ? (modalAccountOpen.value = true) : handleSubmit();

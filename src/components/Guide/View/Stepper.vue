@@ -1,21 +1,35 @@
 <script setup lang="ts">
-import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
+import { UserGuideStepResponse } from '@/composables/useViewGuide';
+import {
+  GuideModel,
+  GuideStep
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
-  steps: {
-    type: Array as PropType<Array<GuideStep>>,
+
+  goToNextStep: Function,
+  goToPreviousStep: Function,
+  guide: {
+    type: Object as PropType<GuideModel>,
     required: true
   },
-  goToNextStep: Function,
-  goToPreviousStep: Function
+  guideResponse: {
+    type: Object as PropType<Record<string, UserGuideStepResponse>>,
+    required: true
+  },
+  selectAnswer: {
+    type: Function,
+    required: true
+  }
 });
 
-const activeStep = computed(
+const activeStep = computed<GuideStep>(
   () =>
-    props.steps.find(step => step.uuid === props.activeStepId) ||
-    props.steps?.[0]
+    props.guide.steps.find(step => step.uuid === props.activeStepId) ||
+    props.guide.steps[0]!
 );
 </script>
 <template>
@@ -26,7 +40,7 @@ const activeStep = computed(
           class="ob-nav-step"
           :class="step.uuid === activeStep.uuid ? 'active' : 'disabled'"
           role="presentation"
-          v-for="step in steps"
+          v-for="step in guide.steps"
           :key="step.uuid"
         >
           <a class="step-link" role="menuitem">{{ step.name }}</a>
@@ -34,9 +48,12 @@ const activeStep = computed(
       </ol>
     </div>
     <GuideViewStepperItem
-      :step="activeStep"
       :goToNextStep="goToNextStep"
       :goToPreviousStep="goToPreviousStep"
+      :guide="guide"
+      :step="activeStep"
+      :stepResponse="guideResponse[activeStep.uuid] ?? {}"
+      @update:questionResponse="selectAnswer"
     />
   </div>
 </template>

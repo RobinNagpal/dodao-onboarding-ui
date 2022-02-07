@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCategories } from '@/composables/useCategories';
 
-const props = defineProps({
+defineProps({
   open: Boolean,
   categories: Array
 });

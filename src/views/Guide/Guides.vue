@@ -60,14 +60,6 @@ onMounted(() => {
   setPageTitle('page.title.space.guides', { space: props.space.name });
 });
 
-async function load() {
-  if (store.space.guides.length > 0) return;
-  loading.value = true;
-  await loadGuides();
-  loading.value = false;
-  emitUpdateLastSeenGuide();
-}
-
 const { endElement } = useScrollMonitor(() =>
   loadMore(() => loadGuides(store.space.guides.length), loading.value)
 );

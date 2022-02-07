@@ -1,13 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  modelValue: Boolean
+  modelValue: Boolean,
+  class: String
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-const input = ref(props.modelValue || undefined);
+const input = ref<boolean | undefined>(props.modelValue || undefined);
 
 watch(input, () => emit('update:modelValue', input.value));
 
@@ -19,7 +20,11 @@ function checkboxClicked() {
 <template>
   <div class="p-2 checkmark-container mt-2">
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
-    <span class="checkmark" @click="checkboxClicked"></span>
+    <span
+      class="checkmark"
+      @click="checkboxClicked"
+      :class="props.class"
+    ></span>
   </div>
 </template>
 <style scoped lang="scss">

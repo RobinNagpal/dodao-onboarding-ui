@@ -8,7 +8,7 @@ import {
   QuestionType
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, PropType, unref } from 'vue';
+import { computed, PropType } from 'vue';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },

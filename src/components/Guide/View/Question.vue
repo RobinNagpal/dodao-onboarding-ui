@@ -1,14 +1,33 @@
 <script setup lang="ts">
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
-import { PropType } from 'vue';
+import { computed, onBeforeUpdate, PropType } from 'vue';
 
-defineProps({
+const props = defineProps({
   question: {
     type: Object as PropType<GuideQuestion>,
     required: true
   },
-  selectAnswer: Function
+  questionResponse: {
+    type: Array as PropType<string[]>,
+    required: true
+  }
 });
+
+const emit = defineEmits(['update:questionResponse']);
+
+const currentlySelectedChoices = computed<string[]>(
+  () => props.questionResponse || []
+);
+
+function selectChoice(choiceKey: string, selected: boolean) {
+  console.log('selectChoice', currentlySelectedChoices, choiceKey, selected);
+
+  const selectedAnswers = selected
+    ? [...currentlySelectedChoices.value, choiceKey]
+    : currentlySelectedChoices.value.filter(choice => choice !== choiceKey);
+
+  emit('update:questionResponse', props.question.uuid, selectedAnswers);
+}
 </script>
 
 <template>
@@ -17,8 +36,8 @@ defineProps({
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex leading-loose items-baseline">
         <Checkbox
-          @update:modelValue="selectAnswer(question.uuid, choice.key, $event)"
-          :modelValue="question.answerKeys.includes(choice.key)"
+          @update:modelValue="selectChoice(choice.key, $event)"
+          :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
         <div>{{ choice.content }}</div>
       </div>

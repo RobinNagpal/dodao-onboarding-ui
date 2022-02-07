@@ -151,6 +151,10 @@ export function useEditGuide(
             questionError.choices[choice.order] = choiceError;
           }
         });
+
+        if (question.answerKeys.length === 0) {
+          questionError.answerKeys = true;
+        }
         if (Object.keys(questionError).length > 0) {
           if (!stepError.questions) {
             stepError.questions = {};

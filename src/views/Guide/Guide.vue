@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import { useApp } from '@/composables/useApp';
+import { useClient } from '@/composables/useClient';
+import { useDomain } from '@/composables/useDomain';
+import { useProfiles } from '@/composables/useProfiles';
+import { useSharing } from '@/composables/useSharing';
+import { useStore } from '@/composables/useStore';
+import { useTerms } from '@/composables/useTerms';
 import { useViewGuide } from '@/composables/useViewGuide';
-import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
+import { useWeb3 } from '@/composables/useWeb3';
+import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
-import { useTerms } from '@/composables/useTerms';
-import { useProfiles } from '@/composables/useProfiles';
-import { useDomain } from '@/composables/useDomain';
-import { useSharing } from '@/composables/useSharing';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useClient } from '@/composables/useClient';
-import { useApp } from '@/composables/useApp';
-import { useStore } from '@/composables/useStore';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -36,9 +35,14 @@ const uuid = route.params.uuid;
 const modalOpen = ref(false);
 
 const {
+  activeStepId,
+  goToNextStep,
+  goToPreviousStep,
   guideRef: guide,
   guideLoaded,
-  initialize
+  guideResponseRef,
+  initialize,
+  selectAnswer
 } = useViewGuide(uuid as string);
 
 const isCreator = computed(() =>
@@ -62,23 +66,21 @@ const browserHasHistory = computed(() => window.history.state.back);
 
 const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
-const activeStepId = ref();
-
 async function deleteGuide() {
   const result = await send(props.space, 'delete-guide', {
     guide: guide.value
   });
   console.log('Result', result);
-  if (result.id) {
-    getExplore();
+  if (result?.id) {
+    await getExplore();
     store.space.guides = [];
     notify?.(['green', t('notify.guideDeleted')]);
-    router.push({ name: 'guide' });
+    await router.push({ name: 'guide' });
   }
 }
 
 async function editGuide() {
-  router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
+  await router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
 }
 
 const {
@@ -128,40 +130,6 @@ onMounted(async () => {
     space: props.space?.name
   });
 });
-
-const steps = computed(() => {
-  const guildSteps = guide.value?.steps || [];
-  const steps = [
-    ...guildSteps,
-    {
-      content: 'The guide has been completed successfully!',
-      name: 'Completed',
-      order: guildSteps.length,
-      uuid: 'UUID'
-    }
-  ];
-  return steps;
-});
-
-function goToNextStep(currentStep: GuideQuery_guide_steps) {
-  currentStep.order;
-  const nextStep = steps.value.find(
-    step => step?.order === currentStep.order + 1
-  );
-  activeStepId.value = nextStep?.uuid;
-}
-
-function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
-  currentStep.order;
-  const nextStep = steps.value.find(
-    step => step?.order === currentStep.order - 1
-  );
-  if (nextStep && nextStep?.uuid) {
-    activeStepId.value = nextStep?.uuid;
-  } else {
-    activeStepId.value = steps.value[steps.value?.length - 1]?.uuid;
-  }
-}
 </script>
 
 <template>
@@ -222,12 +190,18 @@ function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
                   </div>
                 </div>
               </div>
-              <Block :title="$t('guide.onboardingSteps')" :class="`mt-4`">
+              <Block
+                :title="$t('guide.onboardingSteps')"
+                :class="`mt-4`"
+                v-if="guideLoaded"
+              >
                 <GuideViewStepper
                   :activeStepId="activeStepId"
-                  :steps="steps"
                   :goToNextStep="goToNextStep"
                   :goToPreviousStep="goToPreviousStep"
+                  :guide="guide"
+                  :guideResponse="guideResponseRef"
+                  :selectAnswer="selectAnswer"
                 />
               </Block>
             </template>
