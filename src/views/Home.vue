@@ -111,8 +111,11 @@ onMounted(() => {
               />
             </div>
             <div class="pt-2 pb-4 px-4 text-center">
-              <h2 v-text="shorten(space.name, 32)" />
-              <div class="h-[50px] text-ellipsis overflow-hidden">
+              <h2
+                v-text="shorten(space.name, 32)"
+                class="text-base font-bold leading-normal"
+              />
+              <div class="h-[45px] text-ellipsis overflow-hidden text-sm">
                 {{ space.mission }}
               </div>
               <div class="flex flex-col">
