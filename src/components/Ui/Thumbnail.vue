@@ -37,10 +37,10 @@ const bigTileStyle = {
   'object-fit': `${props.big_tile ? 'cover' : 'null'}`,
   'border-radius': `${props.big_tile ? 0 : 'null'}`,
   width: `${
-    props.big_tile ? '424' : (props.size && parseInt(props.size)) || 22
+    props.big_tile ? '264' : (props.size && parseInt(props.size)) || 22
   }px`,
   height: `${
-    props.big_tile ? '350' : (props.size && parseInt(props.size)) || 22
+    props.big_tile ? '275' : (props.size && parseInt(props.size)) || 22
   }px`
 };
 </script>
