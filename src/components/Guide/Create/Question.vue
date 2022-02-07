@@ -2,7 +2,7 @@
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   addChoice: Function,
   question: {
     type: Object as PropType<GuideQuestion>,

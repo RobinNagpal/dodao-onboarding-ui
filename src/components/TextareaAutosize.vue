@@ -28,8 +28,6 @@ const emit = defineEmits(['update:modelValue']);
 
 const { modelValue, minHeight, maxHeight } = toRefs(props);
 
-// data property for v-model binding with real textarea tag
-const val = ref(props.modelValue);
 // works when content height becomes more then value of the maxHeight property
 const maxHeightScroll = ref(false);
 const height = ref('auto');

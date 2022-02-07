@@ -5,7 +5,7 @@ import {
   GuideModel,
   GuideStep
 } from '@dodao/onboarding-schemas/models/GuideModel';
-import { computed, onBeforeUpdate, PropType } from 'vue';
+import { computed, PropType } from 'vue';
 
 const props = defineProps({
   activeStepId: String,

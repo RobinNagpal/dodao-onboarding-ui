@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, inject, onMounted, PropType, ref, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
-import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import defaults from '@/locales/default';
-import { setPageTitle } from '@/helpers/utils';
+import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
+import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
-import { useApp } from '@/composables/useApp';
-import { useRouter } from 'vue-router';
-import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
+import { setPageTitle } from '@/helpers/utils';
+import defaults from '@/locales/default.json';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
+import networks from '@snapshot-labs/snapshot.js/src/networks.json';
+import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import { ErrorObject } from 'ajv';
-const { explore } = useApp();
+import { computed, inject, onMounted, ref, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+
 const { loadExtentedSpaces, extentedSpaces } = useExtendedSpaces();
 
 export interface SpaceForm {
@@ -49,7 +49,6 @@ const router = useRouter();
 
 const notify: Function = inject('notify')!;
 
-const currentSettings = ref({});
 const modalNetworksOpen = ref(false);
 const modalSkinsOpen = ref(false);
 const modalCategoryOpen = ref(false);
@@ -108,7 +107,6 @@ function slugify(string) {
 }
 
 const { modalAccountOpen } = useModal();
-const { modalTermsOpen, termsAccepted } = useTerms(props.spaceId);
 
 async function handleSubmit() {
   if (isValid.value) {

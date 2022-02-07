@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import { useApp } from '@/composables/useApp';
+import { useClient } from '@/composables/useClient';
+import { useDomain } from '@/composables/useDomain';
+import { useProfiles } from '@/composables/useProfiles';
+import { useSharing } from '@/composables/useSharing';
+import { useStore } from '@/composables/useStore';
+import { useTerms } from '@/composables/useTerms';
 import { useViewGuide } from '@/composables/useViewGuide';
-import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
+import { useWeb3 } from '@/composables/useWeb3';
+import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
-import { useTerms } from '@/composables/useTerms';
-import { useProfiles } from '@/composables/useProfiles';
-import { useDomain } from '@/composables/useDomain';
-import { useSharing } from '@/composables/useSharing';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useClient } from '@/composables/useClient';
-import { useApp } from '@/composables/useApp';
-import { useStore } from '@/composables/useStore';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -131,8 +130,6 @@ onMounted(async () => {
     space: props.space?.name
   });
 });
-
-const steps = computed(() => guide.value?.steps || []);
 </script>
 
 <template>
