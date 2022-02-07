@@ -3,7 +3,10 @@ import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import { UserGuideStepResponse } from '@/composables/useViewGuide';
-import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuideModel,
+  GuideStep
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
 
@@ -14,6 +17,10 @@ const props = defineProps({
   },
   goToNextStep: Function,
   goToPreviousStep: Function,
+  guide: {
+    type: Object as PropType<GuideModel>,
+    required: true
+  },
   stepResponse: {
     type: Object as PropType<UserGuideStepResponse>,
     required: true

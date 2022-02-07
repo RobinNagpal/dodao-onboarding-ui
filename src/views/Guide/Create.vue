@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
+import GuideCreateStepper from '@/components/Guide/Create/Stepper.vue';
+import Icon from '@/components/Icon.vue';
+import LayoutSingle from '@/components/Layout/Single.vue';
+import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
+import PageLoading from '@/components/PageLoading.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiInput from '@/components/Ui/Input.vue';
+import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
 import { useEditGuide } from '@/composables/useEditGuide';
 import { useModal } from '@/composables/useModal';
-import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -162,7 +170,7 @@ onMounted(async () => {
             </UiButton>
           </div>
         </Block>
-        <Block :title="$t('guide.create.stepByStep')" :slim="true">
+        <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">
           <GuideCreateStepper
             :activeStepId="activeStepId"
             :guide="form"

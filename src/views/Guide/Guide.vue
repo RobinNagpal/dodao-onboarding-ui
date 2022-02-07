@@ -1,11 +1,19 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
+import GuideViewStepper from '@/components/Guide/View/Stepper.vue';
+import Icon from '@/components/Icon.vue';
+import LayoutSingle from '@/components/Layout/Single.vue';
+import ModalConfirm from '@/components/Modal/Confirm.vue';
+import PageLoading from '@/components/PageLoading.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
+import UiMarkdown from '@/components/Ui/Markdown.vue';
+import User from '@/components/User.vue';
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
 import { useProfiles } from '@/composables/useProfiles';
 import { useSharing } from '@/composables/useSharing';
 import { useStore } from '@/composables/useStore';
-import { useTerms } from '@/composables/useTerms';
 import { useViewGuide } from '@/composables/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
@@ -63,8 +71,6 @@ const threeDotItems = computed(() => {
 });
 
 const browserHasHistory = computed(() => window.history.state.back);
-
-const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
 async function deleteGuide() {
   const result = await send(props.space, 'delete-guide', {
@@ -193,7 +199,7 @@ onMounted(async () => {
               <Block
                 :title="$t('guide.onboardingSteps')"
                 :class="`mt-4`"
-                v-if="guideLoaded"
+                v-if="guideLoaded && guide"
               >
                 <GuideViewStepper
                   :activeStepId="activeStepId"
@@ -251,12 +257,6 @@ onMounted(async () => {
       :space="space"
       :guide="guide"
       :id="spaceId"
-    />
-    <ModalTerms
-      :open="modalTermsOpen"
-      :space="space"
-      @close="modalTermsOpen = false"
-      @accept="acceptTerms(), (modalOpen = true)"
     />
   </teleport>
 </template>
