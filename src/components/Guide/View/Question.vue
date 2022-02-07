@@ -28,10 +28,6 @@ function selectChoice(choiceKey: string, selected: boolean) {
 
   emit('update:questionResponse', props.question.uuid, selectedAnswers);
 }
-
-onBeforeUpdate(() => {
-  console.log('Question  - before update', props);
-});
 </script>
 
 <template>
