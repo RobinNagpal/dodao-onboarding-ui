@@ -110,7 +110,7 @@ onMounted(() => {
                 class="absolute top-0 right-0 !bg-green"
               />
             </div>
-            <div class="p-4 text-center">
+            <div class="pt-2 pb-4 px-4 text-center">
               <h2 v-text="shorten(space.name, 32)" />
               <div class="h-[50px] text-ellipsis overflow-hidden">
                 {{ space.mission }}
