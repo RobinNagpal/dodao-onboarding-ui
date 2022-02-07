@@ -208,7 +208,10 @@
     },
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
-    "votingSystem": "Voting system"
+    "votingSystem": "Voting system",
+    "next": "Next",
+    "previous": "Previous",
+    "complete": "Complete"
   },
   "guides": {
     "header": "Onboarding Guides",

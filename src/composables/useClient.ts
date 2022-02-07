@@ -4,6 +4,7 @@ import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import { GuideResponseInput } from '@dodao/onboarding-schemas/inputs/GuideResponseInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
@@ -151,12 +152,22 @@ export function useClient() {
         terms: payload.terms || '',
         twitter: payload.twitter || ''
       };
-      return (await clientEIP712.spaceNew(auth.web3, web3.value.account, {
+      return (await clientEIP712.upsertSpace(auth.web3, web3.value.account, {
         space: space.id,
         from: web3.value.account,
         settings: spaceSettingsInput,
         timestamp: parseInt((Date.now() / 1e3).toFixed())
       })) as MsgResponse;
+    } else if (type === 'guideResponse') {
+      const guideResponseInput: GuideResponseInput = {
+        ...payload,
+        timestamp: parseInt((Date.now() / 1e3).toFixed())
+      };
+      return (await clientEIP712.createGuideResponse(
+        auth.web3,
+        web3.value.account,
+        guideResponseInput
+      )) as MsgResponse;
     } else {
       throw new Error('Unknown type ' + type);
     }

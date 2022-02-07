@@ -59,6 +59,16 @@ function navigateToNextStep() {
 const showQuestionsCompletionWarning = computed<boolean>(() => {
   return nextButtonClicked.value && !isEveryQuestionAnswered();
 });
+
+const isFirstStep = computed(() => props.step.order !== 0);
+
+const isLastStep = computed(
+  () => props.guide.steps.length - 2 === props.step.order
+);
+
+const isGuideCompletedStep = computed(
+  () => props.guide.steps.length - 1 === props.step.order
+);
 </script>
 <template>
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">
@@ -85,9 +95,9 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
         :aria-label="$t('previous')"
         class="float-left"
         @click="goToPreviousStep(step)"
-        v-if="step.order !== 0 && guide.steps.length - 1 !== step.order"
+        v-if="!isFirstStep && !isGuideCompletedStep"
       >
-        <span class="sm:block" v-text="$t('previous')" />
+        <span class="sm:block" v-text="$t('guide.previous')" />
         <Icon
           name="login"
           size="20"
@@ -98,13 +108,11 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
         :aria-label="$t('next')"
         class="float-right"
         @click="navigateToNextStep"
-        v-if="guide.steps.length - 1 !== step.order"
+        v-if="!isGuideCompletedStep"
       >
         <span
           class="sm:block"
-          v-text="
-            $t(guide.steps.length - 2 === step.order ? 'complete' : 'next')
-          "
+          v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
         />
         <Icon
           name="login"

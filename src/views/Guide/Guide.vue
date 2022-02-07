@@ -24,7 +24,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
-  space: Object as PropType<SpaceModel>,
+  space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean
 });
 
@@ -51,7 +51,7 @@ const {
   guideResponseRef,
   initialize,
   selectAnswer
-} = useViewGuide(uuid as string);
+} = useViewGuide(uuid as string, notify, props.space);
 
 const isCreator = computed(() =>
   guide.value?.authors.includes(web3Account.value)
