@@ -36,9 +36,14 @@ const uuid = route.params.uuid;
 const modalOpen = ref(false);
 
 const {
+  activeStepId,
+  goToNextStep,
+  goToPreviousStep,
   guideRef: guide,
   guideLoaded,
-  initialize
+  guideResponseRef,
+  initialize,
+  selectAnswer
 } = useViewGuide(uuid as string);
 
 const isCreator = computed(() =>
@@ -62,23 +67,21 @@ const browserHasHistory = computed(() => window.history.state.back);
 
 const { modalTermsOpen, acceptTerms } = useTerms(props.spaceId);
 
-const activeStepId = ref();
-
 async function deleteGuide() {
   const result = await send(props.space, 'delete-guide', {
     guide: guide.value
   });
   console.log('Result', result);
-  if (result.id) {
-    getExplore();
+  if (result?.id) {
+    await getExplore();
     store.space.guides = [];
     notify?.(['green', t('notify.guideDeleted')]);
-    router.push({ name: 'guide' });
+    await router.push({ name: 'guide' });
   }
 }
 
 async function editGuide() {
-  router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
+  await router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
 }
 
 const {
@@ -129,39 +132,7 @@ onMounted(async () => {
   });
 });
 
-const steps = computed(() => {
-  const guildSteps = guide.value?.steps || [];
-  const steps = [
-    ...guildSteps,
-    {
-      content: 'The guide has been completed successfully!',
-      name: 'Completed',
-      order: guildSteps.length,
-      uuid: 'UUID'
-    }
-  ];
-  return steps;
-});
-
-function goToNextStep(currentStep: GuideQuery_guide_steps) {
-  currentStep.order;
-  const nextStep = steps.value.find(
-    step => step?.order === currentStep.order + 1
-  );
-  activeStepId.value = nextStep?.uuid;
-}
-
-function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
-  currentStep.order;
-  const nextStep = steps.value.find(
-    step => step?.order === currentStep.order - 1
-  );
-  if (nextStep && nextStep?.uuid) {
-    activeStepId.value = nextStep?.uuid;
-  } else {
-    activeStepId.value = steps.value[steps.value?.length - 1]?.uuid;
-  }
-}
+const steps = computed(() => guide.value?.steps || []);
 </script>
 
 <template>
@@ -222,12 +193,18 @@ function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
                   </div>
                 </div>
               </div>
-              <Block :title="$t('guide.onboardingSteps')" :class="`mt-4`">
+              <Block
+                :title="$t('guide.onboardingSteps')"
+                :class="`mt-4`"
+                v-if="guideLoaded"
+              >
                 <GuideViewStepper
                   :activeStepId="activeStepId"
-                  :steps="steps"
                   :goToNextStep="goToNextStep"
                   :goToPreviousStep="goToPreviousStep"
+                  :guide="guide"
+                  :guideResponse="guideResponseRef"
+                  :selectAnswer="selectAnswer"
                 />
               </Block>
             </template>

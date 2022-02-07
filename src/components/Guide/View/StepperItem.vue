@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import { UserGuideStepResponse } from '@/composables/useViewGuide';
+import {
+  GuideModel,
+  GuideStep
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
-import { computed, PropType } from 'vue';
+import { computed, onBeforeUpdate, PropType } from 'vue';
+import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 
 const props = defineProps({
   step: {
@@ -9,10 +14,18 @@ const props = defineProps({
     required: true
   },
   goToNextStep: Function,
-  goToPreviousStep: Function
+  goToPreviousStep: Function,
+  guide: {
+    type: Object as PropType<GuideModel>,
+    required: true
+  },
+  stepResponse: {
+    type: Object as PropType<UserGuideStepResponse>,
+    required: true
+  }
 });
 
-const emit = defineEmits(['update:step']);
+const emit = defineEmits(['update:questionResponse']);
 
 const questions = computed(() => {
   return props.step.questions;
@@ -20,27 +33,36 @@ const questions = computed(() => {
 
 const stepContents = computed(() => marked.parse(props.step.content));
 
-function selectAnswer(questionId, choiceKey, selected) {
-  console.log(questionId, choiceKey, selected);
+function selectAnswer(questionId: string, selectedAnswers: string[]) {
+  console.log(questionId, selectedAnswers);
+
+  emit('update:questionResponse', props.step.uuid, questionId, selectedAnswers);
 }
+
+onBeforeUpdate(() => {
+  console.log('StepperItem - before update', props);
+});
 </script>
 <template>
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">
-    <div>
+    <div style="min-height: 300px">
       <div class="mb-2 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content" />
       <template v-for="question in questions" :key="question.uuid">
         <GuideViewQuestion
           :question="question"
           :selectAnswer="selectAnswer"
+          :questionResponse="stepResponse[question.uuid] ?? []"
+          @update:questionResponse="selectAnswer"
         ></GuideViewQuestion>
       </template>
     </div>
-    <div class="flex align-center justify-between mt-2">
+    <div class="mt-2">
       <UiButton
         :aria-label="$t('previous')"
-        class="float-right self-start"
+        class="float-left"
         @click="goToPreviousStep(step)"
+        v-if="step.order !== 0"
       >
         <span class="sm:block" v-text="$t('previous')" />
         <Icon
@@ -51,7 +73,7 @@ function selectAnswer(questionId, choiceKey, selected) {
       </UiButton>
       <UiButton
         :aria-label="$t('next')"
-        class="float-right self-end"
+        class="float-right"
         @click="goToNextStep(step)"
       >
         <span class="sm:block" v-text="$t('next')" />
@@ -62,6 +84,13 @@ function selectAnswer(questionId, choiceKey, selected) {
         />
       </UiButton>
     </div>
+    <div>
+      <div v-if="true" class="float-right mb-2 text-sm">
+        <i class="iconfont iconwarning" data-v-abc9f7ae=""></i>
+        <span class="ml-1">Answer all questions to proceed</span>
+      </div>
+    </div>
+    <div>Step response - {{ JSON.stringify(stepResponse) }}</div>
   </div>
 </template>
 <style lang="scss">
