@@ -1,8 +1,8 @@
-import { guideResponseTypes } from '@/helpers/sign/guideResponseTypes';
+import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { GuideResponseInput } from '@dodao/onboarding-schemas/inputs/GuideResponseInput';
+import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { Web3Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
@@ -47,9 +47,9 @@ export default class OnboardingClient extends Client {
   async createGuideResponse(
     web3: Web3Provider | Wallet,
     address: string,
-    message: GuideResponseInput
+    message: GuideSubmissionInput
   ) {
     console.log('guide response', message);
-    return await this.sign(web3, address, message, guideResponseTypes);
+    return await this.sign(web3, address, message, guideSubmissionTypes);
   }
 }

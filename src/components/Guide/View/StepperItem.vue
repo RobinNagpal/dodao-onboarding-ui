@@ -2,7 +2,7 @@
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import { UserGuideStepResponse } from '@/composables/useViewGuide';
+import { UserGuideStepSubmission } from '@/composables/useViewGuide';
 import {
   GuideModel,
   GuideStep
@@ -21,11 +21,11 @@ const props = defineProps({
     type: Object as PropType<GuideModel>,
     required: true
   },
-  stepResponse: {
-    type: Object as PropType<UserGuideStepResponse>,
+  stepSubmission: {
+    type: Object as PropType<UserGuideStepSubmission>,
     required: true
   },
-  submitGuideResponse: {
+  submitGuide: {
     type: Function,
     required: true
   }
@@ -47,7 +47,7 @@ const nextButtonClicked = ref<boolean>(false);
 
 function isEveryQuestionAnswered(): boolean {
   return props.step.questions.every(
-    question => props.stepResponse[question.uuid]?.length > 0
+    question => props.stepSubmission[question.uuid]?.length > 0
   );
 }
 
@@ -71,7 +71,7 @@ async function navigateToNextStep() {
   if (isEveryQuestionAnswered()) {
     nextButtonClicked.value = false;
     if (isLastStep.value) {
-      await props.submitGuideResponse();
+      await props.submitGuide();
     }
     props.goToNextStep?.(props.step);
   }
@@ -86,7 +86,7 @@ async function navigateToNextStep() {
         <GuideViewQuestion
           :question="question"
           :selectAnswer="selectAnswer"
-          :questionResponse="stepResponse[question.uuid] ?? []"
+          :questionResponse="stepSubmission[question.uuid] ?? []"
           @update:questionResponse="selectAnswer"
         ></GuideViewQuestion>
       </template>

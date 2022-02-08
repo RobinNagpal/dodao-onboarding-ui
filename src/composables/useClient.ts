@@ -4,7 +4,7 @@ import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { GuideResponseInput } from '@dodao/onboarding-schemas/inputs/GuideResponseInput';
+import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
@@ -159,7 +159,7 @@ export function useClient() {
         timestamp: parseInt((Date.now() / 1e3).toFixed())
       })) as MsgResponse;
     } else if (type === 'guideResponse') {
-      const guideResponseInput: GuideResponseInput = {
+      const guideResponseInput: GuideSubmissionInput = {
         ...payload,
         timestamp: parseInt((Date.now() / 1e3).toFixed())
       };

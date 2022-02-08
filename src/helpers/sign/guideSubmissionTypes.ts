@@ -1,4 +1,4 @@
-export const guideResponseTypes = {
+export const guideSubmissionTypes = {
   GuideQuestionResponse: [
     { name: 'selectedAnswerKeys', type: 'string[]' },
     { name: 'uuid', type: 'string' }
