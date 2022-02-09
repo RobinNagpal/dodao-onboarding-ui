@@ -68,6 +68,7 @@ const threeDotItems = computed(() => {
   if (isAdmin.value || isCreator.value)
     items.push({ text: t('guide.delete'), action: 'delete' });
   items.push({ text: t('guide.edit'), action: 'edit' });
+  items.push({ text: t('guide.submissions'), action: 'viewSubmissions' });
   return items;
 });
 
@@ -90,6 +91,13 @@ async function editGuide() {
   await router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
 }
 
+async function viewSubmissions() {
+  await router.push({
+    name: 'guideSubmissions',
+    params: { uuid: guide.value?.uuid }
+  });
+}
+
 const {
   shareToTwitter,
   shareToFacebook,
@@ -102,6 +110,7 @@ const {
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
   if (e === 'edit') editGuide();
+  if (e === 'viewSubmissions') viewSubmissions();
   if (e === 'duplicate')
     router.push({
       name: 'spaceCreate',

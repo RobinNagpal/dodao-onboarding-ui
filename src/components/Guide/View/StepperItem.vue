@@ -2,7 +2,9 @@
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import { useModal } from '@/composables/useModal';
 import { UserGuideQuestionSubmission } from '@/composables/useViewGuide';
+import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
   GuideStep
@@ -30,6 +32,9 @@ const props = defineProps({
     required: true
   }
 });
+
+const { web3Account } = useWeb3();
+const { modalAccountOpen } = useModal();
 
 const emit = defineEmits(['update:questionResponse']);
 
@@ -71,7 +76,12 @@ async function navigateToNextStep() {
   if (isEveryQuestionAnswered()) {
     nextButtonClicked.value = false;
     if (isLastStep.value) {
-      await props.submitGuide();
+      if (!web3Account.value) {
+        modalAccountOpen.value = true;
+        return;
+      } else {
+        await props.submitGuide();
+      }
     }
     props.goToNextStep?.(props.step);
   }

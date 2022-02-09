@@ -1,0 +1,19 @@
+query GuideSubmissionsQuery($guideUuid: String) {
+  guideSubmissions(where: { guide_uuid: $guideUuid }) {
+    id
+    created
+    createdBy
+    from
+    ipfs
+    guideId
+    guideIpfs
+    guideUuid
+    result {
+      correctQuestions
+      wrongQuestions
+      allQuestions
+    }
+    spaceId
+    uuid
+  }
+}
