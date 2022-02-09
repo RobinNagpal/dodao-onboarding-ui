@@ -343,15 +343,14 @@ type GuideSubmissionResult {
 type GuideSubmission {
   id: String!
   ipfs: String!
-  from: String!
+  created: Int!
+  createdBy: String!
   guideId: String!
   guideIpfs: String!
   guideUuid: String!
   result: GuideSubmissionResult!
   spaceId: String!
   steps: [GuideStepSubmission!]
-  created: Int!
-  createdBy: String!
   uuid: String!
 }
 

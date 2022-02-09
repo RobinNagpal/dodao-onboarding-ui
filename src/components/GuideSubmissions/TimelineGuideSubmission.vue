@@ -10,12 +10,12 @@ defineProps({
 </script>
 
 <template>
-  <div role="listitem" class="card">
-    <div class="p-4 text-center">
-      <h2 v-text="submission.createdBy" />
-      <h2
+  <div role="listitem" class="card border-2 border-gray-400">
+    <div class="p-4">
+      <div>{{ submission.createdBy }}</div>
+      <div
         v-text="
-          `Result - ${submission.result.correctQuestions}/${submission.result.allQuestions}`
+          `Result - ${submission.result.correctQuestions.length}/${submission.result.allQuestions.length}`
         "
       />
     </div>
