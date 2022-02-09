@@ -2,18 +2,18 @@ import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import { getGuide } from '@/helpers/snapshot';
+import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
+import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
   GuideQuestionSubmission,
-  GuideStepSubmission,
-  GuideSubmissionInput
-} from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
-import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
+  GuideStepSubmission
+} from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export type UserGuideStepSubmission = Record<string, string[]>;
+export type UserGuideQuestionSubmission = Record<string, string[]>;
 
 export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const { send } = useClient();
@@ -21,7 +21,9 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const { t } = useI18n();
 
   const guideRef = ref<GuideModel>();
-  const guideSubmissionRef = ref<Record<string, UserGuideStepSubmission>>({});
+  const guideSubmissionRef = ref<Record<string, UserGuideQuestionSubmission>>(
+    {}
+  );
   const guideLoaded = ref<boolean>(false);
   const guideSubmittingRef = ref<boolean>(false);
   const activeStepId = ref();
@@ -90,6 +92,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     guideSubmittingRef.value = true;
 
     const response: Omit<GuideSubmissionInput, 'timestamp'> = {
+      space: space.id,
       uuid: uuidv4(),
       guideUuid: uuid,
       from: web3.value.account,

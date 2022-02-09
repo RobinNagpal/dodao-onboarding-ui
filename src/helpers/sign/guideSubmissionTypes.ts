@@ -9,9 +9,10 @@ export const guideSubmissionTypes = {
   ],
   Guide: [
     { name: 'from', type: 'address' },
+    { name: 'guideUuid', type: 'string' },
+    { name: 'space', type: 'string' },
     { name: 'steps', type: 'GuideStepResponse[]' },
     { name: 'timestamp', type: 'uint64' },
-    { name: 'uuid', type: 'string' },
-    { name: 'guideUuid', type: 'string' }
+    { name: 'uuid', type: 'string' }
   ]
 };

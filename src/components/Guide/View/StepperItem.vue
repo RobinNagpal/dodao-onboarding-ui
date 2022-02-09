@@ -2,7 +2,7 @@
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import { UserGuideStepSubmission } from '@/composables/useViewGuide';
+import { UserGuideQuestionSubmission } from '@/composables/useViewGuide';
 import {
   GuideModel,
   GuideStep
@@ -22,7 +22,7 @@ const props = defineProps({
     required: true
   },
   stepSubmission: {
-    type: Object as PropType<UserGuideStepSubmission>,
+    type: Object as PropType<UserGuideQuestionSubmission>,
     required: true
   },
   submitGuide: {
