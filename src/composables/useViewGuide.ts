@@ -1,9 +1,11 @@
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
-import { GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
+import {
+  GuideQuery_guide,
+  GuideQuery_guide_steps
+} from '@/graphql/generated/graphqlDocs';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
-import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
   GuideQuestionSubmission,
   GuideStepSubmission
@@ -20,7 +22,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const { web3 } = useWeb3();
   const { t } = useI18n();
 
-  const guideRef = ref<GuideModel>();
+  const guideRef = ref<GuideQuery_guide>();
   const guideSubmissionRef = ref<Record<string, UserGuideQuestionSubmission>>(
     {}
   );
@@ -32,18 +34,20 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     const guide = await getGuide(uuid);
     guideRef.value = {
       ...guide,
-      space: guide.space as unknown as SpaceModel,
+      __typename: 'Guide',
       steps: [
         ...guide.steps,
         {
+          __typename: 'GuideStep',
           content: 'The guide has been completed successfully!',
           name: 'Completed',
           order: guide.steps.length,
           uuid: 'UUID',
-          questions: []
+          questions: [],
+          id: 'some_id',
+          created: new Date().getTime()
         }
-      ],
-      thumbnail: guide.thumbnail || undefined
+      ]
     };
     const minOrder = Math.min(...guide.steps.map(step => step.order));
     activeStepId.value = guide.steps.find(
@@ -113,10 +117,38 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
         }
       )
     };
-    const result = await send(space, 'guideResponse', response);
-    if (result?.id) {
+    const submissionResponse = await send(space, 'guideResponse', response);
+    if (submissionResponse?.id) {
       notify(['green', t('notify.guideResponseSubmitted')]);
     }
+
+    const result = submissionResponse?.result.result;
+    if (result) {
+      console.log('result', result);
+      const lastStepContent = `
+      The guide has been completed successfully!
+      
+      You got ${result.correctQuestions.length} correct out of ${result.allQuestions.length} questions
+      `;
+
+      guideRef.value = {
+        ...guideRef.value!,
+        steps: [
+          ...guideRef.value?.steps?.slice(0, -1)!,
+          {
+            __typename: 'GuideStep',
+            content: lastStepContent,
+            name: 'Completed',
+            order: guideRef.value!.steps.length - 1,
+            uuid: 'UUID',
+            questions: [],
+            id: 'some_id',
+            created: new Date().getTime()
+          }
+        ]
+      };
+    }
+
     guideSubmittingRef.value = false;
   }
 
