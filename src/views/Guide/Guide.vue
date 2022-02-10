@@ -24,7 +24,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
-  space: Object as PropType<SpaceModel>,
+  space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean
 });
 
@@ -50,8 +50,9 @@ const {
   guideLoaded,
   guideResponseRef,
   initialize,
-  selectAnswer
-} = useViewGuide(uuid as string);
+  selectAnswer,
+  submitGuide
+} = useViewGuide(uuid as string, notify, props.space);
 
 const isCreator = computed(() =>
   guide.value?.authors.includes(web3Account.value)
@@ -67,6 +68,7 @@ const threeDotItems = computed(() => {
   if (isAdmin.value || isCreator.value)
     items.push({ text: t('guide.delete'), action: 'delete' });
   items.push({ text: t('guide.edit'), action: 'edit' });
+  items.push({ text: t('guide.submissions'), action: 'viewSubmissions' });
   return items;
 });
 
@@ -89,6 +91,13 @@ async function editGuide() {
   await router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
 }
 
+async function viewSubmissions() {
+  await router.push({
+    name: 'guideSubmissions',
+    params: { uuid: guide.value?.uuid }
+  });
+}
+
 const {
   shareToTwitter,
   shareToFacebook,
@@ -101,6 +110,7 @@ const {
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
   if (e === 'edit') editGuide();
+  if (e === 'viewSubmissions') viewSubmissions();
   if (e === 'duplicate')
     router.push({
       name: 'spaceCreate',
@@ -208,6 +218,7 @@ onMounted(async () => {
                   :guide="guide"
                   :guideResponse="guideResponseRef"
                   :selectAnswer="selectAnswer"
+                  :submitGuide="submitGuide"
                 />
               </Block>
             </template>

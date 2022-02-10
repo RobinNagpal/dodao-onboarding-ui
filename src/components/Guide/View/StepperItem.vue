@@ -2,7 +2,9 @@
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import { UserGuideStepResponse } from '@/composables/useViewGuide';
+import { useModal } from '@/composables/useModal';
+import { UserGuideQuestionSubmission } from '@/composables/useViewGuide';
+import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
   GuideStep
@@ -21,11 +23,18 @@ const props = defineProps({
     type: Object as PropType<GuideModel>,
     required: true
   },
-  stepResponse: {
-    type: Object as PropType<UserGuideStepResponse>,
+  stepSubmission: {
+    type: Object as PropType<UserGuideQuestionSubmission>,
+    required: true
+  },
+  submitGuide: {
+    type: Function,
     required: true
   }
 });
+
+const { web3Account } = useWeb3();
+const { modalAccountOpen } = useModal();
 
 const emit = defineEmits(['update:questionResponse']);
 
@@ -43,22 +52,40 @@ const nextButtonClicked = ref<boolean>(false);
 
 function isEveryQuestionAnswered(): boolean {
   return props.step.questions.every(
-    question => props.stepResponse[question.uuid]?.length > 0
+    question => props.stepSubmission[question.uuid]?.length > 0
   );
-}
-
-function navigateToNextStep() {
-  nextButtonClicked.value = true;
-
-  if (isEveryQuestionAnswered()) {
-    nextButtonClicked.value = false;
-    props.goToNextStep?.(props.step);
-  }
 }
 
 const showQuestionsCompletionWarning = computed<boolean>(() => {
   return nextButtonClicked.value && !isEveryQuestionAnswered();
 });
+
+const isFirstStep = computed(() => props.step.order !== 0);
+
+const isLastStep = computed(
+  () => props.guide.steps.length - 2 === props.step.order
+);
+
+const isGuideCompletedStep = computed(
+  () => props.guide.steps.length - 1 === props.step.order
+);
+
+async function navigateToNextStep() {
+  nextButtonClicked.value = true;
+
+  if (isEveryQuestionAnswered()) {
+    nextButtonClicked.value = false;
+    if (isLastStep.value) {
+      if (!web3Account.value) {
+        modalAccountOpen.value = true;
+        return;
+      } else {
+        await props.submitGuide();
+      }
+    }
+    props.goToNextStep?.(props.step);
+  }
+}
 </script>
 <template>
   <div class="w-full border-l-2 p-4 flex flex-col justify-between">
@@ -69,7 +96,7 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
         <GuideViewQuestion
           :question="question"
           :selectAnswer="selectAnswer"
-          :questionResponse="stepResponse[question.uuid] ?? []"
+          :questionResponse="stepSubmission[question.uuid] ?? []"
           @update:questionResponse="selectAnswer"
         ></GuideViewQuestion>
       </template>
@@ -85,9 +112,9 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
         :aria-label="$t('previous')"
         class="float-left"
         @click="goToPreviousStep(step)"
-        v-if="step.order !== 0 && guide.steps.length - 1 !== step.order"
+        v-if="!isFirstStep && !isGuideCompletedStep"
       >
-        <span class="sm:block" v-text="$t('previous')" />
+        <span class="sm:block" v-text="$t('guide.previous')" />
         <Icon
           name="login"
           size="20"
@@ -98,13 +125,11 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
         :aria-label="$t('next')"
         class="float-right"
         @click="navigateToNextStep"
-        v-if="guide.steps.length - 1 !== step.order"
+        v-if="!isGuideCompletedStep"
       >
         <span
           class="sm:block"
-          v-text="
-            $t(guide.steps.length - 2 === step.order ? 'complete' : 'next')
-          "
+          v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
         />
         <Icon
           name="login"

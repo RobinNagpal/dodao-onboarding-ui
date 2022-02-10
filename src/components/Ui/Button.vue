@@ -17,7 +17,7 @@ defineProps({
   <button
     :type="type || 'button'"
     :class="[
-      'button px-[12px] focus-within:border-skin-link',
+      'button px-[24px] focus-within:border-skin-link',
       { 'button--primary': primary }
     ]"
     :disabled="disabled || loading"
@@ -34,8 +34,8 @@ defineProps({
   color: var(--link-color);
   border-radius: 0.5rem;
   outline: none;
-  line-height: 36px;
-  height: 36px;
+  line-height: 46px;
+  height: 46px;
   font-size: 18px;
 
   &.button--primary {

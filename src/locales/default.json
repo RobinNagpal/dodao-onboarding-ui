@@ -208,7 +208,11 @@
     },
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
-    "votingSystem": "Voting system"
+    "votingSystem": "Voting system",
+    "next": "Next",
+    "previous": "Previous",
+    "complete": "Complete",
+    "submissions": "Submissions"
   },
   "guides": {
     "header": "Onboarding Guides",
@@ -317,16 +321,17 @@
     "supportedEnsTLDs": "Supported domain endings"
   },
   "notify": {
-    "youDidIt": "You did it!",
     "copied": "Copied!",
+    "delegationSuccess": "Delegation successful",
+    "delegationRemoved": "Delegation removed",
+    "guideCreated": "Guide Created",
+    "guideResponseSubmitted": "Guide Submitted",
     "proposalDeleted": "Proposal deleted",
     "somethingWentWrong": "Oops, something went wrong!",
     "saved": "Saved!",
-    "delegationSuccess": "Delegation successful",
-    "delegationRemoved": "Delegation removed",
     "proposalCreated": "Proposal created",
     "voteSuccessful": "Your vote is in!",
-    "guideCreated": "Guide Created"
+    "youDidIt": "You did it!"
   },
   "explore": {
     "createStrategy": "Create strategy",

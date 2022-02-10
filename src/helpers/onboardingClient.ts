@@ -1,6 +1,8 @@
+import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { Web3Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
@@ -33,12 +35,21 @@ export default class OnboardingClient extends Client {
     return await this.sign(web3, address, message, guideTypes);
   }
 
-  async spaceNew(
+  async upsertSpace(
     web3: Web3Provider | Wallet,
     address: string,
     message: SpaceInput
   ) {
     console.log('write space', message);
     return await this.sign(web3, address, message, spaceTypes);
+  }
+
+  async createGuideResponse(
+    web3: Web3Provider | Wallet,
+    address: string,
+    message: GuideSubmissionInput
+  ) {
+    console.log('guide response', message);
+    return await this.sign(web3, address, message, guideSubmissionTypes);
   }
 }

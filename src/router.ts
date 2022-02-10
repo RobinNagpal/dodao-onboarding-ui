@@ -3,6 +3,7 @@ import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GuideCreate from '@/views/Guide/Create.vue';
 import Guides from '@/views/Guide/Guides.vue';
+import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
 import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
@@ -63,6 +64,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     path: 'guide/edit/:uuid',
     name: 'guideEdit',
     component: GuideCreate
+  },
+  {
+    path: 'guide/submissions/:uuid',
+    name: 'guideSubmissions',
+    component: GuideSubmissions
   },
   {
     path: 'create/:from?',
