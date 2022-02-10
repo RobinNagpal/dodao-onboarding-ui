@@ -2,6 +2,11 @@
 import { useViewGuide } from '@/composables/useViewGuide';
 import { useViewGuideSubmissions } from '@/composables/useViewSubmissions';
 import { setPageTitle } from '@/helpers/utils';
+import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
+import NoResults from '@/components/NoResults.vue';
+import LayoutSingle from '@/components/Layout/Single.vue';
+import Block from '@/components/Block.vue';
+import RowLoading from '@/components/RowLoading.vue';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { inject, onMounted, PropType } from 'vue';
 import { useRoute } from 'vue-router';
@@ -40,7 +45,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex w-[1248px] mx-auto pr-4">
+  <div class="flex w-[1248px] mx-auto">
     <LayoutSingle v-bind="$attrs">
       <template #content>
         <div class="mt-6" v-if="submissionsLoadedRef">
