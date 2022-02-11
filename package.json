@@ -78,7 +78,7 @@
     "sass-loader": "^8.0.2",
     "tailwindcss": "^2.2.9",
     "unplugin-vue-components": "^0.17.11",
-    "vite": "^2.7.10"
+    "vite": "^2.8.1"
   },
   "resolutions": {
     "graphql": "15.7.2",
