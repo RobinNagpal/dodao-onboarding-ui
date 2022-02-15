@@ -9,6 +9,7 @@ defineProps({
 <template>
   <button
     class="border w-[44px] h-[44px] rounded-lg flex justify-center items-center button"
+    style="background: white"
     :disabled="disabled"
   >
     <slot />
@@ -19,7 +20,7 @@ defineProps({
 .button {
   border: 1px solid var(--border-color);
   background-color: transparent;
-  color: var(--link-color);
+  color: black;
   border-radius: 0.5rem;
   outline: none;
 

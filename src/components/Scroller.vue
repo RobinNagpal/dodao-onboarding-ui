@@ -69,7 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="!domain" class="w-[68px] h-screen hidden sm:block m-0 fixed">
+  <div v-if="!domain" class="w-[68px] h-screen hidden sm:block m-0 fixed z-1">
     <div class="flex flex-col h-full overflow-auto no-scrollbar">
       <div class="min-h-[78px] h-[78px] flex items-center justify-center"></div>
       <div

@@ -113,7 +113,7 @@ onMounted(() => {
             <div class="pt-2 pb-4 px-4 text-center">
               <h2
                 v-text="shorten(space.name, 32)"
-                class="text-base font-bold leading-normal"
+                class="text-base font-bold leading-normal whitespace-nowrap overflow-hidden text-ellipsis"
               />
               <div class="h-[45px] text-ellipsis overflow-hidden text-sm">
                 {{ space.mission }}
