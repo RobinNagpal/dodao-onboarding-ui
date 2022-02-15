@@ -29,7 +29,6 @@ defineProps({
   }
 
   &:not(:disabled):hover {
-    color: var(--link-color);
     border-color: var(--link-color);
   }
 
