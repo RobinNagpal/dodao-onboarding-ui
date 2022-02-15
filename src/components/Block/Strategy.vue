@@ -16,6 +16,6 @@ defineProps(['strategy']);
       <Icon name="github" class="mr-1" />
       {{ strategy.author }}
     </div>
-    <div>{{ $tc('inSpaces', [n(strategy.spaces)]) }}</div>
+    <div>{{ $tc('inDAO', [n(strategy.spaces)]) }}</div>
   </Block>
 </template>

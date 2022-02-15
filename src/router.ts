@@ -114,7 +114,7 @@ if (domain) {
   routes.push(
     { path: '/', name: 'home', component: Home },
     { path: '/setup', name: 'setup', component: Setup },
-    { path: '/setup-space', name: 'setup-space', component: SetupSpace },
+    { path: '/setup-dao', name: 'setup-dao', component: SetupSpace },
     {
       path: '/space/edit/:spaceId',
       name: 'spaceEdit',

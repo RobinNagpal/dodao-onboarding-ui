@@ -81,7 +81,7 @@ onMounted(() => {
           </template>
         </UiDropdown>
         <div class="ml-3 text-right hidden md:block whitespace-nowrap">
-          {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
+          {{ $tc('daoCount', [n(orderedSpacesByCategory.length)]) }}
         </div>
       </div>
       <div class="_3-column-grid features-grid">

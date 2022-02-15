@@ -57,7 +57,7 @@ function emitUpdateLastSeenGuide() {
 }
 
 onMounted(() => {
-  setPageTitle('page.title.space.guides', { space: props.space.name });
+  setPageTitle('page.title.dao.guides', { dao: props.space.name });
 });
 
 const { endElement } = useScrollMonitor(() =>

@@ -349,7 +349,7 @@ onMounted(() => {
               </UiInput>
               <UiInput
                 v-model="form.avatar"
-                placeholder="e.g. https://example.com/space.png"
+                placeholder="e.g. https://example.com/dao.png"
                 :error="inputError('avatar')"
               >
                 <template v-slot:label>

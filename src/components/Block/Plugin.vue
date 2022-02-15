@@ -37,7 +37,7 @@ function getLogoUrl(key) {
           {{ plugin.author }}
         </a>
       </div>
-      {{ $tc('inSpaces', [n(plugin.spaces)]) }}
+      {{ $tc('inDAO', [n(plugin.spaces)]) }}
     </div>
   </Block>
 </template>

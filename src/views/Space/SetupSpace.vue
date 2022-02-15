@@ -245,12 +245,12 @@ onMounted(async () => {
           </router-link>
         </div>
         <div class="px-4 md:px-0">
-          <h1 v-if="loaded" v-text="$t('setupSpace.header')" class="mb-4" />
+          <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="mb-4" />
           <PageLoading v-else />
         </div>
         <template v-if="loaded">
           <div v-if="space || isOwner">
-            <Block :title="$t('setupSpace.profile')">
+            <Block :title="$t('setupDAO.profile')">
               <div class="mb-2">
                 <UiInput v-model="form.name" :error="inputError('name')">
                   <template v-slot:label>{{ $t(`settings.name`) }}*</template>
@@ -270,7 +270,7 @@ onMounted(async () => {
                 </UiButton>
                 <UiInput
                   v-model="form.avatar"
-                  placeholder="e.g. https://example.com/space.png"
+                  placeholder="e.g. https://example.com/dao.png"
                   :error="inputError('avatar')"
                 >
                   <template v-slot:label>
@@ -338,7 +338,7 @@ onMounted(async () => {
                 </UiInput>
               </div>
             </Block>
-            <Block :title="$t('setupSpace.admins')" v-if="isOwner">
+            <Block :title="$t('setupDAO.admins')" v-if="isOwner">
               <Block
                 :style="`border-color: red !important`"
                 v-if="inputError('admins')"
