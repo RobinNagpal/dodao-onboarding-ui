@@ -60,7 +60,7 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
   return nextButtonClicked.value && !isEveryQuestionAnswered();
 });
 
-const isFirstStep = computed(() => props.step.order !== 0);
+const isNotFirstStep = computed(() => props.step.order !== 0);
 
 const isLastStep = computed(
   () => props.guide.steps.length - 2 === props.step.order
@@ -112,7 +112,7 @@ async function navigateToNextStep() {
         :aria-label="$t('previous')"
         class="float-left"
         @click="goToPreviousStep(step)"
-        v-if="!isFirstStep && !isGuideCompletedStep"
+        v-if="isNotFirstStep && !isGuideCompletedStep"
       >
         <span class="sm:block" v-text="$t('guide.previous')" />
         <Icon
@@ -144,7 +144,12 @@ async function navigateToNextStep() {
 .step-content li {
   margin-bottom: 0.5rem;
 }
+
 .step-content p {
   margin-bottom: 1rem;
+}
+
+.step-content iframe {
+  margin: 2rem 0;
 }
 </style>
