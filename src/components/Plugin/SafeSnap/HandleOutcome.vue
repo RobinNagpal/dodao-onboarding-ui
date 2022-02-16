@@ -160,9 +160,9 @@ import { useTxStatus } from '@/composables/useTxStatus';
 import { useWeb3 } from '@/composables/useWeb3';
 import { formatBatchTransaction } from '@/helpers/abi/utils';
 import { ms } from '@/helpers/utils';
+import { getInstance } from '@/utils/auth/auth';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits } from '@ethersproject/units';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { sleep } from '@snapshot-labs/snapshot.js/src/utils';
 

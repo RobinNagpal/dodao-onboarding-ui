@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getIpfsUrl, shorten } from '@/helpers/utils';
@@ -42,6 +42,14 @@ watch(space, () => {
 });
 
 onMounted(() => setTitle());
+
+function connectWallet() {
+  if (web3.value.blockchain === 'NEAR') {
+    login();
+  } else {
+    modalAccountOpen.value = true;
+  }
+}
 </script>
 
 <template>
@@ -96,7 +104,7 @@ onMounted(() => setTitle());
             </template>
             <UiButton
               v-if="!$auth.isAuthenticated.value"
-              @click="modalAccountOpen = true"
+              @click="connectWallet()"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
             >

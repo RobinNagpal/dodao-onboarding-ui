@@ -1,6 +1,7 @@
 import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
+import { CustomProvider } from '@/utils/auth/customProvider';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
@@ -15,7 +16,12 @@ export const domain = {
 };
 
 export default class OnboardingClient extends Client {
-  async sign(web3: Web3Provider | Wallet, address: string, message, types) {
+  async sign(
+    web3: Web3Provider | Wallet | CustomProvider,
+    address: string,
+    message,
+    types
+  ) {
     // @ts-ignore
     const signer = web3?.getSigner ? web3.getSigner() : web3;
     if (!message.from) message.from = address;

@@ -38,6 +38,7 @@
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "marked": "^4.0.12",
+    "near-api-js": "^0.44.2",
     "numeral": "^2.0.6",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
@@ -83,7 +84,8 @@
   "resolutions": {
     "graphql": "15.7.2",
     "ansi-regex": "^5.0.1",
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "borsh": "0.7.0"
   },
   "license": "MIT",
   "repository": "snapshot-labs/snapshot"

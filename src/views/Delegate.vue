@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { useProfiles } from '@/composables/useProfiles';
 import { isAddress } from '@ethersproject/address';
 import { formatBytes32String } from '@ethersproject/strings';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import {
   sendTransaction,
   getScores

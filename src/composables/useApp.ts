@@ -2,7 +2,7 @@ import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.jso
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import orderBy from 'lodash/orderBy';
 import { computed, reactive, ref } from 'vue';
@@ -33,7 +33,7 @@ export function useApp() {
       auth.getConnector().then(connector => {
         if (connector) login(connector);
       });
-    else login('gnosis');
+    else await login('gnosis');
 
     state.init = true;
     state.loading = false;

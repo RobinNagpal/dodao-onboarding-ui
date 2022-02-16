@@ -53,5 +53,9 @@
   "gnosis": {
     "id": "gnosis",
     "name": "Gnosis Safe"
+  },
+  "near": {
+    "id": "near",
+    "name": "NEAR"
   }
 }
