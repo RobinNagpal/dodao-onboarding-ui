@@ -1,11 +1,15 @@
-<script setup>
+<script setup lang="ts">
+import { Blockchain, getBlockchain } from '@/helpers/network';
 import { n } from '@/helpers/utils';
 
-defineProps(['network']);
+const props = defineProps(['network']);
 
 function getLogoUrl(key) {
   return `/static/icons/networks/${key}.png`;
 }
+
+console.log('props', props);
+const isEthereum = getBlockchain() === Blockchain.ETH;
 </script>
 
 <template>
@@ -16,6 +20,7 @@ function getLogoUrl(key) {
         :imgsrc="getLogoUrl(network.key)"
         :seed="network.key"
         size="28"
+        v-if="isEthereum"
       />
       <h3 v-text="network.name" />
       <div v-text="network.key" class="ml-1 text-color" />
