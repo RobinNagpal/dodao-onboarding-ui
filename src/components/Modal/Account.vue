@@ -12,6 +12,8 @@ const emit = defineEmits(['login', 'close']);
 const { open } = toRefs(props);
 const { web3, logout } = useWeb3();
 
+const isEthBlockchain = web3.value.blockchain === 'ETH';
+
 const step = ref(null);
 
 const injected = computed(() => getInjected());
@@ -22,13 +24,18 @@ const connectors = Object.fromEntries(
     .map(connector => [connector.id, connector])
 );
 
+const showProfileOnEtherscan = () => {
+  if (isEthBlockchain) {
+    window.open(
+      explorerUrl(web3.value.network.key, web3.value.account),
+      '_blank'
+    );
+  }
+};
 async function handleLogout() {
   await logout();
   emit('close');
 }
-
-const path =
-  'https://raw.githubusercontent.com/snapshot-labs/lock/master/connectors/assets';
 
 watch(open, () => (step.value = null));
 </script>
@@ -80,25 +87,26 @@ watch(open, () => (step.value = null));
     </div>
     <div v-else>
       <div v-if="$auth.isAuthenticated.value" class="m-4 space-y-2">
-        <a
-          :href="explorerUrl(web3.network.key, web3.account)"
-          target="_blank"
-          class="block"
+        <UiButton
+          class="button-outline w-full"
+          @click="showProfileOnEtherscan()"
         >
-          <UiButton class="button-outline w-full">
-            <UiAvatar
-              :imgsrc="getIpfsUrl(web3.profile?.image)"
-              :address="web3.account"
-              size="18"
-              class="mr-2 -ml-1"
-            />
-            <span v-if="web3.profile.name" v-text="web3.profile.name" />
-            <span v-else-if="web3.profile.ens" v-text="web3.profile.ens" />
-            <span v-else v-text="shorten(web3.account)" />
-            <Icon name="external-link" class="ml-1" />
-          </UiButton>
-        </a>
-        <UiButton @click="step = 'connect'" class="button-outline w-full">
+          <UiAvatar
+            :imgsrc="getIpfsUrl(web3.profile?.image)"
+            :address="web3.account"
+            size="18"
+            class="mr-2 -ml-1"
+          />
+          <span v-if="web3.profile.name" v-text="web3.profile.name" />
+          <span v-else-if="web3.profile.ens" v-text="web3.profile.ens" />
+          <span v-else v-text="shorten(web3.account)" />
+          <Icon v-if="isEthBlockchain" name="external-link" class="ml-1" />
+        </UiButton>
+        <UiButton
+          v-if="isEthBlockchain"
+          @click="step.value = 'connect'"
+          class="button-outline w-full"
+        >
           {{ $t('connectWallet') }}
         </UiButton>
         <UiButton @click="handleLogout" class="button-outline w-full !text-red">
