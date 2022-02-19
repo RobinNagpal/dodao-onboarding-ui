@@ -4,7 +4,7 @@ import { n } from '@/helpers/utils';
 defineProps(['network']);
 
 function getLogoUrl(key) {
-  return `https://raw.githubusercontent.com/snapshot-labs/snapshot.js/master/src/networks/${key}.png`;
+  return `/static/icons/networks/${key}.png`;
 }
 </script>
 

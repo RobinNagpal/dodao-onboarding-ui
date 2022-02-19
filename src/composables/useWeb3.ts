@@ -29,7 +29,7 @@ const state = reactive<Web3Account>({
   profile: null,
   walletConnectType: null,
   isTrezor: false,
-  blockchain: 'NEAR'
+  blockchain: (import.meta.env.BLOCKCHAIN as Blockchain) ?? 'ETH'
 });
 const nearWallet = useNearWallet();
 export function useWeb3() {

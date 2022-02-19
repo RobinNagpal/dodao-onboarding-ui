@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { toRefs, ref, watch, computed } from 'vue';
 import { getInjected } from '@snapshot-labs/lock/src/utils';
 import { shorten, explorerUrl, getIpfsUrl } from '@/helpers/utils';
-import connectors from '@/helpers/connectors.json';
+import allConnectors from '@/helpers/connectors.json';
 import { useWeb3 } from '@/composables/useWeb3';
 
 const props = defineProps(['open']);
@@ -15,6 +15,12 @@ const { web3, logout } = useWeb3();
 const step = ref(null);
 
 const injected = computed(() => getInjected());
+
+const connectors = Object.fromEntries(
+  Object.values(allConnectors)
+    .filter(connector => connector.blockchain === web3.value.blockchain)
+    .map(connector => [connector.id, connector])
+);
 
 async function handleLogout() {
   await logout();
@@ -49,7 +55,7 @@ watch(open, () => (step.value = null));
             class="button-outline w-full flex justify-center items-center"
           >
             <img
-              :src="`${path}/${injected.id}.png`"
+              :src="`/static/icons/connectors/${injected.id}.png`"
               height="28"
               width="28"
               class="mr-2 -mt-1"
@@ -62,7 +68,7 @@ watch(open, () => (step.value = null));
             class="button-outline w-full flex justify-center items-center gap-2"
           >
             <img
-              :src="`${path}/${connector.id}.png`"
+              :src="`/static/icons/connectors/${connector.id}.png`"
               height="25"
               width="25"
               :alt="connector.name"
