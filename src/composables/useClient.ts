@@ -150,7 +150,8 @@ export function useClient() {
         mission: payload.mission || '',
         network: payload.network || '',
         terms: payload.terms || '',
-        twitter: payload.twitter || ''
+        twitter: payload.twitter || '',
+        blockchain: payload.blockchain
       };
       return (await clientEIP712.upsertSpace(auth.web3, web3.value.account, {
         space: space.id,

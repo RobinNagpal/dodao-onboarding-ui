@@ -1,3 +1,4 @@
+import { getBlockchain } from '@/helpers/network';
 import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
@@ -25,8 +26,10 @@ export default class OnboardingClient extends Client {
     // @ts-ignore
     const signer = web3?.getSigner ? web3.getSigner() : web3;
     if (!message.from) message.from = address;
+    if (!message.blockchain) message.blockchain = getBlockchain().toString();
     if (!message.timestamp)
       message.timestamp = parseInt((Date.now() / 1e3).toFixed());
+
     const data: any = { domain, types, message };
     const sig = await signer._signTypedData(domain, data.types, message);
     console.log('Sign', { address, sig, data });

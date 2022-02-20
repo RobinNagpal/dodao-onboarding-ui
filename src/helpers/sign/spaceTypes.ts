@@ -10,7 +10,8 @@ export const spaceTypes = {
     { name: 'mission', type: 'string' },
     { name: 'network', type: 'string' },
     { name: 'terms', type: 'string' },
-    { name: 'twitter', type: 'string' }
+    { name: 'twitter', type: 'string' },
+    { name: 'blockchain', type: 'string' }
   ],
   Space: [
     { name: 'from', type: 'address' },

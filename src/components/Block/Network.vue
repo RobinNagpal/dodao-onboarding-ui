@@ -8,7 +8,6 @@ function getLogoUrl(key) {
   return `/static/icons/networks/${key}.png`;
 }
 
-console.log('props', props);
 const isEthereum = getBlockchain() === Blockchain.ETH;
 </script>
 
