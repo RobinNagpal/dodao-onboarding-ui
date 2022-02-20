@@ -112,8 +112,17 @@ const { modalAccountOpen } = useModal();
 
 async function handleSubmit() {
   if (isValid.value) {
+    const id =
+      slugify(form.value.name) +
+      '-' +
+      getBlockchain().toLowerCase() +
+      '-' +
+      form.value.network;
+
     const result = await send(
-      { id: slugify(form.value.name) + '-' + form.value.network },
+      {
+        id
+      },
       'settings',
       form.value
     );
