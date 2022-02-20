@@ -1,20 +1,28 @@
+import { getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
 import useNearWallet from '@/utils/near/useNearWallet';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { computed, reactive } from 'vue';
 
 let auth: DoDAOAuth;
-const defaultNetwork: any =
-  import.meta.env.VITE_DEFAULT_NETWORK || Object.keys(networks)[0];
+const networks = getNetworks();
+
+export interface Network {
+  name: string;
+  key: string;
+  networkId: string;
+  testnet?: boolean;
+}
+
+const defaultNetwork: any = import.meta.env.VITE_DEFAULT_NETWORK;
 
 export type Blockchain = 'ETH' | 'NEAR';
 
 export interface Web3Account {
   account: string;
-  network: any;
+  network: Network;
   authLoading: boolean;
   profile: string | null;
   walletConnectType: string | null;
@@ -22,9 +30,14 @@ export interface Web3Account {
   blockchain: Blockchain;
 }
 
+const defaultNetworkConfig = networks[defaultNetwork];
+
+console.log('defaultNetwork', defaultNetwork);
+console.log('defaultNetworkConfig', defaultNetworkConfig);
+
 const state = reactive<Web3Account>({
   account: '',
-  network: networks[defaultNetwork],
+  network: defaultNetworkConfig,
   authLoading: false,
   profile: null,
   walletConnectType: null,
@@ -141,7 +154,7 @@ export function useWeb3() {
   function handleChainChanged(chainId) {
     if (!networks[chainId]) {
       networks[chainId] = {
-        ...networks[defaultNetwork],
+        ...defaultNetworkConfig,
         chainId,
         name: 'Unknown',
         network: 'unknown',

@@ -1,5 +1,6 @@
 <script setup>
 import { watch, onMounted, ref, watchEffect } from 'vue';
+import draggable from 'vuedraggable';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';

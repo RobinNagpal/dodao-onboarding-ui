@@ -2,11 +2,13 @@ import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.jso
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
+import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import orderBy from 'lodash/orderBy';
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+
+const networks = getNetworks();
 
 const state = reactive({
   init: false,
@@ -43,9 +45,9 @@ export function useApp() {
     const viteHubUrl = import.meta.env.VITE_HUB_URL;
     console.log('viteHubUrl', viteHubUrl);
     try {
-      const exploreObj: any = await fetch(`${viteHubUrl}/api/explore`).then(
-        res => res.json()
-      );
+      const exploreObj: any = await fetch(
+        `${viteHubUrl}/api/explore?blockchain=${getBlockchain().toString()}`
+      ).then(res => res.json());
 
       console.log('getExplore', exploreObj);
       exploreObj.spaces = Object.fromEntries(

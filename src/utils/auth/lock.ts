@@ -5,7 +5,6 @@ export default class Lock {
   public options = {};
 
   addConnector(connector: any) {
-    console.log('Add connector -', connector);
     this.connectors[connector.key] = connector.connector;
     this.options[connector.key] = connector.options;
   }

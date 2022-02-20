@@ -1,3 +1,4 @@
+import { useWeb3 } from '@/composables/useWeb3';
 import { getBlockchain } from '@/helpers/network';
 import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
@@ -26,14 +27,27 @@ export default class OnboardingClient extends Client {
     // @ts-ignore
     const signer = web3?.getSigner ? web3.getSigner() : web3;
     if (!message.from) message.from = address;
-    if (!message.blockchain) message.blockchain = getBlockchain().toString();
+    const blockchain = getBlockchain();
+    if (!message.blockchain) message.blockchain = blockchain.toString();
     if (!message.timestamp)
       message.timestamp = parseInt((Date.now() / 1e3).toFixed());
 
     const data: any = { domain, types, message };
     const sig = await signer._signTypedData(domain, data.types, message);
-    console.log('Sign', { address, sig, data });
-    return await this.send({ address, sig, data });
+    const { web3: loggedIn } = useWeb3();
+
+    console.log('loggedIn', loggedIn);
+    const network = loggedIn.value.network.key;
+
+    console.log('Sign', { address, sig, data, blockchain, network });
+
+    return await this.send({
+      address,
+      sig,
+      data,
+      blockchain: blockchain,
+      network: network
+    });
   }
 
   async guide(

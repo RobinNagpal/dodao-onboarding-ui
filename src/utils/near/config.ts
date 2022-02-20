@@ -1,4 +1,4 @@
-import networks from '@/helpers/networks.json';
+import networks from '@dodao/onboarding-schemas/config/networks.json';
 
 export interface NearConfig {
   networkId: string;
