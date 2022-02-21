@@ -13,3 +13,8 @@ export function getNetworks() {
   const blockchain = getBlockchain();
   return networks[blockchain.toString()];
 }
+
+export function getDefaultNetworkConfig() {
+  const defaultNetwork: any = import.meta.env.VITE_DEFAULT_NETWORK;
+  return getNetworks()[defaultNetwork];
+}

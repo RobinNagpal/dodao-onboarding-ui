@@ -7,8 +7,7 @@ const props = defineProps({
   big_tile: Boolean,
   size: String,
   src: {
-    type: String,
-    required: true
+    type: String
   },
   entityId: {
     type: String,

@@ -57,6 +57,7 @@ export function useClient() {
       }
       return await sendEIP712(space, type, payload);
     } catch (e: any) {
+      console.error(e);
       const errorMessage =
         e && e.error_description
           ? `Oops, ${e.error_description}`

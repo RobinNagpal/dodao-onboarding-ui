@@ -1,14 +1,16 @@
 import pkg from '@/../package.json';
 import i18n from '@/helpers/i18n';
+import { getNetworks } from '@/helpers/network';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
 import voting from '@snapshot-labs/snapshot.js/src/voting';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import numeral from 'numeral';
 import { format } from 'timeago.js';
+
+const networks = getNetworks();
 
 dayjs.extend(relativeTime);
 

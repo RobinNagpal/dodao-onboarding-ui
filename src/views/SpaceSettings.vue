@@ -8,7 +8,6 @@ import {
   clone
 } from '@snapshot-labs/snapshot.js/src/utils';
 import schemas from '@snapshot-labs/snapshot.js/src/schemas';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { useSearchFilters } from '@/composables/useSearchFilters';
 import defaults from '@/locales/default';
 import { useCopy } from '@/composables/useCopy';
@@ -16,6 +15,9 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { calcFromSeconds, calcToSeconds } from '@/helpers/utils';
 import { useClient } from '@/composables/useClient';
 import { setPageTitle } from '@/helpers/utils';
+import { getNetworks } from '@/helpers/network';
+
+const networks = getNetworks();
 
 const props = defineProps({
   spaceId: String,

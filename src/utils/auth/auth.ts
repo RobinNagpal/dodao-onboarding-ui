@@ -52,7 +52,7 @@ export const useLock = ({ ...options }) => {
     if (connector) {
       const lockConnector = lockClient.getConnector(connector);
       await lockConnector.logout();
-      localStorage.clear();
+      localStorage.removeItem(`_${name}.connector`);
       isAuthenticated.value = false;
       provider.value = null;
     }

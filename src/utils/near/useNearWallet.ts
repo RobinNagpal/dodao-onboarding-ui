@@ -1,10 +1,8 @@
+import { getDefaultNetworkConfig } from '@/helpers/network';
 import { connect, keyStores, WalletConnection } from 'near-api-js';
 import { KeyStore } from 'near-api-js/lib/key_stores/keystore';
 import 'regenerator-runtime/runtime';
 import { ref } from 'vue';
-import { getConfig } from './config';
-
-const nearConfig = getConfig(process.env.NODE_ENV || 'development');
 
 const nearWalletConnection = ref<WalletConnection | null>(null);
 const nearAccountId = ref<string | null>(null);
@@ -12,17 +10,15 @@ const keyStore = ref<KeyStore>(new keyStores.BrowserLocalStorageKeyStore());
 
 export default function useNearWallet() {
   async function initContract() {
-    const near = await connect(
-      Object.assign(
-        {
-          deps: { keyStore: keyStore.value },
-          headers: {}
-        },
-        nearConfig
-      )
-    );
+    const defaultNetworkConfig = getDefaultNetworkConfig();
+    console.log('defaultNetworkConfig', defaultNetworkConfig);
+    const near = await connect({
+      deps: { keyStore: keyStore.value },
+      headers: {},
+      ...defaultNetworkConfig
+    });
 
-    nearWalletConnection.value = new WalletConnection(near, null);
+    nearWalletConnection.value = new WalletConnection(near, 'dodao');
     nearAccountId.value = nearWalletConnection.value.getAccountId();
   }
 

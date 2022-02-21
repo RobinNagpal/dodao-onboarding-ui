@@ -1,4 +1,4 @@
-import { getNetworks } from '@/helpers/network';
+import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
 import useNearWallet from '@/utils/near/useNearWallet';
@@ -16,8 +16,6 @@ export interface Network {
   testnet?: boolean;
 }
 
-const defaultNetwork: any = import.meta.env.VITE_DEFAULT_NETWORK;
-
 export type Blockchain = 'ETH' | 'NEAR';
 
 export interface Web3Account {
@@ -30,11 +28,9 @@ export interface Web3Account {
   blockchain: Blockchain;
 }
 
-const defaultNetworkConfig = networks[defaultNetwork];
-
 const state = reactive<Web3Account>({
   account: '',
-  network: defaultNetworkConfig,
+  network: getDefaultNetworkConfig(),
   authLoading: false,
   profile: null,
   walletConnectType: null,
@@ -151,7 +147,7 @@ export function useWeb3() {
   function handleChainChanged(chainId) {
     if (!networks[chainId]) {
       networks[chainId] = {
-        ...defaultNetworkConfig,
+        ...getDefaultNetworkConfig(),
         chainId,
         name: 'Unknown',
         network: 'unknown',
