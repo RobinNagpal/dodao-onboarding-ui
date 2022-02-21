@@ -68,7 +68,7 @@ async function handleSubmit() {
       <h4 class="m-4 text-center">
         {{ $t('confirmRemove') }}
         {{ username }}
-        <template v-if="id">{{ $tc('removeSpace', [id]) }}</template
+        <template v-if="id">{{ $tc('removeDAO', [id]) }}</template
         >?
       </h4>
       <div class="p-4 overflow-hidden text-center border-t">

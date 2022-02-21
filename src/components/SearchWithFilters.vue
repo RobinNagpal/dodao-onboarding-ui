@@ -11,7 +11,7 @@ const { t } = useI18n();
 
 const searchOptions = computed(() => [
   {
-    text: t('spaces'),
+    text: t('dao'),
     action: 'home'
   }
 ]);

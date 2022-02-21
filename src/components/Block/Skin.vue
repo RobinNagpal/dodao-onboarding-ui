@@ -9,7 +9,7 @@ defineProps(['skin']);
     <Block>
       <UiButton class="mb-2" primary>{{ skin.key }}</UiButton>
       <div class="text-color">
-        {{ $tc('inSpaces', [n(skin.spaces)]) }}
+        {{ $tc('inDAO', [n(skin.spaces)]) }}
       </div>
     </Block>
   </div>

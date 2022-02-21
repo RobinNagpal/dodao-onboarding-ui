@@ -25,7 +25,7 @@ const isEthereum = getBlockchain() === Blockchain.ETH;
       <div v-text="network.key" class="ml-1 text-color" />
     </div>
     <div class="text-color">
-      {{ $tc('inSpaces', [n(network.spaces)]) }}
+      {{ $tc('inDAO', [n(network.spaces)]) }}
     </div>
   </Block>
 </template>

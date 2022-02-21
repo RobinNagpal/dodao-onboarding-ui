@@ -93,7 +93,7 @@ watchEffect(() => {
         <Icon
           v-if="isVerified === 1"
           v-tippy="{
-            content: $t('verifiedSpace'),
+            content: $t('verifiedDAO'),
             placement: 'right'
           }"
           name="check"

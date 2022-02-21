@@ -81,7 +81,7 @@ onMounted(() => {
           </template>
         </UiDropdown>
         <div class="ml-3 text-right hidden md:block whitespace-nowrap">
-          {{ $tc('spaceCount', [n(orderedSpacesByCategory.length)]) }}
+          {{ $tc('daoCount', [n(orderedSpacesByCategory.length)]) }}
         </div>
       </div>
       <div class="_3-column-grid features-grid">
@@ -113,7 +113,7 @@ onMounted(() => {
             <div class="pt-2 pb-4 px-4 text-center">
               <h2
                 v-text="shorten(space.name, 32)"
-                class="text-base font-bold leading-normal"
+                class="text-base font-bold leading-normal whitespace-nowrap overflow-hidden text-ellipsis"
               />
               <div class="h-[45px] text-ellipsis overflow-hidden text-sm">
                 {{ space.mission }}
@@ -131,9 +131,9 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div class="flex justify-end absolute top-4 right-4">
+            <div class="flex justify-end absolute top-4 right-4 flex-wrap">
               <div
-                class="badge post-category"
+                class="badge post-category mb-1"
                 v-for="category in space.categories || []"
                 :key="category"
               >

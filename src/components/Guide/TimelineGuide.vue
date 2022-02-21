@@ -35,10 +35,13 @@ watchEffect(() => {
         />
       </div>
       <div class="p-4 text-center">
-        <h2 v-text="shorten(guide.name, 32)" />
+        <h2
+          class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis"
+          v-text="shorten(guide.name, 32)"
+        />
         <p
           v-text="shorten(guide.content, 300)"
-          class="break-words mb-2 text-md h-[50px] text-ellipsis overflow-hidden"
+          class="break-words mb-2 text-md h-[45px] text-ellipsis overflow-hidden text-sm"
         />
       </div>
       <div class="flex justify-end absolute top-4 right-4">

@@ -223,7 +223,7 @@ onMounted(async () => {
             v-model.trim="form.id"
             :placeholder="$t('delegate.spacePlaceholder')"
           >
-            <template v-slot:label>{{ $t('space') }}</template>
+            <template v-slot:label>{{ $t('dao') }}</template>
           </UiInput>
         </Block>
         <Block
@@ -243,7 +243,7 @@ onMounted(async () => {
               :profile="profiles[delegate.delegate]"
             />
             <div
-              v-text="shorten(delegate.space || $t('allSpaces'), 'choice')"
+              v-text="shorten(delegate.space || $t('allDAO'), 'choice')"
               class="flex-auto text-right link-color"
             />
             <a

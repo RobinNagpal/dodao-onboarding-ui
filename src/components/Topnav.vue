@@ -121,7 +121,7 @@ function connectWallet() {
               class="float-right ml-2"
               :aria-label="$t('toggleSkin')"
             >
-              <Icon size="20" class="link-color" :name="getSkinIcon()" />
+              <Icon size="20" :name="getSkinIcon()" />
             </UiSidebarButton>
           </div>
         </div>

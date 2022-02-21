@@ -10,7 +10,7 @@ defineProps(['validation']);
       <h3 v-text="validation.name" />
     </div>
     <div class="text-color">
-      {{ $tc('inSpaces', [n(validation.spaces)]) }}
+      {{ $tc('inDAO', [n(validation.spaces)]) }}
     </div>
   </Block>
 </template>
