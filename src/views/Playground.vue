@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
@@ -9,6 +8,9 @@ import { useApp } from '@/composables/useApp';
 import { useI18n } from 'vue-i18n';
 import { useCopy } from '@/composables/useCopy';
 import { setPageTitle, n } from '@/helpers/utils';
+import { getNetworks } from '@/helpers/network';
+
+const networks = getNetworks();
 
 const defaultParams = {
   symbol: 'BAL',

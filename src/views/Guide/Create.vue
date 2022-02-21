@@ -94,7 +94,7 @@ function inputError(field: string) {
 }
 
 onMounted(async () => {
-  setPageTitle('page.title.space.create', { space: props.space?.name });
+  setPageTitle('page.title.guide.create', { space: props.space?.name });
 
   await initialize();
 });

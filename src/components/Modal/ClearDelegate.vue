@@ -2,7 +2,7 @@
 import { ref, watchEffect, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUsername } from '@/composables/useUsername';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import { sendTransaction, sleep } from '@snapshot-labs/snapshot.js/src/utils';
 import { formatBytes32String } from '@ethersproject/strings';
 import { contractAddress } from '@/helpers/delegation';

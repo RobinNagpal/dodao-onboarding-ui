@@ -4,7 +4,7 @@ import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/clientEIP712';
 import { FOLLOWS_QUERY } from '@/helpers/queries';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import { computed, ref } from 'vue';
 import { useSpaceSubscription } from './useSpaceSubscription';
 

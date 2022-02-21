@@ -5,7 +5,7 @@ import options from '@/helpers/auth';
 import i18n from '@/helpers/i18n';
 import router from '@/router';
 import '@/style.scss';
-import { LockPlugin } from '@snapshot-labs/lock/plugins/vue3';
+import { LockPlugin } from '@/utils/auth/auth';
 import { DefaultApolloClient } from '@vue/apollo-composable';
 import { Buffer } from 'buffer';
 import { createApp, h, provide } from 'vue';

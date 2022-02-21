@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import { useProfiles } from '@/composables/useProfiles';
 import { useNotifications } from '@/composables/useNotifications';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';

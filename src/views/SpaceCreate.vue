@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { clone } from '@snapshot-labs/snapshot.js/src/utils';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
 import { PROPOSAL_QUERY } from '@/helpers/queries';

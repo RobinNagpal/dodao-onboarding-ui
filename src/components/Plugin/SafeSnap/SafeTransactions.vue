@@ -6,9 +6,10 @@ import {
   getGnosisSafeCollectibles,
   removeHexPrefix
 } from '@/helpers/abi/utils';
+import { getNetworks } from '@/helpers/network';
 import { shorten } from '@/helpers/utils';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 
+const networks = getNetworks();
 const plugin = new Plugin();
 
 const GNOSIS_SAFE_DEPLOYMENTS = {

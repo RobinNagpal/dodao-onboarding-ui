@@ -476,6 +476,9 @@
         "proposal": "{dao} proposal: {proposal}",
         "guide": "{dao} guide: {guide}",
         "settings": "{dao} Settings"
+      },
+      "guide": {
+        "create": "Create Guide"
       }
     }
   },

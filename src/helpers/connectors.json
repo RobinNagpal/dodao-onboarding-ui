@@ -1,10 +1,12 @@
 {
   "injected": {
     "id": "injected",
+    "blockchain": "ETH",
     "name": "MetaMask"
   },
   "walletconnect": {
     "id": "walletconnect",
+    "blockchain": "ETH",
     "name": "WalletConnect",
     "network": "1",
     "options": {
@@ -17,14 +19,17 @@
   },
   "trezor": {
     "id": "trezor",
+    "blockchain": "ETH",
     "name": "Trezor (with MetaMask)"
   },
   "torus": {
     "id": "torus",
+    "blockchain": "ETH",
     "name": "Torus"
   },
   "walletlink": {
     "id": "walletlink",
+    "blockchain": "ETH",
     "name": "Coinbase",
     "network": "1",
     "options": {
@@ -36,6 +41,7 @@
   },
   "portis": {
     "id": "portis",
+    "blockchain": "ETH",
     "name": "Portis",
     "network": "1",
     "options": {
@@ -45,6 +51,7 @@
   },
   "fortmatic": {
     "id": "fortmatic",
+    "blockchain": "ETH",
     "name": "Fortmatic",
     "options": {
       "apiKey": "pk_live_9CE8FD92E54684ED"
@@ -52,6 +59,12 @@
   },
   "gnosis": {
     "id": "gnosis",
+    "blockchain": "ETH",
     "name": "Gnosis Safe"
+  },
+  "near": {
+    "id": "near",
+    "blockchain": "NEAR",
+    "name": "NEAR"
   }
 }

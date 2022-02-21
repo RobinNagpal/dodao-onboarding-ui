@@ -7,10 +7,15 @@ import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
 import { useUnseenProposals } from '@/composables/useUnseenProposals';
 import { lsSet, lsGet } from '@/helpers/utils';
+import { useModal } from '@/composables/useModal';
+import { useRouter } from 'vue-router';
+
 const { explore } = useApp();
-const { web3Account } = useWeb3();
-const { loadFollows, followingSpaces } = useFollowSpace();
 const { domain } = useDomain();
+const { loadFollows, followingSpaces } = useFollowSpace();
+const { modalAccountOpen } = useModal();
+const router = useRouter();
+const { web3Account } = useWeb3();
 const {
   proposalIds,
   getProposalIds,
@@ -37,6 +42,12 @@ const hasUnseenProposalsBySpace = space => {
 
 const hasUnseenProposals = () =>
   followingSpaces.value.some(fs => hasUnseenProposalsBySpace(fs));
+
+const clickNewSpace = async () => {
+  !web3Account.value
+    ? (modalAccountOpen.value = true)
+    : await router.push({ name: 'setup-dao' });
+};
 
 watch(web3Account, () => {
   loadFollows();
@@ -109,9 +120,11 @@ onMounted(() => {
             </div>
           </template>
         </draggable>
-        <router-link :to="{ name: 'setup-dao' }">
-          <UiSidebarButton><Icon size="20" name="plus" /></UiSidebarButton>
-        </router-link>
+
+        <UiSidebarButton @click="clickNewSpace()"
+          ><Icon size="20" name="plus"
+        /></UiSidebarButton>
+
         <div
           class="flex flex-col items-center space-y-2 justify-center !mb-2 !mt-auto py-2"
         ></div>

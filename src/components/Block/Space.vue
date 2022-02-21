@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watchEffect } from 'vue';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
+import { getInstance } from '@/utils/auth/auth';
 import { n } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';

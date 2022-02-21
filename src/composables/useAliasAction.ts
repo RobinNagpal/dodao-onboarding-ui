@@ -3,9 +3,9 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/clientEIP712';
 import { ALIASES_QUERY } from '@/helpers/queries';
 import { lsGet, lsSet } from '@/helpers/utils';
+import { getInstance } from '@/utils/auth/auth';
 import { getDefaultProvider, Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
 
 const aliases = ref(lsGet('aliases') || {});

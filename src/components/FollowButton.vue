@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useTerms } from '@/composables/useTerms';
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 
-const props = defineProps({ space: Object });
+const props = defineProps({ space: { type: Object, required: true } });
 
 const { isGnosisSafe } = useClient();
 const { web3 } = useWeb3();

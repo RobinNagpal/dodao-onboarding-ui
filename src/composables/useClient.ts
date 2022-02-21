@@ -3,12 +3,12 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
+import { getInstance } from '@/utils/auth/auth';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -57,6 +57,7 @@ export function useClient() {
       }
       return await sendEIP712(space, type, payload);
     } catch (e: any) {
+      console.error(e);
       const errorMessage =
         e && e.error_description
           ? `Oops, ${e.error_description}`
@@ -150,7 +151,8 @@ export function useClient() {
         mission: payload.mission || '',
         network: payload.network || '',
         terms: payload.terms || '',
-        twitter: payload.twitter || ''
+        twitter: payload.twitter || '',
+        blockchain: payload.blockchain
       };
       return (await clientEIP712.upsertSpace(auth.web3, web3.value.account, {
         space: space.id,

@@ -3,13 +3,12 @@ import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useModal } from '@/composables/useModal';
-import { useTerms } from '@/composables/useTerms';
 import { useWeb3 } from '@/composables/useWeb3';
+import { getBlockchain, getNetworks } from '@/helpers/network';
 import { setPageTitle } from '@/helpers/utils';
 import defaults from '@/locales/default.json';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import { ErrorObject } from 'ajv';
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
@@ -17,11 +16,13 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 const { loadExtentedSpaces, extentedSpaces } = useExtendedSpaces();
+const networks = getNetworks();
 
 export interface SpaceForm {
   avatar?: string;
   about?: string;
   admins?: string[];
+  blockchain: string;
   creator?: string;
   categories?: string[];
   github?: string;
@@ -66,6 +67,7 @@ const form = ref<SpaceForm>({
   about: undefined,
   admins: [],
   avatar: undefined,
+  blockchain: getBlockchain().toString(),
   categories: [],
   creator: undefined,
   members: [],
@@ -110,8 +112,17 @@ const { modalAccountOpen } = useModal();
 
 async function handleSubmit() {
   if (isValid.value) {
+    const id =
+      slugify(form.value.name) +
+      '-' +
+      getBlockchain().toLowerCase() +
+      '-' +
+      form.value.network;
+
     const result = await send(
-      { id: slugify(form.value.name) + '-' + form.value.network },
+      {
+        id
+      },
       'settings',
       form.value
     );

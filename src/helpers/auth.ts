@@ -1,4 +1,5 @@
 import connectors from '@/helpers/connectors.json';
+import near from '@/utils/near/nearConnector';
 import fortmatic from '@snapshot-labs/lock/connectors/fortmatic';
 import gnosis from '@snapshot-labs/lock/connectors/gnosis';
 import injected from '@snapshot-labs/lock/connectors/injected';
@@ -16,7 +17,8 @@ const lockConnectors = {
   portis,
   fortmatic,
   gnosis,
-  trezor: injected
+  trezor: injected,
+  near
 };
 
 Object.entries(connectors).forEach((connector: any) => {

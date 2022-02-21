@@ -159,12 +159,14 @@ import { useSafesnap } from '@/composables/useSafesnap';
 import { useTxStatus } from '@/composables/useTxStatus';
 import { useWeb3 } from '@/composables/useWeb3';
 import { formatBatchTransaction } from '@/helpers/abi/utils';
+import { getNetworks } from '@/helpers/network';
 import { ms } from '@/helpers/utils';
+import { getInstance } from '@/utils/auth/auth';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits } from '@ethersproject/units';
-import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { sleep } from '@snapshot-labs/snapshot.js/src/utils';
+
+const networks = getNetworks();
 
 const { clearBatchError, setBatchError } = useSafesnap();
 const { web3 } = useWeb3();
