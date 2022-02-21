@@ -42,14 +42,6 @@ watch(space, () => {
 });
 
 onMounted(() => setTitle());
-
-function connectWallet() {
-  if (web3.value.blockchain === 'NEAR') {
-    login();
-  } else {
-    modalAccountOpen.value = true;
-  }
-}
 </script>
 
 <template>
@@ -104,7 +96,7 @@ function connectWallet() {
             </template>
             <UiButton
               v-if="!$auth.isAuthenticated.value"
-              @click="connectWallet()"
+              @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
             >

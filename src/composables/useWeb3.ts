@@ -32,9 +32,6 @@ export interface Web3Account {
 
 const defaultNetworkConfig = networks[defaultNetwork];
 
-console.log('defaultNetwork', defaultNetwork);
-console.log('defaultNetworkConfig', defaultNetworkConfig);
-
 const state = reactive<Web3Account>({
   account: '',
   network: defaultNetworkConfig,
