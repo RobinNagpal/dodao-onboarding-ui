@@ -1,4 +1,4 @@
-name: Deploy to S3
+name: Deploy to Near S3
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
           yarn run lint
         env:
           VITE_DEFAULT_NETWORK: testnet
-          VITE_BLOCKCHAIN: near
+          VITE_BLOCKCHAIN: NEAR
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
