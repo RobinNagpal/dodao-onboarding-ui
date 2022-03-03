@@ -22,7 +22,7 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-  setPageTitle('page.title.space.about', { space: props.space.name });
+  setPageTitle('page.title.dao.about', { space: props.space.name });
 });
 </script>
 

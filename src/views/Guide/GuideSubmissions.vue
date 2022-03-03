@@ -37,7 +37,7 @@ const {
 onMounted(async () => {
   await initializeGuide();
   await initializeGuideSubmissions();
-  setPageTitle('page.title.space.guide', {
+  setPageTitle('page.title.dao.guide', {
     guide: guide.value?.name,
     space: props.space?.name
   });

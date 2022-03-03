@@ -234,7 +234,7 @@ onMounted(async () => {
         form.value.twitter = space?.twitter || undefined;
 
         space
-          ? setPageTitle('page.title.space.settings', { space: space.name })
+          ? setPageTitle('page.title.dao.settings', { space: space.name })
           : setPageTitle('page.title.setup');
       }
       spaceLoading.value = false;

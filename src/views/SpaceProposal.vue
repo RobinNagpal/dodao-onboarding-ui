@@ -233,7 +233,7 @@ watch([loaded, web3Account], () => {
 
 onMounted(async () => {
   await loadProposal();
-  setPageTitle('page.title.space.proposal', {
+  setPageTitle('page.title.dao.proposal', {
     proposal: proposal.value.title,
     space: props.space.name
   });

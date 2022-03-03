@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GuideCreateStepperItem from '@/components/Guide/Create/StepperItem.vue';
 import {
   GuideInput,
   GuideStepInput

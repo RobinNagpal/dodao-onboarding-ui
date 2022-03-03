@@ -1,38 +1,28 @@
-<script setup>
-import { computed, ref, watchEffect } from 'vue';
-import { getInstance } from '@/utils/auth/auth';
+<script setup lang="ts">
+import FollowButton from '@/components/FollowButton.vue';
+import UiLoading from '@/components/Ui/Loading.vue';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiThumbnail from '@/components/Ui/Thumbnail.vue';
+import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import { useSpace } from '@/composables/useSpace';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { PropType, ref, watchEffect } from 'vue';
 import { n } from '@/helpers/utils';
-import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';
 import { useSpaceSubscription } from '@/composables/useSpaceSubscription';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 
 const props = defineProps({
-  space: Object
+  space: { type: Object as PropType<SpaceModel>, required: true }
 });
-
-const auth = getInstance();
-const { web3Account } = useWeb3();
 
 const { explore } = useApp();
 
 const nbrMembers = explore.value.spaces[props.space.id].followers;
 const isVerified = verified[props.space.id] || 0;
-
-const isAdmin = computed(() => {
-  const admins = props.space?.admins?.map(address => address.toLowerCase());
-
-  const isCreator =
-    props.space?.creator &&
-    props.space?.creator?.toLowerCase() === web3Account?.value?.toLowerCase();
-
-  return (
-    auth.isAuthenticated.value &&
-    web3Account.value &&
-    (admins?.includes(web3Account.value.toLowerCase()) || isCreator)
-  );
-});
+const { isAdmin } = useSpace(props.space);
 
 const {
   loading,
@@ -115,18 +105,12 @@ watchEffect(() => {
           {{ $t('guides.header') }}
         </UiButton>
       </router-link>
-      <router-link :to="{ name: 'guideCreate', params: { key: space.id } }">
-        <UiButton class="whitespace-nowrap">
-          {{ $t('guides.new') }}
-        </UiButton>
-      </router-link>
-
       <router-link
-        :to="{ name: 'spaceAbout', params: { key: space.id } }"
-        :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
+        v-if="isAdmin"
+        :to="{ name: 'guideCreate', params: { key: space.id } }"
       >
         <UiButton class="whitespace-nowrap">
-          {{ $t('about') }}
+          {{ $t('guides.new') }}
         </UiButton>
       </router-link>
       <router-link
@@ -135,6 +119,14 @@ watchEffect(() => {
       >
         <UiButton class="whitespace-nowrap">
           {{ $t('settings.header') }}
+        </UiButton>
+      </router-link>
+      <router-link
+        :to="{ name: 'spaceAbout', params: { key: space.id } }"
+        :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
+      >
+        <UiButton class="whitespace-nowrap">
+          {{ $t('about') }}
         </UiButton>
       </router-link>
     </div>
