@@ -160,14 +160,15 @@ onMounted(async () => {
                 </span>
               </template>
             </UiInput>
-            <UiButton class="block w-full px-3" style="height: auto">
-              <TextareaAutosize
-                v-model="form.content"
-                :placeholder="$t(`guide.create.excerpt`)"
-                class="input w-full text-left"
-                style="font-size: 18px"
-              />
-            </UiButton>
+            <UiInput
+              :modelValue="form.content"
+              :placeholder="$t(`guide.create.excerpt`)"
+              maxlength="64"
+            >
+              <template v-slot:label
+                >{{ $t(`guide.create.excerpt`) }}*</template
+              >
+            </UiInput>
           </div>
         </Block>
         <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">

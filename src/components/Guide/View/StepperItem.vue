@@ -12,6 +12,20 @@ import {
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
 
+const renderer = new marked.Renderer();
+
+renderer.link = function (href, title, text) {
+  return (
+    '<a target="_blank" href="' +
+    href +
+    '" title="' +
+    title +
+    '">' +
+    text +
+    '</a>'
+  );
+};
+
 const props = defineProps({
   step: {
     type: Object as PropType<GuideStep>,
@@ -42,7 +56,9 @@ const questions = computed(() => {
   return props.step.questions;
 });
 
-const stepContents = computed(() => marked.parse(props.step.content));
+const stepContents = computed(() =>
+  marked.parse(props.step.content, { renderer })
+);
 
 function selectAnswer(questionId: string, selectedAnswers: string[]) {
   emit('update:questionResponse', props.step.uuid, questionId, selectedAnswers);
