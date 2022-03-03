@@ -273,7 +273,7 @@ watchEffect(async () => {
 
 onMounted(() => {
   props.space
-    ? setPageTitle('page.title.space.settings', { space: props.space.name })
+    ? setPageTitle('page.title.dao.settings', { space: props.space.name })
     : setPageTitle('page.title.setup');
 });
 </script>

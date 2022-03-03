@@ -59,7 +59,7 @@ function emitUpdateLastSeenProposal() {
 }
 
 onMounted(() => {
-  setPageTitle('page.title.space.proposals', { space: props.space.name });
+  setPageTitle('page.title.dao.proposals', { space: props.space.name });
 });
 
 async function load() {

@@ -141,7 +141,7 @@ watch([loaded, web3Account], () => {
 
 onMounted(async () => {
   await initialize();
-  setPageTitle('page.title.space.guide', {
+  setPageTitle('page.title.dao.guide', {
     guide: guide.value?.name,
     space: props.space?.name
   });

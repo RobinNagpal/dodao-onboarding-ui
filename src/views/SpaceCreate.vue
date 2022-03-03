@@ -208,7 +208,7 @@ async function loadProposal() {
 }
 
 onMounted(async () => {
-  setPageTitle('page.title.space.create', { space: props.space.name });
+  setPageTitle('page.title.dao.create', { space: props.space.name });
   nameForm.value.focus();
   addChoice(2);
 

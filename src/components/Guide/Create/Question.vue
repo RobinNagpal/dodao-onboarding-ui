@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import Checkbox from '@/components/Checkbox.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiInput from '@/components/Ui/Input.vue';
+import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
@@ -55,7 +61,7 @@ const disableChoiceEdit = false;
         />
         <UiInput
           :modelValue="choice.content"
-          maxlength="64"
+          maxlength="256"
           :disabled="disableChoiceEdit"
           @update:modelValue="
             updateChoiceContent(question.uuid, choice.key, $event)

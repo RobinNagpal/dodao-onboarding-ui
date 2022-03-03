@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import UiButtonInput from '@/components/Ui/ButtonInput.vue';
+import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import {
   GuideInput,
   GuideStepInput
