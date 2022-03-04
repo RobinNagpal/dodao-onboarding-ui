@@ -22,8 +22,11 @@ const props = defineProps({
 const error = ref(false);
 
 const imgsrc = computed(() => {
-  const url = getUrl(props.src);
+  const url: string = getUrl(props.src);
   if (!url) return '';
+  if (url.includes('cloudflare-ipfs.com')) {
+    return url.replace('cloudflare-ipfs.com', 'd31h13bdjwgzxs.cloudfront.net');
+  }
   return `https://worker.snapshot.org/mirror?img=${encodeURIComponent(url)}`;
 });
 
