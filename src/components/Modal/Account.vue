@@ -4,6 +4,7 @@ import { getInjected } from '@snapshot-labs/lock/src/utils';
 import { shorten, explorerUrl, getIpfsUrl } from '@/helpers/utils';
 import allConnectors from '@/helpers/connectors.json';
 import { useWeb3 } from '@/composables/useWeb3';
+import { WalletMultiButton } from 'solana-wallets-vue';
 
 const props = defineProps(['open']);
 
@@ -48,7 +49,9 @@ watch(open, () => (step.value = null));
       </h3>
       <h3 v-else>{{ $t('account') }}</h3>
     </template>
+
     <div v-if="!web3.account || step === 'connect'">
+      <div><WalletMultiButton /></div>
       <div class="m-4 space-y-2">
         <a
           v-for="(connector, id, i) in connectors"

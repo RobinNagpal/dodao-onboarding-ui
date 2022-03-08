@@ -2,6 +2,7 @@ import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
 import useNearWallet from '@/utils/near/useNearWallet';
+import useSolanaWallet from '@/utils/solana/useSolanaWallet';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import { computed, reactive } from 'vue';
@@ -38,6 +39,7 @@ const state = reactive<Web3Account>({
   blockchain: (import.meta.env.VITE_BLOCKCHAIN as Blockchain) ?? 'ETH'
 });
 const nearWallet = useNearWallet();
+const solanaWallet = useSolanaWallet();
 export function useWeb3() {
   async function login(connector = 'injected') {
     state.isTrezor = connector === 'trezor';

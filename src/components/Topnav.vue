@@ -9,6 +9,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { useTxStatus } from '@/composables/useTxStatus';
 import { useUserSkin } from '@/composables/useUserSkin';
 import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
+import { WalletMultiButton } from '@/components/Wallet/Solana';
 
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
@@ -94,6 +95,7 @@ onMounted(() => setTitle());
                 />
               </UiButton>
             </template>
+            <WalletMultiButton />
             <UiButton
               v-if="!$auth.isAuthenticated.value"
               @click="modalAccountOpen = true"
