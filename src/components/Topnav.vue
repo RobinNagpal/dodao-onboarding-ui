@@ -17,7 +17,7 @@ const { env, domain } = useDomain();
 const route = useRoute();
 
 const { explore } = useApp();
-const { login, web3 } = useWeb3();
+const { login, web3, isEthBlockchain } = useWeb3();
 const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
@@ -128,7 +128,7 @@ onMounted(() => setTitle());
   </div>
   <teleport to="#modal">
     <ModalAccount
-      :open="modalAccountOpen"
+      :open="isEthBlockchain && modalAccountOpen"
       @close="modalAccountOpen = false"
       @login="handleLogin"
     />

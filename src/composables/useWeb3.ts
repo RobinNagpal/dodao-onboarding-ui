@@ -17,7 +17,7 @@ export interface Network {
   testnet?: boolean;
 }
 
-export type Blockchain = 'ETH' | 'NEAR';
+export type Blockchain = 'ETH' | 'NEAR' | 'SOL';
 
 export interface Web3Account {
   account: string;
@@ -165,6 +165,9 @@ export function useWeb3() {
     loadProvider,
     handleChainChanged,
     web3: computed(() => state),
+    isEthBlockchain: computed(() => state.blockchain === 'ETH'),
+    isSolBlockchain: computed(() => state.blockchain === 'SOL'),
+    isNearBlockchain: computed(() => state.blockchain === 'NEAR'),
     web3Account: computed(() => state.account)
   };
 }

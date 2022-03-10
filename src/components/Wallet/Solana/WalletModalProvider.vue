@@ -1,8 +1,13 @@
 <script lang="ts">
+import { useModal } from '@/composables/useModal';
+import { useWeb3 } from '@/composables/useWeb3';
 import { useWallet } from '@/utils/wallet/solana/useWallet';
 import { onClickOutside, onKeyStroke, useScrollLock } from '@vueuse/core';
 import { computed, defineComponent, nextTick, ref, toRefs, watch } from 'vue';
 import WalletIcon from './WalletIcon.vue';
+
+const { modalAccountOpen } = useModal();
+const { isSolBlockchain } = useWeb3();
 
 export default defineComponent({
   components: {
@@ -17,9 +22,8 @@ export default defineComponent({
   setup(props, { slots }) {
     const { featured, container, logo, dark } = toRefs(props);
     const modalPanel = ref<HTMLElement | null>(null);
-    const modalOpened = ref(false);
-    const openModal = () => (modalOpened.value = true);
-    const closeModal = () => (modalOpened.value = false);
+    const openModal = () => (modalAccountOpen.value = true);
+    const closeModal = () => (modalAccountOpen.value = false);
     const hasLogo = computed(() => !!slots.logo || !!logo.value);
 
     const { wallets, select: selectWallet } = useWallet();
@@ -61,7 +65,7 @@ export default defineComponent({
     });
 
     // Bring focus inside the modal when it opens.
-    watch(modalOpened, isOpened => {
+    watch(modalAccountOpen, isOpened => {
       if (!isOpened) return;
       nextTick(() =>
         modalPanel.value?.querySelectorAll('button')?.[0]?.focus()
@@ -70,7 +74,7 @@ export default defineComponent({
 
     // Lock the body scroll when the modal opens.
     const scrollLock = useScrollLock(document.body);
-    watch(modalOpened, isOpened => (scrollLock.value = isOpened));
+    watch(modalAccountOpen, isOpened => (scrollLock.value = isOpened));
 
     // Define the bindings given to scoped slots.
     const scope = {
@@ -80,14 +84,15 @@ export default defineComponent({
       featured,
       container,
       modalPanel,
-      modalOpened,
+      modalAccountOpen,
       openModal,
       closeModal,
       expandedWallets,
       walletsToDisplay,
       featuredWallets,
       hiddenWallets,
-      selectWallet
+      selectWallet,
+      isSolBlockchain
     };
 
     return {
@@ -102,7 +107,7 @@ export default defineComponent({
   <div :class="dark ? 'swv-dark' : ''">
     <slot v-bind="scope"></slot>
   </div>
-  <teleport :to="container" v-if="modalOpened">
+  <teleport :to="container" v-if="isSolBlockchain && modalAccountOpen">
     <div
       aria-labelledby="swv-modal-title"
       aria-modal="true"
