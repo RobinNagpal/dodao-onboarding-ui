@@ -14,6 +14,7 @@ export class SolanaProvider implements CustomProvider {
     message: any
   ): Promise<string> {
     const { signMessage } = useSolanaWallet();
+    // copied from https://github.com/solana-labs/wallet-adapter/blob/master/FAQ.md#how-can-i-sign-and-verify-messages
     const unit8Array = await signMessage.value?.(
       this.encoder.encode(JSON.stringify({ domain, types, message }))
     );
