@@ -1,10 +1,12 @@
 import { CustomProvider, Domain } from '@/utils/auth/customProvider';
 import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
+import bs58 from 'bs58';
 
 export class SolanaProvider implements CustomProvider {
   connectorName = 'solana';
 
   encoder = new TextEncoder(); // always utf-8
+  textDecoder = new TextDecoder('utf-8');
 
   async _signTypedData(
     domain: Domain,
@@ -15,6 +17,6 @@ export class SolanaProvider implements CustomProvider {
     const unit8Array = await signMessage.value?.(
       this.encoder.encode(JSON.stringify({ domain, types, message }))
     );
-    return new TextDecoder().decode(unit8Array!);
+    return bs58.encode(unit8Array!);
   }
 }
