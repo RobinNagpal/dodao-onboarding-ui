@@ -6,7 +6,7 @@ import i18n from '@/helpers/i18n';
 import router from '@/router';
 import '@/style.scss';
 import { LockPlugin } from '@/utils/auth/auth';
-import { initWallet } from '@/utils/wallet/solana';
+import { initWallet } from '@/utils/solana';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
   PhantomWalletAdapter,

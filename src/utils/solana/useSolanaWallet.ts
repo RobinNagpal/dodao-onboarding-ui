@@ -1,13 +1,19 @@
-// import {
-//   PhantomWalletAdapter,
-//   SolflareWalletAdapter
-// } from '@solana/wallet-adapter-wallets';
-// import { initWallet } from 'solana-wallets-vue';
-//
-// const wallets = [new PhantomWalletAdapter(), new SolflareWalletAdapter()];
-//
-// initWallet({ wallets, autoConnect: true });
+import {
+  createWalletStore,
+  WalletStore,
+  WalletStoreProps
+} from './createWalletStore';
+import { WalletNotInitializedError } from './errors';
 
-export default function f() {
-  return {};
-}
+let walletStore: WalletStore | null = null;
+
+export const useSolanaWallet = (): WalletStore => {
+  if (walletStore) return walletStore;
+  throw new WalletNotInitializedError(
+    'Wallet not initialized. Please use the `initWallet` method to initialize the wallet.'
+  );
+};
+
+export const initWallet = (walletStoreProps: WalletStoreProps): void => {
+  walletStore = createWalletStore(walletStoreProps);
+};

@@ -1,6 +1,6 @@
+import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { computed, Ref } from 'vue';
-import { useWallet } from './useWallet';
 
 export interface AnchorWallet {
   publicKey: PublicKey;
@@ -9,7 +9,7 @@ export interface AnchorWallet {
 }
 
 export function useAnchorWallet(): Ref<AnchorWallet | undefined> {
-  const walletStore = useWallet();
+  const walletStore = useSolanaWallet();
 
   return computed<AnchorWallet | undefined>(() => {
     // Ensure the wallet store was initialised by a WalletProvider.

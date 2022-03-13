@@ -1,5 +1,6 @@
 <script lang="ts">
-import { useWallet } from '@/utils/wallet/solana/useWallet';
+import { useWeb3 } from '@/composables/useWeb3';
+import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { onClickOutside, useClipboard } from '@vueuse/core';
 import { computed, defineComponent, ref, toRefs } from 'vue';
 import WalletConnectButton from './WalletConnectButton.vue';
@@ -20,7 +21,8 @@ export default defineComponent({
   },
   setup(props) {
     const { featured, container, logo, dark } = toRefs(props);
-    const { publicKey, wallet, disconnect } = useWallet();
+    const { publicKey, wallet, disconnect } = useSolanaWallet();
+    const { logout } = useWeb3();
 
     const dropdownPanel = ref<HTMLElement>();
     const dropdownOpened = ref(false);
@@ -51,6 +53,7 @@ export default defineComponent({
       featured,
       container,
       logo,
+      logout,
       dark,
       wallet,
       publicKey,
@@ -134,7 +137,7 @@ export default defineComponent({
                   Change wallet
                 </li>
                 <li
-                  @click="disconnect"
+                  @click="logout"
                   class="swv-dropdown-list-item"
                   role="menuitem"
                 >

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Wallet } from '@/utils/wallet/solana/createWalletStore';
+import { Wallet } from '@/utils/solana/createWalletStore';
 import { defineComponent, PropType, toRefs } from 'vue';
 
 export default defineComponent({

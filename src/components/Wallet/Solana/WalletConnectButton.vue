@@ -1,5 +1,7 @@
 <script lang="ts">
-import { useWallet } from '@/utils/wallet/solana/useWallet';
+import { useWeb3 } from '@/composables/useWeb3';
+import { AuthConnectors } from '@/utils/auth/authConnectors';
+import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { computed, defineComponent, toRefs } from 'vue';
 import WalletIcon from './WalletIcon.vue';
 
@@ -12,8 +14,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const { disabled } = toRefs(props);
-    const { wallet, connect, connecting, connected } = useWallet();
+    const { wallet, connecting, connected } = useSolanaWallet();
 
+    const { login } = useWeb3();
     const content = computed(() => {
       if (connecting.value) return 'Connecting ...';
       if (connected.value) return 'Connected';
@@ -24,7 +27,8 @@ export default defineComponent({
     const onClick = (event: MouseEvent) => {
       emit('click', event);
       if (event.defaultPrevented) return;
-      connect().catch(() => {});
+      // connect().catch(() => {});
+      login(AuthConnectors.solana);
     };
 
     const scope = {

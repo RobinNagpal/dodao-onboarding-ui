@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useWallet } from '@/utils/wallet/solana/useWallet';
+import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { computed, defineComponent, toRefs } from 'vue';
 import WalletIcon from './WalletIcon.vue';
 
@@ -12,7 +12,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const { disabled } = toRefs(props);
-    const { wallet, disconnect, disconnecting } = useWallet();
+    const { wallet, disconnect, disconnecting } = useSolanaWallet();
 
     const content = computed(() => {
       if (disconnecting.value) return 'Disconnecting ...';

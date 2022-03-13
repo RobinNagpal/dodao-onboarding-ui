@@ -10,6 +10,10 @@ import { useTxStatus } from '@/composables/useTxStatus';
 import { useUserSkin } from '@/composables/useUserSkin';
 import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
 import { WalletMultiButton } from '@/components/Wallet/Solana';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import ModalAccount from '@/components/Modal/Account.vue';
 
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
@@ -17,7 +21,7 @@ const { env, domain } = useDomain();
 const route = useRoute();
 
 const { explore } = useApp();
-const { login, web3, isEthBlockchain } = useWeb3();
+const { login, web3, isEthBlockchain, isSolBlockchain } = useWeb3();
 const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
@@ -69,7 +73,7 @@ onMounted(() => setTitle());
             </router-link>
           </div>
           <div :key="web3.account">
-            <template v-if="$auth.isAuthenticated.value">
+            <template v-if="isEthBlockchain && $auth.isAuthenticated.value">
               <UiButton
                 @click="modalAccountOpen = true"
                 :loading="web3.authLoading"
@@ -95,9 +99,9 @@ onMounted(() => setTitle());
                 />
               </UiButton>
             </template>
-            <WalletMultiButton />
+            <WalletMultiButton v-if="isSolBlockchain" />
             <UiButton
-              v-if="!$auth.isAuthenticated.value"
+              v-if="!isSolBlockchain && !$auth.isAuthenticated.value"
               @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"

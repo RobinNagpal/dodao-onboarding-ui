@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
-import { useWallet } from '@/utils/wallet/solana/useWallet';
+import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { onClickOutside, onKeyStroke, useScrollLock } from '@vueuse/core';
 import { computed, defineComponent, nextTick, ref, toRefs, watch } from 'vue';
 import WalletIcon from './WalletIcon.vue';
@@ -26,7 +26,7 @@ export default defineComponent({
     const closeModal = () => (modalAccountOpen.value = false);
     const hasLogo = computed(() => !!slots.logo || !!logo.value);
 
-    const { wallets, select: selectWallet } = useWallet();
+    const { wallets, select: selectWallet } = useSolanaWallet();
     const expandedWallets = ref(false);
     const featuredWallets = computed(() =>
       wallets.value.slice(0, featured.value)
@@ -104,7 +104,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div :class="dark ? 'swv-dark' : ''">
+  <div :class="dark ? 'float-left swv-dark' : 'float-left'">
     <slot v-bind="scope"></slot>
   </div>
   <teleport :to="container" v-if="isSolBlockchain && modalAccountOpen">
