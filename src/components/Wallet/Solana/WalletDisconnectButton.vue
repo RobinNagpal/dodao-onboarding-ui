@@ -23,7 +23,9 @@ export default defineComponent({
     const handleClick = (event: MouseEvent) => {
       emit('click', event);
       if (event.defaultPrevented) return;
-      disconnect().catch(() => {});
+      disconnect().catch(e => {
+        console.error(e);
+      });
     };
 
     const scope = {
