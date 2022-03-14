@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
+    "@blocto/sdk": "file:./node_patches/portto/blocto-sdk",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/address": "^5.4.0",
@@ -86,6 +87,7 @@
     "vite": "^2.7.10"
   },
   "resolutions": {
+    "@blocto/sdk": "file:./node_patches/portto/blocto-sdk",
     "@solana/wallet-adapter-blocto": "file:./node_patches/solana-labs/wallet-adapter-blocto",
     "graphql": "15.7.2",
     "ansi-regex": "^5.0.1",
