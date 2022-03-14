@@ -6,11 +6,29 @@ import i18n from '@/helpers/i18n';
 import router from '@/router';
 import '@/style.scss';
 import { LockPlugin } from '@/utils/auth/auth';
+import { initWallet } from '@/utils/solana';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import {
+  PhantomWalletAdapter,
+  SlopeWalletAdapter,
+  SolflareWalletAdapter
+} from '@solana/wallet-adapter-wallets';
 import { DefaultApolloClient } from '@vue/apollo-composable';
 import { Buffer } from 'buffer';
+// You can either import the default styles or create your own.
+import 'solana-wallets-vue/styles.css';
 import { createApp, h, provide } from 'vue';
 import VueTippy from 'vue-tippy';
 import '../snapshot-spaces/skins';
+
+const walletOptions = {
+  wallets: [
+    new PhantomWalletAdapter(),
+    new SlopeWalletAdapter(),
+    new SolflareWalletAdapter({ network: WalletAdapterNetwork.Devnet })
+  ],
+  autoConnect: false
+};
 
 (window as any).global = window;
 (window as any).Buffer = Buffer;
@@ -30,5 +48,7 @@ const app = createApp({
   });
 
 app.mount('#app');
+
+initWallet(walletOptions);
 
 export default app;

@@ -1,9 +1,12 @@
 import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
+import { AuthConnectors } from '@/utils/auth/authConnectors';
 import useNearWallet from '@/utils/near/useNearWallet';
+import { useSolanaWallet } from '@/utils/solana';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { computed, reactive } from 'vue';
 
 let auth: DoDAOAuth;
@@ -16,7 +19,7 @@ export interface Network {
   testnet?: boolean;
 }
 
-export type Blockchain = 'ETH' | 'NEAR';
+export type Blockchain = 'ETH' | 'NEAR' | 'SOL';
 
 export interface Web3Account {
   account: string;
@@ -38,17 +41,21 @@ const state = reactive<Web3Account>({
   blockchain: (import.meta.env.VITE_BLOCKCHAIN as Blockchain) ?? 'ETH'
 });
 const nearWallet = useNearWallet();
+
 export function useWeb3() {
-  async function login(connector = 'injected') {
-    state.isTrezor = connector === 'trezor';
+  async function login(connector: AuthConnectors = AuthConnectors.injected) {
+    state.isTrezor = connector === AuthConnectors.trezor;
     if (state.blockchain === 'NEAR') {
-      connector = 'near';
+      connector = AuthConnectors.near;
     }
     auth = getInstance();
     state.authLoading = true;
     await auth.login(connector);
     if (auth.provider.value) {
-      if (connector === 'near') {
+      if (
+        connector === AuthConnectors.near ||
+        connector === AuthConnectors.solana
+      ) {
         auth.web3 = auth.provider.value;
       } else {
         auth.web3 = new Web3Provider(auth.provider.value, 'any');
@@ -101,7 +108,23 @@ export function useWeb3() {
       let network, accounts;
       try {
         const connector = auth.provider.value?.connectorName;
-        if (connector !== 'near') {
+        if (connector === 'near') {
+          network = {
+            chainId: nearWallet.nearWalletConnection.value!._networkId
+          };
+          accounts = [nearWallet.nearWalletConnection.value!.getAccountId()];
+          state.account = accounts[0];
+          state.profile = accounts[0];
+        } else if (connector === 'solana') {
+          const { wallet: solanaWallet, publicKey } = useSolanaWallet();
+
+          network = {
+            chainId: WalletAdapterNetwork.Mainnet
+          };
+          accounts = [publicKey.value?.toBase58()];
+          state.account = accounts[0];
+          state.profile = accounts[0];
+        } else {
           console.log('connector', connector);
           if (connector === 'gnosis') {
             const { chainId: safeChainId, safeAddress } = (auth.web3 as any)
@@ -124,13 +147,6 @@ export function useWeb3() {
           state.walletConnectType =
             auth.provider.value?.wc?.peerMeta?.name || null;
           state.profile = profiles[acc];
-        } else {
-          network = {
-            chainId: nearWallet.nearWalletConnection.value!._networkId
-          };
-          accounts = [nearWallet.nearWalletConnection.value!.getAccountId()];
-          state.account = accounts[0];
-          state.profile = accounts[0];
         }
       } catch (e) {
         console.log(e);
@@ -163,6 +179,9 @@ export function useWeb3() {
     loadProvider,
     handleChainChanged,
     web3: computed(() => state),
+    isEthBlockchain: computed(() => state.blockchain === 'ETH'),
+    isSolBlockchain: computed(() => state.blockchain === 'SOL'),
+    isNearBlockchain: computed(() => state.blockchain === 'NEAR'),
     web3Account: computed(() => state.account)
   };
 }
