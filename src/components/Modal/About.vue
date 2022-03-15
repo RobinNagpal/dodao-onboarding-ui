@@ -25,7 +25,7 @@ function changeLang() {
     <template v-slot:header>
       <h3>{{ $t('about') }}</h3>
     </template>
-    <div class="text-center mt-4 space-x-3">
+    <!--    <div class="text-center mt-4 space-x-3">
       <a href="https://twitter.com/SnapshotLabs" target="_blank">
         <Icon size="32" name="twitter" class="hover:opacity-80" />
       </a>
@@ -41,11 +41,8 @@ function changeLang() {
       <a href="https://docs.snapshot.org/" target="_blank">
         <Icon size="32" name="gitbook" class="hover:opacity-80" />
       </a>
-      <a href="https://gitcoin.co/grants/1093/snapshot" target="_blank">
-        <Icon size="32" name="loveit" class="hover:opacity-80" />
-      </a>
-    </div>
-    <div class="m-4 p-4 mt-3 space-y-1 border rounded-md link-color">
+    </div>-->
+    <!--    <div class="m-4 p-4 mt-3 space-y-1 border rounded-md link-color">
       <div class="flex">
         <span v-text="$t('language')" class="flex-auto text-color mr-1" />
         <a @click="changeLang()">{{ languages[$i18n.locale]?.name }}</a>
@@ -79,6 +76,6 @@ function changeLang() {
         <span v-text="$t('hub')" class="flex-auto text-color mr-1" />
         {{ hubUrl }}
       </div>
-    </div>
+    </div>-->
   </UiModal>
 </template>
