@@ -75,7 +75,10 @@ onMounted(() => {
             <div class="flex">
               <span class="mr-3">{{ item.text }}</span>
               <span class="flex ml-auto mt-[-3px]">
-                <UiCounter :counter="item.count" class="my-auto" />
+                <UiCounter
+                  :counter="item.count"
+                  class="my-auto category-counter"
+                />
               </span>
             </div>
           </template>
@@ -115,7 +118,7 @@ onMounted(() => {
                 v-text="shorten(space.name, 32)"
                 class="text-base font-bold leading-normal whitespace-nowrap overflow-hidden text-ellipsis"
               />
-              <div class="h-[45px] text-ellipsis overflow-hidden text-sm">
+              <div class="h-[85px] overflow-hidden text-xs">
                 {{ space.mission }}
               </div>
               <div class="flex flex-col">
@@ -152,3 +155,8 @@ onMounted(() => {
     </div>
   </div>
 </template>
+<style scoped lang="scss">
+.category-counter {
+  line-height: 20px;
+}
+</style>
