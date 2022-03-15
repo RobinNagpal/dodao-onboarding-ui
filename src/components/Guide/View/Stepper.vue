@@ -265,7 +265,7 @@ const activeStep = computed<GuideStep>(
       font-size: 20px;
       width: 38px;
       height: 38px;
-      line-height: 40px;
+      line-height: 36px;
     }
   }
   .ob-step-link {
