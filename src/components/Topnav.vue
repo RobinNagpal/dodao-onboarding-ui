@@ -21,7 +21,8 @@ const { env, domain } = useDomain();
 const route = useRoute();
 
 const { explore } = useApp();
-const { login, web3, isEthBlockchain, isSolBlockchain } = useWeb3();
+const { login, web3, isEthBlockchain, isNearBlockchain, isSolBlockchain } =
+  useWeb3();
 const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
@@ -73,7 +74,12 @@ onMounted(() => setTitle());
             </router-link>
           </div>
           <div :key="web3.account">
-            <template v-if="isEthBlockchain && $auth.isAuthenticated.value">
+            <template
+              v-if="
+                (isEthBlockchain || isNearBlockchain) &&
+                $auth.isAuthenticated.value
+              "
+            >
               <UiButton
                 @click="modalAccountOpen = true"
                 :loading="web3.authLoading"
@@ -132,7 +138,7 @@ onMounted(() => setTitle());
   </div>
   <teleport to="#modal">
     <ModalAccount
-      :open="isEthBlockchain && modalAccountOpen"
+      :open="(isEthBlockchain || isNearBlockchain) && modalAccountOpen"
       @close="modalAccountOpen = false"
       @login="handleLogin"
     />
