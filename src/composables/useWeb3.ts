@@ -47,6 +47,8 @@ export function useWeb3() {
     state.isTrezor = connector === AuthConnectors.trezor;
     if (state.blockchain === 'NEAR') {
       connector = AuthConnectors.near;
+    } else if (state.blockchain === 'SOL') {
+      connector = AuthConnectors.solana;
     }
     auth = getInstance();
     state.authLoading = true;

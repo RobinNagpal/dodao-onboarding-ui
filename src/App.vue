@@ -39,7 +39,7 @@ const skin = computed(() => {
 
 onMounted(async () => {
   await loadLocale();
-  init();
+  await init();
 });
 
 watch(modalOpen, val => {

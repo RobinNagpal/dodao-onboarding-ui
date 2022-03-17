@@ -75,7 +75,7 @@ export const useLock = ({ ...options }) => {
 
   async function getConnector() {
     const connector = localStorage.getItem(`_${name}.connector`);
-    if (connector) {
+    if (getBlockchain() !== Blockchain.SOL && connector) {
       const lockConnector = lockClient.getConnector(connector);
       const isLoggedIn = await lockConnector.isLoggedIn();
       return isLoggedIn ? connector : false;
