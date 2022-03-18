@@ -44,13 +44,13 @@ watchEffect(() => {
           class="break-words mb-2 text-sm h-[95px] text-ellipsis overflow-hidden text-sm"
         />
       </div>
-      <div class="flex justify-end absolute top-4 right-4">
+      <div class="flex flex-wrap justify-end absolute top-4 right-4">
         <div
-          class="badge post-category"
+          class="badge post-category mb-1"
           v-for="category in guide.categories || []"
           :key="category"
         >
-          {{ category }}
+          {{ $t('guide.category.' + category) }}
         </div>
       </div>
     </div>

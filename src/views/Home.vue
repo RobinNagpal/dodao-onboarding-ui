@@ -134,13 +134,13 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div class="flex justify-end absolute top-4 right-4 flex-wrap">
+            <div class="flex flex-wrap justify-end absolute top-4 right-4">
               <div
-                class="badge post-category mb-1"
+                class="badge post-category mb-1 flex-wrap"
                 v-for="category in space.categories || []"
                 :key="category"
               >
-                {{ category }}
+                {{ $t('category.' + category) }}
               </div>
             </div>
           </router-link>
