@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   address: String,
   size: String,
   imgsrc: String,
@@ -10,13 +10,17 @@ defineProps({
 });
 
 const error = ref(false);
+
+const avatarUrl = props.imgsrc?.includes('cloudflare-ipfs.com')
+  ? props.imgsrc.replace('cloudflare-ipfs.com', 'd31h13bdjwgzxs.cloudfront.net')
+  : props.imgsrc;
 </script>
 
 <template>
   <span class="flex-shrink-0" :class="{ 'w-[100%]': big_tile }">
     <img
-      v-if="imgsrc && !error"
-      :src="imgsrc"
+      v-if="avatarUrl && !error"
+      :src="avatarUrl"
       :style="{
         width: `${parseInt(size) || 22}px`,
         height: `${parseInt(size) || 22}px`
