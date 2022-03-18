@@ -263,13 +263,18 @@ onMounted(async () => {
           <div v-if="space || isOwner">
             <Block :title="$t('setupDAO.profile')">
               <div class="mb-2">
-                <UiInput v-model="form.name" :error="inputError('name')">
+                <UiInput
+                  v-model="form.name"
+                  :error="inputError('name')"
+                  maxlength="32"
+                >
                   <template v-slot:label>{{ $t(`settings.name`) }}*</template>
                 </UiInput>
                 <UiInput
                   v-model="form.mission"
                   :error="inputError('mission')"
                   :placeholder="$t(`settings.missionStatement`) + ' *'"
+                  maxlength="64"
                 />
                 <UiButton class="block w-full px-3 mb-2" style="height: auto">
                   <TextareaAutosize
