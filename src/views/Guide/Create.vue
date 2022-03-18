@@ -129,7 +129,11 @@ onMounted(async () => {
       <template v-if="guideLoaded">
         <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
           <div class="mb-2">
-            <UiInput v-model="form.name" :error="inputError('name')">
+            <UiInput
+              v-model="form.name"
+              :error="inputError('name')"
+              maxlength="32"
+            >
               <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
             </UiInput>
             <UiInput
@@ -161,7 +165,8 @@ onMounted(async () => {
               </template>
             </UiInput>
             <UiInput
-              :modelValue="form.content"
+              v-model="form.content"
+              :error="inputError('content')"
               :placeholder="$t(`guide.create.excerpt`)"
               maxlength="64"
             >

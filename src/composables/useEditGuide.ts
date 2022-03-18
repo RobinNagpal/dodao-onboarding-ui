@@ -25,8 +25,11 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
-const contentLimit = 14400;
-const nameLimit = 1000;
+const questionContentLimit = 1024;
+const stepContentLimit = 14400;
+const guideExceptContentLimit = 64;
+const choiceContentLimit = 256;
+const nameLimit = 32;
 
 export function useEditGuide(
   uuid: string | null,
@@ -122,7 +125,7 @@ export function useEditGuide(
       guideErrors.value.name = true;
     }
     guideErrors.value.content = undefined;
-    if (guide.content?.length > contentLimit) {
+    if (!guide.content || guide.content?.length > guideExceptContentLimit) {
       guideErrors.value.content = true;
     }
     guideErrors.value.steps = undefined;
@@ -131,17 +134,20 @@ export function useEditGuide(
       if (!step.name || step.name.length > nameLimit) {
         stepError.name = true;
       }
-      if (step.content?.length > contentLimit) {
+      if (step.content?.length > stepContentLimit) {
         stepError.content = true;
       }
       step.questions.forEach((question: GuideQuestion) => {
         const questionError: QuestionError = {};
-        if (!question.content || question.content.length > contentLimit) {
+        if (
+          !question.content ||
+          question.content.length > questionContentLimit
+        ) {
           questionError.content = true;
         }
         question.choices.forEach((choice: QuestionChoice) => {
           const choiceError: ChoiceError = {};
-          if (!choice.content || choice.content.length > contentLimit) {
+          if (!choice.content || choice.content.length > choiceContentLimit) {
             choiceError.content = true;
           }
           if (Object.keys(choiceError).length > 0) {
