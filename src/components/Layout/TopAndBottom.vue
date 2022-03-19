@@ -17,7 +17,7 @@ const browserHasHistory = computed(() => window.history.state.back);
             <div class="px-4 md:px-0">
               <a class="text-color" @click="$router.push({ path: '/' })">
                 <Icon name="back" size="22" class="!align-middle" />
-                Back to DAOs
+                DAOs
               </a>
             </div>
             <div
