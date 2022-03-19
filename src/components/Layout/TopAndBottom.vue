@@ -15,16 +15,9 @@ const browserHasHistory = computed(() => window.history.state.back);
             class="top-content card integration-main-card integration-card-top-content"
           >
             <div class="px-4 md:px-0">
-              <a
-                class="text-color"
-                @click="
-                  browserHasHistory
-                    ? $router.go(-1)
-                    : $router.push(domain ? { path: '/' } : { name: 'guide' })
-                "
-              >
+              <a class="text-color" @click="$router.push({ path: '/' })">
                 <Icon name="back" size="22" class="!align-middle" />
-                {{ browserHasHistory ? $t('back') : space.name }}
+                Back to DAOs
               </a>
             </div>
             <div

@@ -105,11 +105,18 @@ onMounted(async () => {
     <template #content>
       <div class="px-4 md:px-0 overflow-hidden">
         <router-link
-          :to="domain ? { path: '/' } : { name: 'guides' }"
+          :to="
+            guide.id
+              ? {
+                  name: 'guide',
+                  params: { key: space.id, uuid: guide.uuid }
+                }
+              : { name: 'guides' }
+          "
           class="text-color"
         >
           <Icon name="back" size="22" class="!align-middle" />
-          {{ space.name }}
+          {{ guide.id ? guide.name : 'Back to Guides' }}
         </router-link>
         <UiSidebarButton
           v-if="!preview && guideLoaded"
