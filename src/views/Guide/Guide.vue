@@ -157,13 +157,11 @@ onMounted(async () => {
             <a
               class="text-color"
               @click="
-                browserHasHistory
-                  ? $router.go(-1)
-                  : $router.push(domain ? { path: '/' } : { name: 'guide' })
+                $router.push({ name: 'guides', params: { key: space.id } })
               "
             >
               <Icon name="back" size="22" class="!align-middle" />
-              {{ browserHasHistory ? $t('back') : space.name }}
+              {{ space.name }}
             </a>
           </div>
           <div class="px-4 md:px-0">

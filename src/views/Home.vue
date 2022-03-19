@@ -95,7 +95,7 @@ onMounted(() => {
           :key="space.id"
         >
           <router-link
-            :to="{ name: 'spaceProposals', params: { key: space.id } }"
+            :to="{ name: 'guides', params: { key: space.id } }"
             class="card blog-card w-inline-block"
           >
             <div class="image-wrapper blog-card-thumbnail">
