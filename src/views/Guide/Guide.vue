@@ -13,6 +13,7 @@ import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
 import { useProfiles } from '@/composables/useProfiles';
 import { useSharing } from '@/composables/useSharing';
+import { useSpace } from '@/composables/useSpace';
 import { useStore } from '@/composables/useStore';
 import { useViewGuide } from '@/composables/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
@@ -27,6 +28,8 @@ const props = defineProps({
   space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean
 });
+
+const { isAdmin } = useSpace(props.space);
 
 const route = useRoute();
 const router = useRouter();
@@ -54,25 +57,17 @@ const {
   submitGuide
 } = useViewGuide(uuid as string, notify, props.space);
 
-const isCreator = computed(() =>
-  guide.value?.authors.includes(web3Account.value)
-);
-
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
-const isAdmin = computed(() => {
-  const admins = (props.space?.admins || []).map(admin => admin.toLowerCase());
-  return admins.includes(web3Account.value?.toLowerCase());
-});
+
 const threeDotItems = computed(() => {
-  const items = [{ text: t('guide.duplicate'), action: 'duplicate' }];
-  if (isAdmin.value || isCreator.value)
-    items.push({ text: t('guide.delete'), action: 'delete' });
+  const items: Array<{ text: string; action: string }> = [];
+
+  // items.push({ text: t('guide.duplicate'), action: 'duplicate' });
+  // items.push({ text: t('guide.delete'), action: 'delete' });
   items.push({ text: t('guide.edit'), action: 'edit' });
   items.push({ text: t('guide.submissions'), action: 'viewSubmissions' });
   return items;
 });
-
-const browserHasHistory = computed(() => window.history.state.back);
 
 async function deleteGuide() {
   const result = await send(props.space, 'delete-guide', {
@@ -194,6 +189,7 @@ onMounted(async () => {
                       right="1.3rem"
                       class="float-right mr-2"
                       @select="selectFromThreedotDropdown"
+                      v-if="isAdmin"
                       :items="threeDotItems"
                     >
                       <div class="pr-3">
