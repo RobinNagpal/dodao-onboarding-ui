@@ -11,6 +11,10 @@ import { computed, ref } from 'vue';
 const aliases = ref(lsGet('aliases') || {});
 const isValidAlias = ref(false);
 
+// The alias is a private key that is generated on your browser and used to sign messages
+// without triggering Metamask, we use this for Join and Subscribe actions, the param "alias"
+// that you see in the screenshot is the public key (address) of the private key
+
 export function useAliasAction() {
   const { web3 } = useWeb3();
   const auth = getInstance();
