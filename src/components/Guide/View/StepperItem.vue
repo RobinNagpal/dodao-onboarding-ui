@@ -104,7 +104,7 @@ async function navigateToNextStep() {
 }
 </script>
 <template>
-  <div class="w-full border-l-2 p-4 flex flex-col justify-between">
+  <div class="guide-stepper-content w-full p-4 flex flex-col justify-between">
     <div style="min-height: 300px">
       <div class="mb-2 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content markdown-body" />
@@ -131,11 +131,6 @@ async function navigateToNextStep() {
         v-if="isNotFirstStep && !isGuideCompletedStep"
       >
         <span class="sm:block" v-text="$t('guide.previous')" />
-        <Icon
-          name="login"
-          size="20"
-          class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
-        />
       </UiButton>
       <UiButton
         :aria-label="$t('next')"
@@ -146,11 +141,6 @@ async function navigateToNextStep() {
         <span
           class="sm:block"
           v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
-        />
-        <Icon
-          name="login"
-          size="20"
-          class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
         />
       </UiButton>
     </div>

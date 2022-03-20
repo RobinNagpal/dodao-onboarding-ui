@@ -38,7 +38,7 @@ const activeStep = computed<GuideStep>(
 </script>
 <template>
   <div class="w-full flex flex-row">
-    <div class="p-4">
+    <div class="p-4 guide-stepper">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
           class="ob-nav-step"

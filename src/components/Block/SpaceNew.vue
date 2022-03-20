@@ -74,7 +74,7 @@ watchEffect(() => {
     </div>
   </div>
   <div
-    class="split-content integration-details border-l mb-2"
+    class="split-content integration-details border-l mb-2 space-details"
     style="border-color: #c0c4d1"
   >
     <div class="integration-title-wrapper" style="height: 128px">

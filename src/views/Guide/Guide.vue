@@ -144,7 +144,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex w-[1248px] mx-auto pr-4">
+  <div class="guide-view flex mx-auto">
     <LayoutSingle v-bind="$attrs">
       <template #content>
         <template v-if="loaded">

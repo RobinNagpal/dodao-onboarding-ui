@@ -21,7 +21,7 @@ const browserHasHistory = computed(() => window.history.state.back);
               </a>
             </div>
             <div
-              class="flex integration-top-content"
+              class="flex integration-top-content w-full"
               v-if="$slots['top-content']"
             >
               <slot name="top-content" />
