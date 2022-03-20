@@ -8,7 +8,6 @@ import GuideTimelineGuide from '@/components/Guide/TimelineGuide.vue';
 import Block from '@/components/Block.vue';
 import RowLoading from '@/components/RowLoading.vue';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
-import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
@@ -17,7 +16,11 @@ import { lsSet, setPageTitle } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useStore } from '@/composables/useStore';
 
-const props = defineProps({ space: Object, spaceId: String });
+const props = defineProps({
+  space: Object,
+  spaceId: String,
+  spaceLoading: Boolean
+});
 
 const { lastSeenGuides, updateLastSeenGuide } = useUnseenGuides();
 const { web3Account } = useWeb3();
@@ -29,7 +32,7 @@ const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members
 );
 
-const { loadBy, loadingMore, stopLoadingMore, loadMore } = useInfiniteLoader();
+const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
 
 const { apolloQuery } = useApolloQuery();
 
@@ -65,11 +68,8 @@ function emitUpdateLastSeenGuide() {
 
 onMounted(() => {
   setPageTitle('page.title.dao.guides', { dao: props.space.name });
+  loadGuides(store.space.guides.length);
 });
-
-const { endElement } = useScrollMonitor(() =>
-  loadMore(() => loadGuides(store.space.guides.length), loading.value)
-);
 
 const { profiles, loadProfiles } = useProfiles();
 
@@ -83,7 +83,7 @@ const guidesCount = computed(() => {
 });
 
 const loadingData = computed(() => {
-  return loading.value || loadingMore.value;
+  return loading.value || loadingMore.value || props.spaceLoading.value;
 });
 </script>
 
@@ -104,7 +104,7 @@ const loadingData = computed(() => {
           :space="space"
         />
         <div v-else>
-          <div class="_3-column-grid features-grid">
+          <div v-if="!loadingData" class="_3-column-grid features-grid">
             <GuideTimelineGuide
               v-for="(guide, i) in store.space.guides"
               :key="i"
