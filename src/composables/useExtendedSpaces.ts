@@ -21,7 +21,12 @@ export function useExtendedSpaces() {
         },
         'spaces'
       );
-      extentedSpaces.value = response;
+      extentedSpaces.value = [
+        ...response.map(space => ({
+          ...space,
+          extendedSpace: true
+        }))
+      ];
       loading.value = false;
     } catch (e) {
       loading.value = false;

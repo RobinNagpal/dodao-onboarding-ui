@@ -37,6 +37,7 @@ const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
 const { apolloQuery } = useApolloQuery();
 
 async function loadGuides(skip = 0) {
+  loading.value = true;
   const guidesObj = await apolloQuery(
     {
       query: GuidesQuery,
@@ -52,21 +53,11 @@ async function loadGuides(skip = 0) {
   );
   stopLoadingMore.value = guidesObj?.length < loadBy;
   store.space.guides = guidesObj;
-}
-
-function emitUpdateLastSeenGuide() {
-  if (web3Account.value) {
-    lsSet(
-      `lastSeenGuides.${web3Account.value.slice(0, 8).toLowerCase()}`,
-      Object.assign(lastSeenGuides.value, {
-        [props.spaceId]: new Date().getTime()
-      })
-    );
-  }
-  updateLastSeenGuide(web3Account.value);
+  loading.value = false;
 }
 
 onMounted(() => {
+  store.space.guides = [];
   setPageTitle('page.title.dao.guides', { dao: props.space.name });
   loadGuides(store.space.guides.length);
 });

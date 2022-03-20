@@ -28,7 +28,9 @@ onMounted(() => loadExtentedSpaces([spaceId.value, from.value]));
     :space="space"
     :from="from"
     :spaceFrom="spaceFrom"
-    :spaceLoading="spaceLoading || spaceId !== space.id"
+    :spaceLoading="
+      spaceLoading || spaceId !== space.id || !space?.extendedSpace
+    "
     :loadExtentedSpaces="loadExtentedSpaces"
   />
 </template>
