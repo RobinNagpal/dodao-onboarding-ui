@@ -10,7 +10,6 @@ import { initWallet } from '@/utils/solana';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
   PhantomWalletAdapter,
-  SlopeWalletAdapter,
   SolflareWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import { DefaultApolloClient } from '@vue/apollo-composable';
@@ -24,10 +23,9 @@ import '../snapshot-spaces/skins';
 const walletOptions = {
   wallets: [
     new PhantomWalletAdapter(),
-    new SlopeWalletAdapter(),
-    new SolflareWalletAdapter({ network: WalletAdapterNetwork.Devnet })
+    new SolflareWalletAdapter({ network: WalletAdapterNetwork.Mainnet })
   ],
-  autoConnect: false
+  autoConnect: true
 };
 
 (window as any).global = window;

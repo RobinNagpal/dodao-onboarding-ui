@@ -27,8 +27,7 @@ export default defineComponent({
     const onClick = (event: MouseEvent) => {
       emit('click', event);
       if (event.defaultPrevented) return;
-      // connect().catch(() => {});
-      login(AuthConnectors.solana);
+      login(wallet.value?.name as AuthConnectors);
     };
 
     const scope = {

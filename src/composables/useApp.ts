@@ -4,7 +4,6 @@ import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
 import orderBy from 'lodash/orderBy';
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -32,11 +31,13 @@ export function useApp() {
     await Promise.all([getExplore()]);
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
-    if (window?.parent === window)
-      auth.getConnector().then(connector => {
-        if (connector) login(connector);
-      });
-    else await login(AuthConnectors.gnosis);
+    const connector = await auth.getConnector();
+
+    console.log('connector', connector);
+
+    if (connector) {
+      await login(connector);
+    }
 
     state.init = true;
     state.loading = false;

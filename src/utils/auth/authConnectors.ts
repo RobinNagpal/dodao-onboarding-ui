@@ -1,7 +1,17 @@
 export enum AuthConnectors {
   injected = 'injected',
   near = 'near',
-  solana = 'solana',
   gnosis = 'gnosis',
-  trezor = 'trezor'
+  trezor = 'trezor',
+  Phantom = 'Phantom',
+  Slope = 'Slope',
+  Solflare = 'Solflare'
+}
+
+export function isSolanaConnector(authConnector: AuthConnectors) {
+  return (
+    authConnector === AuthConnectors.Phantom ||
+    authConnector === AuthConnectors.Solflare ||
+    authConnector === AuthConnectors.Slope
+  );
 }

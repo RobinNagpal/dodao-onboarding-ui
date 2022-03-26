@@ -1,7 +1,7 @@
 import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
+import { AuthConnectors, isSolanaConnector } from '@/utils/auth/authConnectors';
 import useNearWallet from '@/utils/near/useNearWallet';
 import { useSolanaWallet } from '@/utils/solana';
 import { Web3Provider } from '@ethersproject/providers';
@@ -47,32 +47,18 @@ export function useWeb3() {
     state.isTrezor = connector === AuthConnectors.trezor;
     if (state.blockchain === 'NEAR') {
       connector = AuthConnectors.near;
-    } else if (state.blockchain === 'SOL') {
-      connector = AuthConnectors.solana;
     }
     auth = getInstance();
     state.authLoading = true;
     await auth.login(connector);
     if (auth.provider.value) {
-      if (
-        connector === AuthConnectors.near ||
-        connector === AuthConnectors.solana
-      ) {
+      if (connector === AuthConnectors.near || isSolanaConnector(connector)) {
         auth.web3 = auth.provider.value;
       } else {
         auth.web3 = new Web3Provider(auth.provider.value, 'any');
       }
 
       await loadProvider();
-
-      if (auth.provider.value.on) {
-        auth.provider.value.on('chainChanged', () => {
-          window.location.reload();
-        });
-        auth.provider.value.on('accountsChanged', () => {
-          window.location.reload();
-        });
-      }
     }
     state.authLoading = false;
   }
@@ -117,12 +103,13 @@ export function useWeb3() {
           accounts = [nearWallet.nearWalletConnection.value!.getAccountId()];
           state.account = accounts[0];
           state.profile = accounts[0];
-        } else if (connector === 'solana') {
-          const { wallet: solanaWallet, publicKey } = useSolanaWallet();
+        } else if (isSolanaConnector(connector)) {
+          const { publicKey } = useSolanaWallet();
 
           network = {
             chainId: WalletAdapterNetwork.Mainnet
           };
+
           accounts = [publicKey.value?.toBase58()];
           state.account = accounts[0];
           state.profile = accounts[0];
@@ -178,7 +165,6 @@ export function useWeb3() {
   return {
     login,
     logout,
-    loadProvider,
     handleChainChanged,
     web3: computed(() => state),
     isEthBlockchain: computed(() => state.blockchain === 'ETH'),

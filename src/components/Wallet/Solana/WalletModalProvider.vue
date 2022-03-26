@@ -21,6 +21,7 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const { featured, container, logo, dark } = toRefs(props);
+    const { login } = useWeb3();
     const modalPanel = ref<HTMLElement | null>(null);
     const openModal = () => (modalAccountOpen.value = true);
     const closeModal = () => (modalAccountOpen.value = false);
@@ -82,6 +83,7 @@ export default defineComponent({
       logo,
       hasLogo,
       featured,
+      login,
       container,
       modalPanel,
       modalAccountOpen,
@@ -142,7 +144,7 @@ export default defineComponent({
                 v-for="wallet in walletsToDisplay"
                 :key="wallet.name"
                 @click="
-                  selectWallet(wallet.name);
+                  login(wallet.name);
                   closeModal();
                 "
               >
