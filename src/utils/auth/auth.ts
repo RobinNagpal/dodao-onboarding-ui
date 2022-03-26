@@ -1,5 +1,5 @@
 import { Blockchain, getBlockchain } from '@/helpers/network';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
+import { AuthConnector, isSolanaConnector } from '@/utils/auth/authConnector';
 import Connector from '@/utils/auth/connector';
 import { CustomProvider } from '@/utils/auth/customProvider';
 import { SolanaProvider } from '@/utils/solana/solanaProvider';
@@ -7,6 +7,7 @@ import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { Web3Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import { SafeAppProvider } from '@gnosis.pm/safe-apps-provider';
+import { WalletName } from '@solana/wallet-adapter-base';
 import { Ref } from '@vue/reactivity';
 import { ref } from 'vue';
 import Lock from './lock';
@@ -17,7 +18,7 @@ export interface DoDAOAuth {
   isAuthenticated: boolean;
   provider: Ref;
   lockClient: Lock;
-  login: (connector: AuthConnectors) => Promise<Web3Provider>;
+  login: (connector: AuthConnector) => Promise<Web3Provider>;
   logout: () => Promise<void>;
   getConnector: Connector | boolean;
   web3: Web3Provider | Wallet | CustomProvider | SafeAppProvider | null;
@@ -38,12 +39,18 @@ export const useLock = ({ ...options }) => {
     lockClient.addConnector(connector);
   });
 
-  async function login(connector: AuthConnectors) {
+  async function login(connector: AuthConnector) {
     console.log('login using connector', connector);
     let localProvider;
     if (getBlockchain() === Blockchain.SOL) {
-      await useSolanaWallet().connect();
-      localProvider = new SolanaProvider();
+      await useSolanaWallet().select(connector.toString() as WalletName);
+      const wallet = await useSolanaWallet().connectAndReturnWallet();
+      console.log('logged in with solana wallet', wallet);
+      if (wallet) {
+        localProvider = new SolanaProvider(connector.toString());
+      } else {
+        window.location.reload();
+      }
     } else {
       const lockConnector = lockClient.getConnector(connector);
       localProvider = await lockConnector.connect();
@@ -75,12 +82,17 @@ export const useLock = ({ ...options }) => {
 
   async function getConnector() {
     const connector = localStorage.getItem(`_${name}.connector`);
-    if (getBlockchain() !== Blockchain.SOL && connector) {
-      const lockConnector = lockClient.getConnector(connector);
+
+    if (getBlockchain() === Blockchain.ETH && connector) {
+      const lockConnector = lockClient.getConnector(connector as AuthConnector);
       const isLoggedIn = await lockConnector.isLoggedIn();
       return isLoggedIn ? connector : false;
+    } else if (getBlockchain() === Blockchain.SOL && connector) {
+      return isSolanaConnector(connector as AuthConnector) ? connector : false;
+    } else if (getBlockchain() === Blockchain.NEAR) {
+      return AuthConnector.near;
     }
-    return false;
+    return connector;
   }
 
   instance = {

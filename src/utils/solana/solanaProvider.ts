@@ -3,8 +3,11 @@ import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import bs58 from 'bs58';
 
 export class SolanaProvider implements CustomProvider {
-  connectorName = 'solana';
+  connectorName;
 
+  constructor(connectorName: string) {
+    this.connectorName = connectorName;
+  }
   encoder = new TextEncoder(); // always utf-8
   textDecoder = new TextDecoder('utf-8');
 

@@ -38,6 +38,7 @@ export interface WalletStore {
   // Methods.
   select(walletName: WalletName): void;
   connect(): Promise<void>;
+  connectAndReturnWallet(): Promise<Wallet | null>;
   disconnect(): Promise<void>;
   sendTransaction(
     transaction: Transaction,
@@ -178,6 +179,44 @@ export const createWalletStore = ({
     }
   };
 
+  const connectAndReturnWallet = async (): Promise<Wallet | null> => {
+    const _wallet = wallet.value;
+    if (!_wallet) return Promise.resolve(null);
+    if (!ready.value) return Promise.resolve(null);
+
+    type WalletResolve = (wallet: Wallet) => void;
+    type WalletReject = (reason?: any) => void;
+
+    if (connected.value) {
+      return _wallet;
+    }
+
+    connecting.value = true;
+
+    const promise = new Promise<Wallet>(
+      (resolve: WalletResolve, reject: WalletReject) => {
+        _wallet.connect().catch(e => {
+          connecting.value = false;
+          setWallet(_wallet);
+          reject(e);
+        });
+        _wallet.on('connect', () => {
+          connecting.value = false;
+          setWallet(_wallet);
+          resolve(_wallet);
+        });
+
+        _wallet.on('error', e => {
+          connecting.value = false;
+          setWallet(_wallet);
+          reject(e);
+        });
+      }
+    );
+
+    return promise;
+  };
+
   // Disconnect the wallet adapter.
   const disconnect = async (): Promise<void> => {
     if (disconnecting.value) return;
@@ -276,6 +315,7 @@ export const createWalletStore = ({
     // Methods.
     select,
     connect,
+    connectAndReturnWallet,
     disconnect,
     sendTransaction,
     signTransaction,

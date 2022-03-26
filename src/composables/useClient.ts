@@ -4,6 +4,7 @@ import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { getInstance } from '@/utils/auth/auth';
+import { AuthConnector } from '@/utils/auth/authConnector';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
@@ -175,5 +176,16 @@ export function useClient() {
     }
   }
 
-  return { send, clientLoading: computed(() => loading.value), isGnosisSafe };
+  async function sendLogin(connector: AuthConnector) {
+    return (await clientEIP712.login(auth.web3, web3.value.account, {
+      connector: connector === AuthConnector.injected ? 'metamask' : connector
+    })) as { jwt: string };
+  }
+
+  return {
+    send,
+    clientLoading: computed(() => loading.value),
+    isGnosisSafe,
+    sendLogin
+  };
 }

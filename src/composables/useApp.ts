@@ -1,10 +1,9 @@
 import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.json';
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
-import { useWeb3 } from '@/composables/useWeb3';
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
 import orderBy from 'lodash/orderBy';
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -20,10 +19,9 @@ const spaces = ref({});
 const strategies = ref({});
 const explore: any = ref({});
 
-const { login } = useWeb3();
-
 export function useApp() {
   const route = useRoute();
+  const { loginWrapper } = useWeb3Wrapper();
   const { followingSpaces } = useFollowSpace();
 
   async function init() {
@@ -32,11 +30,17 @@ export function useApp() {
     await Promise.all([getExplore()]);
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
-    if (window?.parent === window)
-      auth.getConnector().then(connector => {
-        if (connector) login(connector);
-      });
-    else await login(AuthConnectors.gnosis);
+    const connector = await auth.getConnector();
+
+    console.log('connector', connector);
+
+    if (connector) {
+      try {
+        await loginWrapper(connector);
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
     state.init = true;
     state.loading = false;

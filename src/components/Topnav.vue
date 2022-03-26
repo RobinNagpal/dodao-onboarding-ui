@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getIpfsUrl, shorten } from '@/helpers/utils';
@@ -21,8 +22,9 @@ const { env, domain } = useDomain();
 const route = useRoute();
 
 const { explore } = useApp();
-const { login, web3, isEthBlockchain, isNearBlockchain, isSolBlockchain } =
-  useWeb3();
+const { web3, isEthBlockchain, isNearBlockchain, isSolBlockchain } = useWeb3();
+
+const { loginWrapper } = useWeb3Wrapper();
 const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
@@ -39,7 +41,7 @@ function setTitle() {
 async function handleLogin(connector) {
   modalAccountOpen.value = false;
   loading.value = true;
-  await login(connector);
+  await loginWrapper(connector);
   loading.value = false;
 }
 
