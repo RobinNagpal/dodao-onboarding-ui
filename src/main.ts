@@ -25,7 +25,7 @@ const walletOptions = {
     new PhantomWalletAdapter(),
     new SolflareWalletAdapter({ network: WalletAdapterNetwork.Mainnet })
   ],
-  autoConnect: true
+  autoConnect: false
 };
 
 (window as any).global = window;

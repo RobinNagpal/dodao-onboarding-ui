@@ -48,6 +48,8 @@ export const useLock = ({ ...options }) => {
       console.log('logged in with solana wallet', wallet);
       if (wallet) {
         localProvider = new SolanaProvider(connector.toString());
+      } else {
+        window.location.reload();
       }
     } else {
       const lockConnector = lockClient.getConnector(connector);

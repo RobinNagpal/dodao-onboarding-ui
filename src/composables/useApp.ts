@@ -36,7 +36,11 @@ export function useApp() {
     console.log('connector', connector);
 
     if (connector) {
-      await login(connector);
+      try {
+        await login(connector);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     state.init = true;

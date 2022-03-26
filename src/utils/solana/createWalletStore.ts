@@ -182,6 +182,7 @@ export const createWalletStore = ({
   const connectAndReturnWallet = async (): Promise<Wallet | null> => {
     const _wallet = wallet.value;
     if (!_wallet) return Promise.resolve(null);
+    if (!ready.value) return Promise.resolve(null);
 
     type WalletResolve = (wallet: Wallet) => void;
     type WalletReject = (reason?: any) => void;
