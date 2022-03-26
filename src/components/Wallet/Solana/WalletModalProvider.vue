@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { onClickOutside, onKeyStroke, useScrollLock } from '@vueuse/core';
 import { computed, defineComponent, nextTick, ref, toRefs, watch } from 'vue';
@@ -21,7 +22,7 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const { featured, container, logo, dark } = toRefs(props);
-    const { login } = useWeb3();
+    const { loginWrapper } = useWeb3Wrapper();
     const modalPanel = ref<HTMLElement | null>(null);
     const openModal = () => (modalAccountOpen.value = true);
     const closeModal = () => (modalAccountOpen.value = false);
@@ -83,7 +84,7 @@ export default defineComponent({
       logo,
       hasLogo,
       featured,
-      login,
+      loginWrapper,
       container,
       modalPanel,
       modalAccountOpen,
@@ -144,7 +145,7 @@ export default defineComponent({
                 v-for="wallet in walletsToDisplay"
                 :key="wallet.name"
                 @click="
-                  login(wallet.name);
+                  loginWrapper(wallet.name);
                   closeModal();
                 "
               >

@@ -175,5 +175,16 @@ export function useClient() {
     }
   }
 
-  return { send, clientLoading: computed(() => loading.value), isGnosisSafe };
+  async function sendLogin(connector: string) {
+    return (await clientEIP712.login(auth.web3, web3.value.account, {
+      connector
+    })) as { jwt: string };
+  }
+
+  return {
+    send,
+    clientLoading: computed(() => loading.value),
+    isGnosisSafe,
+    sendLogin
+  };
 }

@@ -51,6 +51,7 @@ export function useWeb3() {
     auth = getInstance();
     state.authLoading = true;
     await auth.login(connector);
+
     if (auth.provider.value) {
       if (connector === AuthConnectors.near || isSolanaConnector(connector)) {
         auth.web3 = auth.provider.value;

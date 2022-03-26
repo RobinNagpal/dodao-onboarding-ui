@@ -2,6 +2,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { getBlockchain } from '@/helpers/network';
 import { guideSubmissionTypes } from '@/helpers/sign/guideSubmissionTypes';
 import { guideTypes } from '@/helpers/sign/guideTypes';
+import { loginTypes } from '@/helpers/sign/loginTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
 import { CustomProvider } from '@/utils/auth/customProvider';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
@@ -46,6 +47,32 @@ export default class OnboardingClient extends Client {
       sig,
       data,
       blockchain: blockchain,
+      network: network
+    });
+  }
+
+  async login(
+    web3: Web3Provider | Wallet | CustomProvider,
+    address: string,
+    message: any
+  ) {
+    // @ts-ignore
+    const signer = web3?.getSigner ? web3.getSigner() : web3;
+    message.from = address;
+    message.timestamp = parseInt((Date.now() / 1e3).toFixed());
+    message.blockchain = getBlockchain();
+
+    const data: any = { domain, types: loginTypes, message };
+    const sig = await signer._signTypedData(domain, loginTypes, message);
+    const { web3: loggedIn } = useWeb3();
+
+    const network = loggedIn.value.network.key;
+
+    return await this.send({
+      address,
+      sig,
+      data,
+      blockchain: getBlockchain().toString(),
       network: network
     });
   }

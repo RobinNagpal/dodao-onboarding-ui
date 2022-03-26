@@ -1,7 +1,7 @@
 import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.json';
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
-import { useWeb3 } from '@/composables/useWeb3';
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
 import orderBy from 'lodash/orderBy';
@@ -19,10 +19,9 @@ const spaces = ref({});
 const strategies = ref({});
 const explore: any = ref({});
 
-const { login } = useWeb3();
-
 export function useApp() {
   const route = useRoute();
+  const { loginWrapper } = useWeb3Wrapper();
   const { followingSpaces } = useFollowSpace();
 
   async function init() {
@@ -37,7 +36,7 @@ export function useApp() {
 
     if (connector) {
       try {
-        await login(connector);
+        await loginWrapper(connector);
       } catch (e) {
         console.error(e);
       }

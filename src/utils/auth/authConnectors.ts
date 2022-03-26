@@ -1,8 +1,13 @@
 export enum AuthConnectors {
   injected = 'injected',
-  near = 'near',
   gnosis = 'gnosis',
   trezor = 'trezor',
+  walletlink = 'walletlink',
+  walletconnect = 'walletconnect',
+  portis = 'portis',
+
+  near = 'near',
+
   Phantom = 'Phantom',
   Slope = 'Slope',
   Solflare = 'Solflare'

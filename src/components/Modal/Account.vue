@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { toRefs, ref, watch, computed } from 'vue';
 import { getInjected } from '@snapshot-labs/lock/src/utils';
 import { shorten, explorerUrl, getIpfsUrl } from '@/helpers/utils';
@@ -13,7 +14,8 @@ const props = defineProps(['open']);
 const emit = defineEmits(['login', 'close']);
 
 const { open } = toRefs(props);
-const { web3, logout } = useWeb3();
+const { web3 } = useWeb3();
+const { logoutWrapper } = useWeb3Wrapper();
 
 const isEthBlockchain = web3.value.blockchain === 'ETH';
 
@@ -36,7 +38,7 @@ const showProfileOnEtherscan = () => {
   }
 };
 async function handleLogout() {
-  await logout();
+  await logoutWrapper();
   emit('close');
 }
 
