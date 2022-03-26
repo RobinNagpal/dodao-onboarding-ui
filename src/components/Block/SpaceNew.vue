@@ -6,6 +6,7 @@ import UiButton from '@/components/Ui/Button.vue';
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useSpace } from '@/composables/useSpace';
+import { useWeb3 } from '@/composables/useWeb3';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { PropType, ref, watchEffect } from 'vue';
 import { n } from '@/helpers/utils';
@@ -19,6 +20,7 @@ const props = defineProps({
 });
 
 const { explore } = useApp();
+const { isEthBlockchain } = useWeb3();
 
 const nbrMembers = explore.value.spaces[props.space.id].followers;
 const isVerified = verified[props.space.id] || 0;
@@ -58,10 +60,10 @@ watchEffect(() => {
       size="80"
       class="mt-3 mb-2"
     />
-    <div class="mt-2 text-color">
+    <div class="mt-2 text-color" v-if="isEthBlockchain">
       {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
     </div>
-    <div class="flex mt-2">
+    <div class="flex mt-2" v-if="isEthBlockchain">
       <FollowButton :space="space" :class="'mx-2'" />
       <UiSidebarButton
         class="inline px-2"
