@@ -1,8 +1,7 @@
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import { AuthConnector } from '@/utils/auth/authConnector';
-import { JwtModel } from '@dodao/onboarding-schemas/models/JwtModel';
-import jwt_decode from 'jwt-decode';
+import { getValidDecodedToken } from '@/utils/auth/jwtUtil';
 
 export function useWeb3Wrapper() {
   const { login, logout, web3Account } = useWeb3();
@@ -10,14 +9,11 @@ export function useWeb3Wrapper() {
 
   async function loginWrapper(connector: AuthConnector) {
     await login(connector);
-    const exitingJwt = localStorage.getItem(`dodao_token`);
     let isValidJWT = false;
-
-    if (exitingJwt) {
-      const jwtModel = jwt_decode<JwtModel>(exitingJwt);
-      const isSameAccount = jwtModel.accountId === web3Account.value;
-      const isNotExpired = jwtModel.exp - Date.now() / 1000 > 2 * 24 * 60 * 60;
-      if (isSameAccount && isNotExpired) {
+    const validDecodedToken = getValidDecodedToken();
+    if (validDecodedToken) {
+      const isSameAccount = validDecodedToken.accountId === web3Account.value;
+      if (isSameAccount) {
         isValidJWT = true;
       }
     }

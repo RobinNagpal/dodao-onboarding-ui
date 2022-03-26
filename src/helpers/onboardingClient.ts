@@ -5,12 +5,14 @@ import { guideTypes } from '@/helpers/sign/guideTypes';
 import { loginTypes } from '@/helpers/sign/loginTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
 import { CustomProvider } from '@/utils/auth/customProvider';
+import { getJwt, getValidDecodedToken } from '@/utils/auth/jwtUtil';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
 import { Web3Provider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import Client from '@snapshot-labs/snapshot.js/src/sign';
+import fetch from 'cross-fetch';
 
 export const domain = {
   name: 'DoDAO',
@@ -34,21 +36,38 @@ export default class OnboardingClient extends Client {
       message.timestamp = parseInt((Date.now() / 1e3).toFixed());
 
     const data: any = { domain, types, message };
-    const sig = await signer._signTypedData(domain, data.types, message);
-    const { web3: loggedIn } = useWeb3();
+    const jwt = getJwt();
+    if (jwt && getValidDecodedToken()) {
+      const { web3: loggedIn } = useWeb3();
 
-    console.log('loggedIn', loggedIn);
-    const network = loggedIn.value.network.key;
+      console.log('loggedIn', loggedIn);
+      const network = loggedIn.value.network.key;
 
-    console.log('Sign', { address, sig, data, blockchain, network });
+      console.log('Sign', { address, data, blockchain, network });
 
-    return await this.send({
-      address,
-      sig,
-      data,
-      blockchain: blockchain,
-      network: network
-    });
+      return await this.sendPrivate(jwt, {
+        address,
+        data,
+        blockchain: blockchain,
+        network: network
+      });
+    } else {
+      const sig = await signer._signTypedData(domain, data.types, message);
+      const { web3: loggedIn } = useWeb3();
+
+      console.log('loggedIn', loggedIn);
+      const network = loggedIn.value.network.key;
+
+      console.log('Sign', { address, sig, data, blockchain, network });
+
+      return await this.send({
+        address,
+        sig,
+        data,
+        blockchain: blockchain,
+        network: network
+      });
+    }
   }
 
   async login(
@@ -101,5 +120,46 @@ export default class OnboardingClient extends Client {
   ) {
     console.log('guide response', message);
     return await this.sign(web3, address, message, guideSubmissionTypes);
+  }
+
+  async send(envelop) {
+    const url = `${this.address}/api/msg`;
+    const init = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(envelop)
+    };
+    return new Promise((resolve, reject) => {
+      fetch(url, init)
+        .then(res => {
+          if (res.ok) return resolve(res.json());
+          throw res;
+        })
+        .catch(e => e.json().then(json => reject(json)));
+    });
+  }
+
+  async sendPrivate(jwt: string, envelop: any) {
+    const url = `${this.address}/api/private`;
+    const init = {
+      method: 'POST',
+      headers: {
+        Authorization: jwt,
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(envelop)
+    };
+    return new Promise((resolve, reject) => {
+      fetch(url, init)
+        .then(res => {
+          if (res.ok) return resolve(res.json());
+          throw res;
+        })
+        .catch(e => e.json().then(json => reject(json)));
+    });
   }
 }
