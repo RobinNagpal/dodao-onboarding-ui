@@ -1,6 +1,6 @@
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
+import { AuthConnector } from '@/utils/auth/authConnector';
 import { JwtModel } from '@dodao/onboarding-schemas/models/JwtModel';
 import jwt_decode from 'jwt-decode';
 
@@ -8,7 +8,7 @@ export function useWeb3Wrapper() {
   const { login, logout, web3Account } = useWeb3();
   const { sendLogin } = useClient();
 
-  async function loginWrapper(connector: AuthConnectors) {
+  async function loginWrapper(connector: AuthConnector) {
     await login(connector);
     const exitingJwt = localStorage.getItem(`dodao_token`);
     let isValidJWT = false;

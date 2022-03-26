@@ -1,4 +1,4 @@
-export enum AuthConnectors {
+export enum AuthConnector {
   injected = 'injected',
   gnosis = 'gnosis',
   trezor = 'trezor',
@@ -13,10 +13,10 @@ export enum AuthConnectors {
   Solflare = 'Solflare'
 }
 
-export function isSolanaConnector(authConnector: AuthConnectors) {
+export function isSolanaConnector(authConnector: AuthConnector) {
   return (
-    authConnector === AuthConnectors.Phantom ||
-    authConnector === AuthConnectors.Solflare ||
-    authConnector === AuthConnectors.Slope
+    authConnector === AuthConnector.Phantom ||
+    authConnector === AuthConnector.Solflare ||
+    authConnector === AuthConnector.Slope
   );
 }

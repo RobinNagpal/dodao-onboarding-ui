@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
-import { AuthConnectors } from '@/utils/auth/authConnectors';
+import { AuthConnector } from '@/utils/auth/authConnector';
 import { useSolanaWallet } from '@/utils/solana/useSolanaWallet';
 import { computed, defineComponent, toRefs } from 'vue';
 import WalletIcon from './WalletIcon.vue';
@@ -27,7 +27,7 @@ export default defineComponent({
     const onClick = (event: MouseEvent) => {
       emit('click', event);
       if (event.defaultPrevented) return;
-      loginWrapper(wallet.value?.name as AuthConnectors);
+      loginWrapper(wallet.value?.name as AuthConnector);
     };
 
     const scope = {

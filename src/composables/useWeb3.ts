@@ -1,7 +1,7 @@
 import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
-import { AuthConnectors, isSolanaConnector } from '@/utils/auth/authConnectors';
+import { AuthConnector, isSolanaConnector } from '@/utils/auth/authConnector';
 import useNearWallet from '@/utils/near/useNearWallet';
 import { useSolanaWallet } from '@/utils/solana';
 import { Web3Provider } from '@ethersproject/providers';
@@ -43,17 +43,17 @@ const state = reactive<Web3Account>({
 const nearWallet = useNearWallet();
 
 export function useWeb3() {
-  async function login(connector: AuthConnectors = AuthConnectors.injected) {
-    state.isTrezor = connector === AuthConnectors.trezor;
+  async function login(connector: AuthConnector = AuthConnector.injected) {
+    state.isTrezor = connector === AuthConnector.trezor;
     if (state.blockchain === 'NEAR') {
-      connector = AuthConnectors.near;
+      connector = AuthConnector.near;
     }
     auth = getInstance();
     state.authLoading = true;
     await auth.login(connector);
 
     if (auth.provider.value) {
-      if (connector === AuthConnectors.near || isSolanaConnector(connector)) {
+      if (connector === AuthConnector.near || isSolanaConnector(connector)) {
         auth.web3 = auth.provider.value;
       } else {
         auth.web3 = new Web3Provider(auth.provider.value, 'any');
