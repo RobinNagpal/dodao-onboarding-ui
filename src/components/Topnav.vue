@@ -15,9 +15,11 @@ import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import ModalAccount from '@/components/Modal/Account.vue';
+import ModalBlockchains from '@/components/Modal/Blockchains.vue';
 
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
+
 const { env, domain } = useDomain();
 const route = useRoute();
 
@@ -28,6 +30,8 @@ const { loginWrapper } = useWeb3Wrapper();
 const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
+
+const modalBlockchainsOpen = ref(false);
 
 const space = computed(() => {
   const key = domain || route.params.key;
@@ -65,7 +69,7 @@ onMounted(() => setTitle());
       <Container class="max-w-[100%] container-default w-container">
         <div class="flex items-center header-wrapper" style="height: 78px">
           <div
-            class="flex-auto flex items-center header-logo-wrapper w-nav-brand w--current"
+            class="flex items-center header-logo-wrapper w-nav-brand w--current"
           >
             <router-link
               :to="{ path: '/' }"
@@ -74,6 +78,15 @@ onMounted(() => setTitle());
             >
               <img :src="dodaoLogo" alt="arrow" class="logo arrow w-[190px]" />
             </router-link>
+          </div>
+          <div>
+            <UiButton
+              @click="modalBlockchainsOpen = true"
+              :loading="web3.authLoading"
+              class="flex items-center float-left"
+            >
+              <span>All DAOs</span>
+            </UiButton>
           </div>
           <div :key="web3.account">
             <template
@@ -143,6 +156,10 @@ onMounted(() => setTitle());
       :open="(isEthBlockchain || isNearBlockchain) && modalAccountOpen"
       @close="modalAccountOpen = false"
       @login="handleLogin"
+    />
+    <ModalBlockchains
+      :open="modalBlockchainsOpen"
+      @close="modalBlockchainsOpen = false"
     />
   </teleport>
 </template>

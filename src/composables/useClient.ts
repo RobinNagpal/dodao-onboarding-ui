@@ -98,6 +98,7 @@ export function useClient() {
         uuid: payload.uuid,
         categories: payload.categories || [],
         content: payload.content,
+        discordWebhook: payload.discordWebhook,
         from: web3.value.account,
         name: payload.name,
         space: space.id,

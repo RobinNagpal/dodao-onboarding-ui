@@ -1,0 +1,26 @@
+{
+  "ETH": {
+    "id": "ETH",
+    "name": "Ethereum",
+    "logo": "/static/icons/blockchains/ethereum.png",
+    "url": "https://eth.dodao.io"
+  },
+  "SOL": {
+    "id": "SOL",
+    "name": "Solana",
+    "logo": "/static/icons/blockchains/solana.png",
+    "url": "https://sol.dodao.io"
+  },
+  "NEAR": {
+    "id": "NEAR",
+    "name": "NEAR",
+    "logo": "/static/icons/blockchains/near.png",
+    "url": "https://near.dodao.io"
+  },
+  "ONE": {
+    "id": "ONE",
+    "name": "Harmony",
+    "logo": "/static/icons/blockchains/harmony.png",
+    "url": "https://one.dodao.io"
+  }
+}
