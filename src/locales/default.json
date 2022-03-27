@@ -502,6 +502,9 @@
       }
     }
   },
+  "topNav": {
+    "browseByBlockchain": "Browse DAOs by Blockchain"
+  },
   "hal": {
     "title": "Track proposals for {daoName}",
     "text": "Receive notifications every time a new proposal is created or ends"
