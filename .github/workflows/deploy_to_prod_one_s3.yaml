@@ -1,4 +1,4 @@
-name: Deploy to Near S3
+name: Deploy to Eth S3
 
 on:
   push:
@@ -30,12 +30,12 @@ jobs:
           yarn run lint
         env:
           VITE_DEFAULT_NETWORK: mainnet
-          VITE_BLOCKCHAIN: NEAR
+          VITE_BLOCKCHAIN: ONE
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: near.dodao.io
+          AWS_S3_BUCKET: one.dodao.io
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
