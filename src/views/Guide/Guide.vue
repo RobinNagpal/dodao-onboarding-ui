@@ -15,7 +15,7 @@ import { useProfiles } from '@/composables/useProfiles';
 import { useSharing } from '@/composables/useSharing';
 import { useSpace } from '@/composables/useSpace';
 import { useStore } from '@/composables/useStore';
-import { useViewGuide } from '@/composables/useViewGuide';
+import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -52,6 +52,7 @@ const {
   guideRef: guide,
   guideLoaded,
   guideResponseRef,
+  guideSubmittingRef,
   initialize,
   selectAnswer,
   submitGuide
@@ -211,6 +212,7 @@ onMounted(async () => {
                   :goToPreviousStep="goToPreviousStep"
                   :guide="guide"
                   :guideResponse="guideResponseRef"
+                  :guideSubmitting="guideSubmittingRef"
                   :selectAnswer="selectAnswer"
                   :submitGuide="submitGuide"
                 />

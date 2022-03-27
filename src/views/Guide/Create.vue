@@ -10,7 +10,7 @@ import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
-import { useEditGuide } from '@/composables/useEditGuide';
+import { useEditGuide } from '@/composables/guide/useEditGuide';
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
@@ -159,6 +159,15 @@ onMounted(async () => {
                 >
                   {{ $t('upload') }}
                 </Upload>
+              </template>
+            </UiInput>
+            <UiInput
+              v-model="form.discordWebhook"
+              placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
+              :error="inputError('discordWebhook')"
+            >
+              <template v-slot:label>
+                {{ $t('guide.discordWebhook') }}
               </template>
             </UiInput>
             <UiInput @click="modalCategoryOpen = true">

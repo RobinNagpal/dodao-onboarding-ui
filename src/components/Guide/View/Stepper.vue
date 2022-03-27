@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
-import { UserGuideQuestionSubmission } from '@/composables/useViewGuide';
+import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import {
   GuideModel,
   GuideStep
@@ -20,6 +20,7 @@ const props = defineProps({
     type: Object as PropType<Record<string, UserGuideQuestionSubmission>>,
     required: true
   },
+  guideSubmitting: Boolean,
   selectAnswer: {
     type: Function,
     required: true
@@ -55,6 +56,7 @@ const activeStep = computed<GuideStep>(
       :goToNextStep="goToNextStep"
       :goToPreviousStep="goToPreviousStep"
       :guide="guide"
+      :guideSubmitting="guideSubmitting"
       :step="activeStep"
       :stepSubmission="guideResponse[activeStep.uuid] ?? {}"
       :submitGuide="submitGuide"

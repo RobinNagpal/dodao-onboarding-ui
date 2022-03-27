@@ -313,6 +313,7 @@ type Guide {
   categories: [String!]!
   content: String!
   created: Int!
+  discordWebhook: String
   id: String!
   ipfs: String!
   name: String!

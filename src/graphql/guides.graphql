@@ -25,6 +25,7 @@ query GuideQuery($uuid: String!) {
     categories
     content
     created
+    discordWebhook
     id
     ipfs
     link
