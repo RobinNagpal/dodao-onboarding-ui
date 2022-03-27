@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
-import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import { useModal } from '@/composables/useModal';
-import { UserGuideQuestionSubmission } from '@/composables/useViewGuide';
+import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
@@ -37,6 +36,7 @@ const props = defineProps({
     type: Object as PropType<GuideModel>,
     required: true
   },
+  guideSubmitting: Boolean,
   stepSubmission: {
     type: Object as PropType<UserGuideQuestionSubmission>,
     required: true
@@ -136,6 +136,8 @@ async function navigateToNextStep() {
         :aria-label="$t('next')"
         class="float-right"
         @click="navigateToNextStep"
+        :loading="guideSubmitting"
+        :disabled="guideSubmitting"
         v-if="!isGuideCompletedStep"
       >
         <span

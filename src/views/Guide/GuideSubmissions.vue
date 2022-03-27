@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useViewGuide } from '@/composables/useViewGuide';
-import { useViewGuideSubmissions } from '@/composables/useViewSubmissions';
+import { useViewGuide } from '@/composables/guide/useViewGuide';
+import { useViewGuideSubmissions } from '@/composables/guide/useViewSubmissions';
 import { setPageTitle } from '@/helpers/utils';
 import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
 import NoResults from '@/components/NoResults.vue';

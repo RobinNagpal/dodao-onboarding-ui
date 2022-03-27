@@ -208,6 +208,7 @@
     },
     "delete": "Delete",
     "duplicate": "Duplicate",
+    "discordWebhook": "Discord Webhook",
     "edit": "Edit",
     "endDate": "End date",
     "guideBy": "by {0}",

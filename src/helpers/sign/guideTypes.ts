@@ -23,6 +23,7 @@ export const guideTypes = {
     { name: 'from', type: 'address' },
     { name: 'categories', type: 'string[]' },
     { name: 'content', type: 'string' },
+    { name: 'discordWebhook', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'space', type: 'string' },
     { name: 'steps', type: 'Step[]' },
