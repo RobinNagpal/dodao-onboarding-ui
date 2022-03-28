@@ -1,4 +1,4 @@
-name: Deploy to Eth S3
+name: Deploy to One S3
 
 on:
   push:
