@@ -66,5 +66,10 @@
     "id": "near",
     "blockchain": "NEAR",
     "name": "NEAR"
+  },
+  "harmonymetamask": {
+    "id": "harmonymetamask",
+    "blockchain": "ONE",
+    "name": "MetaMask"
   }
 }

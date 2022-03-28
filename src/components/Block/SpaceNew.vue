@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const { explore } = useApp();
-const { isEthBlockchain } = useWeb3();
+const { isEthBlockchain, isOneBlockchain } = useWeb3();
 
 const nbrMembers = explore.value.spaces[props.space.id].followers;
 const isVerified = verified[props.space.id] || 0;
@@ -60,10 +60,10 @@ watchEffect(() => {
       size="80"
       class="mt-3 mb-2"
     />
-    <div class="mt-2 text-color" v-if="isEthBlockchain">
+    <div class="mt-2 text-color" v-if="isEthBlockchain || isOneBlockchain">
       {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
     </div>
-    <div class="flex mt-2" v-if="isEthBlockchain">
+    <div class="flex mt-2" v-if="isEthBlockchain || isOneBlockchain">
       <FollowButton :space="space" :class="'mx-2'" />
       <UiSidebarButton
         class="inline px-2"

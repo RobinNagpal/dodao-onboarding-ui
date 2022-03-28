@@ -11,7 +11,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 const { selectedCategory, orderedSpaces, orderedSpacesByCategory } = useApp();
 const { followingSpaces } = useFollowSpace();
 const { spacesPerCategory, categoriesOrderedBySpaceCount } = useCategories();
-const { isEthBlockchain } = useWeb3();
+const { isEthBlockchain, isOneBlockchain } = useWeb3();
 
 function selectCategory(c) {
   selectedCategory.value = c === selectedCategory.value ? '' : c;
@@ -123,7 +123,10 @@ onMounted(() => {
               <div class="h-[85px] overflow-hidden text-xs">
                 {{ space.mission }}
               </div>
-              <div class="flex flex-col" v-if="isEthBlockchain">
+              <div
+                class="flex flex-col"
+                v-if="isEthBlockchain || isOneBlockchain"
+              >
                 <div>
                   <div class="mb-[12px] text-color">
                     {{

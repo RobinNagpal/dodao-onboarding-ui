@@ -3,6 +3,7 @@ import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/clientEIP712';
+import { getBlockchain } from '@/helpers/network';
 import { FOLLOWS_QUERY } from '@/helpers/queries';
 import { getInstance } from '@/utils/auth/auth';
 import { computed, ref } from 'vue';
@@ -46,7 +47,8 @@ export function useFollowSpace(spaceObj: any = {}) {
           {
             query: FOLLOWS_QUERY,
             variables: {
-              follower_in: web3Account.value
+              follower_in: web3Account.value,
+              blockchain: getBlockchain()
             }
           },
           'follows'
