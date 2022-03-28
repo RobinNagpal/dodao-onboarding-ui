@@ -91,7 +91,6 @@ onMounted(() => setTitle());
           <div>
             <UiButton
               @click="modalBlockchainsOpen = true"
-              :loading="web3.authLoading"
               class="flex items-center float-left"
             >
               <span class="whitespace-nowrap">All DAOs</span>
