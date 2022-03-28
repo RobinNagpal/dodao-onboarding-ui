@@ -24,7 +24,13 @@ const { env, domain } = useDomain();
 const route = useRoute();
 
 const { explore } = useApp();
-const { web3, isEthBlockchain, isNearBlockchain, isSolBlockchain } = useWeb3();
+const {
+  web3,
+  isEthBlockchain,
+  isNearBlockchain,
+  isOneBlockchain,
+  isSolBlockchain
+} = useWeb3();
 
 const { loginWrapper } = useWeb3Wrapper();
 const { toggleSkin, getSkinIcon } = useUserSkin();
@@ -67,7 +73,10 @@ onMounted(() => setTitle());
   <div id="topnav" class="header w-nav">
     <div class="header-main-wrapper">
       <Container class="max-w-[100%] container-default w-container">
-        <div class="flex items-center header-wrapper" style="height: 78px">
+        <div
+          class="flex justify-between items-center header-wrapper"
+          style="height: 78px"
+        >
           <div
             class="flex items-center header-logo-wrapper w-nav-brand w--current"
           >
@@ -85,13 +94,13 @@ onMounted(() => setTitle());
               :loading="web3.authLoading"
               class="flex items-center float-left"
             >
-              <span>All DAOs</span>
+              <span class="whitespace-nowrap">All DAOs</span>
             </UiButton>
           </div>
-          <div :key="web3.account">
+          <div :key="web3.account" class="flex">
             <template
               v-if="
-                (isEthBlockchain || isNearBlockchain) &&
+                (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
                 $auth.isAuthenticated.value
               "
             >
@@ -153,7 +162,10 @@ onMounted(() => setTitle());
   </div>
   <teleport to="#modal">
     <ModalAccount
-      :open="(isEthBlockchain || isNearBlockchain) && modalAccountOpen"
+      :open="
+        (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
+        modalAccountOpen
+      "
       @close="modalAccountOpen = false"
       @login="handleLogin"
     />

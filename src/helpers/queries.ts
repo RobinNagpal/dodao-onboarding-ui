@@ -106,8 +106,15 @@ export const PROPOSALS_QUERY = gql`
 `;
 
 export const FOLLOWS_QUERY = gql`
-  query Follows($space_in: [String], $follower_in: [String]) {
-    follows(where: { space_in: $space_in, follower_in: $follower_in }) {
+  query Follows(
+    $space_in: [String]
+    $follower_in: [String]
+    $blockchain: String
+  ) {
+    follows(
+      where: { space_in: $space_in, follower_in: $follower_in }
+      blockchain: $blockchain
+    ) {
       id
       follower
       space {

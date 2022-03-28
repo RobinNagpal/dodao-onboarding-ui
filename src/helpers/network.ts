@@ -3,7 +3,8 @@ import networks from '@dodao/onboarding-schemas/config/networks.json';
 export enum Blockchain {
   ETH = 'ETH',
   NEAR = 'NEAR',
-  SOL = 'SOL'
+  SOL = 'SOL',
+  ONE = 'ONE'
 }
 
 export function getBlockchain(): Blockchain {

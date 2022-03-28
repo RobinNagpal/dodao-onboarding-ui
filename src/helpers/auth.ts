@@ -18,7 +18,8 @@ const lockConnectors = {
   fortmatic,
   gnosis,
   trezor: injected,
-  near
+  near,
+  harmonymetamask: injected
 };
 
 Object.entries(connectors).forEach((connector: any) => {

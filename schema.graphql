@@ -65,6 +65,7 @@ type Query {
     where: FollowWhere
     orderBy: String
     orderDirection: OrderDirection
+    blockchain: String
   ): [Follow]
 
   subscriptions(

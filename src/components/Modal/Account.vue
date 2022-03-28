@@ -14,10 +14,8 @@ const props = defineProps(['open']);
 const emit = defineEmits(['login', 'close']);
 
 const { open } = toRefs(props);
-const { web3 } = useWeb3();
+const { web3, isEthBlockchain, isOneBlockchain } = useWeb3();
 const { logoutWrapper } = useWeb3Wrapper();
-
-const isEthBlockchain = web3.value.blockchain === 'ETH';
 
 const step = ref(null);
 
@@ -30,7 +28,7 @@ const connectors = Object.fromEntries(
 );
 
 const showProfileOnEtherscan = () => {
-  if (isEthBlockchain) {
+  if (isEthBlockchain || isOneBlockchain) {
     window.open(
       explorerUrl(web3.value.network.key, web3.value.account),
       '_blank'
@@ -106,10 +104,14 @@ watch(open, () => (step.value = null));
           <span v-if="web3.profile.name" v-text="web3.profile.name" />
           <span v-else-if="web3.profile.ens" v-text="web3.profile.ens" />
           <span v-else v-text="shorten(web3.account)" />
-          <Icon v-if="isEthBlockchain" name="external-link" class="ml-1" />
+          <Icon
+            v-if="isEthBlockchain || isOneBlockchain"
+            name="external-link"
+            class="ml-1"
+          />
         </UiButton>
         <UiButton
-          v-if="isEthBlockchain"
+          v-if="isEthBlockchain || isOneBlockchain"
           @click="step.value = 'connect'"
           class="button-outline w-full"
         >
