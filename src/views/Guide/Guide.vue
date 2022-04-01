@@ -145,7 +145,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="guide-view flex mx-auto">
+  <div class="page-main flex mx-auto">
     <LayoutSingle v-bind="$attrs">
       <template #content>
         <template v-if="loaded">
@@ -194,7 +194,7 @@ onMounted(async () => {
                       :items="threeDotItems"
                     >
                       <div class="pr-3">
-                        <UiLoading v-if="clientLoading" />
+                        <UiLoading v-if="clientLoading" class="w-full" />
                         <Icon v-else name="threedots" size="25" />
                       </div>
                     </UiDropdown>

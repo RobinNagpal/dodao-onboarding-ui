@@ -40,6 +40,15 @@
   //margin-left: 50px;
 }
 
+.page-main {
+  bottom: auto;
+  width: 100%;
+  max-width: 1248px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 24px;
+}
+
 .header-logo {
   width: 190px;
   -webkit-transition: -webkit-transform 300ms ease;
@@ -606,6 +615,10 @@
   }
 
   .header-main-wrapper {
+    margin-top: 24px;
+    padding: 24px 0px;
+  }
+  .page-main-wrapper {
     margin-top: 24px;
     padding: 24px 0px;
   }

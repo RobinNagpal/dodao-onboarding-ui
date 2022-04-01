@@ -1,20 +1,33 @@
-<script setup>
-import { watchEffect } from 'vue';
-import { shorten, explorerUrl, getIpfsUrl } from '@/helpers/utils';
+<script setup lang="ts">
+import Icon from '@/components/Icon.vue';
+import UiAvatar from '@/components/Ui/Avatar.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiPopover from '@/components/Ui/Popover.vue';
 import { useUsername } from '@/composables/useUsername';
+import { useWeb3 } from '@/composables/useWeb3';
+import { explorerUrl, getIpfsUrl, shorten } from '@/helpers/utils';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { PropType, watchEffect } from 'vue';
 
 const props = defineProps({
-  address: String,
+  address: { type: String, required: true },
   space: Object,
   proposal: Object,
-  profile: Object
+  profile: { type: Object as PropType<any> }
 });
+
+const { isEthBlockchain } = useWeb3();
 
 const { address, profile, username } = useUsername();
 
+if (isEthBlockchain && props.profile) {
+  watchEffect(() => {
+    profile.value = props.profile;
+  });
+}
+
 watchEffect(() => {
   address.value = props.address;
-  profile.value = props.profile;
 });
 </script>
 
@@ -45,7 +58,7 @@ watchEffect(() => {
           <h3 v-else-if="profile?.ens" v-text="profile.ens" class="mt-3" />
           <h3 v-else v-text="shorten(address)" class="mt-3" />
         </div>
-        <div class="m-4">
+        <div class="m-4" v-if="isEthBlockchain">
           <a
             :href="
               explorerUrl(proposal?.network || space?.network || '1', address)
