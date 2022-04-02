@@ -54,7 +54,7 @@ const { modalAccountOpen } = useModal();
 const emit = defineEmits(['update:questionResponse']);
 
 const questions = computed(() => {
-  return props.step.questions;
+  return props.step.stepItems;
 });
 
 const stepContents = computed(() =>
@@ -68,7 +68,7 @@ function selectAnswer(questionId: string, selectedAnswers: string[]) {
 const nextButtonClicked = ref<boolean>(false);
 
 function isEveryQuestionAnswered(): boolean {
-  return props.step.questions.every(
+  return props.step.stepItems.every(
     question => props.stepSubmission[question.uuid]?.length > 0
   );
 }

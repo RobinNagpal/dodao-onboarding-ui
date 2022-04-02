@@ -12,6 +12,7 @@ import {
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
+  GuideStepItem,
   InputType,
   QuestionType,
   UserInput
@@ -47,7 +48,7 @@ function updateStepContent(content) {
 }
 
 function updateQuestionDescription(questionId, content) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       return {
         ...question,
@@ -58,11 +59,11 @@ function updateQuestionDescription(questionId, content) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function updateChoiceContent(questionId, choiceKey, content) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const choices = question.choices.map(choice => {
         if (choice.key === choiceKey) {
@@ -80,13 +81,17 @@ function updateChoiceContent(questionId, choiceKey, content) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 const inputsAndQuestions = computed(() => {
   return [
-    ...props.step.questions.map(q => ({ ...q, isQuestion: true })),
-    ...props.step.userInputs.map(i => ({ ...i, isQuestion: false }))
+    ...props.step.stepItems.map((q: GuideStepItem) => ({
+      ...q,
+      isQuestion:
+        q.type === QuestionType.MultipleChoice ||
+        q.type === QuestionType.SingleChoice
+    }))
   ];
 });
 
@@ -96,7 +101,7 @@ function newChoiceKey() {
 
 function addChoice(questionId) {
   const key = newChoiceKey();
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const choices = [...question.choices, { key, content: '' }];
       return {
@@ -108,11 +113,11 @@ function addChoice(questionId) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function removeChoice(questionId, choiceKey) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       return {
         ...question,
@@ -123,11 +128,11 @@ function removeChoice(questionId, choiceKey) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function removeQuestion(questionId) {
-  const filteredQuestions = props.step.questions.filter(
+  const filteredQuestions = props.step.stepItems.filter(
     question => question.uuid !== questionId
   );
 
@@ -138,11 +143,11 @@ function removeQuestion(questionId) {
     })
   );
 
-  emit('update:step', { ...props.step, questions: questionsWithIndex });
+  emit('update:step', { ...props.step, stepItems: questionsWithIndex });
 }
 
 function updateAnswers(questionId, choiceKey, selected) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const answerKeys = selected
         ? [...question.answerKeys, choiceKey]
@@ -155,11 +160,11 @@ function updateAnswers(questionId, choiceKey, selected) {
       return question;
     }
   });
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function setAnswer(questionId, choiceKey) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const answerKeys = isEqual(question.answerKeys, [choiceKey])
         ? []
@@ -172,7 +177,7 @@ function setAnswer(questionId, choiceKey) {
       return question;
     }
   });
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function addQuestion(type: QuestionType) {
@@ -192,23 +197,23 @@ function addQuestion(type: QuestionType) {
       }
     ],
     answerKeys: [],
-    order: props.step.questions.length + props.step.userInputs.length,
+    order: props.step.stepItems.length,
     questionType: type
   };
-  const questions = [...(props.step.questions || []), question];
-  emit('update:step', { ...props.step, questions });
+  const stepItems = [...(props.step.stepItems || []), question];
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function addInput(type: InputType) {
   const input: UserInput = {
     uuid: uuidv4(),
     label: 'Label',
-    order: props.step.questions.length + props.step.userInputs.length,
-    inputType: type,
+    order: props.step.stepItems.length,
+    type: type,
     required: false
   };
-  const inputs = [...(props.step.userInputs || []), input];
-  emit('update:step', { ...props.step, userInputs: inputs });
+  const inputs = [...(props.step.stepItems || []), input];
+  emit('update:step', { ...props.step, stepItems: inputs });
 }
 </script>
 <template>

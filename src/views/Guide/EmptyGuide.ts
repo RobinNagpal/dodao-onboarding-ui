@@ -20,30 +20,27 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
         content: `
 Introduction Comments 
         `,
-        userInputs: [
+        stepItems: [
           {
             label: 'Full Name',
             order: 1,
-            inputType: InputType.PublicShortInput,
+            type: InputType.PublicShortInput,
             uuid: uuidv4()
           }
         ],
-        questions: [],
         order: 0
       },
       {
         uuid: uuidv4(),
         name: 'Introduction Evaluation',
         content: ``,
-        userInputs: [
+        stepItems: [
           {
             label: 'Full Name',
             order: 1,
-            inputType: InputType.PublicShortInput,
+            type: InputType.PublicShortInput,
             uuid: uuidv4()
-          }
-        ],
-        questions: [
+          },
           {
             uuid: uuidv4(),
             content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
@@ -70,7 +67,7 @@ Introduction Comments
               }
             ],
             answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
-            questionType: QuestionType.MultipleChoice,
+            type: QuestionType.MultipleChoice,
             order: 0
           }
         ],

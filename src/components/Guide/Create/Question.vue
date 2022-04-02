@@ -60,7 +60,7 @@ const disableChoiceEdit = false;
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex">
         <Checkbox
-          v-if="question.questionType === QuestionType.MultipleChoice"
+          v-if="question.type === QuestionType.MultipleChoice"
           @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
           :class="{ 'border-2 border-red': questionErrors?.answerKeys }"

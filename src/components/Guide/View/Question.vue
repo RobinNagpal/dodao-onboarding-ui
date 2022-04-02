@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';
-import TextareaAutosize from '@/components/TextareaAutosize.vue';
-import Icon from '@/components/Icon.vue';
-import UiButton from '@/components/Ui/Button.vue';
-import UiInput from '@/components/Ui/Input.vue';
 import UiMarkdown from '@/components/Ui/Markdown.vue';
 import {
   GuideQuestion,
