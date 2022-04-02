@@ -235,18 +235,6 @@ enum OrderDirection {
   desc
 }
 
-enum QuestionType {
-  SingleChoice
-  MultipleChoice
-}
-
-enum InputType {
-  PublicShortInput
-  PrivateShortInput
-}
-
-# Types
-
 type Space {
   id: String!
   about: String
@@ -300,14 +288,14 @@ type GuideQuestion {
   choices: [QuestionChoice!]!
   content: String!
   order: Int!
-  type: QuestionType!
+  type: String!
   uuid: String!
 }
 
 type GuideUserInput {
   label: String!
   order: Int!
-  type: InputType!
+  type: String!
   uuid: String!
 }
 
