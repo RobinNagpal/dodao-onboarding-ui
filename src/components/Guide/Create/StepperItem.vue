@@ -18,6 +18,7 @@ import {
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, PropType, ref } from 'vue';
+import isEqual from 'lodash/isEqual';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },
@@ -154,6 +155,23 @@ function updateAnswers(questionId, choiceKey, selected) {
   emit('update:step', { ...props.step, questions });
 }
 
+function setAnswer(questionId, choiceKey) {
+  const questions = props.step.questions.map(question => {
+    if (question.uuid === questionId) {
+      const answerKeys = isEqual(question.answerKeys, [choiceKey])
+        ? []
+        : [choiceKey];
+      return {
+        ...question,
+        answerKeys
+      };
+    } else {
+      return question;
+    }
+  });
+  emit('update:step', { ...props.step, questions });
+}
+
 function addQuestion(type: QuestionType) {
   const question = {
     uuid: uuidv4(),
@@ -244,6 +262,7 @@ function addInput(type: InputType) {
         :question="question"
         :removeChoice="removeChoice"
         :removeQuestion="removeQuestion"
+        :setAnswer="setAnswer"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"

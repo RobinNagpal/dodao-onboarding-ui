@@ -1,0 +1,89 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+
+const props = defineProps({
+  modelValue: Boolean,
+  class: String
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const input = ref<boolean | undefined>(props.modelValue || undefined);
+
+watch(input, () => emit('update:modelValue', input.value));
+
+function radioSelected() {
+  input.value = !input.value;
+}
+</script>
+
+<template>
+  <div class="p-2 radio-container mt-2">
+    <input type="checkbox" v-model="input" :checked="props.modelValue" />
+    <span class="checkmark" @click="radioSelected" :class="props.class"></span>
+  </div>
+</template>
+<style scoped lang="scss">
+.radio-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    &:checked {
+      ~ {
+        .checkmark {
+          background-color: #2196f3;
+          &:after {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    input {
+      ~ {
+        .checkmark {
+          background-color: #ccc;
+        }
+      }
+    }
+  }
+  .checkmark {
+    &:after {
+      top: 9px;
+      left: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+  }
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+  &:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
+}
+</style>

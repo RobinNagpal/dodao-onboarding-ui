@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import Checkbox from '@/components/Checkbox.vue';
+import Radio from '@/components/Radio.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuideQuestion,
+  QuestionType
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
 defineProps({
@@ -17,6 +21,7 @@ defineProps({
   questionErrors: Object,
   removeChoice: Function,
   removeQuestion: Function,
+  setAnswer: Function,
   updateChoiceContent: Function,
   updateQuestionDescription: Function,
   updateAnswers: Function
@@ -55,7 +60,14 @@ const disableChoiceEdit = false;
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex">
         <Checkbox
+          v-if="question.questionType === QuestionType.MultipleChoice"
           @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
+          :modelValue="question.answerKeys.includes(choice.key)"
+          :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
+        />
+        <Radio
+          v-else
+          @update:modelValue="setAnswer(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
           :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
         />

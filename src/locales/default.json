@@ -230,8 +230,8 @@
     "complete": "Complete",
     "submissions": "Submissions",
     "addInputOrQuestion": "Add Input or Question",
-    "multipleChoiceQuestion": "Multiple Choice Question",
-    "singleChoiceQuestion": "Single Choice Question",
+    "multipleChoiceQuestion": "Multiple Choice",
+    "singleChoiceQuestion": "Single Choice",
     "publicInput": "Public Input",
     "privateInput": "Private Input"
   },
