@@ -6,6 +6,7 @@ import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import { QuestionError } from '@/types/error';
 import {
   GuideQuestion,
   QuestionType
@@ -18,7 +19,7 @@ defineProps({
     type: Object as PropType<GuideQuestion>,
     required: true
   },
-  questionErrors: Object,
+  questionErrors: { type: Object as PropType<QuestionError> },
   removeChoice: Function,
   removeQuestion: Function,
   setAnswer: Function,

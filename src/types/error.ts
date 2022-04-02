@@ -8,10 +8,14 @@ export interface QuestionError {
   answerKeys?: boolean;
 }
 
+export interface UserInputError {
+  label?: boolean;
+}
+
 export interface StepError {
   name?: boolean;
   content?: boolean;
-  questions?: Record<string, QuestionError>;
+  stepItems?: Record<string, QuestionError | UserInputError>;
 }
 
 export interface GuideError {

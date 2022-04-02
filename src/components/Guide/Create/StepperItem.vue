@@ -7,6 +7,7 @@ import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import { StepError } from '@/types/error';
 import {
   GuideInput,
   GuideStepInput
@@ -28,7 +29,7 @@ const props = defineProps({
     type: Object as PropType<GuideStepInput>,
     required: true
   },
-  stepErrors: Object,
+  stepErrors: { type: Object as PropType<StepError> },
   moveStepUp: Function,
   moveStepDown: Function
 });
@@ -145,6 +146,21 @@ function removeStepItem(itemUuid) {
   );
 
   emit('update:step', { ...props.step, stepItems: itemsWithIndex });
+}
+
+function updateUserInputLabel(itemUuid: string, label: string) {
+  const stepItems = props.step.stepItems.map(userInput => {
+    if (userInput.uuid === itemUuid) {
+      return {
+        ...userInput,
+        label
+      };
+    } else {
+      return userInput;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function updateUserInputPrivate(itemUuid: string, isPrivate: boolean) {
@@ -312,14 +328,16 @@ function addInput(type: InputType) {
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
-        :questionErrors="stepErrors?.questions?.[inputOrQuestion.order]"
+        :questionErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
       />
       <GuideCreateUserInput
         v-else
         :removeUserInput="removeStepItem"
+        :userInput="inputOrQuestion"
+        :userInputErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :updateUserInputLabel="updateUserInputLabel"
         :updateUserInputPrivate="updateUserInputPrivate"
         :updateUserInputRequired="updateUserInputRequired"
-        :userInput="inputOrQuestion"
       />
     </template>
   </div>

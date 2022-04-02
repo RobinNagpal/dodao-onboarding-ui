@@ -2,6 +2,7 @@
 import Icon from '@/components/Icon.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import { QuestionError, UserInputError } from '@/types/error';
 import {
   InputType,
   UserInput
@@ -10,11 +11,13 @@ import { PropType } from 'vue';
 import Checkbox from '@/components/Checkbox.vue';
 
 defineProps({
+  removeUserInput: { type: Function, required: true },
   userInput: {
     type: Object as PropType<UserInput>,
     required: true
   },
-  removeUserInput: { type: Function, required: true },
+  userInputErrors: { type: Object as PropType<UserInputError> },
+  updateUserInputLabel: { type: Function, required: true },
   updateUserInputPrivate: { type: Function, required: true },
   updateUserInputRequired: { type: Function, required: true }
 });
@@ -35,7 +38,11 @@ defineProps({
           maxlength="64"
           :modelValue="userInput.label"
           class="border-r-2"
+          :class="{
+            '!border-red border rounded-lg': userInputErrors?.label
+          }"
           :hideBorder="true"
+          @update:modelValue="updateUserInputLabel(userInput.uuid, $event)"
         />
       </template>
     </UiInput>
