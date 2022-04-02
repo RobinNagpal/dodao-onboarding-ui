@@ -20,7 +20,14 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
         content: `
 Introduction Comments 
         `,
-        userInputs: [],
+        userInputs: [
+          {
+            label: 'Full Name',
+            order: 1,
+            inputType: InputType.PublicShortInput,
+            uuid: uuidv4()
+          }
+        ],
         questions: [],
         order: 0
       },

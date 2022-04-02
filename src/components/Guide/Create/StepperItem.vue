@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import UiButtonInput from '@/components/Ui/ButtonInput.vue';
-import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
-import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import Icon from '@/components/Icon.vue';
+import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import {
   GuideInput,
@@ -16,9 +16,9 @@ import {
   QuestionType,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
+import isEqual from 'lodash/isEqual';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, PropType, ref } from 'vue';
-import isEqual from 'lodash/isEqual';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },
@@ -83,8 +83,11 @@ function updateChoiceContent(questionId, choiceKey, content) {
   emit('update:step', { ...props.step, questions });
 }
 
-const questions = computed(() => {
-  return props.step.questions;
+const inputsAndQuestions = computed(() => {
+  return [
+    ...props.step.questions.map(q => ({ ...q, isQuestion: true })),
+    ...props.step.userInputs.map(i => ({ ...i, isQuestion: false }))
+  ];
 });
 
 function newChoiceKey() {
@@ -201,7 +204,8 @@ function addInput(type: InputType) {
     uuid: uuidv4(),
     label: 'Label',
     order: props.step.questions.length + props.step.userInputs.length,
-    inputType: type
+    inputType: type,
+    required: false
   };
   const inputs = [...(props.step.userInputs || []), input];
   emit('update:step', { ...props.step, userInputs: inputs });
@@ -256,18 +260,23 @@ function addInput(type: InputType) {
         @update:modelValue="updateStepContent"
       />
     </UiButton>
-    <template v-for="question in questions" :key="question.uuid">
+    <template
+      v-for="inputOrQuestion in inputsAndQuestions"
+      :key="inputOrQuestion.uuid"
+    >
       <GuideCreateQuestion
+        v-if="inputOrQuestion.isQuestion"
         :addChoice="addChoice"
-        :question="question"
+        :question="inputOrQuestion"
         :removeChoice="removeChoice"
         :removeQuestion="removeQuestion"
         :setAnswer="setAnswer"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
-        :questionErrors="stepErrors?.questions?.[question.order]"
-      ></GuideCreateQuestion>
+        :questionErrors="stepErrors?.questions?.[inputOrQuestion.order]"
+      />
+      <GuideCreateUserInput v-else :userInput="inputOrQuestion" />
     </template>
   </div>
   <teleport to="#modal">
