@@ -138,6 +138,10 @@
     "format": "Invalid format",
     "type": "Invalid type"
   },
+  "form": {
+    "required": "Required",
+    "private": "Private (Information not saved in ipfs or sent in Discord)"
+  },
   "create": {
     "question": "Ask a question...",
     "categorie(s)": "Select up to 2 categorie(s)",

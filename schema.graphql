@@ -300,16 +300,18 @@ type GuideQuestion {
   choices: [QuestionChoice!]!
   content: String!
   order: Int!
-  questionType: QuestionType!
+  type: QuestionType!
   uuid: String!
 }
 
 type GuideUserInput {
   label: String!
   order: Int!
-  inputType: InputType!
+  type: InputType!
   uuid: String!
 }
+
+union GuideStepItem = GuideQuestion | GuideUserInput
 
 type GuideStep {
   content: String!
@@ -317,8 +319,7 @@ type GuideStep {
   id: String!
   name: String!
   order: Int!
-  questions: [GuideQuestion!]!
-  userInputs: [GuideUserInput!]!
+  stepItems: [GuideStepItem!]!
   uuid: String!
 }
 
