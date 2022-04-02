@@ -6,6 +6,7 @@ import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
 import {
   GuideInput,
   GuideStepInput
@@ -131,19 +132,19 @@ function removeChoice(questionId, choiceKey) {
   emit('update:step', { ...props.step, stepItems });
 }
 
-function removeQuestion(questionId) {
+function removeStepItem(itemUuid) {
   const filteredQuestions = props.step.stepItems.filter(
-    question => question.uuid !== questionId
+    stepItem => stepItem.uuid !== itemUuid
   );
 
-  const questionsWithIndex: GuideQuestion[] = filteredQuestions.map(
+  const itemsWithIndex: GuideQuestion[] = filteredQuestions.map(
     (question, index) => ({
       ...question,
       order: index
     })
   );
 
-  emit('update:step', { ...props.step, stepItems: questionsWithIndex });
+  emit('update:step', { ...props.step, stepItems: itemsWithIndex });
 }
 
 function updateAnswers(questionId, choiceKey, selected) {
@@ -198,7 +199,7 @@ function addQuestion(type: QuestionType) {
     ],
     answerKeys: [],
     order: props.step.stepItems.length,
-    questionType: type
+    type: type
   };
   const stepItems = [...(props.step.stepItems || []), question];
   emit('update:step', { ...props.step, stepItems });
@@ -274,14 +275,18 @@ function addInput(type: InputType) {
         :addChoice="addChoice"
         :question="inputOrQuestion"
         :removeChoice="removeChoice"
-        :removeQuestion="removeQuestion"
+        :removeQuestion="removeStepItem"
         :setAnswer="setAnswer"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
         :questionErrors="stepErrors?.questions?.[inputOrQuestion.order]"
       />
-      <GuideCreateUserInput v-else :userInput="inputOrQuestion" />
+      <GuideCreateUserInput
+        v-else
+        :removeUserInput="removeStepItem"
+        :userInput="inputOrQuestion"
+      />
     </template>
   </div>
   <teleport to="#modal">

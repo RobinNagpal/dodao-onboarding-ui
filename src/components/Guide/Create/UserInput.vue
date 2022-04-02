@@ -11,7 +11,7 @@ defineProps({
     type: Object as PropType<UserInput>,
     required: true
   },
-  removeInput: Function
+  removeUserInput: Function
 });
 
 const updateRequired = (uuid: string, value: string) => {
@@ -23,7 +23,7 @@ const updateRequired = (uuid: string, value: string) => {
   <UiSidebarButton
     class="float-right my-2 mr-4"
     :aria-label="$t('toggleSkin')"
-    @click="removeInput()"
+    @click="removeUserInput(userInput.uuid)"
   >
     <Icon size="20" class="link-color" name="close" />
   </UiSidebarButton>
