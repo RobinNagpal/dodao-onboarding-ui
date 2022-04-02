@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
+import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
 import Icon from '@/components/Icon.vue';
 import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
 import {
   GuideInput,
   GuideStepInput
@@ -147,6 +147,38 @@ function removeStepItem(itemUuid) {
   emit('update:step', { ...props.step, stepItems: itemsWithIndex });
 }
 
+function updateUserInputPrivate(itemUuid: string, isPrivate: boolean) {
+  const stepItems = props.step.stepItems.map(stepItem => {
+    if (stepItem.uuid === itemUuid) {
+      return {
+        ...stepItem,
+        type: isPrivate
+          ? InputType.PrivateShortInput
+          : InputType.PublicShortInput
+      };
+    } else {
+      return stepItem;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
+}
+
+function updateUserInputRequired(itemUuid: string, isRequired: boolean) {
+  const stepItems = props.step.stepItems.map(stepItem => {
+    if (stepItem.uuid === itemUuid) {
+      return {
+        ...stepItem,
+        required: isRequired
+      };
+    } else {
+      return stepItem;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
+}
+
 function updateAnswers(questionId, choiceKey, selected) {
   const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
@@ -285,6 +317,8 @@ function addInput(type: InputType) {
       <GuideCreateUserInput
         v-else
         :removeUserInput="removeStepItem"
+        :updateUserInputPrivate="updateUserInputPrivate"
+        :updateUserInputRequired="updateUserInputRequired"
         :userInput="inputOrQuestion"
       />
     </template>

@@ -2,7 +2,10 @@
 import Icon from '@/components/Icon.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { UserInput } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  InputType,
+  UserInput
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 import Checkbox from '@/components/Checkbox.vue';
 
@@ -11,12 +14,10 @@ defineProps({
     type: Object as PropType<UserInput>,
     required: true
   },
-  removeUserInput: Function
+  removeUserInput: { type: Function, required: true },
+  updateUserInputPrivate: { type: Function, required: true },
+  updateUserInputRequired: { type: Function, required: true }
 });
-
-const updateRequired = (uuid: string, value: string) => {
-  console.log(uuid, value);
-};
 </script>
 
 <template>
@@ -40,7 +41,7 @@ const updateRequired = (uuid: string, value: string) => {
     </UiInput>
     <div class="flex mt-2">
       <Checkbox
-        @update:modelValue="updateRequired(userInput.uuid, $event)"
+        @update:modelValue="updateUserInputRequired(userInput.uuid, $event)"
         :modelValue="userInput.required"
       />
       <div class="mt-2">
@@ -49,8 +50,8 @@ const updateRequired = (uuid: string, value: string) => {
     </div>
     <div class="flex mt-2">
       <Checkbox
-        @update:modelValue="updateRequired(userInput.uuid, $event)"
-        :modelValue="userInput.required"
+        @update:modelValue="updateUserInputPrivate(userInput.uuid, $event)"
+        :modelValue="userInput.type === InputType.PrivateShortInput"
       />
       <div class="mt-2">
         {{ $t('form.private') }}
