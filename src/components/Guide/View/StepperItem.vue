@@ -10,6 +10,7 @@ import {
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
+import isEqual from 'lodash/isEqual';
 
 const renderer = new marked.Renderer();
 

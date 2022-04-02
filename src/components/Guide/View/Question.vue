@@ -1,6 +1,17 @@
 <script setup lang="ts">
-import { GuideQuestion } from '@dodao/onboarding-schemas/models/GuideModel';
-import { computed, onBeforeUpdate, PropType } from 'vue';
+import Checkbox from '@/components/Checkbox.vue';
+import Radio from '@/components/Radio.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import Icon from '@/components/Icon.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiInput from '@/components/Ui/Input.vue';
+import UiMarkdown from '@/components/Ui/Markdown.vue';
+import {
+  GuideQuestion,
+  QuestionType
+} from '@dodao/onboarding-schemas/models/GuideModel';
+import { computed, PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 
 const props = defineProps({
   question: {
@@ -19,12 +30,18 @@ const currentlySelectedChoices = computed<string[]>(
   () => props.questionResponse || []
 );
 
-function selectChoice(choiceKey: string, selected: boolean) {
-  console.log('selectChoice', currentlySelectedChoices, choiceKey, selected);
-
+function selectMultipleChoice(choiceKey: string, selected: boolean) {
   const selectedAnswers = selected
     ? [...currentlySelectedChoices.value, choiceKey]
     : currentlySelectedChoices.value.filter(choice => choice !== choiceKey);
+
+  emit('update:questionResponse', props.question.uuid, selectedAnswers);
+}
+
+function selectSingleChoice(choiceKey: string) {
+  const selectedAnswers = isEqual(currentlySelectedChoices.value, [choiceKey])
+    ? []
+    : [choiceKey];
 
   emit('update:questionResponse', props.question.uuid, selectedAnswers);
 }
@@ -36,7 +53,13 @@ function selectChoice(choiceKey: string, selected: boolean) {
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex leading-loose items-baseline">
         <Checkbox
-          @update:modelValue="selectChoice(choice.key, $event)"
+          v-if="question.questionType === QuestionType.MultipleChoice"
+          @update:modelValue="selectMultipleChoice(choice.key, $event)"
+          :modelValue="currentlySelectedChoices.includes(choice.key)"
+        />
+        <Radio
+          v-else
+          @update:modelValue="selectSingleChoice(choice.key)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
         <div>{{ choice.content }}</div>
