@@ -27,34 +27,34 @@ const addInput = (inputType: InputType) => {
 <template>
   <UiModal :open="open" @close="$emit('close')">
     <template v-slot:header>
-      <h3>{{ $t('topNav.browseByBlockchain') }}</h3>
+      <h3>{{ $t('guide.addInputOrQuestion') }}</h3>
     </template>
 
     <div>
       <div class="m-4 space-y-2">
         <UiButton
           class="button-outline w-full flex justify-center items-center"
-          @click="addQuestion(QuestionType.MultipleChoice)"
-        >
-          Multiple Choice
-        </UiButton>
-        <UiButton
-          class="button-outline w-full flex justify-center items-center"
-          @click="addQuestion(QuestionType.SingleChoice)"
-        >
-          Single Choice
-        </UiButton>
-        <UiButton
-          class="button-outline w-full flex justify-center items-center"
           @click="addInput(InputType.PublicShortInput)"
         >
-          Public Input
+          {{ $t('guide.publicInput') }}
         </UiButton>
         <UiButton
           class="button-outline w-full flex justify-center items-center"
           @click="addInput(InputType.PrivateShortInput)"
         >
-          Private Input
+          {{ $t('guide.privateInput') }}
+        </UiButton>
+        <UiButton
+          class="button-outline w-full flex justify-center items-center"
+          @click="addQuestion(QuestionType.MultipleChoice)"
+        >
+          {{ $t('guide.multipleChoiceQuestion') }}
+        </UiButton>
+        <UiButton
+          class="button-outline w-full flex justify-center items-center"
+          @click="addQuestion(QuestionType.SingleChoice)"
+        >
+          {{ $t('guide.singleChoiceQuestion') }}
         </UiButton>
       </div>
     </div>

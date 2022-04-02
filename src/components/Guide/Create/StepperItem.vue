@@ -212,7 +212,7 @@ function addInput(type: InputType) {
       <UiSidebarButton
         class="float-right ml-2"
         :aria-label="$t('toggleSkin')"
-        @click="addQuestion"
+        @click="modalGuideInputOrQuestionOpen = true"
       >
         <svg height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor">
           <path d="M0 0h24v24H0V0z" fill="none" />

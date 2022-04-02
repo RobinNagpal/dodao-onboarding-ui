@@ -228,7 +228,12 @@
     "next": "Next",
     "previous": "Previous",
     "complete": "Complete",
-    "submissions": "Submissions"
+    "submissions": "Submissions",
+    "addInputOrQuestion": "Add Input or Question",
+    "multipleChoiceQuestion": "Multiple Choice Question",
+    "singleChoiceQuestion": "Single Choice Question",
+    "publicInput": "Public Input",
+    "privateInput": "Private Input"
   },
   "guides": {
     "header": "Onboarding Guides",
