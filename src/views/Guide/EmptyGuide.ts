@@ -1,5 +1,8 @@
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  InputType,
+  QuestionType
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +20,7 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
         content: `
 Introduction Comments 
         `,
+        userInputs: [],
         questions: [],
         order: 0
       },
@@ -24,6 +28,14 @@ Introduction Comments
         uuid: uuidv4(),
         name: 'Introduction Evaluation',
         content: ``,
+        userInputs: [
+          {
+            label: 'Full Name',
+            order: 1,
+            inputType: InputType.PublicShortInput,
+            uuid: uuidv4()
+          }
+        ],
         questions: [
           {
             uuid: uuidv4(),

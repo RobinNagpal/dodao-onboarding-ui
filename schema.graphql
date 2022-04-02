@@ -240,6 +240,11 @@ enum QuestionType {
   MultipleChoice
 }
 
+enum InputType {
+  PublicShortInput
+  PrivateShortInput
+}
+
 # Types
 
 type Space {
@@ -299,6 +304,13 @@ type GuideQuestion {
   uuid: String!
 }
 
+type GuideUserInput {
+  label: String!
+  order: Int!
+  inputType: InputType!
+  uuid: String!
+}
+
 type GuideStep {
   content: String!
   created: Int!
@@ -306,6 +318,7 @@ type GuideStep {
   name: String!
   order: Int!
   questions: [GuideQuestion!]!
+  userInputs: [GuideUserInput!]!
   uuid: String!
 }
 

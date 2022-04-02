@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UiButtonInput from '@/components/Ui/ButtonInput.vue';
+import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import Icon from '@/components/Icon.vue';
@@ -11,10 +12,12 @@ import {
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
-  QuestionType
+  InputType,
+  QuestionType,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, PropType } from 'vue';
+import { computed, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },
@@ -28,6 +31,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:step']);
+const modalGuideInputOrQuestionOpen = ref(false);
 
 function inputError(field: string) {
   return props.stepErrors?.[field];
@@ -150,7 +154,7 @@ function updateAnswers(questionId, choiceKey, selected) {
   emit('update:step', { ...props.step, questions });
 }
 
-function addQuestion() {
+function addQuestion(type: QuestionType) {
   const question = {
     uuid: uuidv4(),
     content: '',
@@ -167,11 +171,22 @@ function addQuestion() {
       }
     ],
     answerKeys: [],
-    order: props.step.questions.length,
-    questionType: QuestionType.MultipleChoice
+    order: props.step.questions.length + props.step.userInputs.length,
+    questionType: type
   };
   const questions = [...(props.step.questions || []), question];
   emit('update:step', { ...props.step, questions });
+}
+
+function addInput(type: InputType) {
+  const input: UserInput = {
+    uuid: uuidv4(),
+    label: 'Label',
+    order: props.step.questions.length + props.step.userInputs.length,
+    inputType: type
+  };
+  const inputs = [...(props.step.userInputs || []), input];
+  emit('update:step', { ...props.step, userInputs: inputs });
 }
 </script>
 <template>
@@ -236,5 +251,15 @@ function addQuestion() {
       ></GuideCreateQuestion>
     </template>
   </div>
+  <teleport to="#modal">
+    <ModalGuideInputOrQuestion
+      :open="modalGuideInputOrQuestionOpen"
+      :categories="guide.categories"
+      @close="modalGuideInputOrQuestionOpen = false"
+      @addQuestion="addQuestion"
+      @addInput="addInput"
+    />
+  </teleport>
 </template>
+
 <style scoped lang="scss"></style>

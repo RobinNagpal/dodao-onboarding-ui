@@ -114,6 +114,7 @@ export function useEditGuide(
         uuid: uuidv4(),
         name: `Step ${guideRef.value.steps.length + 1}`,
         content: '',
+        userInputs: [],
         order: guideRef.value.steps.length,
         questions: []
       }

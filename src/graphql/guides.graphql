@@ -38,6 +38,12 @@ query GuideQuery($uuid: String!) {
     steps {
       content
       created
+      userInputs {
+        inputType
+        label
+        order
+        uuid
+      }
       id
       name
       order
