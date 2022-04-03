@@ -8,7 +8,10 @@ import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
   GuideStep,
-  InputType
+  InputType,
+  isQuestion,
+  isUserInput,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
@@ -77,9 +80,18 @@ function setUserInput(userInputUuid: string, userInput: string) {
 const nextButtonClicked = ref<boolean>(false);
 
 function isEveryQuestionAnswered(): boolean {
-  return props.step.stepItems.every(
-    question => props.stepSubmission[question.uuid]?.length > 0
-  );
+  const allQuestionsAnswered = props.step.stepItems
+    .filter(isQuestion)
+    .every(question => props.stepSubmission[question.uuid]?.length > 0);
+
+  const allRequiredFiledsAnswered = props.step.stepItems
+    .filter(isUserInput)
+    .filter(input => (input as UserInput).required)
+    .every(
+      userInput => !!(props.stepSubmission[userInput.uuid] as string)?.trim()
+    );
+
+  return allQuestionsAnswered && allRequiredFiledsAnswered;
 }
 
 const showQuestionsCompletionWarning = computed<boolean>(() => {

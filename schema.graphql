@@ -296,6 +296,7 @@ type GuideUserInput {
   label: String!
   order: Int!
   type: String!
+  required: Boolean!
   uuid: String!
 }
 
