@@ -11,8 +11,8 @@ import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput'
 import {
   GuideQuestion,
   GuideStep,
-  InputType,
-  QuestionType,
+  isQuestion,
+  isUserInput,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
@@ -114,36 +114,30 @@ export function useClient() {
           content: step.content,
           order: step.order,
           stepItems: (step.stepItems || [])
-            .map(item1 => {
-              if (
-                item1.type === QuestionType.MultipleChoice ||
-                item1.type === QuestionType.SingleChoice
-              ) {
-                const item = item1 as GuideQuestion;
+            .map(item => {
+              if (isQuestion(item)) {
+                const question = item as GuideQuestion;
 
                 return {
-                  uuid: item.uuid,
-                  content: item.content,
-                  choices: (item.choices || []).map(choice => ({
+                  uuid: question.uuid,
+                  content: question.content,
+                  choices: (question.choices || []).map(choice => ({
                     key: choice.key,
                     content: choice.content,
                     order: choice.order
                   })),
-                  answerKeys: item.answerKeys,
-                  type: item.questionType,
-                  order: item.order
+                  answerKeys: question.answerKeys,
+                  type: question.type,
+                  order: question.order
                 };
-              } else if (
-                item1.type === InputType.PublicShortInput ||
-                item1.type === InputType.PrivateShortInput
-              ) {
-                const item = item1 as UserInput;
+              } else if (isUserInput(item)) {
+                const userInput = item as UserInput;
                 return {
-                  uuid: item.uuid,
-                  label: item.label,
-                  required: item.required,
-                  type: item.type,
-                  order: item.order
+                  uuid: userInput.uuid,
+                  label: userInput.label,
+                  required: userInput.required,
+                  type: userInput.type,
+                  order: userInput.order
                 };
               }
             })

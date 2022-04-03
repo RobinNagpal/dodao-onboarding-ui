@@ -49,7 +49,7 @@ function selectSingleChoice(choiceKey: string) {
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex leading-loose items-baseline">
         <Radio
-          v-if="question.questionType === QuestionType.SingleChoice"
+          v-if="question.type === QuestionType.SingleChoice"
           @update:modelValue="selectSingleChoice(choice.key)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
