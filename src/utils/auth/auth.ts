@@ -90,7 +90,7 @@ export const useLock = ({ ...options }) => {
     } else if (getBlockchain() === Blockchain.SOL && connector) {
       return isSolanaConnector(connector as AuthConnector) ? connector : false;
     } else if (getBlockchain() === Blockchain.NEAR) {
-      return AuthConnector.near;
+      return connector ? AuthConnector.near : false;
     }
     return connector;
   }

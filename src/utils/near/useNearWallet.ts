@@ -42,7 +42,6 @@ export default function useNearWallet() {
   }
 
   return {
-    initContract,
     keyStore,
     nearLogin,
     nearLogout,
