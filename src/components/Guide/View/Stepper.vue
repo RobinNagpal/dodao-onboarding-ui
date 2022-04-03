@@ -25,6 +25,10 @@ const props = defineProps({
     type: Function,
     required: true
   },
+  setUserInput: {
+    type: Function,
+    required: true
+  },
   submitGuide: {
     type: Function,
     required: true
@@ -61,6 +65,7 @@ const activeStep = computed<GuideStep>(
       :stepSubmission="guideResponse[activeStep.uuid] ?? {}"
       :submitGuide="submitGuide"
       @update:questionResponse="selectAnswer"
+      @update:userInputResponse="setUserInput"
     />
   </div>
 </template>
