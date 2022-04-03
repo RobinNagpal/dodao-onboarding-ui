@@ -12,7 +12,10 @@ const props = defineProps({
 const error = ref(false);
 
 const avatarUrl = props.imgsrc?.includes('cloudflare-ipfs.com')
-  ? props.imgsrc.replace('cloudflare-ipfs.com', 'd31h13bdjwgzxs.cloudfront.net')
+  ? props.imgsrc.replace(
+      'cloudflare-ipfs.com/ipfs',
+      'd31h13bdjwgzxs.cloudfront.net'
+    )
   : props.imgsrc;
 </script>
 

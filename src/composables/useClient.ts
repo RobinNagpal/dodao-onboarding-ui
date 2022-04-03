@@ -8,7 +8,13 @@ import { AuthConnector } from '@/utils/auth/authConnector';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
-import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuideQuestion,
+  GuideStep,
+  isQuestion,
+  isUserInput,
+  UserInput
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -107,18 +113,35 @@ export function useClient() {
           name: step.name,
           content: step.content,
           order: step.order,
-          questions: (step.questions || []).map(question => ({
-            uuid: question.uuid,
-            content: question.content,
-            choices: (question.choices || []).map(choice => ({
-              key: choice.key,
-              content: choice.content,
-              order: choice.order
-            })),
-            answerKeys: question.answerKeys,
-            questionType: question.questionType,
-            order: question.order
-          }))
+          stepItems: (step.stepItems || [])
+            .map(item => {
+              if (isQuestion(item)) {
+                const question = item as GuideQuestion;
+
+                return {
+                  uuid: question.uuid,
+                  content: question.content,
+                  choices: (question.choices || []).map(choice => ({
+                    key: choice.key,
+                    content: choice.content,
+                    order: choice.order
+                  })),
+                  answerKeys: question.answerKeys,
+                  type: question.type,
+                  order: question.order
+                };
+              } else if (isUserInput(item)) {
+                const userInput = item as UserInput;
+                return {
+                  uuid: userInput.uuid,
+                  label: userInput.label,
+                  required: userInput.required,
+                  type: userInput.type,
+                  order: userInput.order
+                };
+              }
+            })
+            .filter(Boolean)
         })),
         thumbnail: payload.thumbnail || ''
       };

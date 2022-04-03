@@ -7,7 +7,8 @@ import {
   ChoiceError,
   GuideError,
   QuestionError,
-  StepError
+  StepError,
+  UserInputError
 } from '@/types/error';
 import { emptyGuide } from '@/views/Guide/EmptyGuide';
 import {
@@ -16,7 +17,10 @@ import {
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
-  QuestionChoice
+  InputType,
+  QuestionChoice,
+  QuestionType,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
@@ -26,6 +30,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 const questionContentLimit = 1024;
+const inputLabelLimit = 32;
 const stepContentLimit = 14400;
 const guideExceptContentLimit = 64;
 const choiceContentLimit = 256;
@@ -114,8 +119,8 @@ export function useEditGuide(
         uuid: uuidv4(),
         name: `Step ${guideRef.value.steps.length + 1}`,
         content: '',
-        order: guideRef.value.steps.length,
-        questions: []
+        stepItems: [],
+        order: guideRef.value.steps.length
       }
     ];
   }
@@ -138,37 +143,17 @@ export function useEditGuide(
       if (step.content?.length > stepContentLimit) {
         stepError.content = true;
       }
-      step.questions.forEach((question: GuideQuestion) => {
-        const questionError: QuestionError = {};
+      step.stepItems.forEach((item: GuideQuestion | UserInput) => {
         if (
-          !question.content ||
-          question.content.length > questionContentLimit
+          item.type === QuestionType.MultipleChoice ||
+          item.type === QuestionType.SingleChoice
         ) {
-          questionError.content = true;
-        }
-        question.choices.forEach((choice: QuestionChoice) => {
-          const choiceError: ChoiceError = {};
-          if (!choice.content || choice.content.length > choiceContentLimit) {
-            choiceError.content = true;
-          }
-          if (Object.keys(choiceError).length > 0) {
-            if (!questionError.choices) {
-              questionError.choices = {};
-            }
-            questionError.choices[choice.order] = choiceError;
-          }
-        });
-
-        if (question.answerKeys.length === 0) {
-          questionError.answerKeys = true;
-        }
-        if (Object.keys(questionError).length > 0) {
-          if (!stepError.questions) {
-            stepError.questions = {};
-          }
-          stepError.questions[question.order] = questionError;
-        } else {
-          delete stepError.questions;
+          validateQuestion(item as GuideQuestion, stepError);
+        } else if (
+          item.type === InputType.PublicShortInput ||
+          item.type === InputType.PrivateShortInput
+        ) {
+          validateUserInput(item as UserInput, stepError);
         }
       });
       if (Object.keys(stepError).length > 0) {
@@ -179,6 +164,55 @@ export function useEditGuide(
       }
     });
     return Object.values(guideErrors.value).filter(v => !!v).length === 0;
+  }
+
+  function validateQuestion(question: GuideQuestion, stepError: StepError) {
+    const questionError: QuestionError = {};
+    if (!question.content || question.content.length > questionContentLimit) {
+      questionError.content = true;
+    }
+    question.choices.forEach((choice: QuestionChoice) => {
+      const choiceError: ChoiceError = {};
+      if (!choice.content || choice.content.length > choiceContentLimit) {
+        choiceError.content = true;
+      }
+      if (Object.keys(choiceError).length > 0) {
+        if (!questionError.choices) {
+          questionError.choices = {};
+        }
+        questionError.choices[choice.order] = choiceError;
+      }
+    });
+
+    if (question.answerKeys.length === 0) {
+      questionError.answerKeys = true;
+    }
+    if (Object.keys(questionError).length > 0) {
+      if (!stepError.stepItems) {
+        stepError.stepItems = {};
+      }
+      stepError.stepItems[question.order] = questionError;
+    } else {
+      delete stepError.stepItems;
+    }
+  }
+
+  function validateUserInput(userInput: UserInput, stepError: StepError) {
+    console.log('userInput', userInput);
+    const userInputError: UserInputError = {};
+    if (!userInput.label?.trim() || userInput.label.length > inputLabelLimit) {
+      userInputError.label = true;
+    }
+
+    if (Object.keys(userInputError).length > 0) {
+      if (!stepError.stepItems) {
+        stepError.stepItems = {};
+      }
+      stepError.stepItems[userInput.order] = userInputError;
+    } else {
+      delete stepError.stepItems;
+    }
+    console.log('stepError', stepError);
   }
 
   async function handleSubmit() {

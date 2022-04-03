@@ -1,20 +1,27 @@
 <script setup lang="ts">
-import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
-import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
 import Icon from '@/components/Icon.vue';
+import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
+import { StepError } from '@/types/error';
 import {
   GuideInput,
   GuideStepInput
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
-  QuestionType
+  GuideStepItem,
+  InputType,
+  QuestionType,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
+import isEqual from 'lodash/isEqual';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, PropType } from 'vue';
+import { computed, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: { type: Object as PropType<GuideInput>, required: true },
@@ -22,12 +29,13 @@ const props = defineProps({
     type: Object as PropType<GuideStepInput>,
     required: true
   },
-  stepErrors: Object,
+  stepErrors: { type: Object as PropType<StepError> },
   moveStepUp: Function,
   moveStepDown: Function
 });
 
 const emit = defineEmits(['update:step']);
+const modalGuideInputOrQuestionOpen = ref(false);
 
 function inputError(field: string) {
   return props.stepErrors?.[field];
@@ -42,7 +50,7 @@ function updateStepContent(content) {
 }
 
 function updateQuestionDescription(questionId, content) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       return {
         ...question,
@@ -53,11 +61,11 @@ function updateQuestionDescription(questionId, content) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function updateChoiceContent(questionId, choiceKey, content) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const choices = question.choices.map(choice => {
         if (choice.key === choiceKey) {
@@ -75,11 +83,18 @@ function updateChoiceContent(questionId, choiceKey, content) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
-const questions = computed(() => {
-  return props.step.questions;
+const inputsAndQuestions = computed(() => {
+  return [
+    ...props.step.stepItems.map((q: GuideStepItem) => ({
+      ...q,
+      isQuestion:
+        q.type === QuestionType.MultipleChoice ||
+        q.type === QuestionType.SingleChoice
+    }))
+  ];
 });
 
 function newChoiceKey() {
@@ -88,7 +103,7 @@ function newChoiceKey() {
 
 function addChoice(questionId) {
   const key = newChoiceKey();
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const choices = [...question.choices, { key, content: '' }];
       return {
@@ -100,11 +115,11 @@ function addChoice(questionId) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function removeChoice(questionId, choiceKey) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       return {
         ...question,
@@ -115,26 +130,73 @@ function removeChoice(questionId, choiceKey) {
     }
   });
 
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
-function removeQuestion(questionId) {
-  const filteredQuestions = props.step.questions.filter(
-    question => question.uuid !== questionId
+function removeStepItem(itemUuid) {
+  const filteredQuestions = props.step.stepItems.filter(
+    stepItem => stepItem.uuid !== itemUuid
   );
 
-  const questionsWithIndex: GuideQuestion[] = filteredQuestions.map(
+  const itemsWithIndex: GuideQuestion[] = filteredQuestions.map(
     (question, index) => ({
       ...question,
       order: index
     })
   );
 
-  emit('update:step', { ...props.step, questions: questionsWithIndex });
+  emit('update:step', { ...props.step, stepItems: itemsWithIndex });
+}
+
+function updateUserInputLabel(itemUuid: string, label: string) {
+  const stepItems = props.step.stepItems.map(userInput => {
+    if (userInput.uuid === itemUuid) {
+      return {
+        ...userInput,
+        label
+      };
+    } else {
+      return userInput;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
+}
+
+function updateUserInputPrivate(itemUuid: string, isPrivate: boolean) {
+  const stepItems = props.step.stepItems.map(stepItem => {
+    if (stepItem.uuid === itemUuid) {
+      return {
+        ...stepItem,
+        type: isPrivate
+          ? InputType.PrivateShortInput
+          : InputType.PublicShortInput
+      };
+    } else {
+      return stepItem;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
+}
+
+function updateUserInputRequired(itemUuid: string, isRequired: boolean) {
+  const stepItems = props.step.stepItems.map(stepItem => {
+    if (stepItem.uuid === itemUuid) {
+      return {
+        ...stepItem,
+        required: isRequired
+      };
+    } else {
+      return stepItem;
+    }
+  });
+
+  emit('update:step', { ...props.step, stepItems });
 }
 
 function updateAnswers(questionId, choiceKey, selected) {
-  const questions = props.step.questions.map(question => {
+  const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
       const answerKeys = selected
         ? [...question.answerKeys, choiceKey]
@@ -147,10 +209,27 @@ function updateAnswers(questionId, choiceKey, selected) {
       return question;
     }
   });
-  emit('update:step', { ...props.step, questions });
+  emit('update:step', { ...props.step, stepItems });
 }
 
-function addQuestion() {
+function setAnswer(questionId, choiceKey) {
+  const stepItems = props.step.stepItems.map(question => {
+    if (question.uuid === questionId) {
+      const answerKeys = isEqual(question.answerKeys, [choiceKey])
+        ? []
+        : [choiceKey];
+      return {
+        ...question,
+        answerKeys
+      };
+    } else {
+      return question;
+    }
+  });
+  emit('update:step', { ...props.step, stepItems });
+}
+
+function addQuestion(type: QuestionType) {
   const question = {
     uuid: uuidv4(),
     content: '',
@@ -167,11 +246,23 @@ function addQuestion() {
       }
     ],
     answerKeys: [],
-    order: props.step.questions.length,
-    questionType: QuestionType.MultipleChoice
+    order: props.step.stepItems.length,
+    type: type
   };
-  const questions = [...(props.step.questions || []), question];
-  emit('update:step', { ...props.step, questions });
+  const stepItems = [...(props.step.stepItems || []), question];
+  emit('update:step', { ...props.step, stepItems });
+}
+
+function addInput(type: InputType) {
+  const input: UserInput = {
+    uuid: uuidv4(),
+    label: 'Label',
+    order: props.step.stepItems.length,
+    type: type,
+    required: false
+  };
+  const inputs = [...(props.step.stepItems || []), input];
+  emit('update:step', { ...props.step, stepItems: inputs });
 }
 </script>
 <template>
@@ -197,7 +288,7 @@ function addQuestion() {
       <UiSidebarButton
         class="float-right ml-2"
         :aria-label="$t('toggleSkin')"
-        @click="addQuestion"
+        @click="modalGuideInputOrQuestionOpen = true"
       >
         <svg height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor">
           <path d="M0 0h24v24H0V0z" fill="none" />
@@ -223,18 +314,42 @@ function addQuestion() {
         @update:modelValue="updateStepContent"
       />
     </UiButton>
-    <template v-for="question in questions" :key="question.uuid">
+    <template
+      v-for="inputOrQuestion in inputsAndQuestions"
+      :key="inputOrQuestion.uuid"
+    >
       <GuideCreateQuestion
+        v-if="inputOrQuestion.isQuestion"
         :addChoice="addChoice"
-        :question="question"
+        :question="inputOrQuestion"
         :removeChoice="removeChoice"
-        :removeQuestion="removeQuestion"
+        :removeQuestion="removeStepItem"
+        :setAnswer="setAnswer"
         :updateChoiceContent="updateChoiceContent"
         :updateQuestionDescription="updateQuestionDescription"
         :updateAnswers="updateAnswers"
-        :questionErrors="stepErrors?.questions?.[question.order]"
-      ></GuideCreateQuestion>
+        :questionErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+      />
+      <GuideCreateUserInput
+        v-else
+        :removeUserInput="removeStepItem"
+        :userInput="inputOrQuestion"
+        :userInputErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :updateUserInputLabel="updateUserInputLabel"
+        :updateUserInputPrivate="updateUserInputPrivate"
+        :updateUserInputRequired="updateUserInputRequired"
+      />
     </template>
   </div>
+  <teleport to="#modal">
+    <ModalGuideInputOrQuestion
+      :open="modalGuideInputOrQuestionOpen"
+      :categories="guide.categories"
+      @close="modalGuideInputOrQuestionOpen = false"
+      @addQuestion="addQuestion"
+      @addInput="addInput"
+    />
+  </teleport>
 </template>
+
 <style scoped lang="scss"></style>

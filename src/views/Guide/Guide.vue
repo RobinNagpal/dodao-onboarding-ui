@@ -55,7 +55,8 @@ const {
   guideSubmittingRef,
   initialize,
   selectAnswer,
-  submitGuide
+  submitGuide,
+  setUserInput
 } = useViewGuide(uuid as string, notify, props.space);
 
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
@@ -214,6 +215,7 @@ onMounted(async () => {
                   :guideResponse="guideResponseRef"
                   :guideSubmitting="guideSubmittingRef"
                   :selectAnswer="selectAnswer"
+                  :setUserInput="setUserInput"
                   :submitGuide="submitGuide"
                 />
               </Block>

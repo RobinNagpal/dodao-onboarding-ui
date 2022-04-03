@@ -1,5 +1,8 @@
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  InputType,
+  QuestionType
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,14 +20,27 @@ export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
         content: `
 Introduction Comments 
         `,
-        questions: [],
+        stepItems: [
+          {
+            label: 'Full Name',
+            order: 1,
+            type: InputType.PublicShortInput,
+            uuid: uuidv4()
+          }
+        ],
         order: 0
       },
       {
         uuid: uuidv4(),
         name: 'Introduction Evaluation',
         content: ``,
-        questions: [
+        stepItems: [
+          {
+            label: 'Full Name',
+            order: 1,
+            type: InputType.PublicShortInput,
+            uuid: uuidv4()
+          },
           {
             uuid: uuidv4(),
             content: 'Dog or a Cat, Do or a Cat, Dog or a Cat',
@@ -51,7 +67,7 @@ Introduction Comments
               }
             ],
             answerKeys: ['dog_or_cat', 'only_dog', 'only_cat'],
-            questionType: QuestionType.MultipleChoice,
+            type: QuestionType.MultipleChoice,
             order: 0
           }
         ],

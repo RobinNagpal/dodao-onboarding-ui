@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
+import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import { useModal } from '@/composables/useModal';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
-  GuideStep
+  GuideStep,
+  InputType,
+  isQuestion,
+  isUserInput,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
+import isEqual from 'lodash/isEqual';
 
 const renderer = new marked.Renderer();
 
@@ -50,10 +56,13 @@ const props = defineProps({
 const { web3Account } = useWeb3();
 const { modalAccountOpen } = useModal();
 
-const emit = defineEmits(['update:questionResponse']);
+const emit = defineEmits([
+  'update:questionResponse',
+  'update:userInputResponse'
+]);
 
-const questions = computed(() => {
-  return props.step.questions;
+const stepItems = computed(() => {
+  return props.step.stepItems;
 });
 
 const stepContents = computed(() =>
@@ -64,12 +73,25 @@ function selectAnswer(questionId: string, selectedAnswers: string[]) {
   emit('update:questionResponse', props.step.uuid, questionId, selectedAnswers);
 }
 
+function setUserInput(userInputUuid: string, userInput: string) {
+  emit('update:userInputResponse', props.step.uuid, userInputUuid, userInput);
+}
+
 const nextButtonClicked = ref<boolean>(false);
 
 function isEveryQuestionAnswered(): boolean {
-  return props.step.questions.every(
-    question => props.stepSubmission[question.uuid]?.length > 0
-  );
+  const allQuestionsAnswered = props.step.stepItems
+    .filter(isQuestion)
+    .every(question => props.stepSubmission[question.uuid]?.length > 0);
+
+  const allRequiredFieldsAnswered = props.step.stepItems
+    .filter(isUserInput)
+    .filter(input => (input as UserInput).required)
+    .every(
+      userInput => !!(props.stepSubmission[userInput.uuid] as string)?.trim()
+    );
+
+  return allQuestionsAnswered && allRequiredFieldsAnswered;
 }
 
 const showQuestionsCompletionWarning = computed<boolean>(() => {
@@ -108,13 +130,23 @@ async function navigateToNextStep() {
     <div style="min-height: 300px">
       <div class="mb-2 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content markdown-body" />
-      <template v-for="question in questions" :key="question.uuid">
+      <template v-for="stepItem in stepItems" :key="stepItem.uuid">
+        <GuideViewUserInput
+          v-if="
+            stepItem.type === InputType.PublicShortInput ||
+            stepItem.type === InputType.PrivateShortInput
+          "
+          :userInput="stepItem"
+          :setUserInput="setUserInput"
+          :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
+        />
         <GuideViewQuestion
-          :question="question"
+          v-else
+          :question="stepItem"
           :selectAnswer="selectAnswer"
-          :questionResponse="stepSubmission[question.uuid] ?? []"
+          :questionResponse="stepSubmission[stepItem.uuid] ?? []"
           @update:questionResponse="selectAnswer"
-        ></GuideViewQuestion>
+        />
       </template>
     </div>
     <div v-if="showQuestionsCompletionWarning">
