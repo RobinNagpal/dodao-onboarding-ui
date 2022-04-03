@@ -44,6 +44,7 @@ const preview = ref(false);
 const modalCategoryOpen = ref(false);
 
 const {
+  addEmptyBundleGuideInput,
   guideBundleCreating,
   guideBundleLoaded,
   guideBundleRef: guideBundle,
@@ -234,6 +235,14 @@ onMounted(async () => {
           <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
           <span class="ml-1">Fix errors to proceed</span>
         </div>
+        <UiButton
+          @click="addEmptyBundleGuideInput"
+          :disabled="clientLoading || !guideBundleLoaded || guideBundleCreating"
+          class="block w-full"
+          primary
+        >
+          {{ $t('guideBundle.create.addGuide') }}
+        </UiButton>
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"

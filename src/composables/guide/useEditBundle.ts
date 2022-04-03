@@ -6,6 +6,7 @@ import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
+import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
@@ -45,6 +46,15 @@ export function useEditGuideBundle(
     guideBundleLoaded.value = true;
   }
 
+  function addEmptyBundleGuideInput() {
+    guideBundleRef.value.bundleGuides = [
+      ...guideBundleRef.value.bundleGuides,
+      {
+        uuid: uuidv4(),
+        order: guideBundleRef.value.bundleGuides.length
+      }
+    ];
+  }
   function selectGuide(uuid: string, guideUuid: string) {
     guideBundleRef.value.bundleGuides = guideBundleRef.value.bundleGuides.map(
       g => {
@@ -102,6 +112,7 @@ export function useEditGuideBundle(
   }
 
   return {
+    addEmptyBundleGuideInput,
     guideBundleCreating,
     guideBundleLoaded,
     guideBundleRef,

@@ -245,7 +245,8 @@
       "name": "Name",
       "excerpt": "Bundle excerpt...",
       "basicInfo": "Basic Information",
-      "guidesInBundle": "Guides in Bundle"
+      "guidesInBundle": "Guides in Bundle",
+      "addGuide": "Add Guide"
     },
     "modal": {
       "selectGuide": "Select Guide"
