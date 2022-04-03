@@ -1,4 +1,7 @@
 import {
+  GuideBundleQuery,
+  GuideBundleQueryVariables,
+  GuideBundleQuery_guideBundle,
   GuideQuery,
   GuideQueryVariables,
   GuideQuery_guide,
@@ -6,6 +9,7 @@ import {
   GuideSubmissionsQueryVariables,
   GuideSubmissionsQuery_guideSubmissions
 } from '@/graphql/generated/graphqlDocs';
+import { GuideBundleQuery as guideBundleQuery } from '@/graphql/guideBundles.graphql';
 import { GuideQuery as guideQuery } from '@/graphql/guides.graphql';
 import { GuideSubmissionsQuery as guideSubmissionsQuery } from '@/graphql/guideSubmissions.graphql';
 import { apolloClient } from '@/helpers/apollo';
@@ -52,9 +56,31 @@ export async function getGuide(uuid): Promise<GuideQuery_guide> {
 
     console.timeEnd('getGuide');
 
-    const positionResClone = cloneDeep(response);
+    return response.data.guide;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
 
-    return positionResClone.data.guide;
+export async function getGuideBundle(
+  uuid
+): Promise<GuideBundleQuery_guideBundle> {
+  try {
+    console.time('getGuideBundle');
+    const response = await apolloClient.query<
+      GuideBundleQuery,
+      GuideBundleQueryVariables
+    >({
+      query: guideBundleQuery,
+      variables: {
+        uuid
+      }
+    });
+
+    console.timeEnd('getGuideBundle');
+
+    return response.data.guideBundle;
   } catch (e) {
     console.log(e);
     throw e;

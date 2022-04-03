@@ -23,3 +23,10 @@ export interface GuideError {
   content?: boolean;
   steps?: Record<string, StepError>;
 }
+
+export interface GuideBundleError {
+  name?: boolean;
+  excerpt?: boolean;
+  content?: boolean;
+  bundleGuides?: { [key: string]: boolean };
+}

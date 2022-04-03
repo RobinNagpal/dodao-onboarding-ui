@@ -117,6 +117,14 @@ watchEffect(() => {
       </router-link>
       <router-link
         v-if="isAdmin"
+        :to="{ name: 'guideBundleCreate', params: { key: space.id } }"
+      >
+        <UiButton class="whitespace-nowrap">
+          {{ $t('guideBundles.new') }}
+        </UiButton>
+      </router-link>
+      <router-link
+        v-if="isAdmin"
         :to="{ name: 'spaceEdit', params: { spaceId: space.id, space: space } }"
       >
         <UiButton class="whitespace-nowrap">

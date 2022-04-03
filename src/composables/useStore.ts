@@ -4,6 +4,7 @@ const store = reactive({
   space: {
     proposals: [],
     guides: [],
+    guideBundles: [],
     filterBy: 'all'
   },
   timeline: {

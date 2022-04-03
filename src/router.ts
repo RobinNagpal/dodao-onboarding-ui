@@ -4,6 +4,7 @@ import Explore from '@/views/Explore.vue';
 import GuideCreate from '@/views/Guide/Create.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
+import GuideBundleCreate from '@/views/GuideBundle/Create.vue';
 import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
@@ -46,6 +47,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: Guides
   },
   {
+    path: 'guide-bundles',
+    name: 'guideBundles',
+    component: Guides
+  },
+  {
     path: 'proposal/:id',
     name: 'spaceProposal',
     component: SpaceProposal
@@ -59,6 +65,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     path: 'guide/create',
     name: 'guideCreate',
     component: GuideCreate
+  },
+  {
+    path: 'guide-bundle/create',
+    name: 'guideBundleCreate',
+    component: GuideBundleCreate
   },
   {
     path: 'guide/edit/:uuid',

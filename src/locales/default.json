@@ -240,12 +240,67 @@
     "publicInput": "Public Input",
     "privateInput": "Private Input"
   },
+  "guideBundle": {
+    "create": {
+      "name": "Name",
+      "excerpt": "Bundle excerpt...",
+      "basicInfo": "Basic Information",
+      "guidesInBundle": "Guides in Bundle"
+    },
+    "modal": {
+      "selectGuide": "Select Guide"
+    },
+    "category": {
+      "engineering": "Engineering",
+      "marketing": "Marketing",
+      "sales": "Sales",
+      "contentWriting": "Content Writing",
+      "setup": "Setup",
+      "member": "Member",
+      "community": "Community"
+    },
+    "delete": "Delete",
+    "duplicate": "Duplicate",
+    "discordWebhook": "Discord Webhook",
+    "edit": "Edit",
+    "endDate": "End date",
+    "guideBundleBy": "by {0}",
+    "startDate": "Start date",
+
+    "thumbnail": "Thumbnail Image",
+    "vote": "Vote",
+    "votingSystem": "Voting system",
+    "next": "Next",
+    "previous": "Previous",
+    "complete": "Complete",
+    "submissions": "Submissions",
+    "addInputOrQuestion": "Add Input or Question",
+    "multipleChoiceQuestion": "Multiple Choice",
+    "singleChoiceQuestion": "Single Choice",
+    "publicInput": "Public Input",
+    "privateInput": "Private Input"
+  },
   "guides": {
     "header": "Onboarding Guides",
     "new": "New guide",
     "noGuides": "There aren't any onboarding guides here yet!",
     "createGuide": "Create",
     "createFirstGuide": "Let's create your first onboarding guide",
+    "states": {
+      "all": "All",
+      "core": "Core",
+      "community": "Community",
+      "active": "Active",
+      "pending": "Pending",
+      "closed": "Closed"
+    }
+  },
+  "guideBundles": {
+    "header": "Onboarding Guide Bundles",
+    "new": "New bundle",
+    "noGuides": "There aren't any onboarding guide bundles here yet!",
+    "createGuide": "Create",
+    "createFirstGuide": "Let's create your first onboarding guide bundle",
     "states": {
       "all": "All",
       "core": "Core",
