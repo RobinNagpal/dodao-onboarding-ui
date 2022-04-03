@@ -8,7 +8,13 @@ import { AuthConnector } from '@/utils/auth/authConnector';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
-import { GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuideQuestion,
+  GuideStep,
+  InputType,
+  QuestionType,
+  UserInput
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -107,18 +113,41 @@ export function useClient() {
           name: step.name,
           content: step.content,
           order: step.order,
-          questions: (step.questions || []).map(question => ({
-            uuid: question.uuid,
-            content: question.content,
-            choices: (question.choices || []).map(choice => ({
-              key: choice.key,
-              content: choice.content,
-              order: choice.order
-            })),
-            answerKeys: question.answerKeys,
-            questionType: question.questionType,
-            order: question.order
-          }))
+          stepItems: (step.stepItems || [])
+            .map(item1 => {
+              if (
+                item1.type === QuestionType.MultipleChoice ||
+                item1.type === QuestionType.SingleChoice
+              ) {
+                const item = item1 as GuideQuestion;
+
+                return {
+                  uuid: item.uuid,
+                  content: item.content,
+                  choices: (item.choices || []).map(choice => ({
+                    key: choice.key,
+                    content: choice.content,
+                    order: choice.order
+                  })),
+                  answerKeys: item.answerKeys,
+                  type: item.questionType,
+                  order: item.order
+                };
+              } else if (
+                item1.type === InputType.PublicShortInput ||
+                item1.type === InputType.PrivateShortInput
+              ) {
+                const item = item1 as UserInput;
+                return {
+                  uuid: item.uuid,
+                  label: item.label,
+                  required: item.required,
+                  type: item.type,
+                  order: item.order
+                };
+              }
+            })
+            .filter(Boolean)
         })),
         thumbnail: payload.thumbnail || ''
       };

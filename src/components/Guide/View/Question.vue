@@ -48,14 +48,14 @@ function selectSingleChoice(choiceKey: string) {
     <UiMarkdown :body="question.content" class="mb-6" />
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex leading-loose items-baseline">
-        <Checkbox
-          v-if="question.questionType === QuestionType.MultipleChoice"
-          @update:modelValue="selectMultipleChoice(choice.key, $event)"
+        <Radio
+          v-if="question.questionType === QuestionType.SingleChoice"
+          @update:modelValue="selectSingleChoice(choice.key)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
-        <Radio
+        <Checkbox
           v-else
-          @update:modelValue="selectSingleChoice(choice.key)"
+          @update:modelValue="selectMultipleChoice(choice.key, $event)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
         <div>{{ choice.content }}</div>

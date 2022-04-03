@@ -60,15 +60,15 @@ const disableChoiceEdit = false;
     </UiButton>
     <template v-for="choice in question.choices" :key="choice.key">
       <div class="flex">
-        <Checkbox
-          v-if="question.type === QuestionType.MultipleChoice"
-          @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
+        <Radio
+          v-if="question.type === QuestionType.SingleChoice"
+          @update:modelValue="setAnswer(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
           :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
         />
-        <Radio
+        <Checkbox
           v-else
-          @update:modelValue="setAnswer(question.uuid, choice.key, $event)"
+          @update:modelValue="updateAnswers(question.uuid, choice.key, $event)"
           :modelValue="question.answerKeys.includes(choice.key)"
           :class="{ 'border-2 border-red': questionErrors?.answerKeys }"
         />
