@@ -14,7 +14,11 @@ defineProps({
 </script>
 
 <template>
-  <UiInput maxlength="64" class="mt-4">
+  <UiInput
+    maxlength="64"
+    class="mt-4"
+    @update:modelValue="setUserInput(userInput.uuid, $event)"
+  >
     <template v-slot:label
       >{{ userInput.label }} {{ userInput.required ? '*' : '' }}</template
     >

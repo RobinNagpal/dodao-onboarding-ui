@@ -84,14 +84,14 @@ function isEveryQuestionAnswered(): boolean {
     .filter(isQuestion)
     .every(question => props.stepSubmission[question.uuid]?.length > 0);
 
-  const allRequiredFiledsAnswered = props.step.stepItems
+  const allRequiredFieldsAnswered = props.step.stepItems
     .filter(isUserInput)
     .filter(input => (input as UserInput).required)
     .every(
       userInput => !!(props.stepSubmission[userInput.uuid] as string)?.trim()
     );
 
-  return allQuestionsAnswered && allRequiredFiledsAnswered;
+  return allQuestionsAnswered && allRequiredFieldsAnswered;
 }
 
 const showQuestionsCompletionWarning = computed<boolean>(() => {
