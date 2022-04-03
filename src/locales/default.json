@@ -248,6 +248,10 @@
       "guidesInBundle": "Guides in Bundle",
       "addGuide": "Add Guide"
     },
+    "guideSelect": {
+      "changeGuide": "Change Guide",
+      "selectGuide": "Select Guide"
+    },
     "modal": {
       "selectGuide": "Select Guide"
     },

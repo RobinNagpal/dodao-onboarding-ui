@@ -67,9 +67,9 @@ export function useEditGuideBundle(
     );
   }
 
-  function moveGuideUp(guideUuid: string) {
+  function moveGuideUp(guideInputUuid: string) {
     const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.uuid === guideUuid
+      s => s.uuid === guideInputUuid
     );
     guideBundleRef.value.bundleGuides[guideIndex - 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex - 1;
@@ -77,6 +77,15 @@ export function useEditGuideBundle(
     guideBundleRef.value.bundleGuides = orderBy(
       guideBundleRef.value.bundleGuides,
       'order'
+    );
+  }
+
+  function removeGuideInput(guideInputUuid: string) {
+    const filteredGuides = guideBundleRef.value.bundleGuides.filter(
+      s => s.uuid !== guideInputUuid
+    );
+    guideBundleRef.value.bundleGuides = filteredGuides.map(
+      (guideInput, index) => ({ ...guideInput, order: index })
     );
   }
 
@@ -121,6 +130,7 @@ export function useEditGuideBundle(
     initialize,
     moveGuideUp,
     moveGuideDown,
+    removeGuideInput,
     selectGuide
   };
 }

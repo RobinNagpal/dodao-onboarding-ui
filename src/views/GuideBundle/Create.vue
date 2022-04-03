@@ -53,6 +53,7 @@ const {
   initialize,
   moveGuideUp,
   moveGuideDown,
+  removeGuideInput,
   selectGuide
 } = useEditGuideBundle(uuid as string, props.space, notify);
 const { modalAccountOpen } = useModal();
@@ -85,6 +86,10 @@ const categoriesString = computed(() => {
   return form.value.categories ? form.value.categories.join(', ') : '';
 });
 
+const guidesMap = computed(() => {
+  return Object.fromEntries(guides.value.map(guide => [guide.uuid, guide]));
+});
+
 function handleSubmitAddCategories(categories) {
   guideBundle.value.categories = categories;
 }
@@ -103,7 +108,7 @@ function inputError(field: string) {
 
 async function loadGuides(skip = 0) {
   loadingGuides.value = true;
-  const guides = await apolloQuery(
+  const guidesResult = await apolloQuery(
     {
       query: GuidesQuery,
       variables: {
@@ -114,9 +119,10 @@ async function loadGuides(skip = 0) {
     },
     'guides'
   );
-  stopLoadingMore.value = guides?.length < loadBy;
-  store.space.guides = guides;
-  guides.value = guides;
+  stopLoadingMore.value = guidesResult?.length < loadBy;
+
+  store.space.guides = guidesResult;
+  guides.value = guidesResult;
   loadingGuides.value = false;
 }
 
@@ -219,11 +225,17 @@ onMounted(async () => {
           <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.uuid">
             <GuideBundleGuideSelect
               :bundle-input="guideBundle"
+              :guide="
+                bundleGuide.guideUuid
+                  ? guidesMap[bundleGuide.guideUuid]
+                  : undefined
+              "
               :guide-errors="guideBundleErrors.bundleGuides[bundleGuide.uuid]"
               :guide-input="bundleGuide"
               :guides="guides"
               :move-guide-down="moveGuideDown"
               :move-guide-up="moveGuideUp"
+              :remove-guide-input="removeGuideInput"
               :select-guide="selectGuide"
             />
           </template>
@@ -247,7 +259,7 @@ onMounted(async () => {
           @click="clickSubmit"
           :disabled="!isValid"
           :loading="clientLoading || !guideBundleLoaded || guideBundleCreating"
-          class="block w-full"
+          class="block w-full mt-4"
           primary
         >
           {{ $t('create.publish') }}
