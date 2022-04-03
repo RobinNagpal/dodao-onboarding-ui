@@ -11,9 +11,10 @@ const osSkin =
     ? DARK_MODE
     : LIGHT_MODE;
 
-const userSkin = ref(currenSkin === NOT_SET ? osSkin : currenSkin);
+const userSkin = ref(currenSkin === NOT_SET ? LIGHT_MODE : currenSkin);
 const getSkinIcon = () => (userSkin.value === LIGHT_MODE ? 'moon' : 'sun');
 const _toggleSkin = skin => {
+  console.log('_toggleSkin', skin);
   if (skin === LIGHT_MODE) {
     lsSet('skin', DARK_MODE);
     userSkin.value = DARK_MODE;
@@ -27,7 +28,7 @@ export function useUserSkin() {
   function toggleSkin() {
     const currentSkin = lsGet('skin', NOT_SET);
     if (currentSkin === NOT_SET) {
-      _toggleSkin(osSkin);
+      _toggleSkin(LIGHT_MODE);
     } else {
       _toggleSkin(currentSkin);
     }
