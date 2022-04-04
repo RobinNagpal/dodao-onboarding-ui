@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
+import GuideBundleGuideSelect from '@/components/GuideBundle/GuideSelect.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import GuideBundleGuideSelect from '@/components/GuideBundle/GuideSelect.vue';
+import { useEditGuideBundle } from '@/composables/guide/useEditBundle';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
-import { useEditGuideBundle } from '@/composables/guide/useEditBundle';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useModal } from '@/composables/useModal';
 import { useStore } from '@/composables/useStore';
@@ -88,6 +89,10 @@ const categoriesString = computed(() => {
 
 const guidesMap = computed(() => {
   return Object.fromEntries(guides.value.map(guide => [guide.uuid, guide]));
+});
+
+const bundleHasErrors = computed(() => {
+  return Object.values(guideBundleErrors.value).filter(v => !!v).length > 0;
 });
 
 function handleSubmitAddCategories(categories) {
@@ -210,8 +215,8 @@ onMounted(async () => {
               </template>
             </UiInput>
             <UiInput
-              v-model="form.content"
-              :error="inputError('content')"
+              v-model="form.excerpt"
+              :error="guideBundleErrors.excerpt"
               :placeholder="$t(`guideBundle.create.excerpt`)"
               maxlength="64"
             >
@@ -219,6 +224,25 @@ onMounted(async () => {
                 >{{ $t(`guideBundle.create.excerpt`) }}*</template
               >
             </UiInput>
+            <UiButton
+              class="w-full h-96 mb-4 px-[16px] flex items-center"
+              style="height: max-content"
+              :class="{ '!border-red': guideBundleErrors.content }"
+            >
+              <TextareaAutosize
+                :value="guideBundle.content"
+                :placeholder="$t(`guideBundle.create.content`)"
+                :minHeight="200"
+                class="input w-full text-left"
+                style="font-size: 18px"
+                @update:modelValue="form.content = $event"
+              />
+              <i
+                class="iconfont iconwarning !text-red"
+                data-v-abc9f7ae=""
+                v-if="guideBundleErrors.content"
+              ></i>
+            </UiButton>
           </div>
         </Block>
         <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
@@ -230,7 +254,9 @@ onMounted(async () => {
                   ? guidesMap[bundleGuide.guideUuid]
                   : undefined
               "
-              :guide-errors="guideBundleErrors.bundleGuides[bundleGuide.uuid]"
+              :guide-errors="
+                guideBundleErrors?.bundleGuides?.[bundleGuide.uuid]
+              "
               :guide-input="bundleGuide"
               :guides="guides"
               :move-guide-down="moveGuideDown"
@@ -241,7 +267,7 @@ onMounted(async () => {
           </template>
         </Block>
         <div
-          v-if="Object.values(guideBundleErrors).filter(v => !!v).length"
+          v-if="bundleHasErrors"
           class="!text-red flex text-center justify-center mb-2 align-baseline"
         >
           <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
@@ -249,7 +275,12 @@ onMounted(async () => {
         </div>
         <UiButton
           @click="addEmptyBundleGuideInput"
-          :disabled="clientLoading || !guideBundleLoaded || guideBundleCreating"
+          :disabled="
+            clientLoading ||
+            !guideBundleLoaded ||
+            guideBundleCreating ||
+            bundleGuides.length >= guides.length
+          "
           class="block w-full"
           primary
         >

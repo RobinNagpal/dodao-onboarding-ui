@@ -245,6 +245,7 @@
       "name": "Name",
       "excerpt": "Bundle excerpt...",
       "basicInfo": "Basic Information",
+      "content": "Detailed Description of the Guide Bundle",
       "guidesInBundle": "Guides in Bundle",
       "addGuide": "Add Guide"
     },

@@ -12,6 +12,10 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
+const bundleNameLimit = 32;
+const bundleContentLimit = 14400;
+const bundleExceptContentLimit = 64;
+
 export function useEditGuideBundle(
   uuid: string | null,
   space: SpaceModel,
@@ -26,7 +30,7 @@ export function useEditGuideBundle(
 
   const emptyGuideBundleModel = emptyGuideBundle(web3.value.account, space);
   const guideBundleRef = ref<TempGuideBundleInput>(emptyGuideBundleModel);
-  const guideBundleErrors = ref<GuideBundleError>({ bundleGuides: {} });
+  const guideBundleErrors = ref<GuideBundleError>({});
   const guideBundleLoaded = ref<boolean>(false);
 
   const guideBundleCreating = ref(false);
@@ -102,7 +106,40 @@ export function useEditGuideBundle(
     );
   }
 
+  function validateBundle(bundle: TempGuideBundleInput) {
+    guideBundleErrors.value.name = undefined;
+    if (!bundle.name || bundle.name.length > bundleNameLimit) {
+      guideBundleErrors.value.name = true;
+    }
+
+    guideBundleErrors.value.excerpt = undefined;
+    if (!bundle.excerpt || bundle.excerpt?.length > bundleExceptContentLimit) {
+      guideBundleErrors.value.excerpt = true;
+    }
+
+    guideBundleErrors.value.content = undefined;
+    if (!bundle.content || bundle.content?.length > bundleContentLimit) {
+      guideBundleErrors.value.content = true;
+    }
+
+    guideBundleErrors.value.bundleGuides = undefined;
+    bundle.bundleGuides.forEach(tempGuide => {
+      if (!tempGuide.guideUuid) {
+        if (!guideBundleErrors.value.bundleGuides) {
+          guideBundleErrors.value.bundleGuides = {};
+        }
+        guideBundleErrors.value.bundleGuides[tempGuide.uuid] = true;
+      }
+    });
+    return Object.values(guideBundleErrors.value).filter(v => !!v).length === 0;
+  }
+
   async function handleSubmit() {
+    const valid = validateBundle(guideBundleRef.value);
+    if (!valid) {
+      console.log('Bundle invalid', valid, guideBundleErrors);
+      return;
+    }
     guideBundleCreating.value = true;
     const result = await send(space, 'guideBundle', guideBundleRef.value);
     if (result?.id) {

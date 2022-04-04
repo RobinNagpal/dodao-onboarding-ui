@@ -35,7 +35,10 @@ const modalGuideSelectionOpen = ref(false);
 
 <template>
   <Block :slim="true" :class="`mt-4`">
-    <div class="w-full border-1 p-4">
+    <div
+      class="w-full border-1 p-4"
+      :class="{ '!border-red border-2 rounded-md': guideErrors }"
+    >
       <div class="h-40 mb-4" style="min-height: 40px">
         <UiSidebarButton
           class="float-right ml-2"
