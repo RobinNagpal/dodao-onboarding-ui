@@ -96,7 +96,7 @@ const modalGuideSelectionOpen = ref(false);
           </svg>
         </UiSidebarButton>
       </div>
-      <div class="flex" v-if="guide">
+      <div class="flex align-center" v-if="guide">
         <UiThumbnail
           :src="guide.thumbnail"
           :entityId="guide.uuid"
@@ -127,3 +127,4 @@ const modalGuideSelectionOpen = ref(false);
     />
   </teleport>
 </template>
+<style scoped lang="scss"></style>
