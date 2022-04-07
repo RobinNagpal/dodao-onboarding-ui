@@ -112,6 +112,7 @@ export default class OnboardingClient extends Client {
     address: string,
     message: Omit<BundleInput, 'timestamp' | 'from'>
   ) {
+    console.log('bundle', message);
     return await this.sign(web3, address, message, bundleTypes);
   }
 

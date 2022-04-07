@@ -162,7 +162,7 @@ export function useClient() {
         categories: bundlePayload.categories || [],
         excerpt: bundlePayload.excerpt,
         content: bundlePayload.content,
-        discordWebhook: bundlePayload.discordWebhook,
+        discordWebhook: bundlePayload.discordWebhook || '',
         from: web3.value.account,
         name: bundlePayload.name,
         space: space.id,

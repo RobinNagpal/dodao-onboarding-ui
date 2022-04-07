@@ -1,10 +1,10 @@
 export const bundleTypes = {
-  BundleGuideInput: [
+  GuideInBundleInput: [
     { name: 'order', type: 'uint64' },
-    { name: 'uuid', type: 'string' },
-    { name: 'guideUuid', type: 'uint64' }
+    { name: 'bundleUuid', type: 'string' },
+    { name: 'guideUuid', type: 'string' }
   ],
-  Bundle: [
+  GuideBundleInput: [
     { name: 'from', type: 'address' },
     { name: 'categories', type: 'string[]' },
     { name: 'excerpt', type: 'string' },
@@ -12,7 +12,7 @@ export const bundleTypes = {
     { name: 'discordWebhook', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'space', type: 'string' },
-    { name: 'bundleGuides', type: 'BundleGuideInput[]' },
+    { name: 'bundleGuides', type: 'GuideInBundleInput[]' },
     { name: 'thumbnail', type: 'string' },
     { name: 'timestamp', type: 'uint64' },
     { name: 'uuid', type: 'string' }
