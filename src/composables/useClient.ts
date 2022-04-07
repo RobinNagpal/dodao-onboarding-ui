@@ -7,9 +7,9 @@ import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { getInstance } from '@/utils/auth/auth';
 import { AuthConnector } from '@/utils/auth/authConnector';
 import {
-  BundleGuideInput,
-  BundleInput
-} from '@dodao/onboarding-schemas/inputs/BundleInput';
+  GuideBundleInput,
+  GuideInBundleInput
+} from '@dodao/onboarding-schemas/inputs/GuideBundleInput';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
@@ -157,7 +157,7 @@ export function useClient() {
       )) as MsgResponse;
     } else if (type === 'guideBundle') {
       const bundlePayload = payload as TempGuideBundleInput;
-      const bundleMessage: BundleInput = {
+      const bundleMessage: GuideBundleInput = {
         uuid: bundlePayload.uuid,
         categories: bundlePayload.categories || [],
         excerpt: bundlePayload.excerpt,
@@ -167,7 +167,9 @@ export function useClient() {
         name: bundlePayload.name,
         space: space.id,
         thumbnail: bundlePayload.thumbnail || '',
-        bundleGuides: bundlePayload.bundleGuides.map(g => g as BundleGuideInput)
+        bundleGuides: bundlePayload.bundleGuides.map(
+          g => g as GuideInBundleInput
+        )
       };
       return (await clientEIP712.bundle(
         auth.web3,

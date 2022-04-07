@@ -9,7 +9,7 @@ import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { useEditGuideBundle } from '@/composables/guide/useEditBundle';
+import { useEditGuideBundle } from '@/composables/guide/useEditGuideBundle';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useClient } from '@/composables/useClient';
 import { useDomain } from '@/composables/useDomain';
