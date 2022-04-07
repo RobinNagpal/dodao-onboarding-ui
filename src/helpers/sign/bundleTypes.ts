@@ -1,7 +1,6 @@
 export const bundleTypes = {
   GuideInBundleInput: [
     { name: 'order', type: 'uint64' },
-    { name: 'bundleUuid', type: 'string' },
     { name: 'guideUuid', type: 'string' }
   ],
   GuideBundleInput: [
