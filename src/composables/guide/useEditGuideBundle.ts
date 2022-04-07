@@ -54,7 +54,7 @@ export function useEditGuideBundle(
     guideBundleRef.value.bundleGuides = [
       ...guideBundleRef.value.bundleGuides,
       {
-        uuid: uuidv4(),
+        bundleUuid: uuidv4(),
         order: guideBundleRef.value.bundleGuides.length
       }
     ];
@@ -62,7 +62,7 @@ export function useEditGuideBundle(
   function selectGuide(uuid: string, guideUuid: string) {
     guideBundleRef.value.bundleGuides = guideBundleRef.value.bundleGuides.map(
       g => {
-        if (g.uuid === uuid) {
+        if (g.bundleUuid === uuid) {
           return { ...g, guideUuid };
         } else {
           return g;
@@ -73,7 +73,7 @@ export function useEditGuideBundle(
 
   function moveGuideUp(guideInputUuid: string) {
     const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.uuid === guideInputUuid
+      s => s.bundleUuid === guideInputUuid
     );
     guideBundleRef.value.bundleGuides[guideIndex - 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex - 1;
@@ -86,7 +86,7 @@ export function useEditGuideBundle(
 
   function removeGuideInput(guideInputUuid: string) {
     const filteredGuides = guideBundleRef.value.bundleGuides.filter(
-      s => s.uuid !== guideInputUuid
+      s => s.bundleUuid !== guideInputUuid
     );
     guideBundleRef.value.bundleGuides = filteredGuides.map(
       (guideInput, index) => ({ ...guideInput, order: index })
@@ -95,7 +95,7 @@ export function useEditGuideBundle(
 
   function moveGuideDown(guideUuid: string) {
     const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.uuid === guideUuid
+      s => s.bundleUuid === guideUuid
     );
     guideBundleRef.value.bundleGuides[guideIndex + 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex + 1;
@@ -128,7 +128,7 @@ export function useEditGuideBundle(
         if (!guideBundleErrors.value.bundleGuides) {
           guideBundleErrors.value.bundleGuides = {};
         }
-        guideBundleErrors.value.bundleGuides[tempGuide.uuid] = true;
+        guideBundleErrors.value.bundleGuides[tempGuide.bundleUuid] = true;
       }
     });
     return Object.values(guideBundleErrors.value).filter(v => !!v).length === 0;

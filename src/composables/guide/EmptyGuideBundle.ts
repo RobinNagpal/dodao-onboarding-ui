@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface TempGuideModelInput {
   order: number;
-  uuid: string;
+  bundleUuid: string;
   guideUuid?: string;
 }
 
@@ -35,7 +35,7 @@ export const emptyGuideBundle = (
       'Some detailed content in Markdown format to tell about the bundle',
     bundleGuides: [
       {
-        uuid: uuidv4(),
+        bundleUuid: uuidv4(),
         order: 0
       }
     ],

@@ -44,7 +44,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="bundleInput.bundleGuides.length === 1"
-          @click="removeGuideInput(guideInput.uuid)"
+          @click="removeGuideInput(guideInput.bundleUuid)"
         >
           <Icon size="20" class="link-color" name="close" />
         </UiSidebarButton>
@@ -52,7 +52,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="guideInput.order === 0"
-          @click="moveGuideUp(guideInput.uuid)"
+          @click="moveGuideUp(guideInput.bundleUuid)"
         >
           <Icon size="20" class="link-color" name="arrow-up" />
         </UiSidebarButton>
@@ -60,7 +60,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="guideInput.order + 1 === bundleInput.bundleGuides.length"
-          @click="moveGuideDown(guideInput.uuid)"
+          @click="moveGuideDown(guideInput.bundleUuid)"
         >
           <Icon size="20" class="link-color" name="arrow-down" />
         </UiSidebarButton>

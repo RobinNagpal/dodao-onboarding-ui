@@ -32,7 +32,7 @@ const selectGuide = (guideInputUuid: string, guideUUid: string) => {
         <template v-for="guide in guides" :key="guide.uuid">
           <UiButton
             class="button-outline w-full flex justify-center items-center"
-            @click="selectGuide(guideInput.uuid, guide.uuid)"
+            @click="selectGuide(guideInput.bundleUuid, guide.uuid)"
           >
             {{ guide.name }}
           </UiButton>

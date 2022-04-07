@@ -246,7 +246,7 @@ onMounted(async () => {
           </div>
         </Block>
         <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
-          <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.uuid">
+          <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.bundleUuid">
             <GuideBundleGuideSelect
               :bundle-input="guideBundle"
               :guide="
@@ -255,7 +255,7 @@ onMounted(async () => {
                   : undefined
               "
               :guide-errors="
-                guideBundleErrors?.bundleGuides?.[bundleGuide.uuid]
+                guideBundleErrors?.bundleGuides?.[bundleGuide.bundleUuid]
               "
               :guide-input="bundleGuide"
               :guides="guides"
