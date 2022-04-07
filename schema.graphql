@@ -340,7 +340,7 @@ type Guide {
   link: String!
 }
 
-type GuideBundleGuide {
+type GuideInBundle {
   categories: [String!]!
   content: String!
   created: Int!
@@ -364,7 +364,7 @@ type GuideBundle {
   name: String!
   thumbnail: String
   space: Space!
-  bundleGuides: [GuideBundleGuide!]!
+  bundleGuides: [GuideInBundle!]!
   uuid: String!
   version: Int!
   link: String!

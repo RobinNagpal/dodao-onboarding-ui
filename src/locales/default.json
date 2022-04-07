@@ -304,9 +304,9 @@
   "guideBundles": {
     "header": "Onboarding Guide Bundles",
     "new": "New bundle",
-    "noGuides": "There aren't any onboarding guide bundles here yet!",
-    "createGuide": "Create",
-    "createFirstGuide": "Let's create your first onboarding guide bundle",
+    "noGuideBundles": "There aren't any onboarding guide bundles here yet!",
+    "createGuideBundle": "Create",
+    "createFirstGuideBundle": "Let's create your first onboarding guide bundle",
     "states": {
       "all": "All",
       "core": "Core",
@@ -567,6 +567,7 @@
         "guides": "{dao} Guides",
         "proposal": "{dao} proposal: {proposal}",
         "guide": "{dao} guide: {guide}",
+        "bundle": "{dao} bundle: {bundle}",
         "settings": "{dao} Settings"
       },
       "guide": {

@@ -10,6 +10,7 @@ const store = reactive({
   timeline: {
     proposals: [],
     guides: [],
+    guideBundles: [],
     filterBy: 'all'
   }
 });
