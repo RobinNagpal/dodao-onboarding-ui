@@ -287,7 +287,7 @@
     "privateInput": "Private Input"
   },
   "guides": {
-    "header": "Onboarding Guides",
+    "header": "Guides",
     "new": "New guide",
     "noGuides": "There aren't any onboarding guides here yet!",
     "createGuide": "Create",
@@ -302,7 +302,7 @@
     }
   },
   "guideBundles": {
-    "header": "Onboarding Guide Bundles",
+    "header": "Guide Bundles",
     "new": "New bundle",
     "noGuideBundles": "There aren't any onboarding guide bundles here yet!",
     "createGuideBundle": "Create",

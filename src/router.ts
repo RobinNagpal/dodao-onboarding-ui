@@ -65,7 +65,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'guide-bundle/view/:uuid',
     name: 'guideBundle',
-    component: () => import('@/views/Guide/ViewGuide.vue')
+    component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
   {
     path: 'guide/create',
