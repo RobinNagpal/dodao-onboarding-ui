@@ -4,6 +4,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
+import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,7 +44,12 @@ export function useEditGuideBundle(
         from: web3.value.account,
         space: space.id,
         thumbnail: guideBundle.thumbnail || undefined,
-        discordWebhook: guideBundle.discordWebhook || undefined
+        discordWebhook: guideBundle.discordWebhook || undefined,
+        bundleGuides: guideBundle.bundleGuides.map(g => ({
+          uuid: uuidv4(),
+          guide: g,
+          order: g.order
+        }))
       };
     }
 
@@ -54,16 +60,16 @@ export function useEditGuideBundle(
     guideBundleRef.value.bundleGuides = [
       ...guideBundleRef.value.bundleGuides,
       {
-        bundleUuid: uuidv4(),
+        uuid: uuidv4(),
         order: guideBundleRef.value.bundleGuides.length
       }
     ];
   }
-  function selectGuide(uuid: string, guideUuid: string) {
+  function selectGuide(uuid: string, guide: GuideModel) {
     guideBundleRef.value.bundleGuides = guideBundleRef.value.bundleGuides.map(
       g => {
-        if (g.bundleUuid === uuid) {
-          return { ...g, guideUuid };
+        if (g.uuid === uuid) {
+          return { ...g, guide };
         } else {
           return g;
         }
@@ -71,9 +77,9 @@ export function useEditGuideBundle(
     );
   }
 
-  function moveGuideUp(guideInputUuid: string) {
+  function moveGuideUp(uuid: string) {
     const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.bundleUuid === guideInputUuid
+      s => s.uuid === uuid
     );
     guideBundleRef.value.bundleGuides[guideIndex - 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex - 1;
@@ -84,18 +90,18 @@ export function useEditGuideBundle(
     );
   }
 
-  function removeGuideInput(guideInputUuid: string) {
+  function removeGuideInput(uuid: string) {
     const filteredGuides = guideBundleRef.value.bundleGuides.filter(
-      s => s.bundleUuid !== guideInputUuid
+      s => s.uuid !== uuid
     );
     guideBundleRef.value.bundleGuides = filteredGuides.map(
       (guideInput, index) => ({ ...guideInput, order: index })
     );
   }
 
-  function moveGuideDown(guideUuid: string) {
+  function moveGuideDown(uuid: string) {
     const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.bundleUuid === guideUuid
+      s => s.uuid === uuid
     );
     guideBundleRef.value.bundleGuides[guideIndex + 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex + 1;
@@ -124,11 +130,11 @@ export function useEditGuideBundle(
 
     guideBundleErrors.value.bundleGuides = undefined;
     bundle.bundleGuides.forEach(tempGuide => {
-      if (!tempGuide.guideUuid) {
+      if (!tempGuide.guide) {
         if (!guideBundleErrors.value.bundleGuides) {
           guideBundleErrors.value.bundleGuides = {};
         }
-        guideBundleErrors.value.bundleGuides[tempGuide.bundleUuid] = true;
+        guideBundleErrors.value.bundleGuides[tempGuide.uuid] = true;
       }
     });
     return Object.values(guideBundleErrors.value).filter(v => !!v).length === 0;

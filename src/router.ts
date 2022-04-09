@@ -83,6 +83,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: GuideCreate
   },
   {
+    path: 'guide-bundle/edit/:uuid',
+    name: 'guideBundleEdit',
+    component: GuideBundleCreate
+  },
+  {
     path: 'guide/submissions/:uuid',
     name: 'guideSubmissions',
     component: GuideSubmissions

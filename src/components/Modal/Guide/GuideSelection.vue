@@ -15,8 +15,8 @@ const emit = defineEmits(['close', 'selectGuide']);
 
 const { open } = toRefs(props);
 
-const selectGuide = (guideInputUuid: string, guideUUid: string) => {
-  emit('selectGuide', guideInputUuid, guideUUid);
+const selectGuide = (guideInputUuid: string, guide: GuideModel) => {
+  emit('selectGuide', guideInputUuid, guide);
   emit('close');
 };
 </script>
@@ -32,7 +32,7 @@ const selectGuide = (guideInputUuid: string, guideUUid: string) => {
         <template v-for="guide in guides" :key="guide.uuid">
           <UiButton
             class="button-outline w-full flex justify-center items-center"
-            @click="selectGuide(guideInput.bundleUuid, guide.uuid)"
+            @click="selectGuide(guideInput.uuid, guide)"
           >
             {{ guide.name }}
           </UiButton>

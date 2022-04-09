@@ -17,7 +17,6 @@ const props = defineProps({
     type: Object as PropType<TempGuideBundleInput>,
     required: true
   },
-  guide: { type: Object as PropType<GuideModel> },
   guideErrors: { type: Boolean },
   guideInput: {
     type: Object as PropType<TempGuideModelInput>,
@@ -44,7 +43,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="bundleInput.bundleGuides.length === 1"
-          @click="removeGuideInput(guideInput.guideUuid)"
+          @click="removeGuideInput(guideInput.uuid)"
         >
           <Icon size="20" class="link-color" name="close" />
         </UiSidebarButton>
@@ -52,7 +51,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="guideInput.order === 0"
-          @click="moveGuideUp(guideInput.guideUuid)"
+          @click="moveGuideUp(guideInput.uuid)"
         >
           <Icon size="20" class="link-color" name="arrow-up" />
         </UiSidebarButton>
@@ -60,7 +59,7 @@ const modalGuideSelectionOpen = ref(false);
           class="float-right ml-2"
           :aria-label="$t('toggleSkin')"
           :disabled="guideInput.order + 1 === bundleInput.bundleGuides.length"
-          @click="moveGuideDown(guideInput.guideUuid)"
+          @click="moveGuideDown(guideInput.uuid)"
         >
           <Icon size="20" class="link-color" name="arrow-down" />
         </UiSidebarButton>
@@ -70,7 +69,7 @@ const modalGuideSelectionOpen = ref(false);
           @click="modalGuideSelectionOpen = true"
         >
           <svg
-            v-if="guide"
+            v-if="guideInput.guide"
             height="24px"
             width="24px"
             fill="currentColor"
@@ -96,21 +95,21 @@ const modalGuideSelectionOpen = ref(false);
           </svg>
         </UiSidebarButton>
       </div>
-      <div class="flex align-center" v-if="guide">
+      <div class="flex align-center" v-if="guideInput.guide">
         <UiThumbnail
-          :src="guide.thumbnail"
-          :entityId="guide.uuid"
-          :title="guide.name"
+          :src="guideInput.guide?.thumbnail"
+          :entityId="guideInput.uuid"
+          :title="guideInput.guide?.name"
           :size="'150'"
           class="mb-1"
         />
         <div class="mx-4">
           <h1
             class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis"
-            v-text="guide.name"
+            v-text="guideInput.guide?.name"
           />
           <p
-            v-text="shorten(guide.content, 300)"
+            v-text="shorten(guideInput.guide?.content, 300)"
             class="break-words mb-2 text-sm h-[95px] text-ellipsis overflow-hidden text-md"
           />
         </div>

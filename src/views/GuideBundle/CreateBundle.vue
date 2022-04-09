@@ -31,7 +31,6 @@ const props = defineProps({
   uuid: String
 });
 
-const { domain } = useDomain();
 const { web3, web3Account } = useWeb3();
 const { clientLoading } = useClient();
 const notify = inject('notify') as any;
@@ -60,11 +59,12 @@ const {
 const { modalAccountOpen } = useModal();
 const { store } = useStore();
 const { apolloQuery } = useApolloQuery();
-const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
+const { loadBy, stopLoadingMore } = useInfiniteLoader();
 
 const form = ref(guideBundle);
 
 const bundleGuides = computed(() => {
+  console.log('form.value.bundleGuides', form.value.bundleGuides);
   return form.value.bundleGuides;
 });
 
@@ -88,7 +88,11 @@ const categoriesString = computed(() => {
 });
 
 const guidesMap = computed(() => {
-  return Object.fromEntries(guides.value.map(guide => [guide.uuid, guide]));
+  const fromEntries = Object.fromEntries(
+    form.value.bundleGuides.map(guide => [guide.uuid, guide])
+  );
+  console.log('fromEntries', fromEntries);
+  return fromEntries;
 });
 
 const bundleHasErrors = computed(() => {
@@ -246,16 +250,11 @@ onMounted(async () => {
           </div>
         </Block>
         <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
-          <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.bundleUuid">
+          <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.uuid">
             <GuideBundleGuideSelect
               :bundle-input="guideBundle"
-              :guide="
-                bundleGuide.guideUuid
-                  ? guidesMap[bundleGuide.guideUuid]
-                  : undefined
-              "
               :guide-errors="
-                guideBundleErrors?.bundleGuides?.[bundleGuide.bundleUuid]
+                guideBundleErrors?.bundleGuides?.[bundleGuide.uuid]
               "
               :guide-input="bundleGuide"
               :guides="guides"

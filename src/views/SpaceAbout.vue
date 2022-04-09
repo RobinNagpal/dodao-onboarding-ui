@@ -35,7 +35,7 @@ onMounted(() => {
       <div v-if="!spaceLoading" class="card integration-main-card mt-6">
         <div v-if="space.about" class="mb-3">
           <h4 class="link-color mb-2">{{ $t('settings.about') }}</h4>
-          <UiText :text="space.about" />
+          <UiMarkdown :body="space.about" class="mb-6" />
         </div>
 
         <div class="mb-3">
@@ -49,20 +49,6 @@ onMounted(() => {
             <UiText :text="getUrl(space.terms)" :truncate="35" />
             <Icon name="external-link" class="ml-1" />
           </a>
-        </div>
-
-        <div v-if="space.strategies" class="last:mb-0 mb-3">
-          <h4 class="link-color mb-2">{{ $t('settings.strategies') }}</h4>
-          <div v-for="(strategy, i) in space.strategies" :key="i">
-            <div>{{ strategy.name }}</div>
-          </div>
-        </div>
-
-        <div v-if="Object.keys(space.plugins || {}).length">
-          <h4 class="link-color mb-2">{{ $t('plugins') }}</h4>
-          <div v-for="(plugin, i) in space.plugins" :key="i">
-            <div>{{ i }}</div>
-          </div>
         </div>
       </div>
       <Block

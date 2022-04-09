@@ -50,7 +50,6 @@ async function loadGuideBundles(skip = 0) {
   stopLoadingMore.value = guidesObj?.length < loadBy;
   store.space.guideBundles = guidesObj;
   loading.value = false;
-  console.log('Guide Bundles load', store.space.guideBundles);
 }
 
 onMounted(() => {

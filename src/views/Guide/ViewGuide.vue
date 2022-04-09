@@ -125,10 +125,24 @@ function selectFromThreedotDropdown(e) {
 }
 
 function selectFromShareDropdown(e) {
-  if (e === 'shareToTwitter') shareToTwitter(props.space, guide.value, window);
+  if (e === 'shareToTwitter')
+    shareToTwitter(
+      props.space,
+      guide.value?.name ?? '',
+      'guide/view',
+      guide.value?.uuid ?? '',
+      window
+    );
   else if (e === 'shareToFacebook')
-    shareToFacebook(props.space, guide.value, window);
-  else if (e === 'shareToClipboard') shareToClipboard(props.space, guide.value);
+    shareToFacebook(
+      props.space,
+      guide.value?.name ?? '',
+      'guide/view',
+      guide.value?.uuid ?? '',
+      window
+    );
+  else if (e === 'shareToClipboard')
+    shareToClipboard(props.space, 'guide/view', guide.value?.uuid ?? '');
 }
 
 const { profiles, loadProfiles } = useProfiles();
