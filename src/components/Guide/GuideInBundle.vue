@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
+import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
 import { shorten } from '@/helpers/utils';
+import { PropType } from 'vue';
 
 const props = defineProps({
+  guideBundle: { type: Object as PropType<GuideBundleQuery_guideBundle> },
   guide: Object,
   profiles: Object
 });
@@ -12,12 +15,23 @@ const props = defineProps({
   <router-link
     :to="{
       name: 'guide',
-      params: { key: guide.space.id, uuid: guide.uuid }
+      params: {
+        key: guide.space.id,
+        uuid: guide.uuid,
+        from: JSON.stringify({
+          displayName: guideBundle.name,
+          name: 'guideBundle',
+          params: {
+            key: guideBundle.space.id,
+            uuid: guideBundle.uuid
+          }
+        })
+      }
     }"
   >
     <div
       role="listitem"
-      class="home-hero-tab guide-in-bundle-card w-full flex mb-4"
+      class="card home-hero-tab guide-in-bundle-card w-full flex mb-4"
     >
       <div class="guide-image">
         <UiThumbnail

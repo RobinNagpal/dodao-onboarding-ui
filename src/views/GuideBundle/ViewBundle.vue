@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
-import { computed, onMounted, ref, watch } from 'vue';
-import LayoutTopAndBottom from '@/components/Layout/TopAndBottom.vue';
-import LayoutSingle from '@/components/Layout/Single.vue';
-import BlockSpaceNew from '@/components/Block/SpaceNew.vue';
-import GuideGuideinBundle from '@/components/Guide/GuideInBundle.vue';
 import Block from '@/components/Block.vue';
+import GuideGuideinBundle from '@/components/Guide/GuideInBundle.vue';
 import RowLoading from '@/components/RowLoading.vue';
+import UiThumbnail from '@/components/Ui/Thumbnail.vue';
+import Icon from '@/components/Icon.vue';
 import { useApolloQuery } from '@/composables/useApolloQuery';
-import { GuideBundleQuery } from '@/graphql/guideBundles.graphql';
 import { useProfiles } from '@/composables/useProfiles';
-import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
+import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
+import { GuideBundleQuery } from '@/graphql/guideBundles.graphql';
+import { setPageTitle } from '@/helpers/utils';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { marked } from 'marked';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { PropType } from 'vue/dist/vue';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+
+const renderer = new marked.Renderer();
 
 const props = defineProps({
   spaceId: String,
@@ -53,55 +55,79 @@ onMounted(() => {
   loadGuideBundle();
 });
 
+const bundleContents = computed(() => {
+  return guideBundle.value
+    ? marked.parse(guideBundle.value.content, { renderer })
+    : null;
+});
+
 const { profiles, loadProfiles } = useProfiles();
 </script>
 
 <template>
-  <div>
-    <div class="container-default w-container">
-      <div class="home-tabs-wrapper mt-6">
-        <div
-          data-duration-in="300"
-          data-duration-out="100"
-          data-easing="ease"
-          class="home-tabs w-tabs"
-        >
-          <div class="home-tabs-content w-tab-content">
-            <div class="home-tab-pane w-tab-pane">
-              <div
-                v-if="!loading && guideBundle"
-                class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
+  <div class="container-default w-container" v-if="guideBundle">
+    <div class="home-tabs-wrapper mt-6">
+      <div
+        data-duration-in="300"
+        data-duration-out="100"
+        data-easing="ease"
+        class="home-tabs w-tabs"
+      >
+        <div class="card home-tabs-content w-tab-content">
+          <div class="home-tab-pane w-tab-pane p-6">
+            <div class="px-4 md:px-0 mb-3">
+              <a
+                class="text-color"
+                @click="
+                  $router.push({
+                    name: 'guideBundles',
+                    params: { key: space.id }
+                  })
+                "
               >
+                <Icon name="back" size="22" class="!align-middle" />
+                {{ space.name }}
+              </a>
+            </div>
+            <div>
+              <div class="pt-4">
                 <UiThumbnail
                   :src="guideBundle.thumbnail"
                   :entityId="guideBundle.id"
                   :title="guideBundle.name"
                   symbolIndex="guideBundle"
-                  size="200"
+                  :big_tile="true"
+                  :size="'400'"
                   class="mt-3 mb-2"
                 />
               </div>
+              <h2>{{ guideBundle.name }}</h2>
+              <div class="pt-2">
+                {{ guideBundle.excerpt }}
+              </div>
+              <div v-html="bundleContents" class="markdown-body pt-2" />
             </div>
           </div>
-          <div class="home-tabs-menu wf-grid w-tab-menu" role="tablist">
-            <div v-if="!loading && guideBundle">
-              <GuideGuideinBundle
-                v-for="(guide, i) in guideBundle.bundleGuides"
-                :key="i"
-                :guide="{ ...guide, space }"
-                :profiles="profiles"
-              />
-            </div>
-            <div
-              style="height: 10px; width: 10px; position: absolute"
-              ref="endElement"
+        </div>
+        <div class="home-tabs-menu wf-grid w-tab-menu" role="tablist">
+          <div v-if="!loading && guideBundle">
+            <GuideGuideinBundle
+              v-for="(guide, i) in guideBundle.bundleGuides"
+              :key="i"
+              :guide="{ ...guide, space }"
+              :guide-bundle="guideBundle"
+              :profiles="profiles"
             />
-            <Block v-if="loading" :slim="true">
-              <RowLoading class="my-2" />
-            </Block>
           </div>
+          <div
+            style="height: 10px; width: 10px; position: absolute"
+            ref="endElement"
+          />
         </div>
       </div>
     </div>
+    <Block v-if="loading" :slim="true">
+      <RowLoading class="my-2" />
+    </Block>
   </div>
 </template>

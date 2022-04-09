@@ -532,14 +532,11 @@
   .home-hero-tab {
     padding: 20px 20px;
     border-radius: 16px;
-    background-color: #fff;
     box-shadow: 0 6px 54px 0 rgba(163, 166, 255, 0.13), 0 24px 94px 0 rgba(12, 12, 12, 0.04);
-    opacity: 0.70;
     -webkit-transition: opacity 200ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
     transition: opacity 200ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
     transition: opacity 200ms ease, transform 300ms ease, opacity 300ms ease;
     transition: opacity 200ms ease, transform 300ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
-    color: #66666e;
     text-decoration: none;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
@@ -549,15 +546,12 @@
   }
 
   .home-hero-tab:hover {
-    opacity: 0.7;
     -webkit-transform: scale3d(0.94, 0.94, 0.01);
     transform: scale3d(0.94, 0.94, 0.01);
-    color: #66666e;
   }
 
   .home-hero-tab.w--current {
     background-color: #fff;
-    opacity: 1;
   }
 
   .home-hero-tab.last {
@@ -585,7 +579,6 @@
     height: 100%;
     min-height: 580px;
     border-radius: 24px;
-    background-color: rgba(255, 255, 255, 0.65);
     box-shadow: 0 14px 40px 0 rgba(45, 33, 178, 0.05);
   }
 }
@@ -595,6 +588,12 @@
 .card {
   overflow: hidden;
   border-radius: 20px;
+  background-color: var(--header-main-bg);
+  box-shadow: var(--box-shadow);
+  border-color: var(--border-color);
+  transition: transform 300ms ease;
+  transition: transform 300ms ease, -webkit-transform 300ms ease;
+
 
   &.feature-card {
     max-width: 300px;
@@ -607,11 +606,6 @@
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
-    background-color: var(--header-main-bg);
-    box-shadow: var(--box-shadow);
-    border-color: var(--border-color);
-    transition: transform 300ms ease;
-    transition: transform 300ms ease, -webkit-transform 300ms ease;
     position: relative;
     transition: -webkit-transform 300ms ease;
 
