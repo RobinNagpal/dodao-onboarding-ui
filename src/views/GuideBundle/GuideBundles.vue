@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import LayoutTopAndBottom from '@/components/Layout/TopAndBottom.vue';
 import BlockSpaceNew from '@/components/Block/SpaceNew.vue';
 import NoResults from '@/components/NoResults.vue';
-import GuideNoGuides from '@/components/Guide/NoGuides.vue';
+import GuideBundleNoGuideBundles from '@/components/GuideBundle/NoGuideBundles.vue';
 import GuideBundleTimelineGuideBundle from '@/components/GuideBundle/TimelineGuideBundle.vue';
 import Block from '@/components/Block.vue';
 import RowLoading from '@/components/RowLoading.vue';
@@ -89,7 +89,7 @@ const loadingData = computed(() => {
             store.space.guideBundles.length < 1
           "
         />
-        <GuideNoGuides
+        <GuideBundleNoGuideBundles
           v-else-if="!guideBundlesCount && !loadingData"
           class="mt-2"
           :space="space"

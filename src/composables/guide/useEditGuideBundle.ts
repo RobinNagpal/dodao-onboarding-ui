@@ -75,6 +75,9 @@ export function useEditGuideBundle(
         }
       }
     );
+    if (guideBundleErrors.value.bundleGuides?.[uuid]) {
+      delete guideBundleErrors.value.bundleGuides[uuid];
+    }
   }
 
   function moveGuideUp(uuid: string) {

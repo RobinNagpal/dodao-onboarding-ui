@@ -306,7 +306,7 @@
     "new": "New bundle",
     "noGuideBundles": "There aren't any onboarding guide bundles here yet!",
     "createGuideBundle": "Create",
-    "createFirstGuideBundle": "Let's create your first onboarding guide bundle",
+    "createFirstGuideBundle": "Let's create your first guide bundle",
     "states": {
       "all": "All",
       "core": "Core",
