@@ -1,9 +1,11 @@
 import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
-import GuideCreate from '@/views/Guide/Create.vue';
+import GuideCreate from '@/views/Guide/CreateGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
+import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
+import GuideBundles from '@/views/GuideBundle/GuideBundles.vue';
 import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
@@ -46,6 +48,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: Guides
   },
   {
+    path: 'guide-bundles',
+    name: 'guideBundles',
+    component: GuideBundles
+  },
+  {
     path: 'proposal/:id',
     name: 'spaceProposal',
     component: SpaceProposal
@@ -53,7 +60,12 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'guide/view/:uuid',
     name: 'guide',
-    component: () => import('@/views/Guide/Guide.vue')
+    component: () => import('@/views/Guide/ViewGuide.vue')
+  },
+  {
+    path: 'guide-bundle/view/:uuid',
+    name: 'guideBundle',
+    component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
   {
     path: 'guide/create',
@@ -61,9 +73,19 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: GuideCreate
   },
   {
+    path: 'guide-bundle/create',
+    name: 'guideBundleCreate',
+    component: GuideBundleCreate
+  },
+  {
     path: 'guide/edit/:uuid',
     name: 'guideEdit',
     component: GuideCreate
+  },
+  {
+    path: 'guide-bundle/edit/:uuid',
+    name: 'guideBundleEdit',
+    component: GuideBundleCreate
   },
   {
     path: 'guide/submissions/:uuid',

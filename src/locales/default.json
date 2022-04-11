@@ -240,12 +240,73 @@
     "publicInput": "Public Input",
     "privateInput": "Private Input"
   },
+  "guideBundle": {
+    "create": {
+      "name": "Name",
+      "excerpt": "Bundle excerpt...",
+      "basicInfo": "Basic Information",
+      "content": "Detailed Description of the Guide Bundle",
+      "guidesInBundle": "Guides in Bundle",
+      "addGuide": "Add Guide"
+    },
+    "guideSelect": {
+      "changeGuide": "Change Guide",
+      "selectGuide": "Select Guide"
+    },
+    "modal": {
+      "selectGuide": "Select Guide"
+    },
+    "category": {
+      "engineering": "Engineering",
+      "marketing": "Marketing",
+      "sales": "Sales",
+      "contentWriting": "Content Writing",
+      "setup": "Setup",
+      "member": "Member",
+      "community": "Community"
+    },
+    "delete": "Delete",
+    "duplicate": "Duplicate",
+    "discordWebhook": "Discord Webhook",
+    "edit": "Edit",
+    "endDate": "End date",
+    "guideBundleBy": "by {0}",
+    "startDate": "Start date",
+
+    "thumbnail": "Thumbnail Image",
+    "vote": "Vote",
+    "votingSystem": "Voting system",
+    "next": "Next",
+    "previous": "Previous",
+    "complete": "Complete",
+    "submissions": "Submissions",
+    "addInputOrQuestion": "Add Input or Question",
+    "multipleChoiceQuestion": "Multiple Choice",
+    "singleChoiceQuestion": "Single Choice",
+    "publicInput": "Public Input",
+    "privateInput": "Private Input"
+  },
   "guides": {
-    "header": "Onboarding Guides",
+    "header": "Guides",
     "new": "New guide",
     "noGuides": "There aren't any onboarding guides here yet!",
     "createGuide": "Create",
     "createFirstGuide": "Let's create your first onboarding guide",
+    "states": {
+      "all": "All",
+      "core": "Core",
+      "community": "Community",
+      "active": "Active",
+      "pending": "Pending",
+      "closed": "Closed"
+    }
+  },
+  "guideBundles": {
+    "header": "Guide Bundles",
+    "new": "New bundle",
+    "noGuideBundles": "There aren't any onboarding guide bundles here yet!",
+    "createGuideBundle": "Create",
+    "createFirstGuideBundle": "Let's create your first guide bundle",
     "states": {
       "all": "All",
       "core": "Core",
@@ -348,6 +409,7 @@
     "delegationRemoved": "Delegation removed",
     "guideCreated": "Guide Created",
     "guideResponseSubmitted": "Guide Submitted",
+    "guideBundleCreated": "Guide Bundle Created",
     "proposalDeleted": "Proposal deleted",
     "somethingWentWrong": "Oops, something went wrong!",
     "saved": "Saved!",
@@ -505,6 +567,7 @@
         "guides": "{dao} Guides",
         "proposal": "{dao} proposal: {proposal}",
         "guide": "{dao} guide: {guide}",
+        "bundle": "{dao} bundle: {bundle}",
         "settings": "{dao} Settings"
       },
       "guide": {

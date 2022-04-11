@@ -1,4 +1,5 @@
 import { useCopy } from '@/composables/useCopy';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useShare } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
@@ -23,52 +24,75 @@ export function useSharing() {
     }
   ];
 
-  function proposalUrl(key, proposal) {
-    return `https://${window.location.hostname}/#/${key}/proposal/${proposal.id}`;
+  function entitylUrl(space: string, entityUrl: string, uuid: string) {
+    return `https://${window.location.hostname}/#/${space}/${entityUrl}/${uuid}`;
   }
-  function encodedProposalUrl(key, proposal) {
-    return encodeURIComponent(proposalUrl(key, proposal));
+  function encodedProposalUrl(space: string, entityUrl: string, uuid: string) {
+    return encodeURIComponent(entitylUrl(space, entityUrl, uuid));
   }
 
   const { share, isSupported } = useShare();
 
-  function startShare(space, proposal) {
+  function startShare(
+    space: SpaceModel,
+    entityName: string,
+    entityUrl: string,
+    uuid: string
+  ) {
     share({
       title: '',
-      text: `${space.name} - ${proposal.title}`,
-      url: proposalUrl(space.id, proposal)
+      text: `${space.name} - ${entityName}`,
+      url: entitylUrl(space.id, entityUrl, uuid)
     });
   }
 
-  function shareToTwitter(space, proposal, window) {
+  function shareToTwitter(
+    space: SpaceModel,
+    entityName: string,
+    entityUrl: string,
+    uuid: string,
+    window
+  ) {
     const url = `https://twitter.com/intent/tweet?text=@${
       space.twitter || space.name
-    }%20${encodeURIComponent(proposal.title)}%20${encodedProposalUrl(
+    }%20${encodeURIComponent(entityName)}%20${encodedProposalUrl(
       space.id,
-      proposal
+      entityUrl,
+      uuid
     )}`;
     window.open(url, '_blank').focus();
   }
 
-  function shareToFacebook(space, proposal, window) {
+  function shareToFacebook(
+    space: SpaceModel,
+    entityName: string,
+    entityUrl: string,
+    uuid: string,
+    window
+  ) {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodedProposalUrl(
       space.id,
-      proposal
-    )}&quote=${encodeURIComponent(proposal.title)}`;
+      entityUrl,
+      uuid
+    )}&quote=${encodeURIComponent(entityName)}`;
     window.open(url, '_blank').focus();
   }
 
   const { copyToClipboard } = useCopy();
 
-  function shareToClipboard(space, proposal) {
-    copyToClipboard(proposalUrl(space.id, proposal));
+  function shareToClipboard(
+    space: SpaceModel,
+    entityUrl: string,
+    uuid: string
+  ) {
+    copyToClipboard(entitylUrl(space.id, entityUrl, uuid));
   }
 
   return {
     shareToTwitter,
     shareToFacebook,
     shareToClipboard,
-    proposalUrl,
+    proposalUrl: entitylUrl,
     startShare,
     sharingIsSupported: isSupported,
     sharingItems

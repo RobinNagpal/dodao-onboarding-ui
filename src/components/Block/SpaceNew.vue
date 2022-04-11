@@ -108,11 +108,28 @@ watchEffect(() => {
         </UiButton>
       </router-link>
       <router-link
+        v-if="isEthBlockchain"
+        :to="{ name: 'guideBundles', params: { key: space.id } }"
+        :class="$route.name === 'guideBundles' && 'router-link-exact-active'"
+      >
+        <UiButton class="whitespace-nowrap">
+          {{ $t('guideBundles.header') }}
+        </UiButton>
+      </router-link>
+      <router-link
         v-if="isAdmin"
         :to="{ name: 'guideCreate', params: { key: space.id } }"
       >
         <UiButton class="whitespace-nowrap">
           {{ $t('guides.new') }}
+        </UiButton>
+      </router-link>
+      <router-link
+        v-if="isAdmin && isEthBlockchain"
+        :to="{ name: 'guideBundleCreate', params: { key: space.id } }"
+      >
+        <UiButton class="whitespace-nowrap">
+          {{ $t('guideBundles.new') }}
         </UiButton>
       </router-link>
       <router-link
@@ -138,6 +155,21 @@ watchEffect(() => {
 .nav-links {
   a {
     margin: 8px;
+  }
+
+  .router-link-exact-active {
+    button {
+      color: white;
+      background-color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+
+      &:hover {
+        color: white;
+        background-color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        cursor: default;
+      }
+    }
   }
 }
 </style>

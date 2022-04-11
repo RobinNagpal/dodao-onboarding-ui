@@ -1,3 +1,4 @@
+import { TempGuideBundleInput } from '@/composables/guide/EmptyGuideBundle';
 import { useNotifications } from '@/composables/useNotifications';
 import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
@@ -5,6 +6,7 @@ import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
 import { getInstance } from '@/utils/auth/auth';
 import { AuthConnector } from '@/utils/auth/authConnector';
+import { GuideBundleInput } from '@dodao/onboarding-schemas/inputs/GuideBundleInput';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
@@ -149,6 +151,28 @@ export function useClient() {
         auth.web3,
         web3.value.account,
         guideMessage
+      )) as MsgResponse;
+    } else if (type === 'guideBundle') {
+      const bundlePayload = payload as TempGuideBundleInput;
+      const bundleMessage: GuideBundleInput = {
+        uuid: bundlePayload.uuid,
+        categories: bundlePayload.categories || [],
+        excerpt: bundlePayload.excerpt,
+        content: bundlePayload.content,
+        discordWebhook: bundlePayload.discordWebhook || '',
+        from: web3.value.account,
+        name: bundlePayload.name,
+        space: space.id,
+        thumbnail: bundlePayload.thumbnail || '',
+        bundleGuides: bundlePayload.bundleGuides.map(g => ({
+          guideUuid: g.guide!.uuid,
+          order: g.order
+        }))
+      };
+      return (await clientEIP712.bundle(
+        auth.web3,
+        web3.value.account,
+        bundleMessage
       )) as MsgResponse;
     } else if (type === 'vote') {
       return (await clientEIP712.vote(auth.web3, web3.value.account, {

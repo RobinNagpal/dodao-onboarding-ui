@@ -36,7 +36,7 @@ const uuid = route.params.uuid;
 
 const preview = ref(false);
 
-const modalCategoryOpen = ref(false);
+const modalCategoryOpen = ref<boolean>(false);
 
 const {
   activeStepId,
@@ -118,20 +118,6 @@ onMounted(async () => {
           <Icon name="back" size="22" class="!align-middle" />
           {{ guide.id ? guide.name : 'Back to Guides' }}
         </router-link>
-        <UiSidebarButton
-          v-if="!preview && guideLoaded"
-          @click="preview = true"
-          class="float-right"
-        >
-          <Icon name="preview" size="18" />
-        </UiSidebarButton>
-        <UiSidebarButton
-          v-if="preview"
-          @click="preview = false"
-          class="float-right"
-        >
-          <Icon name="back" size="18" />
-        </UiSidebarButton>
       </div>
       <template v-if="guideLoaded">
         <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">

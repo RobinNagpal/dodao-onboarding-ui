@@ -26,7 +26,8 @@ import { useRoute, useRouter } from 'vue-router';
 const props = defineProps({
   spaceId: String,
   space: { type: Object as PropType<SpaceModel>, required: true },
-  spaceLoading: Boolean
+  spaceLoading: Boolean,
+  from: { type: String }
 });
 
 const { isAdmin } = useSpace(props.space);
@@ -44,6 +45,9 @@ const notify = inject('notify') as Function;
 const uuid = route.params.uuid;
 
 const modalOpen = ref(false);
+const backButtonText = props.from
+  ? JSON.parse(props.from)?.displayName || props.space.name
+  : props.space.name;
 
 const {
   activeStepId,
@@ -119,10 +123,24 @@ function selectFromThreedotDropdown(e) {
 }
 
 function selectFromShareDropdown(e) {
-  if (e === 'shareToTwitter') shareToTwitter(props.space, guide.value, window);
+  if (e === 'shareToTwitter')
+    shareToTwitter(
+      props.space,
+      guide.value?.name ?? '',
+      'guide/view',
+      guide.value?.uuid ?? '',
+      window
+    );
   else if (e === 'shareToFacebook')
-    shareToFacebook(props.space, guide.value, window);
-  else if (e === 'shareToClipboard') shareToClipboard(props.space, guide.value);
+    shareToFacebook(
+      props.space,
+      guide.value?.name ?? '',
+      'guide/view',
+      guide.value?.uuid ?? '',
+      window
+    );
+  else if (e === 'shareToClipboard')
+    shareToClipboard(props.space, 'guide/view', guide.value?.uuid ?? '');
 }
 
 const { profiles, loadProfiles } = useProfiles();
@@ -143,6 +161,17 @@ onMounted(async () => {
     space: props.space?.name
   });
 });
+
+function onClickBackButton() {
+  if (props.from && JSON.parse(props.from).name) {
+    router.push({
+      name: JSON.parse(props.from).name,
+      params: JSON.parse(props.from).params
+    });
+  } else {
+    router.push({ name: 'guides', params: { key: props.space.id } });
+  }
+}
 </script>
 
 <template>
@@ -151,14 +180,9 @@ onMounted(async () => {
       <template #content>
         <template v-if="loaded">
           <div class="px-4 md:px-0 mb-3">
-            <a
-              class="text-color"
-              @click="
-                $router.push({ name: 'guides', params: { key: space.id } })
-              "
-            >
+            <a class="text-color" @click="onClickBackButton()">
               <Icon name="back" size="22" class="!align-middle" />
-              {{ space.name }}
+              {{ backButtonText }}
             </a>
           </div>
           <div class="px-4 md:px-0">

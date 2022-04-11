@@ -4,11 +4,13 @@ const store = reactive({
   space: {
     proposals: [],
     guides: [],
+    guideBundles: [],
     filterBy: 'all'
   },
   timeline: {
     proposals: [],
     guides: [],
+    guideBundles: [],
     filterBy: 'all'
   }
 });

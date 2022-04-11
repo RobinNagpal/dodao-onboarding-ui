@@ -10,7 +10,6 @@ import {
   StepError,
   UserInputError
 } from '@/types/error';
-import { emptyGuide } from '@/views/Guide/EmptyGuide';
 import {
   GuideInput,
   GuideStepInput
@@ -28,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { emptyGuide } from './EmptyGuide';
 
 const questionContentLimit = 1024;
 const inputLabelLimit = 32;

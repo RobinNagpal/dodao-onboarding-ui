@@ -13,7 +13,7 @@ type Query {
     orderDirection: OrderDirection
   ): [Space]
 
-  guide(uuid: String): Guide
+  guide(uuid: String): Guide!
 
   guides(
     first: Int
@@ -21,7 +21,17 @@ type Query {
     where: GuideWhere
     orderBy: String
     orderDirection: OrderDirection
-  ): [Guide]
+  ): [Guide!]
+
+  guideBundle(uuid: String): GuideBundle!
+
+  guideBundles(
+    first: Int
+    skip: Int
+    where: GuideWhere
+    orderBy: String
+    orderDirection: OrderDirection
+  ): [GuideBundle!]
 
   guideSubmissions(
     first: Int
@@ -325,6 +335,36 @@ type Guide {
   thumbnail: String
   space: Space!
   steps: [GuideStep!]!
+  uuid: String!
+  version: Int!
+  link: String!
+}
+
+type GuideInBundle {
+  categories: [String!]!
+  content: String!
+  created: Int!
+  discordWebhook: String
+  name: String!
+  order: Int!
+  thumbnail: String
+  uuid: String!
+  link: String!
+}
+
+type GuideBundle {
+  authors: [String!]!
+  categories: [String!]!
+  excerpt: String!
+  content: String!
+  created: Int!
+  discordWebhook: String
+  id: String!
+  ipfs: String!
+  name: String!
+  thumbnail: String
+  space: Space!
+  bundleGuides: [GuideInBundle!]!
   uuid: String!
   version: Int!
   link: String!

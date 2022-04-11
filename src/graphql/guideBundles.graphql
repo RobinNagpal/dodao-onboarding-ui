@@ -1,0 +1,70 @@
+query GuideBundlesQuery(
+  $space: String
+  $space_in: [String]
+  $author_in: [String]
+) {
+  guideBundles(
+    where: { space: $space, space_in: $space_in, author_in: $author_in }
+  ) {
+    id
+    ipfs
+    authors
+    name
+    categories
+    content
+    created
+    excerpt
+    bundleGuides {
+      categories
+      content
+      created
+      name
+      order
+      thumbnail
+      uuid
+    }
+    space {
+      id
+      name
+      members
+      avatar
+      symbol
+    }
+
+    thumbnail
+    uuid
+  }
+}
+
+query GuideBundleQuery($uuid: String!) {
+  guideBundle(uuid: $uuid) {
+    authors
+    categories
+    content
+    created
+    discordWebhook
+    excerpt
+    id
+    ipfs
+    link
+    name
+    space {
+      id
+      name
+    }
+    thumbnail
+    uuid
+    version
+    bundleGuides {
+      categories
+      content
+      created
+      discordWebhook
+      link
+      name
+      order
+      thumbnail
+      uuid
+    }
+  }
+}
