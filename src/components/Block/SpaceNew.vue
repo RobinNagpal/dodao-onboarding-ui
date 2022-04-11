@@ -108,6 +108,7 @@ watchEffect(() => {
         </UiButton>
       </router-link>
       <router-link
+        v-if="isEthBlockchain"
         :to="{ name: 'guideBundles', params: { key: space.id } }"
         :class="$route.name === 'guideBundles' && 'router-link-exact-active'"
       >
@@ -124,7 +125,7 @@ watchEffect(() => {
         </UiButton>
       </router-link>
       <router-link
-        v-if="isAdmin"
+        v-if="isAdmin && isEthBlockchain"
         :to="{ name: 'guideBundleCreate', params: { key: space.id } }"
       >
         <UiButton class="whitespace-nowrap">

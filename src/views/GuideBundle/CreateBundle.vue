@@ -12,7 +12,6 @@ import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useEditGuideBundle } from '@/composables/guide/useEditGuideBundle';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useClient } from '@/composables/useClient';
-import { useDomain } from '@/composables/useDomain';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useModal } from '@/composables/useModal';
 import { useStore } from '@/composables/useStore';

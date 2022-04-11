@@ -7,7 +7,7 @@ import { loginTypes } from '@/helpers/sign/loginTypes';
 import { spaceTypes } from '@/helpers/sign/spaceTypes';
 import { CustomProvider } from '@/utils/auth/customProvider';
 import { getJwt, getValidDecodedToken } from '@/utils/auth/jwtUtil';
-import { BundleInput } from '@dodao/onboarding-schemas/inputs/BundleInput';
+import { GuideBundleInput } from '@dodao/onboarding-schemas/inputs/GuideBundleInput';
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { SpaceInput } from '@dodao/onboarding-schemas/inputs/SpaceInput';
@@ -39,8 +39,7 @@ export default class OnboardingClient extends Client {
 
     const data: any = { domain, types, message };
     const jwt = getJwt();
-    const fff = false;
-    if (jwt && getValidDecodedToken() && fff) {
+    if (jwt && getValidDecodedToken()) {
       const { web3: loggedIn } = useWeb3();
 
       console.log('loggedIn', loggedIn);
@@ -110,7 +109,7 @@ export default class OnboardingClient extends Client {
   async bundle(
     web3: Web3Provider | Wallet,
     address: string,
-    message: Omit<BundleInput, 'timestamp' | 'from'>
+    message: Omit<GuideBundleInput, 'timestamp' | 'from'>
   ) {
     console.log('bundle', message);
     return await this.sign(web3, address, message, bundleTypes);

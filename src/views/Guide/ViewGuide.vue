@@ -30,8 +30,6 @@ const props = defineProps({
   from: { type: String }
 });
 
-console.log('props.from', props.from);
-
 const { isAdmin } = useSpace(props.space);
 
 const route = useRoute();
