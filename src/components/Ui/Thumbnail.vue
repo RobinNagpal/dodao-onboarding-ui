@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getCDNImageUrl } from '@/utils/platform/imageUtils';
 import { formatBytes32String } from '@ethersproject/strings';
 import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
 import { computed, ref } from 'vue';
@@ -23,14 +24,7 @@ const error = ref(false);
 
 const imgsrc = computed(() => {
   const url: string = getUrl(props.src);
-  if (!url) return '';
-  if (url.includes('cloudflare-ipfs.com')) {
-    return url.replace(
-      'cloudflare-ipfs.com/ipfs',
-      'd31h13bdjwgzxs.cloudfront.net'
-    );
-  }
-  return `https://worker.snapshot.org/mirror?img=${encodeURIComponent(url)}`;
+  return getCDNImageUrl(url);
 });
 
 const address = computed(() => {
