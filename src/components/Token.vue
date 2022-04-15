@@ -1,10 +1,12 @@
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { getCDNImageUrl } from '@/utils/platform/imageUtils';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { computed, PropType } from 'vue';
 import { formatBytes32String } from '@ethersproject/strings';
-import { getUrl } from '@snapshot-labs/snapshot.js/src/utils.ts';
+import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
 
 const props = defineProps({
-  space: Object,
+  space: { type: Object as PropType<SpaceModel>, required: true },
   size: String,
   symbolIndex: [String, Number],
   big_tile: Boolean
@@ -13,9 +15,8 @@ const props = defineProps({
 const spaceId = computed(() => props.space.id);
 
 const url = computed(() => {
-  const url = getUrl(props.space.avatar);
-  if (!url) return '';
-  return `https://worker.snapshot.org/mirror?img=${encodeURIComponent(url)}`;
+  const url: string = getUrl(props.space.avatar);
+  return getCDNImageUrl(url);
 });
 
 const spaceAddress = computed(() => {

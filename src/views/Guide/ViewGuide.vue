@@ -4,18 +4,18 @@ import GuideViewStepper from '@/components/Guide/View/Stepper.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ModalConfirm from '@/components/Modal/Confirm.vue';
+import ModalGuideGuideExport from '@/components/Modal/Guide/GuideExport.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiMarkdown from '@/components/Ui/Markdown.vue';
 import User from '@/components/User.vue';
+import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
-import { useDomain } from '@/composables/useDomain';
 import { useProfiles } from '@/composables/useProfiles';
 import { useSharing } from '@/composables/useSharing';
 import { useSpace } from '@/composables/useSpace';
 import { useStore } from '@/composables/useStore';
-import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -30,11 +30,10 @@ const props = defineProps({
   from: { type: String }
 });
 
-const { isAdmin } = useSpace(props.space);
+const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const route = useRoute();
 const router = useRouter();
-const { domain } = useDomain();
 const { t } = useI18n();
 const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
@@ -45,6 +44,9 @@ const notify = inject('notify') as Function;
 const uuid = route.params.uuid;
 
 const modalOpen = ref(false);
+
+const modalGuideExportOpen = ref(false);
+
 const backButtonText = props.from
   ? JSON.parse(props.from)?.displayName || props.space.name
   : props.space.name;
@@ -72,6 +74,10 @@ const threeDotItems = computed(() => {
   // items.push({ text: t('guide.delete'), action: 'delete' });
   items.push({ text: t('guide.edit'), action: 'edit' });
   items.push({ text: t('guide.submissions'), action: 'viewSubmissions' });
+
+  if (isSuperAdmin) {
+    items.push({ text: t('guide.export'), action: 'exportGuide' });
+  }
   return items;
 });
 
@@ -99,6 +105,10 @@ async function viewSubmissions() {
   });
 }
 
+async function exportGuide() {
+  modalGuideExportOpen.value = true;
+}
+
 const {
   shareToTwitter,
   shareToFacebook,
@@ -111,6 +121,7 @@ const {
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
   if (e === 'edit') editGuide();
+  if (e === 'exportGuide') exportGuide();
   if (e === 'viewSubmissions') viewSubmissions();
   if (e === 'duplicate')
     router.push({
@@ -290,6 +301,12 @@ function onClickBackButton() {
       :space="space"
       :guide="guide"
       :id="spaceId"
+    />
+    <ModalGuideGuideExport
+      v-if="loaded"
+      :open="modalGuideExportOpen"
+      @close="modalGuideExportOpen = false"
+      :guide="guide"
     />
   </teleport>
 </template>

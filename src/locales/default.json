@@ -195,6 +195,7 @@
     }
   },
   "guide": {
+    "addInputOrQuestion": "Add Input or Question",
     "castVote": "Cast your vote",
     "create": {
       "name": "Name",
@@ -211,34 +212,36 @@
       "member": "Member",
       "community": "Community"
     },
+    "complete": "Complete",
     "delete": "Delete",
     "duplicate": "Duplicate",
     "discordWebhook": "Discord Webhook",
     "edit": "Edit",
     "endDate": "End date",
+    "export": "Export",
     "guideBy": "by {0}",
+    "import": "Import",
+    "multipleChoiceQuestion": "Multiple Choice",
+    "next": "Next",
     "onboardingSteps": "Onboarding Steps",
+    "previous": "Previous",
+    "privateInput": "Private Input",
+    "publicInput": "Public Input",
     "question": {
       "content": "Question?",
       "description": "Question description"
     },
+    "singleChoiceQuestion": "Single Choice",
     "startDate": "Start date",
     "step": {
       "name": "Step Name",
       "contents": "Contents"
     },
+
+    "submissions": "Submissions",
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
-    "votingSystem": "Voting system",
-    "next": "Next",
-    "previous": "Previous",
-    "complete": "Complete",
-    "submissions": "Submissions",
-    "addInputOrQuestion": "Add Input or Question",
-    "multipleChoiceQuestion": "Multiple Choice",
-    "singleChoiceQuestion": "Single Choice",
-    "publicInput": "Public Input",
-    "privateInput": "Private Input"
+    "votingSystem": "Voting system"
   },
   "guideBundle": {
     "create": {

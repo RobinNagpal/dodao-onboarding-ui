@@ -7,11 +7,12 @@ import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
+import ModalGuideGuideImport from '@/components/Modal/Guide/GuideImport.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useClient } from '@/composables/useClient';
-import { useDomain } from '@/composables/useDomain';
 import { useEditGuide } from '@/composables/guide/useEditGuide';
 import { useModal } from '@/composables/useModal';
+import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -25,7 +26,7 @@ const props = defineProps({
   uuid: String
 });
 
-const { domain } = useDomain();
+const { isSuperAdmin } = useSpace(props.space);
 const { web3, web3Account } = useWeb3();
 const { clientLoading } = useClient();
 const notify = inject('notify') as any;
@@ -34,9 +35,9 @@ const route = useRoute();
 
 const uuid = route.params.uuid;
 
-const preview = ref(false);
-
 const modalCategoryOpen = ref<boolean>(false);
+
+const modalGuideImportOpen = ref(false);
 
 const {
   activeStepId,
@@ -54,10 +55,6 @@ const {
 } = useEditGuide(uuid as string, props.space, notify);
 
 const form = ref(guide);
-
-const steps = computed(() => {
-  return form.value.steps;
-});
 
 const isValid = computed(() => {
   return !clientLoading.value && !web3.value.authLoading;
@@ -93,6 +90,10 @@ function inputError(field: string) {
   return errors[field];
 }
 
+function importGuide(importedGuide: any) {
+  form.value = importedGuide;
+  activeStepId.value = form.value.steps[0].uuid;
+}
 onMounted(async () => {
   setPageTitle('page.title.guide.create', { space: props.space?.name });
 
@@ -118,7 +119,25 @@ onMounted(async () => {
           <Icon name="back" size="22" class="!align-middle" />
           {{ guide.id ? guide.name : 'Back to Guides' }}
         </router-link>
+        <UiSidebarButton
+          v-if="isSuperAdmin"
+          class="float-right ml-2"
+          :aria-label="$t('toggleSkin')"
+          @click="modalGuideImportOpen = true"
+        >
+          <svg
+            style="width: 24px; height: 24px"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              fill="currentColor"
+              d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"
+            />
+          </svg>
+        </UiSidebarButton>
       </div>
+
       <template v-if="guideLoaded">
         <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
           <div class="mb-2">
@@ -183,7 +202,7 @@ onMounted(async () => {
             :activeStepId="activeStepId"
             :guide="form"
             :guideErrors="guideErrors"
-            :steps="steps"
+            :steps="form.steps"
             :setActiveStep="setActiveStep"
             :updateStep="updateStep"
             :addStep="addStep"
@@ -217,6 +236,11 @@ onMounted(async () => {
       :categories="guide.categories"
       @close="modalCategoryOpen = false"
       @add="handleSubmitAddCategories"
+    />
+    <ModalGuideGuideImport
+      :open="modalGuideImportOpen"
+      @close="modalGuideImportOpen = false"
+      :import-guide="importGuide"
     />
   </teleport>
 </template>

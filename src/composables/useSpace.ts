@@ -6,6 +6,13 @@ import { computed } from 'vue';
 export function useSpace(space: SpaceModel) {
   const { web3Account } = useWeb3();
   const auth = getInstance();
+
+  const isSuperAdmin = computed(
+    () =>
+      web3Account.value?.toLowerCase() ===
+      '0x470579d16401a36bf63b1428eaa7189fbde5fee9'
+  );
+
   const isAdmin = computed(() => {
     const admins = space.admins?.map(address => address.toLowerCase());
 
@@ -17,9 +24,9 @@ export function useSpace(space: SpaceModel) {
       (auth.isAuthenticated.value &&
         web3Account.value &&
         (admins?.includes(web3Account.value.toLowerCase()) || isCreator)) ||
-      web3Account.value?.toLowerCase() ===
-        '0x470579d16401a36bf63b1428eaa7189fbde5fee9'
+      isSuperAdmin.value
     );
   });
-  return { isAdmin };
+
+  return { isAdmin, isSuperAdmin };
 }
