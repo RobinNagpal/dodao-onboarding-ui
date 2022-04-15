@@ -36,7 +36,7 @@ export function useApp() {
 
     if (connector) {
       try {
-        await loginWrapper(connector);
+        loginWrapper(connector);
       } catch (e) {
         console.error(e);
       }
