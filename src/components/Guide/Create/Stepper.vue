@@ -37,13 +37,13 @@ const activeStep = computed(() =>
         <li
           @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
+          role="presentation"
+          v-for="step in steps"
+          :key="step.uuid"
           :class="{
             active: step.uuid === activeStep.uuid,
             error: errors.steps?.[step.order]
           }"
-          role="presentation"
-          v-for="step in steps"
-          :key="step.uuid"
         >
           <a class="step-link" role="menuitem">{{ step.name }}</a>
         </li>

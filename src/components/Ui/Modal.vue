@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { watch, toRefs } from 'vue';
 import { useModal } from '@/composables/useModal';
 
@@ -6,7 +6,8 @@ const props = defineProps({
   open: {
     type: Boolean,
     required: true
-  }
+  },
+  shellClass: String
 });
 
 const { open } = toRefs(props);
@@ -21,7 +22,10 @@ watch(open, (val, prev) => {
   <transition name="fade">
     <div v-if="open" class="modal mx-auto">
       <div class="backdrop" @click="$emit('close')" />
-      <div class="shell overflow-hidden relative rounded-none md:rounded-lg">
+      <div
+        class="shell overflow-hidden relative rounded-none md:rounded-lg"
+        :class="shellClass || ''"
+      >
         <div v-if="$slots.header" class="border-b pt-3 pb-2 text-center">
           <slot name="header" />
         </div>
