@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
+import Icon from '@/components/Icon.vue';
+import LayoutSingle from '@/components/Layout/Single.vue';
+import ModalNetworks from '@/components/Modal/Networks.vue';
+import ModalSkins from '@/components/Modal/Skins.vue';
+import ModalSpaceCategory from '@/components/Modal/SpaceCategory.vue';
+import ModalValidation from '@/components/Modal/Validation.vue';
+import PageLoading from '@/components/PageLoading.vue';
+import TextareaArray from '@/components/TextareaArray.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiInput from '@/components/Ui/Input.vue';
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
@@ -30,6 +42,7 @@ export interface SpaceForm {
   mission?: string;
   name?: string;
   network?: string;
+  skin: string;
   terms?: string;
   twitter?: string;
   validation: any;
@@ -75,6 +88,7 @@ const form = ref<SpaceForm>({
   mission: undefined,
   name: undefined,
   network: undefined,
+  skin: 'default',
   terms: undefined,
   twitter: undefined,
   validation: basicValidation
@@ -230,6 +244,7 @@ onMounted(async () => {
         form.value.mission = space.mission;
         form.value.name = space.name || undefined;
         form.value.network = space.network;
+        form.value.skin = space.network;
         form.value.terms = space?.terms || undefined;
         form.value.twitter = space?.twitter || undefined;
 
@@ -325,6 +340,17 @@ onMounted(async () => {
                     <span class="capitalize">
                       {{ categoriesString }}
                     </span>
+                  </template>
+                </UiInput>
+                <UiInput
+                  @click="modalSkinsOpen = true"
+                  :error="inputError('skin')"
+                >
+                  <template v-slot:selected>
+                    {{ form.skin ? form.skin : $t('defaultSkin') }}
+                  </template>
+                  <template v-slot:label>
+                    {{ $t(`settings.skin`) }}
                   </template>
                 </UiInput>
                 <UiInput
