@@ -83,25 +83,7 @@ export function useClient() {
     type,
     payload
   ): Promise<MsgResponse | undefined> {
-    if (type === 'proposal') {
-      let plugins = {};
-      if (Object.keys(payload.metadata?.plugins).length !== 0)
-        plugins = payload.metadata.plugins;
-      return (await clientEIP712.proposal(auth.web3, web3.value.account, {
-        space: space.id,
-        type: payload.type,
-        title: payload.name,
-        body: payload.body,
-        choices: payload.choices,
-        start: payload.start,
-        end: payload.end,
-        snapshot: payload.snapshot,
-        network: space.network,
-        strategies: JSON.stringify(space.strategies),
-        plugins: JSON.stringify(plugins),
-        metadata: JSON.stringify({})
-      })) as MsgResponse;
-    } else if (type === 'guide') {
+    if (type === 'guide') {
       const guideMessage: GuideInput = {
         uuid: payload.uuid,
         categories: payload.categories || [],
@@ -199,6 +181,7 @@ export function useClient() {
         github: payload.github || '',
         mission: payload.mission || '',
         network: payload.network || '',
+        skin: payload.skin || 'default',
         terms: payload.terms || '',
         twitter: payload.twitter || '',
         blockchain: payload.blockchain
