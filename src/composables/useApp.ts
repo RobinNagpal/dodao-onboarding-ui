@@ -1,6 +1,7 @@
 import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.json';
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
+import { useSpaceSkin } from '@/composables/useSpaceSkin';
 import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
@@ -23,6 +24,7 @@ export function useApp() {
   const route = useRoute();
   const { loginWrapper } = useWeb3Wrapper();
   const { followingSpaces } = useFollowSpace();
+  const { spaceIdForDomain } = useSpaceSkin();
 
   async function init() {
     const auth = getInstance();
@@ -81,18 +83,12 @@ export function useApp() {
   }
 
   function initSkin() {
-    const spaceWithSkin: any = Object.values(explore.value.spaces).find(
-      (space: any) => space.skin !== 'default'
-    );
+    const spaceWithSkin: any = spaceIdForDomain
+      ? explore.value.spaces[spaceIdForDomain]
+      : null;
 
-    if (
-      spaceWithSkin?.skin &&
-      window.location.hostname !== 'light-localhost' &&
-      window.location.hostname !== 'dark-localhost'
-    ) {
+    if (spaceWithSkin?.skin) {
       document.body.classList.add(spaceWithSkin?.skin);
-    } else {
-      document.body.classList.add();
     }
   }
 
