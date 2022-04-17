@@ -27,7 +27,8 @@ export function useApp() {
   async function init() {
     const auth = getInstance();
     state.loading = true;
-    await Promise.all([getExplore()]);
+    await getExplore();
+    initSkin();
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
     const connector = await auth.getConnector();
@@ -69,12 +70,30 @@ export function useApp() {
         })
       );
       explore.value = exploreObj;
+
+      return exploreObj;
     } catch (e) {
       console.error(e);
       explore.value = {};
     }
 
     return;
+  }
+
+  function initSkin() {
+    const spaceWithSkin: any = Object.values(explore.value.spaces).find(
+      (space: any) => space.skin !== 'default'
+    );
+
+    if (
+      spaceWithSkin?.skin &&
+      window.location.hostname !== 'light-localhost' &&
+      window.location.hostname !== 'dark-localhost'
+    ) {
+      document.body.classList.add(spaceWithSkin?.skin);
+    } else {
+      document.body.classList.add();
+    }
   }
 
   const selectedCategory = ref('');

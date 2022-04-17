@@ -186,7 +186,7 @@ function onClickBackButton() {
 </script>
 
 <template>
-  <div class="page-main flex mx-auto">
+  <div class="page-main flex mx-auto justify-between">
     <LayoutSingle v-bind="$attrs">
       <template #content>
         <template v-if="loaded">
@@ -262,7 +262,7 @@ function onClickBackButton() {
     </LayoutSingle>
     <template v-if="loaded">
       <div
-        class="bg-skin-bg mt-4 w-[280px] h-[280px] info-bar card guide-right-side-card"
+        class="bg-skin-bg mt-4 ml-4 w-[280px] h-[280px] info-bar card guide-right-side-card"
       >
         <h3>{{ $t('information') }}</h3>
         <div class="space-y-1">

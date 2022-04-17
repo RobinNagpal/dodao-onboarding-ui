@@ -1,6 +1,6 @@
-<script setup>
-import { watch, onMounted, ref, watchEffect } from 'vue';
-import draggable from 'vuedraggable';
+<script setup lang="ts">
+import { watch, onMounted, ref } from 'vue';
+import Draggable from 'vuedraggable';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';
@@ -16,7 +16,7 @@ const { modalAccountOpen } = useModal();
 const router = useRouter();
 const { web3Account } = useWeb3();
 
-const draggableSpaces = ref([]);
+const draggableSpaces = ref<any>([]);
 
 function saveSpaceOrder() {
   if (web3Account.value)
@@ -76,7 +76,7 @@ const hasUnseenGuides = false;
             </UiSidebarButton>
           </router-link>
         </div>
-        <draggable
+        <Draggable
           v-if="draggableSpaces.length > 0"
           v-model="draggableSpaces"
           :component-data="{ name: 'list' }"
@@ -101,7 +101,7 @@ const hasUnseenGuides = false;
               </router-link>
             </div>
           </template>
-        </draggable>
+        </Draggable>
 
         <UiSidebarButton @click="clickNewSpace()"
           ><Icon size="20" name="plus"

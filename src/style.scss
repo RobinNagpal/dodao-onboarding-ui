@@ -17,7 +17,7 @@
   --border-color: #424242;
   --header-bg: #121212;
   --header-main-bg: #121212;
-  --box-shadow: 0px 0px 2px 1px rgba(238, 238, 238);
+  --border-width: 1px
 }
 
 [data-color-scheme='light'] {
@@ -32,6 +32,7 @@
   --block-bg: transparent;
   --header-main-bg: rgba(255, 255, 255, 0.9);
   --box-shadow: 0 4px 16px 0 rgba(26, 27, 30, 0.1);
+  --border-width: 1px
 }
 
 @layer base {
@@ -90,7 +91,7 @@
 }
 
 body {
-  background: var(--header-bg);
+  background: var(--bg-color);
 }
 
 * {
@@ -398,4 +399,8 @@ ol {
 ul {
   margin-left: 20px;
   list-style: auto;
+}
+
+#topnav {
+  border-radius: 14px;
 }

@@ -244,7 +244,7 @@ onMounted(async () => {
         form.value.mission = space.mission;
         form.value.name = space.name || undefined;
         form.value.network = space.network;
-        form.value.skin = space.network;
+        form.value.skin = space.skin;
         form.value.terms = space?.terms || undefined;
         form.value.twitter = space?.twitter || undefined;
 
@@ -347,7 +347,7 @@ onMounted(async () => {
                   :error="inputError('skin')"
                 >
                   <template v-slot:selected>
-                    {{ form.skin ? form.skin : $t('defaultSkin') }}
+                    {{ form.skin }}
                   </template>
                   <template v-slot:label>
                     {{ $t(`settings.skin`) }}
