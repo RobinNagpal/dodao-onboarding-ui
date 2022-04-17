@@ -69,6 +69,7 @@ import dhedge from './dhedge.scss';
 import diadata from './diadata.scss';
 import dinoswap from './dinoswap.css';
 import dittomoney from './dittomoney.scss';
+import dodao from './dodao.scss';
 import dogeswap from './dogeswap.scss';
 import domo from './domo.scss';
 import dorg from './dorg.scss';
@@ -334,6 +335,7 @@ export default {
   diadata,
   dinoswap,
   dittomoney,
+  dodao,
   dogeswap,
   domo,
   dorg,

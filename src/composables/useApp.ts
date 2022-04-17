@@ -19,6 +19,7 @@ const state = reactive({
 const spaces = ref({});
 const strategies = ref({});
 const explore: any = ref({});
+const appSkin: any = ref('default');
 
 export function useApp() {
   const route = useRoute();
@@ -87,9 +88,10 @@ export function useApp() {
       ? explore.value.spaces[spaceIdForDomain]
       : null;
 
-    if (spaceWithSkin?.skin) {
-      document.body.classList.add(spaceWithSkin?.skin);
-    }
+    const selectedSkin = spaceWithSkin?.skin || 'dodao';
+    appSkin.value = selectedSkin;
+    console.log('selected skin', selectedSkin);
+    document.body.classList.add(selectedSkin);
   }
 
   const selectedCategory = ref('');
@@ -148,6 +150,7 @@ export function useApp() {
   );
 
   return {
+    appSkin,
     init,
     getExplore,
     app: computed(() => state),

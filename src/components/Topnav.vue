@@ -8,7 +8,6 @@ import { useDomain } from '@/composables/useDomain';
 import { useApp } from '@/composables/useApp';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useTxStatus } from '@/composables/useTxStatus';
-import { useUserSkin } from '@/composables/useUserSkin';
 import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
 import { WalletMultiButton } from '@/components/Wallet/Solana';
 import Icon from '@/components/Icon.vue';
@@ -33,7 +32,6 @@ const {
 } = useWeb3();
 
 const { loginWrapper } = useWeb3Wrapper();
-const { toggleSkin, getSkinIcon } = useUserSkin();
 
 const loading = ref(false);
 
@@ -142,14 +140,6 @@ onMounted(() => setTitle());
                 class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
               />
             </UiButton>
-            <UiSidebarButton
-              v-if="!domain"
-              @click="toggleSkin"
-              class="float-right ml-2"
-              :aria-label="$t('toggleSkin')"
-            >
-              <Icon size="20" :name="getSkinIcon()" />
-            </UiSidebarButton>
           </div>
         </div>
       </Container>

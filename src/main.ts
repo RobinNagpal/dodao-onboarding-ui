@@ -3,6 +3,7 @@ import { apolloClient } from '@/helpers/apollo';
 import '@/helpers/auth';
 import options from '@/helpers/auth';
 import i18n from '@/helpers/i18n';
+import '@/helpers/skins';
 import router from '@/router';
 import '@/style.scss';
 import { LockPlugin } from '@/utils/auth/auth';
@@ -18,7 +19,6 @@ import { Buffer } from 'buffer';
 import 'solana-wallets-vue/styles.css';
 import { createApp, h, provide } from 'vue';
 import VueTippy from 'vue-tippy';
-import '../snapshot-spaces/skins';
 
 const walletOptions = {
   wallets: [

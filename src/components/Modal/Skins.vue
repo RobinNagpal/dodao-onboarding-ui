@@ -6,7 +6,6 @@ import Search from '@/components/Search.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiModal from '@/components/Ui/Modal.vue';
 import { useSearchFilters } from '@/composables/useSearchFilters';
-import { useUserSkin } from '@/composables/useUserSkin';
 import { computed, ref } from 'vue';
 
 defineProps({
@@ -26,8 +25,6 @@ function select(key) {
   emit('update:modelValue', key);
   emit('close');
 }
-
-const { userSkin } = useUserSkin();
 </script>
 
 <template>
@@ -42,11 +39,13 @@ const { userSkin } = useUserSkin();
     />
     <div class="mt-4 mx-0 md:mx-4">
       <a
-        v-if="!searchInput || searchInput === 'default'"
+        v-if="
+          !searchInput || searchInput === 'default' || searchInput === 'dodao'
+        "
         key=""
-        @click="select('default')"
+        @click="select('dodao')"
       >
-        <div :class="userSkin" class="bg-black rounded-none md:rounded-md">
+        <div class="bg-black rounded-none md:rounded-md">
           <Block>
             <UiButton class="mb-2" primary>{{ $t('defaultSkin') }}</UiButton>
           </Block>

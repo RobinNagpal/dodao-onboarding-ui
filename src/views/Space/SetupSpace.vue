@@ -88,7 +88,7 @@ const form = ref<SpaceForm>({
   mission: undefined,
   name: undefined,
   network: undefined,
-  skin: 'default',
+  skin: 'dodao',
   terms: undefined,
   twitter: undefined,
   validation: basicValidation

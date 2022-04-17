@@ -8,7 +8,7 @@ export function useSpaceSkin() {
   let spaceId = domains[domainName];
 
   if (env === 'local') {
-    spaceId = import.meta.env.VITE_VIEW_AS_SPACE ?? spaceId;
+    spaceId = import.meta.env.VITE_VIEW_AS_SPACE_WITH_SKIN ?? spaceId;
   }
 
   return { spaceIdForDomain: spaceId };
