@@ -12,7 +12,6 @@ import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
 import { WalletMultiButton } from '@/components/Wallet/Solana';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import ModalAccount from '@/components/Modal/Account.vue';
 import ModalBlockchains from '@/components/Modal/Blockchains.vue';
 
@@ -56,6 +55,9 @@ async function handleLogin(connector) {
 watch(space, () => {
   setTitle();
 });
+
+console.log('route.params.key', route.params.key);
+console.log('domain', domain);
 
 onMounted(() => setTitle());
 </script>

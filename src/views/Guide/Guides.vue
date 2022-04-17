@@ -11,9 +11,7 @@ import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
-import { useUnseenGuides } from '@/composables/useUnseenGuides';
-import { lsSet, setPageTitle } from '@/helpers/utils';
-import { useWeb3 } from '@/composables/useWeb3';
+import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 
 const props = defineProps({
@@ -22,8 +20,6 @@ const props = defineProps({
   spaceLoading: Boolean
 });
 
-const { lastSeenGuides, updateLastSeenGuide } = useUnseenGuides();
-const { web3Account } = useWeb3();
 const { store } = useStore();
 
 const loading = ref(false);
@@ -76,6 +72,8 @@ const guidesCount = computed(() => {
 const loadingData = computed(() => {
   return loading.value || loadingMore.value || props.spaceLoading.value;
 });
+
+console.log('store.space', store.space);
 </script>
 
 <template>

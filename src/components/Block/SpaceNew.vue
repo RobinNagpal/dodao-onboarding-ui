@@ -101,7 +101,10 @@ watchEffect(() => {
     <div class="px-3 flex nav-links">
       <router-link
         :to="{ name: 'guides', params: { key: space.id } }"
-        :class="$route.name === 'guides' && 'router-link-exact-active'"
+        :class="
+          $route.name === 'guides' ||
+          ($route.name === 'spaceHome' && 'router-link-exact-active')
+        "
       >
         <UiButton class="whitespace-nowrap">
           {{ $t('guides.header') }}

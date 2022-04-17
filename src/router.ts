@@ -34,12 +34,7 @@ const routes: RouteRecordRaw[] = [];
 const spaceRoutes: RouteRecordRaw[] = [
   {
     path: '',
-    name: 'spaceProposals',
-    component: Guides
-  },
-  {
-    path: '',
-    name: 'guides',
+    name: 'spaceHome',
     component: Guides
   },
   {
