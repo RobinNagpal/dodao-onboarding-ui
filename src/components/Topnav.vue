@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { getIpfsUrl, shorten } from '@/helpers/utils';
-import { useModal } from '@/composables/useModal';
-import { useDomain } from '@/composables/useDomain';
-import { useApp } from '@/composables/useApp';
-import { useWeb3 } from '@/composables/useWeb3';
-import { useTxStatus } from '@/composables/useTxStatus';
 import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
-import { WalletMultiButton } from '@/components/Wallet/Solana';
 import Icon from '@/components/Icon.vue';
-import UiButton from '@/components/Ui/Button.vue';
 import ModalAccount from '@/components/Modal/Account.vue';
 import ModalBlockchains from '@/components/Modal/Blockchains.vue';
+import SpaceNavigation from '@/components/Space/Navigation.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import { WalletMultiButton } from '@/components/Wallet/Solana';
+import { useApp } from '@/composables/useApp';
+import { useDomain } from '@/composables/useDomain';
+import { useModal } from '@/composables/useModal';
+import { useTxStatus } from '@/composables/useTxStatus';
+import { useWeb3 } from '@/composables/useWeb3';
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
+import { getIpfsUrl, shorten } from '@/helpers/utils';
+import { getCDNImageUrl } from '@/utils/platform/imageUtils';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
@@ -38,7 +40,7 @@ const modalBlockchainsOpen = ref(false);
 
 const space = computed(() => {
   const key = domain || route.params.key;
-  return explore.value.space?.[key];
+  return explore.value.spaces?.[key];
 });
 
 function setTitle() {
@@ -58,7 +60,11 @@ watch(space, () => {
 
 console.log('route.params.key', route.params.key);
 console.log('domain', domain);
-
+console.log('TopNav space', space);
+const logoUrl =
+  domain && space.value?.avatar
+    ? getCDNImageUrl(space.value?.avatar)
+    : dodaoLogo;
 onMounted(() => setTitle());
 </script>
 
@@ -85,16 +91,19 @@ onMounted(() => setTitle());
               class="flex items-center"
               style="font-size: 24px; padding-top: 4px"
             >
-              <img :src="dodaoLogo" alt="arrow" class="logo arrow w-[190px]" />
+              <img :src="logoUrl" alt="arrow" class="logo arrow h-[60px]" />
             </router-link>
           </div>
-          <div>
+          <div v-if="!domain">
             <UiButton
               @click="modalBlockchainsOpen = true"
               class="flex items-center float-left"
             >
               <span class="whitespace-nowrap">All DAOs</span>
             </UiButton>
+          </div>
+          <div v-else>
+            <SpaceNavigation :space="space" />
           </div>
           <div :key="web3.account" class="flex">
             <template

@@ -90,9 +90,7 @@ const hasUnseenGuides = false;
                 class="group-hover:opacity-100 group-active:hidden"
                 v-if="hasUnseenGuides"
               />
-              <router-link
-                :to="{ name: 'spaceProposals', params: { key: element } }"
-              >
+              <router-link :to="{ name: 'guides', params: { key: element } }">
                 <Token
                   :space="explore.spaces[element]"
                   symbolIndex="space"

@@ -13,6 +13,7 @@ import { GuidesQuery } from '@/graphql/guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
+import { useDomain } from '@/composables/useDomain';
 
 const props = defineProps({
   space: Object,
@@ -23,6 +24,7 @@ const props = defineProps({
 const { store } = useStore();
 
 const loading = ref(false);
+const { domain } = useDomain();
 
 const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members
@@ -72,13 +74,11 @@ const guidesCount = computed(() => {
 const loadingData = computed(() => {
   return loading.value || loadingMore.value || props.spaceLoading.value;
 });
-
-console.log('store.space', store.space);
 </script>
 
 <template>
   <LayoutTopAndBottom>
-    <template #top-content>
+    <template v-if="!domain" #top-content>
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>

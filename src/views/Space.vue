@@ -12,13 +12,9 @@ const { loadExtentedSpaces, extentedSpaces, spaceLoading } =
 
 const spaceId = computed(() => domain || route.params.key);
 
-console.log('Space.vue - domain', domain);
 const space = computed(() =>
   formatSpace(extentedSpaces.value?.find(s => s.id === spaceId.value))
 );
-
-console.log('Space.vue - route.path', route.path);
-console.log('Space.vue - space', space.value);
 
 const from = computed(() => route.params.from);
 const spaceFrom = computed(() =>

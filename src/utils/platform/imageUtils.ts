@@ -6,5 +6,8 @@ export function getCDNImageUrl(url: string) {
       'd31h13bdjwgzxs.cloudfront.net'
     );
   }
+  if (url.includes('ipfs://')) {
+    return url.replace('ipfs://', 'https://d31h13bdjwgzxs.cloudfront.net/');
+  }
   return `https://worker.snapshot.org/mirror?img=${encodeURIComponent(url)}`;
 }
