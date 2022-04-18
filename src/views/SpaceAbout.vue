@@ -1,20 +1,30 @@
-<script setup>
-import { computed, watchEffect, onMounted } from 'vue';
+<script setup lang="ts">
+import Block from '@/components/Block.vue';
+import BlockSpaceNew from '@/components/Block/SpaceNew.vue';
+import Icon from '@/components/Icon.vue';
+import UiMarkdown from '@/components/Ui/Markdown.vue';
+import UiText from '@/components/Ui/Text.vue';
+import User from '@/components/User.vue';
+import LayoutTopAndBottom from '@/components/Layout/TopAndBottom.vue';
+import { useDomain } from '@/composables/useDomain';
 import { useProfiles } from '@/composables/useProfiles';
-import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
-import { setPageTitle } from '@/helpers/utils';
 import { getNetworks } from '@/helpers/network';
+import { setPageTitle } from '@/helpers/utils';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
+import { computed, onMounted, PropType, watchEffect } from 'vue';
 
 const networks = getNetworks();
 
 const props = defineProps({
-  space: Object,
+  space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean
 });
 
 const network = computed(() => networks[props.space.network]);
 
 const { profiles, loadProfiles } = useProfiles();
+const { domain } = useDomain();
 
 watchEffect(() => {
   if (props.space.admins)
@@ -28,7 +38,7 @@ onMounted(() => {
 
 <template>
   <LayoutTopAndBottom>
-    <template #top-content>
+    <template #top-content v-if="!domain">
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>

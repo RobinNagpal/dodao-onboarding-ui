@@ -2,8 +2,6 @@
   max-width: 1248px;
   margin-right: auto;
   margin-left: auto;
-  padding-right: 24px;
-  padding-left: 24px;
 }
 
 .container-default.footer-container {
@@ -46,7 +44,6 @@
   max-width: 1248px;
   margin-right: auto;
   margin-left: auto;
-  padding-right: 24px;
 }
 
 .header-logo {
@@ -246,13 +243,12 @@
 
 .header-main-wrapper {
   margin-top: 40px;
-  margin-right: 24px;
-  margin-left: 24px;
   padding: 28px 26px;
   border-radius: 14px;
-  background-color: var(--header-main-bg);
+  background-color: var(--background-color);
   box-shadow: var(--box-shadow);
   border-color: var(--border-color);
+  border-width: var(--border-width, 1px);
 }
 
 .logo-grid {
@@ -428,7 +424,6 @@
   margin-right: 16px;
   padding: 20px 24px;
   border-radius: 8px;
-  background-color: #fff;
   box-shadow: 0 4px 10px 0 hsla(0, 0%, 47.8%, 0.1);
   color: #1a1b1e;
   line-height: 1.1;
@@ -436,7 +431,6 @@
   text-decoration: none;
 
   &:hover {
-    background-color: #1a1b1e;
     -webkit-transform: scale(0.96);
     -ms-transform: scale(0.96);
     transform: scale(0.96);
@@ -444,7 +438,6 @@
   }
 
   &.w--current {
-    background-color: #1a1b1e;
     box-shadow: none;
     color: #fff;
 
@@ -467,7 +460,6 @@
 .divider {
   width: 100%;
   min-height: 1px;
-  background-color: #c0c4d1;
 }
 
 .top-content.home-tabs-top-content {
@@ -550,10 +542,6 @@
     transform: scale3d(0.94, 0.94, 0.01);
   }
 
-  .home-hero-tab.w--current {
-    background-color: #fff;
-  }
-
   .home-hero-tab.last {
     margin-bottom: 0px;
   }
@@ -588,9 +576,10 @@
 .card {
   overflow: hidden;
   border-radius: 20px;
-  background-color: var(--header-main-bg);
+  background-color: var(--bg-color);
   box-shadow: var(--box-shadow);
   border-color: var(--border-color);
+  border-width: var(--border-width, 1px);
   transition: transform 300ms ease;
   transition: transform 300ms ease, -webkit-transform 300ms ease;
 
@@ -625,7 +614,7 @@
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: row;
-    background-color: var(--header-main-bg);
+    background-color: var(--background-color);
     box-shadow: var(--box-shadow);
     border-color: var(--border-color);
     transition: transform 300ms ease;
@@ -642,7 +631,7 @@
   &.integration-card {
     display: block;
     padding: 40px 30px;
-    background-color: rgba(255, 255, 255, 0.65);
+    background-color: var(--background-color);
     box-shadow: 0 6px 32px 0 rgba(8, 15, 52, 0.04);
     -webkit-transition: -webkit-transform 300ms ease;
     transition: -webkit-transform 300ms ease;
@@ -660,7 +649,7 @@
 
   &.integration-main-card {
     padding: 24px;
-    background-color: var(--header-main-bg);
+    background-color: var(--background-color);
     box-shadow: var(--box-shadow);
     border-color: var(--border-color);
 
@@ -671,7 +660,7 @@
 
   &.guide-right-side-card {
     padding: 24px;
-    background-color: var(--header-main-bg);
+    background-color: var(--background-color);
     box-shadow: var(--box-shadow);
     border-color: var(--border-color);
   }
@@ -747,7 +736,7 @@
     border-style: solid;
     border-width: 1px;
     border-color: #e5ecf5;
-    background-color: #fff;
+    background-color: var(--background-color);
     box-shadow: 0 4px 10px 0 rgba(74, 58, 255, 0.1);
   }
   ._404-title {
@@ -1006,7 +995,7 @@
     &.integration-main-card {
       max-width: 400px;
       padding: 0;
-      background-color: var(--header-main-bg);
+      background-color: var(--background-color);
       box-shadow: var(--box-shadow);
       border-color: var(--border-color);
 

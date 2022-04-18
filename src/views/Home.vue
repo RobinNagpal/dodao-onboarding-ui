@@ -1,24 +1,18 @@
 <script setup>
-import { ref, watchEffect, onMounted } from 'vue';
-import { useUnseenProposals } from '@/composables/useUnseenProposals';
+import { onMounted, ref } from 'vue';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { useApp } from '@/composables/useApp';
-import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useCategories } from '@/composables/useCategories';
-import { shorten, setPageTitle, n } from '@/helpers/utils';
+import { n, setPageTitle, shorten } from '@/helpers/utils';
 import { useWeb3 } from '@/composables/useWeb3';
 
 const { selectedCategory, orderedSpaces, orderedSpacesByCategory } = useApp();
-const { followingSpaces } = useFollowSpace();
 const { spacesPerCategory, categoriesOrderedBySpaceCount } = useCategories();
 const { isEthBlockchain, isOneBlockchain } = useWeb3();
 
 function selectCategory(c) {
   selectedCategory.value = c === selectedCategory.value ? '' : c;
 }
-
-const { getProposalIds } = useUnseenProposals();
-watchEffect(() => getProposalIds(followingSpaces.value));
 
 // Scroll
 const loadBy = 16;

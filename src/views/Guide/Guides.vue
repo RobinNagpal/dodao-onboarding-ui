@@ -11,10 +11,9 @@ import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { useProfiles } from '@/composables/useProfiles';
-import { useUnseenGuides } from '@/composables/useUnseenGuides';
-import { lsSet, setPageTitle } from '@/helpers/utils';
-import { useWeb3 } from '@/composables/useWeb3';
+import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
+import { useDomain } from '@/composables/useDomain';
 
 const props = defineProps({
   space: Object,
@@ -22,11 +21,10 @@ const props = defineProps({
   spaceLoading: Boolean
 });
 
-const { lastSeenGuides, updateLastSeenGuide } = useUnseenGuides();
-const { web3Account } = useWeb3();
 const { store } = useStore();
 
 const loading = ref(false);
+const { domain } = useDomain();
 
 const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members
@@ -80,7 +78,7 @@ const loadingData = computed(() => {
 
 <template>
   <LayoutTopAndBottom>
-    <template #top-content>
+    <template v-if="!domain" #top-content>
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>

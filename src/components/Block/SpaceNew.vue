@@ -2,10 +2,9 @@
 import FollowButton from '@/components/FollowButton.vue';
 import UiLoading from '@/components/Ui/Loading.vue';
 import Icon from '@/components/Icon.vue';
-import UiButton from '@/components/Ui/Button.vue';
+import SpaceNavigation from '@/components/Space/Navigation.vue';
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { PropType, ref, watchEffect } from 'vue';
@@ -24,7 +23,6 @@ const { isEthBlockchain, isOneBlockchain } = useWeb3();
 
 const nbrMembers = explore.value.spaces[props.space.id].followers;
 const isVerified = verified[props.space.id] || 0;
-const { isAdmin } = useSpace(props.space);
 
 const {
   loading,
@@ -49,127 +47,70 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div
-    class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
-  >
-    <UiThumbnail
-      :src="space.avatar"
-      :entityId="space.id"
-      :title="space.name"
-      symbolIndex="space"
-      size="80"
-      class="mt-3 mb-2"
-    />
-    <div class="mt-2 text-color" v-if="isEthBlockchain || isOneBlockchain">
-      {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
+  <div class="flex flex-col integration-top-content w-full">
+    <div class="px-4 md:px-0">
+      <a class="text-color" @click="$router.push({ path: '/' })">
+        <Icon name="back" size="22" class="!align-middle" />
+        DAOs
+      </a>
     </div>
-    <div class="flex mt-2" v-if="isEthBlockchain || isOneBlockchain">
-      <FollowButton :space="space" :class="'mx-2'" />
-      <UiSidebarButton
-        class="inline px-2"
-        v-if="isFollowing"
-        @click="toggleSubscription()"
+    <div class="flex">
+      <div
+        class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
       >
-        <UiLoading v-if="loading" />
-        <Icon v-else size="20" class="link-color" :name="notificationIcon" />
-      </UiSidebarButton>
-    </div>
-  </div>
-  <div
-    class="split-content integration-details border-l mb-2 space-details"
-    style="border-color: #c0c4d1"
-  >
-    <div class="integration-title-wrapper" style="height: 128px">
-      <h1>
-        {{ space.name }}
-        <Icon
-          v-if="isVerified === 1"
-          v-tippy="{
-            content: $t('verifiedDAO'),
-            placement: 'right'
-          }"
-          name="check"
-          size="20"
+        <UiThumbnail
+          :src="space.avatar"
+          :entityId="space.id"
+          :title="space.name"
+          symbolIndex="space"
+          size="80"
+          class="mt-3 mb-2"
         />
-        <Icon v-if="isVerified === -1" name="warning" size="20" />
-      </h1>
-      <p class="paragraph integration-about-excerpt">
-        {{ space.mission }}
-      </p>
-    </div>
+        <div class="mt-2 text-color" v-if="isEthBlockchain || isOneBlockchain">
+          {{ $tc('members', nbrMembers, { count: n(nbrMembers) }) }}
+        </div>
+        <div class="flex mt-2" v-if="isEthBlockchain || isOneBlockchain">
+          <FollowButton :space="space" :class="'mx-2'" />
+          <UiSidebarButton
+            class="inline px-2"
+            v-if="isFollowing"
+            @click="toggleSubscription()"
+          >
+            <UiLoading v-if="loading" />
+            <Icon
+              v-else
+              size="20"
+              class="link-color"
+              :name="notificationIcon"
+            />
+          </UiSidebarButton>
+        </div>
+      </div>
+      <div
+        class="split-content integration-details border-l mb-2 space-details"
+        style="border-color: #c0c4d1"
+      >
+        <div class="integration-title-wrapper" style="height: 128px">
+          <h1>
+            {{ space.name }}
+            <Icon
+              v-if="isVerified === 1"
+              v-tippy="{
+                content: $t('verifiedDAO'),
+                placement: 'right'
+              }"
+              name="check"
+              size="20"
+            />
+            <Icon v-if="isVerified === -1" name="warning" size="20" />
+          </h1>
+          <p class="paragraph integration-about-excerpt">
+            {{ space.mission }}
+          </p>
+        </div>
 
-    <div class="px-3 flex nav-links">
-      <router-link
-        :to="{ name: 'guides', params: { key: space.id } }"
-        :class="$route.name === 'guides' && 'router-link-exact-active'"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('guides.header') }}
-        </UiButton>
-      </router-link>
-      <router-link
-        v-if="isEthBlockchain"
-        :to="{ name: 'guideBundles', params: { key: space.id } }"
-        :class="$route.name === 'guideBundles' && 'router-link-exact-active'"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('guideBundles.header') }}
-        </UiButton>
-      </router-link>
-      <router-link
-        v-if="isAdmin"
-        :to="{ name: 'guideCreate', params: { key: space.id } }"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('guides.new') }}
-        </UiButton>
-      </router-link>
-      <router-link
-        v-if="isAdmin && isEthBlockchain"
-        :to="{ name: 'guideBundleCreate', params: { key: space.id } }"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('guideBundles.new') }}
-        </UiButton>
-      </router-link>
-      <router-link
-        v-if="isAdmin"
-        :to="{ name: 'spaceEdit', params: { spaceId: space.id, space: space } }"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('settings.header') }}
-        </UiButton>
-      </router-link>
-      <router-link
-        :to="{ name: 'spaceAbout', params: { key: space.id } }"
-        :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
-      >
-        <UiButton class="whitespace-nowrap">
-          {{ $t('about') }}
-        </UiButton>
-      </router-link>
+        <SpaceNavigation :space="space" />
+      </div>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-.nav-links {
-  a {
-    margin: 8px;
-  }
-
-  .router-link-exact-active {
-    button {
-      color: white;
-      background-color: var(--primary-color);
-      border: 1px solid var(--primary-color);
-
-      &:hover {
-        color: white;
-        background-color: var(--primary-color);
-        border: 1px solid var(--primary-color);
-        cursor: default;
-      }
-    }
-  }
-}
-</style>

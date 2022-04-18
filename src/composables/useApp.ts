@@ -1,6 +1,7 @@
 import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.json';
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
+import { useSpaceSkin } from '@/composables/useSpaceSkin';
 import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
@@ -18,16 +19,19 @@ const state = reactive({
 const spaces = ref({});
 const strategies = ref({});
 const explore: any = ref({});
+const appSkin: any = ref('default');
 
 export function useApp() {
   const route = useRoute();
   const { loginWrapper } = useWeb3Wrapper();
   const { followingSpaces } = useFollowSpace();
+  const { spaceIdForDomain } = useSpaceSkin();
 
   async function init() {
     const auth = getInstance();
     state.loading = true;
-    await Promise.all([getExplore()]);
+    await getExplore();
+    initSkin();
 
     // Auto connect with gnosis-connector when inside gnosis-safe iframe
     const connector = await auth.getConnector();
@@ -69,12 +73,25 @@ export function useApp() {
         })
       );
       explore.value = exploreObj;
+
+      return exploreObj;
     } catch (e) {
       console.error(e);
       explore.value = {};
     }
 
     return;
+  }
+
+  function initSkin() {
+    const spaceWithSkin: any = spaceIdForDomain
+      ? explore.value.spaces[spaceIdForDomain]
+      : null;
+
+    const selectedSkin = spaceWithSkin?.skin || 'dodao';
+    appSkin.value = selectedSkin;
+    console.log('selected skin', selectedSkin);
+    document.body.classList.add(selectedSkin);
   }
 
   const selectedCategory = ref('');
@@ -133,6 +150,7 @@ export function useApp() {
   );
 
   return {
+    appSkin,
     init,
     getExplore,
     app: computed(() => state),

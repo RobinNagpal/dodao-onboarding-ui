@@ -13,6 +13,7 @@ import { GuideBundlesQuery } from '@/graphql/guideBundles.graphql';
 import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
+import { useDomain } from '@/composables/useDomain';
 
 const props = defineProps({
   space: Object,
@@ -21,6 +22,7 @@ const props = defineProps({
 });
 
 const { store } = useStore();
+const { domain } = useDomain();
 
 const loading = ref(false);
 
@@ -76,7 +78,7 @@ const loadingData = computed(() => {
 
 <template>
   <LayoutTopAndBottom>
-    <template #top-content>
+    <template #top-content v-if="!domain">
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>

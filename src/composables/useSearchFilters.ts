@@ -1,7 +1,7 @@
 import plugins from '@/../snapshot-plugins/src/plugins';
-import skins from '@/../snapshot-spaces/skins';
 import { useApp } from '@/composables/useApp';
 import { getNetworks } from '@/helpers/network';
+import skins from '@/helpers/skins';
 import validations from '@snapshot-labs/snapshot.js/src/validations';
 import { computed } from 'vue';
 

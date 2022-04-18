@@ -1,7 +1,12 @@
-<script setup>
-import { ref, computed } from 'vue';
+<script setup lang="ts">
+import Block from '@/components/Block.vue';
+import BlockSkin from '@/components/Block/Skin.vue';
+import NoResults from '@/components/NoResults.vue';
+import Search from '@/components/Search.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiModal from '@/components/Ui/Modal.vue';
 import { useSearchFilters } from '@/composables/useSearchFilters';
-import { useUserSkin } from '@/composables/useUserSkin';
+import { computed, ref } from 'vue';
 
 defineProps({
   open: {
@@ -20,8 +25,6 @@ function select(key) {
   emit('update:modelValue', key);
   emit('close');
 }
-
-const { userSkin } = useUserSkin();
 </script>
 
 <template>
@@ -35,8 +38,14 @@ const { userSkin } = useUserSkin();
       :modal="true"
     />
     <div class="mt-4 mx-0 md:mx-4">
-      <a v-if="!searchInput" key="" @click="select(undefined)">
-        <div :class="userSkin" class="bg-black rounded-none md:rounded-md">
+      <a
+        v-if="
+          !searchInput || searchInput === 'default' || searchInput === 'dodao'
+        "
+        key=""
+        @click="select('dodao')"
+      >
+        <div class="bg-black rounded-none md:rounded-md">
           <Block>
             <UiButton class="mb-2" primary>{{ $t('defaultSkin') }}</UiButton>
           </Block>

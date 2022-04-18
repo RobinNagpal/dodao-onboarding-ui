@@ -9,6 +9,7 @@ export const spaceTypes = {
     { name: 'members', type: 'address[]' },
     { name: 'mission', type: 'string' },
     { name: 'network', type: 'string' },
+    { name: 'skin', type: 'string' },
     { name: 'terms', type: 'string' },
     { name: 'twitter', type: 'string' },
     { name: 'blockchain', type: 'string' }

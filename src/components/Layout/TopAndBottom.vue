@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Icon from '@/components/Icon.vue';
 import { computed } from 'vue';
 
 const browserHasHistory = computed(() => window.history.state.back);
@@ -13,19 +12,9 @@ const browserHasHistory = computed(() => window.history.state.back);
           <slot />
           <div
             class="top-content card integration-main-card integration-card-top-content"
+            v-if="$slots['top-content']"
           >
-            <div class="px-4 md:px-0">
-              <a class="text-color" @click="$router.push({ path: '/' })">
-                <Icon name="back" size="22" class="!align-middle" />
-                DAOs
-              </a>
-            </div>
-            <div
-              class="flex integration-top-content w-full"
-              v-if="$slots['top-content']"
-            >
-              <slot name="top-content" />
-            </div>
+            <slot name="top-content" />
           </div>
           <div
             class="split-content integration-card-content"

@@ -1,5 +1,5 @@
 import aliases from '@/../snapshot-spaces/spaces/aliases.json';
-import domains from '@/../snapshot-spaces/spaces/domains.json';
+import domains from '@/helpers/jsons/dodao_domains.json';
 
 export function useDomain() {
   const domainName = window.location.hostname;

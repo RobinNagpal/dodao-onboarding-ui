@@ -1,11 +1,10 @@
-<script setup>
-import { watch, onMounted, ref, watchEffect } from 'vue';
-import draggable from 'vuedraggable';
+<script setup lang="ts">
+import { watch, onMounted, ref } from 'vue';
+import Draggable from 'vuedraggable';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
-import { useUnseenProposals } from '@/composables/useUnseenProposals';
 import { lsSet, lsGet } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
 import { useRouter } from 'vue-router';
@@ -16,14 +15,8 @@ const { loadFollows, followingSpaces } = useFollowSpace();
 const { modalAccountOpen } = useModal();
 const router = useRouter();
 const { web3Account } = useWeb3();
-const {
-  proposalIds,
-  getProposalIds,
-  lastSeenProposals,
-  updateLastSeenProposal
-} = useUnseenProposals();
 
-const draggableSpaces = ref([]);
+const draggableSpaces = ref<any>([]);
 
 function saveSpaceOrder() {
   if (web3Account.value)
@@ -32,16 +25,6 @@ function saveSpaceOrder() {
       draggableSpaces.value
     );
 }
-const hasUnseenProposalsBySpace = space => {
-  return proposalIds.value.some(p => {
-    return (
-      p.space.id === space && p.created > (lastSeenProposals.value[space] || 0)
-    );
-  });
-};
-
-const hasUnseenProposals = () =>
-  followingSpaces.value.some(fs => hasUnseenProposalsBySpace(fs));
 
 const clickNewSpace = async () => {
   !web3Account.value
@@ -51,7 +34,6 @@ const clickNewSpace = async () => {
 
 watch(web3Account, () => {
   loadFollows();
-  updateLastSeenProposal(web3Account.value);
 });
 
 watch(followingSpaces, () => {
@@ -72,11 +54,11 @@ watch(followingSpaces, () => {
   saveSpaceOrder();
 });
 
-watchEffect(() => getProposalIds(followingSpaces.value));
-
 onMounted(() => {
   loadFollows();
 });
+
+const hasUnseenGuides = false;
 </script>
 
 <template>
@@ -87,14 +69,14 @@ onMounted(() => {
         class="flex flex-col h-[calc(100%-78px)] items-center space-y-2 pt-2"
       >
         <div class="flex items-center justify-center relative w-full">
-          <UiUnreadIndicator v-if="hasUnseenProposals()" />
+          <UiUnreadIndicator v-if="hasUnseenGuides" />
           <router-link :to="{ name: 'timeline' }">
             <UiSidebarButton>
               <Icon size="20" name="feed" />
             </UiSidebarButton>
           </router-link>
         </div>
-        <draggable
+        <Draggable
           v-if="draggableSpaces.length > 0"
           v-model="draggableSpaces"
           :component-data="{ name: 'list' }"
@@ -106,11 +88,9 @@ onMounted(() => {
             <div class="w-full flex items-center justify-center relative group">
               <UiUnreadIndicator
                 class="group-hover:opacity-100 group-active:hidden"
-                v-if="hasUnseenProposalsBySpace(element)"
+                v-if="hasUnseenGuides"
               />
-              <router-link
-                :to="{ name: 'spaceProposals', params: { key: element } }"
-              >
+              <router-link :to="{ name: 'guides', params: { key: element } }">
                 <Token
                   :space="explore.spaces[element]"
                   symbolIndex="space"
@@ -119,7 +99,7 @@ onMounted(() => {
               </router-link>
             </div>
           </template>
-        </draggable>
+        </Draggable>
 
         <UiSidebarButton @click="clickNewSpace()"
           ><Icon size="20" name="plus"
