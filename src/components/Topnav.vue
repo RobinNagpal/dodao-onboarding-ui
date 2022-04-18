@@ -58,9 +58,6 @@ watch(space, () => {
   setTitle();
 });
 
-console.log('route.params.key', route.params.key);
-console.log('domain', domain);
-console.log('TopNav space', space);
 const logoUrl =
   domain && space.value?.avatar
     ? getCDNImageUrl(space.value?.avatar)
