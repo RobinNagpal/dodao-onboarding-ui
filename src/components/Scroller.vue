@@ -68,14 +68,6 @@ const hasUnseenGuides = false;
       <div
         class="flex flex-col h-[calc(100%-78px)] items-center space-y-2 pt-2"
       >
-        <div class="flex items-center justify-center relative w-full">
-          <UiUnreadIndicator v-if="hasUnseenGuides" />
-          <router-link :to="{ name: 'timeline' }">
-            <UiSidebarButton>
-              <Icon size="20" name="feed" />
-            </UiSidebarButton>
-          </router-link>
-        </div>
         <Draggable
           v-if="draggableSpaces.length > 0"
           v-model="draggableSpaces"
