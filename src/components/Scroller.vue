@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, onMounted, ref } from 'vue';
+import { watch, onMounted, ref, computed } from 'vue';
 import Draggable from 'vuedraggable';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useWeb3 } from '@/composables/useWeb3';
@@ -7,6 +7,7 @@ import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
 import { lsSet, lsGet } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
+import superAdmins from '@/helpers/jsons/super_admins.json';
 import { useRouter } from 'vue-router';
 
 const { explore } = useApp();
@@ -25,6 +26,13 @@ function saveSpaceOrder() {
       draggableSpaces.value
     );
 }
+
+const isSuperAdmin = computed(
+  () =>
+    web3Account.value && superAdmins.includes(web3Account.value?.toLowerCase())
+);
+
+const isNotProdEnv = import.meta.env.VITE_ENVIRONMENT !== 'prod';
 
 const clickNewSpace = async () => {
   !web3Account.value
@@ -93,7 +101,9 @@ const hasUnseenGuides = false;
           </template>
         </Draggable>
 
-        <UiSidebarButton @click="clickNewSpace()"
+        <UiSidebarButton
+          v-if="isNotProdEnv || isSuperAdmin"
+          @click="clickNewSpace()"
           ><Icon size="20" name="plus"
         /></UiSidebarButton>
 
