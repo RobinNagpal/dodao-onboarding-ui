@@ -1,0 +1,75 @@
+{
+  "injected": {
+    "id": "injected",
+    "blockchain": "ETH",
+    "name": "MetaMask"
+  },
+  "walletconnect": {
+    "id": "walletconnect",
+    "blockchain": "ETH",
+    "name": "WalletConnect",
+    "network": "1",
+    "options": {
+      "rpc": {
+        "1": "https://cloudflare-eth.com",
+        "4": "https://eth-rinkeby.alchemyapi.io/v2/twReQE9Px03E-E_N_Fbb3OVF7YgHxoGq",
+        "42": "https://eth-kovan.alchemyapi.io/v2/QCsM2iU0bQ49eGDmZ7-Y--Wpu0lVWXSO"
+      }
+    }
+  },
+  "trezor": {
+    "id": "trezor",
+    "blockchain": "ETH",
+    "name": "Trezor (with MetaMask)"
+  },
+  "torus": {
+    "id": "torus",
+    "blockchain": "ETH",
+    "name": "Torus"
+  },
+  "walletlink": {
+    "id": "walletlink",
+    "blockchain": "ETH",
+    "name": "Coinbase",
+    "network": "1",
+    "options": {
+      "appName": "Snapshot",
+      "darkMode": false,
+      "chainId": 1,
+      "ethJsonrpcUrl": "https://cloudflare-eth.com"
+    }
+  },
+  "portis": {
+    "id": "portis",
+    "blockchain": "ETH",
+    "name": "Portis",
+    "network": "1",
+    "options": {
+      "dappId": "3eb93706-c71d-456b-b4eb-322ea27f7d48",
+      "network": "mainnet"
+    }
+  },
+  "fortmatic": {
+    "id": "fortmatic",
+    "blockchain": "ETH",
+    "name": "Fortmatic",
+    "options": {
+      "apiKey": "pk_live_9CE8FD92E54684ED"
+    }
+  },
+  "gnosis": {
+    "id": "gnosis",
+    "blockchain": "ETH",
+    "name": "Gnosis Safe"
+  },
+  "near": {
+    "id": "near",
+    "blockchain": "NEAR",
+    "name": "NEAR"
+  },
+  "harmonymetamask": {
+    "id": "harmonymetamask",
+    "blockchain": "ONE",
+    "name": "MetaMask"
+  }
+}
