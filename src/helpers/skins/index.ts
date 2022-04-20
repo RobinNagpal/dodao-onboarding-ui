@@ -223,6 +223,7 @@ import swagg from './swagg.scss';
 import swaphub from './swaphub.scss';
 import swapx from './swapx.scss';
 import swarm from './swarm.scss';
+import swdao from './swdao.scss';
 import swerve from './swerve.scss';
 import synthetix from './synthetix.scss';
 import takeprofit from './takeprofit.scss';
@@ -489,6 +490,7 @@ export default {
   swaphub,
   swapx,
   swarm,
+  swdao,
   swerve,
   synthetix,
   takeprofit,

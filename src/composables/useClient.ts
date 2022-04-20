@@ -50,7 +50,9 @@ export function useClient() {
   async function send(space, type, payload): Promise<MsgResponse | undefined> {
     loading.value = true;
     try {
-      if (usePersonalSign.value) {
+      // disabled to fix the issue with wallet connect
+      const usePersonal = usePersonalSign.value && false;
+      if (usePersonal) {
         if (payload.proposal) payload.proposal = payload.proposal.id;
         const clientPersonalSign = isGnosisSafe.value
           ? clientGnosisSafe
