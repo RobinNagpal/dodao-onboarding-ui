@@ -4,5 +4,6 @@
   "balancer.dodao.io": "balancer-eth-1",
   "curve.dodao.io": "curve-finance-eth-1",
   "dark-localhost": "sw-dao-eth-1",
-  "dxdao.dodao.io": "dxdao-eth-1"
+  "dxdao.dodao.io": "dxdao-eth-1",
+  "swdao.dodao.io": "sw-dao-eth-1"
 }
