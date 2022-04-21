@@ -204,13 +204,20 @@
       "stepByStep": "Step by Step Guide"
     },
     "category": {
-      "engineering": "Engineering",
-      "marketing": "Marketing",
-      "sales": "Sales",
+      "community": "Community",
       "contentWriting": "Content Writing",
-      "setup": "Setup",
+      "design": "Design",
+      "developer": "Developer",
+      "engineering": "Engineering",
+      "general": "General",
+      "governance": "Governance",
+      "introduction": "Introduction",
+      "marketing": "Marketing",
       "member": "Member",
-      "community": "Community"
+      "overview": "Overview",
+      "products": "Products",
+      "sales": "Sales",
+      "setup": "Setup"
     },
     "complete": "Complete",
     "delete": "Delete",
@@ -260,13 +267,20 @@
       "selectGuide": "Select Guide"
     },
     "category": {
-      "engineering": "Engineering",
-      "marketing": "Marketing",
-      "sales": "Sales",
+      "community": "Community",
       "contentWriting": "Content Writing",
-      "setup": "Setup",
+      "design": "Design",
+      "developer": "Developer",
+      "engineering": "Engineering",
+      "general": "General",
+      "governance": "Governance",
+      "introduction": "Introduction",
+      "marketing": "Marketing",
       "member": "Member",
-      "community": "Community"
+      "overview": "Overview",
+      "products": "Products",
+      "sales": "Sales",
+      "setup": "Setup"
     },
     "delete": "Delete",
     "duplicate": "Duplicate",
