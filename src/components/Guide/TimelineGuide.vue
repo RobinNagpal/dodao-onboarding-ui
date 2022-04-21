@@ -33,10 +33,10 @@ const props = defineProps({
         />
         <p
           v-text="shorten(guide.content, 300)"
-          class="break-words mb-2 text-sm h-[95px] text-ellipsis overflow-hidden text-sm"
+          class="break-words mb-2 text-sm h-65px] text-ellipsis overflow-hidden text-sm"
         />
       </div>
-      <div class="flex flex-wrap justify-end absolute top-4 right-4">
+      <div class="flex flex-wrap justify-end absolute top-2 right-2">
         <div
           class="badge post-category mb-1"
           v-for="category in guide.categories || []"

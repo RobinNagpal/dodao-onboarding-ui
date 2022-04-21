@@ -133,7 +133,7 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div class="flex flex-wrap justify-end absolute top-4 right-4">
+            <div class="flex flex-wrap justify-end absolute top-2 right-2">
               <div
                 class="badge post-category mb-1 flex-wrap"
                 v-for="category in space.categories || []"
