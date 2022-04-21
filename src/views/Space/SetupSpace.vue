@@ -126,12 +126,13 @@ const { modalAccountOpen } = useModal();
 
 async function handleSubmit() {
   if (isValid.value) {
-    const id =
+    const computedSpaceId =
       slugify(form.value.name) +
       '-' +
       getBlockchain().toLowerCase() +
       '-' +
       form.value.network;
+    const id = props.spaceId || computedSpaceId;
 
     const result = await send(
       {
