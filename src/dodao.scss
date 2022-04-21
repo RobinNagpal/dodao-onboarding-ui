@@ -29,7 +29,6 @@
   top: 0%;
   right: 0%;
   bottom: auto;
-  width: 100%;
   max-width: 1248px;
   margin-right: auto;
   margin-left: auto;
@@ -882,9 +881,26 @@
     grid-template-columns: 1fr;
   }
 
-  .header-logo-wrapper {
-    padding-left: 0px;
+  .header-main-wrapper {
+    flex-wrap:wrap;
+
+
+    .top-nav-middle {
+      padding-top: 10px;
+      width: 100%;
+      order: 3;
+    }
+
+    .top-nav-left{
+      width: 50%;
+    }
+    .top-nav-right {
+      width:50%;
+      order:2;
+
+    }
   }
+
   .hamburger-menu-icon {
     width: 24px;
     font-size: 21px;
@@ -946,6 +962,12 @@
     margin-right: 0px;
     margin-left: 0px;
     border-radius: 0px;
+
+    width: 100%;
+
+    .topnav-domain-navigation-three-dots {
+      display: none;
+    }
   }
   .logo-grid {
     -ms-grid-columns: auto;

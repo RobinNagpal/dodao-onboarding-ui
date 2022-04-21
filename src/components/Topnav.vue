@@ -77,11 +77,11 @@ onMounted(() => setTitle());
     <div class="header-main-wrapper">
       <Container class="max-w-[100%] container-default w-container">
         <div
-          class="flex justify-between items-center header-wrapper"
-          style="height: 78px"
+          class="flex justify-between items-center header-wrapper flex-wrap"
+          style="min-height: 78px"
         >
           <div
-            class="flex items-center header-logo-wrapper w-nav-brand w--current"
+            class="flex items-center header-logo-wrapper w-nav-brand w--current top-nav-left pl-4"
           >
             <router-link
               :to="{ path: '/' }"
@@ -91,7 +91,7 @@ onMounted(() => setTitle());
               <img :src="logoUrl" alt="arrow" class="logo arrow h-[60px]" />
             </router-link>
           </div>
-          <div v-if="!domain">
+          <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
               class="flex items-center float-left"
@@ -99,10 +99,10 @@ onMounted(() => setTitle());
               <span class="whitespace-nowrap">All DAOs</span>
             </UiButton>
           </div>
-          <div v-else>
+          <div v-else class="top-nav-middle flex justify-center">
             <SpaceNavigation :space="space" />
           </div>
-          <div :key="web3.account" class="flex">
+          <div :key="web3.account" class="flex top-nav-right justify-end pr-4">
             <template
               v-if="
                 (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
@@ -112,7 +112,7 @@ onMounted(() => setTitle());
               <UiButton
                 @click="modalAccountOpen = true"
                 :loading="web3.authLoading"
-                class="flex items-center float-left"
+                class="flex items-center float-right"
               >
                 <UiAvatar
                   :imgsrc="

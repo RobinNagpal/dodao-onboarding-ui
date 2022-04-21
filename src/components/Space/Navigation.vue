@@ -62,7 +62,7 @@ const threeDotItems = computed(() => {
 });
 </script>
 <template>
-  <div class="flex">
+  <div class="flex topnav-domain-navigation">
     <div class="px-3 flex nav-links">
       <router-link
         :to="{ name: 'guides', params: { key: space.id } }"
@@ -97,7 +97,7 @@ const threeDotItems = computed(() => {
       <UiDropdown
         top="2.5rem"
         right="1.3rem"
-        class="float-right mr-2"
+        class="float-right mr-2 topnav-domain-navigation-three-dots"
         :sub-menu-class="'z-10'"
         @select="selectFromThreedotDropdown"
         v-if="isAdmin"
