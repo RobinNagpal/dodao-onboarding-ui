@@ -17,7 +17,8 @@ const props = defineProps({
   title: {
     type: String,
     required: true
-  }
+  },
+  imageClass: String
 });
 
 const error = ref(false);
@@ -52,6 +53,7 @@ const bigTileStyle = {
       :style="bigTileStyle"
       @error="error = true"
       class="inline-block !align-middle leading-none rounded-lg"
+      :class="imageClass"
       :alt="title"
     />
     <UiBlockie

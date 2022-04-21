@@ -5,6 +5,7 @@ const props = defineProps({
   items: Array,
   top: String,
   right: String,
+  subMenuClass: String,
   hideDropdown: Boolean
 });
 
@@ -43,7 +44,7 @@ onBeforeUnmount(() => window.removeEventListener('click', close));
       <slot />
     </div>
     <div class="sub-menu-wrapper" :class="{ hidden: !open }" :style="cssVars">
-      <ul class="sub-menu my-2">
+      <ul class="sub-menu my-2" :class="subMenuClass">
         <li
           v-for="item in items"
           :key="item"

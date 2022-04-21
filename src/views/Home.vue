@@ -102,6 +102,7 @@ onMounted(() => {
                 size="350"
                 class="mb-1"
                 big_tile
+                :image-class="'w-full'"
               />
               <UiCounter
                 v-if="space.activeProposals"
