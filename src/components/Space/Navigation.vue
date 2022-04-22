@@ -4,20 +4,28 @@ import UiDropdown from '@/components/Ui/Dropdown.vue';
 import { useDomain } from '@/composables/useDomain';
 import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
+import { bundleTypes } from '@/helpers/sign/bundleTypes';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const props = defineProps({
-  space: { type: Object as PropType<SpaceModel>, required: true }
+  space: { type: Object as PropType<SpaceModel>, required: true },
+  guideType: String,
+  bundleType: String
 });
 
 const { isEthBlockchain } = useWeb3();
 
 const { isAdmin } = useSpace(props.space);
 
+const route = useRoute();
 const router = useRouter();
+
+const guideType = route.params.guideType;
+const bundleType = route.params.bundleType;
 
 function createNewOnboardingGuide() {
   router.push({ name: 'guideCreate', params: { key: props.space.id } });
@@ -65,7 +73,10 @@ const threeDotItems = computed(() => {
   <div class="flex topnav-domain-navigation">
     <div class="px-3 flex nav-links">
       <router-link
-        :to="{ name: 'guides', params: { key: space.id } }"
+        :to="{
+          name: 'guides',
+          params: { guideType: guideType || bundleType, key: space.id }
+        }"
         :class="
           $route.name === 'guides' ||
           ($route.name === 'spaceHome' && 'router-link-exact-active')
@@ -77,7 +88,10 @@ const threeDotItems = computed(() => {
       </router-link>
       <router-link
         v-if="isEthBlockchain"
-        :to="{ name: 'guideBundles', params: { key: space.id } }"
+        :to="{
+          name: 'guideBundles',
+          params: { bundleType: guideType || bundleType, key: space.id }
+        }"
         :class="$route.name === 'guideBundles' && 'router-link-exact-active'"
       >
         <UiButton class="whitespace-nowrap">

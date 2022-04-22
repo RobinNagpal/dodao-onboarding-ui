@@ -1,10 +1,19 @@
-<script setup>
-import { onMounted, ref } from 'vue';
-import { useScrollMonitor } from '@/composables/useScrollMonitor';
+<script setup lang="ts">
+import FollowButton from '@/components/FollowButton.vue';
+import Icon from '@/components/Icon.vue';
+import NoResults from '@/components/NoResults.vue';
+import SearchWithFilters from '@/components/SearchWithFilters.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiCounter from '@/components/Ui/Counter.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
+import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import { useApp } from '@/composables/useApp';
 import { useCategories } from '@/composables/useCategories';
-import { n, setPageTitle, shorten } from '@/helpers/utils';
+import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { useWeb3 } from '@/composables/useWeb3';
+import { n, setPageTitle, shorten } from '@/helpers/utils';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
+import { onMounted, ref } from 'vue';
 
 const { selectedCategory, orderedSpaces, orderedSpacesByCategory } = useApp();
 const { spacesPerCategory, categoriesOrderedBySpaceCount } = useCategories();
@@ -91,7 +100,10 @@ onMounted(() => {
           :key="space.id"
         >
           <router-link
-            :to="{ name: 'guides', params: { key: space.id } }"
+            :to="{
+              name: 'guides',
+              params: { guideType: GuideType.Onboarding, key: space.id }
+            }"
             class="card blog-card w-inline-block"
           >
             <div class="image-wrapper blog-card-thumbnail">

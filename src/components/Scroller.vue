@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { watch, onMounted, ref, computed } from 'vue';
-import Draggable from 'vuedraggable';
-import { useFollowSpace } from '@/composables/useFollowSpace';
-import { useWeb3 } from '@/composables/useWeb3';
 import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
-import { lsSet, lsGet } from '@/helpers/utils';
+import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useModal } from '@/composables/useModal';
+import { useWeb3 } from '@/composables/useWeb3';
 import superAdmins from '@/helpers/jsons/super_admins.json';
+import { lsGet, lsSet } from '@/helpers/utils';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-
+import Draggable from 'vuedraggable';
+import Icon from '@/components/Icon.vue';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 const { explore } = useApp();
 const { domain } = useDomain();
 const { loadFollows, followingSpaces } = useFollowSpace();
@@ -90,7 +91,12 @@ const hasUnseenGuides = false;
                 class="group-hover:opacity-100 group-active:hidden"
                 v-if="hasUnseenGuides"
               />
-              <router-link :to="{ name: 'guides', params: { key: element } }">
+              <router-link
+                :to="{
+                  name: 'guides',
+                  params: { guideType: GuideType.Onboarding, key: element }
+                }"
+              >
                 <Token
                   :space="explore.spaces[element]"
                   symbolIndex="space"
