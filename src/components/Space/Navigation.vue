@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
+import UiNamedToggle from '@/components/Ui/NamedToggle.vue';
 import { useDomain } from '@/composables/useDomain';
 import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
-import { bundleTypes } from '@/helpers/sign/bundleTypes';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const props = defineProps({
-  space: { type: Object as PropType<SpaceModel>, required: true },
-  guideType: String,
-  bundleType: String
+  space: { type: Object as PropType<SpaceModel>, required: true }
 });
 
 const { isEthBlockchain } = useWeb3();
@@ -27,12 +24,26 @@ const router = useRouter();
 const guideType = route.params.guideType;
 const bundleType = route.params.bundleType;
 
-function createNewOnboardingGuide() {
-  router.push({ name: 'guideCreate', params: { key: props.space.id } });
+function toggleGuidesAndBundles() {
+  const typeParam =
+    route.name === 'guides'
+      ? { bundleType: guideType || bundleType }
+      : { guideType: guideType || bundleType };
+
+  router.push({
+    name: route.name === 'guides' ? 'guideBundles' : 'guides',
+    params: {
+      ...typeParam,
+      key: props.space.id
+    }
+  });
 }
 
 function createNewOnboardingBundle() {
-  router.push({ name: 'guideBundleCreate', params: { key: props.space.id } });
+  router.push({
+    name: 'guideBundleCreate',
+    params: { bundleType: guideType || bundleType, key: props.space.id }
+  });
 }
 
 function editSpaceSettings() {
@@ -43,6 +54,13 @@ function selectFromThreedotDropdown(e) {
   if (e === 'createNewOnboardingGuide') createNewOnboardingGuide();
   if (e === 'createNewOnboardingBundle') createNewOnboardingBundle();
   if (e === 'spaceSettings') editSpaceSettings();
+}
+
+function createNewOnboardingGuide() {
+  router.push({
+    name: 'guideCreate',
+    params: { guideType: guideType || bundleType, key: props.space.id }
+  });
 }
 
 const { t } = useI18n();
@@ -71,43 +89,57 @@ const threeDotItems = computed(() => {
 </script>
 <template>
   <div class="flex topnav-domain-navigation">
-    <div class="px-3 flex nav-links">
+    <div class="pl-3 flex nav-links">
       <router-link
         :to="{
           name: 'guides',
-          params: { guideType: guideType || bundleType, key: space.id }
+          params: { guideType: 'onboarding', key: space.id }
         }"
         :class="
-          $route.name === 'guides' ||
+          guideType === 'onboarding' ||
+          bundleType === 'onboarding' ||
           ($route.name === 'spaceHome' && 'router-link-exact-active')
         "
       >
         <UiButton class="whitespace-nowrap">
-          {{ $t('guides.header') }}
+          {{ $t('navigation.onboarding') }}
         </UiButton>
       </router-link>
       <router-link
         v-if="isEthBlockchain"
         :to="{
-          name: 'guideBundles',
-          params: { bundleType: guideType || bundleType, key: space.id }
+          name: 'guides',
+          params: { guideType: 'how-to', key: space.id }
         }"
-        :class="$route.name === 'guideBundles' && 'router-link-exact-active'"
+        :class="
+          (guideType === 'how-to' || bundleType === 'how-to') &&
+          'router-link-exact-active'
+        "
       >
         <UiButton class="whitespace-nowrap">
-          {{ $t('guideBundles.header') }}
+          {{ $t('navigation.howTo') }}
         </UiButton>
       </router-link>
       <router-link
-        :to="{ name: 'spaceAbout', params: { key: space.id } }"
-        :class="$route.name === 'spaceAbout' && 'router-link-exact-active'"
+        :to="{
+          name: 'guides',
+          params: { guideType: 'level-up', key: space.id }
+        }"
+        :class="
+          (guideType === 'level-up' || bundleType === 'level-up') &&
+          'router-link-exact-active'
+        "
       >
         <UiButton class="whitespace-nowrap">
-          {{ $t('about') }}
+          {{ $t('navigation.levelUp') }}
         </UiButton>
       </router-link>
     </div>
-    <div class="pt-2">
+    <UiNamedToggle
+      @update:modelValue="toggleGuidesAndBundles"
+      :modelValue="$route.name === 'guideBundles'"
+    />
+    <div class="pt-2 pl-6">
       <UiDropdown
         top="2.5rem"
         right="1.3rem"
