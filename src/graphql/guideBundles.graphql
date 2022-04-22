@@ -1,12 +1,19 @@
 query GuideBundlesQuery(
   $space: String
+  $bundleType: String
   $space_in: [String]
   $author_in: [String]
 ) {
   guideBundles(
-    where: { space: $space, space_in: $space_in, author_in: $author_in }
+    where: {
+      space: $space
+      bundle_type: $bundleType
+      space_in: $space_in
+      author_in: $author_in
+    }
   ) {
     id
+    bundleType
     ipfs
     authors
     name
@@ -39,6 +46,7 @@ query GuideBundlesQuery(
 query GuideBundleQuery($uuid: String!) {
   guideBundle(uuid: $uuid) {
     authors
+    bundleType
     categories
     content
     created

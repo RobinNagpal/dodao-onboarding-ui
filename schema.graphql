@@ -28,7 +28,7 @@ type Query {
   guideBundles(
     first: Int
     skip: Int
-    where: GuideWhere
+    where: GuideBundleWhere
     orderBy: String
     orderDirection: OrderDirection
   ): [GuideBundle!]
@@ -79,6 +79,27 @@ input GuideWhere {
   ipfs_in: [String]
   space: String
   space_in: [String]
+  guide_type: String
+  guide_type_in: [String]
+  author: String
+  author_in: [String]
+  created: Int
+  created_in: [Int]
+  created_gt: Int
+  created_gte: Int
+  created_lt: Int
+  created_lte: Int
+}
+
+input GuideBundleWhere {
+  id: String
+  id_in: [String]
+  ipfs: String
+  ipfs_in: [String]
+  space: String
+  space_in: [String]
+  bundle_type: String
+  bundle_type_in: [String]
   author: String
   author_in: [String]
   created: Int
@@ -245,6 +266,7 @@ type Guide {
   content: String!
   created: Int!
   discordWebhook: String
+  guideType: String!
   id: String!
   ipfs: String!
   name: String!
@@ -271,11 +293,12 @@ type GuideInBundle {
 
 type GuideBundle {
   authors: [String!]!
+  bundleType: String!
   categories: [String!]!
-  excerpt: String!
   content: String!
   created: Int!
   discordWebhook: String
+  excerpt: String!
   id: String!
   ipfs: String!
   name: String!
