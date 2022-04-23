@@ -17,7 +17,7 @@ import { marked } from 'marked';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { PropType } from 'vue/dist/vue';
+import { PropType } from 'vue';
 
 const renderer = new marked.Renderer();
 
