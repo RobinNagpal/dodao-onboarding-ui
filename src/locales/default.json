@@ -227,8 +227,12 @@
     "endDate": "End date",
     "export": "Export",
     "guideBy": "by {0}",
+    "guideType": "Guide Type",
     "import": "Import",
     "multipleChoiceQuestion": "Multiple Choice",
+    "modal": {
+      "selectGuideOrBundleType": "Select Guide Type"
+    },
     "next": "Next",
     "onboardingSteps": "Onboarding Steps",
     "previous": "Previous",
@@ -264,7 +268,8 @@
       "selectGuide": "Select Guide"
     },
     "modal": {
-      "selectGuide": "Select Guide"
+      "selectGuide": "Select Guide",
+      "selectGuideOrBundleType": "Select Guide Type"
     },
     "category": {
       "community": "Community",
@@ -289,7 +294,6 @@
     "endDate": "End date",
     "guideBundleBy": "by {0}",
     "startDate": "Start date",
-
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
     "votingSystem": "Voting system",

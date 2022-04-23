@@ -21,7 +21,7 @@ import { setPageTitle } from '@/helpers/utils';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -35,6 +35,9 @@ const { clientLoading } = useClient();
 const notify = inject('notify') as any;
 
 const route = useRoute();
+const router = useRouter();
+
+const bundleType = computed(() => route.params.bundleType);
 
 const uuid = route.params.uuid;
 
@@ -87,11 +90,9 @@ const categoriesString = computed(() => {
 });
 
 const guidesMap = computed(() => {
-  const fromEntries = Object.fromEntries(
+  return Object.fromEntries(
     form.value.bundleGuides.map(guide => [guide.uuid, guide])
   );
-  console.log('fromEntries', fromEntries);
-  return fromEntries;
 });
 
 const bundleHasErrors = computed(() => {
@@ -150,9 +151,9 @@ onMounted(async () => {
             guideBundle.id
               ? {
                   name: 'guideBundle',
-                  params: { key: space.id, uuid: guideBundle.uuid }
+                  params: { bundleType, key: space.id, uuid: guideBundle.uuid }
                 }
-              : { name: 'guideBundles' }
+              : { name: 'guideBundles', params: { bundleType } }
           "
           class="text-color"
         >

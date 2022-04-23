@@ -5,6 +5,7 @@ import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ModalGuideGuideImport from '@/components/Modal/Guide/GuideImport.vue';
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
+import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleType.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
@@ -16,8 +17,9 @@ import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -34,8 +36,11 @@ const notify = inject('notify') as any;
 const route = useRoute();
 
 const uuid = route.params.uuid;
+const guideType = computed(() => route.params.guideType);
 
 const modalCategoryOpen = ref<boolean>(false);
+
+const modalGuideOrBundleTypeOpen = ref<boolean>(false);
 
 const modalGuideImportOpen = ref(false);
 
@@ -99,6 +104,12 @@ onMounted(async () => {
 
   await initialize();
 });
+
+const guideExists = !!guide.value?.id;
+
+function selectGuideOrBundleType(guideType: GuideType) {
+  guide.value.guideType = guideType;
+}
 </script>
 
 <template>
@@ -107,12 +118,16 @@ onMounted(async () => {
       <div class="px-4 md:px-0 overflow-hidden">
         <router-link
           :to="
-            guide.id
+            guideExists
               ? {
                   name: 'guide',
-                  params: { key: space.id, uuid: guide.uuid }
+                  params: {
+                    guideType,
+                    key: props.space.id,
+                    uuid: guide.value.uuid
+                  }
                 }
-              : { name: 'guides' }
+              : { name: 'guides', params: { guideType } }
           "
           class="text-color"
         >
@@ -185,6 +200,16 @@ onMounted(async () => {
                 </span>
               </template>
             </UiInput>
+            <UiInput @click="modalGuideOrBundleTypeOpen = true">
+              <template v-slot:label>
+                {{ $t(`guide.guideType`) }}
+              </template>
+              <template v-slot:selected>
+                <span class="capitalize">
+                  {{ $tc('navigation.' + guide.guideType) }}
+                </span>
+              </template>
+            </UiInput>
             <UiInput
               v-model="form.content"
               :error="inputError('content')"
@@ -236,6 +261,12 @@ onMounted(async () => {
       :categories="guide.categories"
       @close="modalCategoryOpen = false"
       @add="handleSubmitAddCategories"
+    />
+    <ModalGuideGuideOrBundleType
+      :open="modalGuideOrBundleTypeOpen"
+      :selected-type="guide.guideType"
+      @close="modalGuideOrBundleTypeOpen = false"
+      @selectGuideOrBundleType="selectGuideOrBundleType"
     />
     <ModalGuideGuideImport
       :open="modalGuideImportOpen"

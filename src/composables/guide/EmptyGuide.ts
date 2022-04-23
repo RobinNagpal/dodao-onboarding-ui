@@ -6,13 +6,18 @@ import {
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
-export const emptyGuide = (from: string, space: SpaceModel): GuideInput => {
+export const emptyGuide = (
+  from: string,
+  space: SpaceModel,
+  guideType: string
+): GuideInput => {
   return {
     from,
     uuid: uuidv4(),
     name: 'Guide Name',
     categories: [],
     content: 'New Guide',
+    guideType: guideType,
     steps: [
       {
         uuid: uuidv4(),

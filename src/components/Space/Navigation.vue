@@ -44,7 +44,7 @@ function toggleGuidesAndBundles() {
   });
 }
 
-function createNewOnboardingBundle() {
+function createNewBundle() {
   router.push({
     name: 'guideBundleCreate',
     params: {
@@ -59,12 +59,12 @@ function editSpaceSettings() {
 }
 
 function selectFromThreedotDropdown(e) {
-  if (e === 'createNewOnboardingGuide') createNewOnboardingGuide();
-  if (e === 'createNewOnboardingBundle') createNewOnboardingBundle();
+  if (e === 'createNewGuide') createNewGuide();
+  if (e === 'createNewBundle') createNewBundle();
   if (e === 'spaceSettings') editSpaceSettings();
 }
 
-function createNewOnboardingGuide() {
+function createNewGuide() {
   router.push({
     name: 'guideCreate',
     params: { guideType: guideOrBundleType.value, key: props.space.id }
@@ -78,10 +78,10 @@ const { domain } = useDomain();
 const threeDotItems = computed(() => {
   const items: Array<{ text: string; action: string }> = [];
 
-  items.push({ text: t('guides.new'), action: 'createNewOnboardingGuide' });
+  items.push({ text: t('guides.new'), action: 'createNewGuide' });
   items.push({
     text: t('guideBundles.new'),
-    action: 'createNewOnboardingBundle'
+    action: 'createNewBundle'
   });
 
   if (!domain) {
