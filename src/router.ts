@@ -35,10 +35,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'spaceHome',
-    component: Guides,
-    props: {
-      guideType: 'Onboarding'
-    }
+    component: Guides
   },
   {
     path: ':guideType/guides',

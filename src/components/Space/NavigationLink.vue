@@ -1,25 +1,19 @@
 <script setup lang="ts">
 import UiButton from '@/components/Ui/Button.vue';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { PropType } from 'vue';
-import { RouteParamValue } from 'vue-router';
-
-type Param = string | RouteParamValue[];
+import { computed, PropType } from 'vue';
 
 const props = defineProps({
   space: { type: Object as PropType<SpaceModel>, required: true },
-  guideType: { type: Object as PropType<Param> },
-  bundleType: { type: Object as PropType<Param> },
-  categoryType: { type: String, required: true },
-  orCondition: Boolean
+  guideOrBundleType: { type: String },
+  categoryType: { type: String, required: true }
 });
 
-const linkClass =
-  props.guideType === props.categoryType ||
-  props.bundleType === props.categoryType ||
-  props.orCondition
+const linkClass = computed(() =>
+  props.guideOrBundleType === props.categoryType
     ? 'router-link-exact-active'
-    : '';
+    : ''
+);
 </script>
 
 <template>

@@ -4,6 +4,7 @@ import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiNamedToggle from '@/components/Ui/NamedToggle.vue';
 import { useDomain } from '@/composables/useDomain';
 import { useSpace } from '@/composables/useSpace';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -18,20 +19,24 @@ const { isAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 
-const guideType = route.params.guideType;
-const bundleType = route.params.bundleType;
+const guideType = computed(() => route.params.guideType);
+const bundleType = computed(() => route.params.bundleType);
 
-console.log('guideType', guideType);
-console.log('bundleType', bundleType);
+const guideOrBundleType = computed(
+  () =>
+    route.params.guideType || route.params.bundleType || GuideType.Onboarding
+);
+
+const routeName = computed(() => route.name);
 
 function toggleGuidesAndBundles() {
   const typeParam =
-    route.name === 'guides'
-      ? { bundleType: guideType || bundleType }
-      : { guideType: guideType || bundleType };
+    routeName.value === 'guides'
+      ? { bundleType: guideOrBundleType.value }
+      : { guideType: guideOrBundleType.value };
 
   router.push({
-    name: route.name === 'guides' ? 'guideBundles' : 'guides',
+    name: routeName.value === 'guides' ? 'guideBundles' : 'guides',
     params: {
       ...typeParam,
       key: props.space.id
@@ -42,7 +47,10 @@ function toggleGuidesAndBundles() {
 function createNewOnboardingBundle() {
   router.push({
     name: 'guideBundleCreate',
-    params: { bundleType: guideType || bundleType, key: props.space.id }
+    params: {
+      bundleType: guideOrBundleType.value,
+      key: props.space.id
+    }
   });
 }
 
@@ -59,7 +67,7 @@ function selectFromThreedotDropdown(e) {
 function createNewOnboardingGuide() {
   router.push({
     name: 'guideCreate',
-    params: { guideType: guideType || bundleType, key: props.space.id }
+    params: { guideType: guideOrBundleType.value, key: props.space.id }
   });
 }
 
@@ -90,21 +98,17 @@ const threeDotItems = computed(() => {
     <div class="pl-3 flex nav-links">
       <SpaceNavigationLink
         :space="space"
-        :bundle-type="bundleType"
-        :guide-type="guideType"
+        :guide-or-bundle-type="guideOrBundleType"
         :category-type="'onboarding'"
-        :or-condition="$route.name === 'spaceHome'"
       />
       <SpaceNavigationLink
         :space="space"
-        :bundle-type="bundleType"
-        :guide-type="guideType"
+        :guide-or-bundle-type="guideOrBundleType"
         :category-type="'how-to'"
       />
       <SpaceNavigationLink
         :space="space"
-        :bundle-type="bundleType"
-        :guide-type="guideType"
+        :guide-or-bundle-type="guideOrBundleType"
         :category-type="'level-up'"
       />
     </div>

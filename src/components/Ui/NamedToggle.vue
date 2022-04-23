@@ -53,7 +53,6 @@ function handleToggle() {
 
   .swipe {
     width: 40%;
-    background-color: black;
     opacity: 0.15;
     border-radius: 10px;
     margin: 0.5rem auto;
@@ -68,6 +67,8 @@ function handleToggle() {
     width: 100%;
     transform: translateY(5%);
     margin: 0 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
   }
 
   label,
@@ -78,7 +79,7 @@ function handleToggle() {
 
   label {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
+    //background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     position: relative;
     cursor: pointer;
@@ -87,7 +88,7 @@ function handleToggle() {
   .toggle {
     position: absolute;
     width: 50%;
-    background-color: #fff;
+    background-color: var(--primary-color);
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
@@ -130,14 +131,24 @@ function handleToggle() {
   /* Toggle */
   [type='checkbox']:checked + .app .toggle {
     transform: translateX(100%);
-    background-color: white;
+    background-color: var(--primary-color);
+  }
+
+  [type='checkbox'] + .app .dark {
+    opacity: 0.5;
+  }
+
+  [type='checkbox'] + .app .light {
+    color: white;
   }
 
   [type='checkbox']:checked + .app .dark {
+    color: white;
     opacity: 1;
   }
 
   [type='checkbox']:checked + .app .light {
+    color: var(--text-color);
     opacity: 0.5;
   }
 }

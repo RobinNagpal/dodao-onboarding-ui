@@ -15,6 +15,7 @@ import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
 import { useRoute } from 'vue-router';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const props = defineProps({
   space: Object,
@@ -28,7 +29,7 @@ const loading = ref(false);
 const { domain } = useDomain();
 const route = useRoute();
 
-const guideType = route.params.guideType;
+const guideType = route.params.guideType || GuideType.Onboarding;
 
 const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members

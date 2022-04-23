@@ -12,7 +12,11 @@ const props = defineProps({
   <router-link
     :to="{
       name: 'guide',
-      params: { key: guide.space.id, uuid: guide.uuid }
+      params: {
+        key: guide.space.id,
+        uuid: guide.uuid,
+        guideType: guide.guideType
+      }
     }"
   >
     <div role="listitem" class="card feature-card">
