@@ -19,7 +19,7 @@ import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,

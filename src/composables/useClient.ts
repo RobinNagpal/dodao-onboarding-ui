@@ -92,6 +92,7 @@ export function useClient() {
         content: payload.content,
         discordWebhook: payload.discordWebhook,
         from: web3.value.account,
+        guideType: payload.guideType,
         name: payload.name,
         space: space.id,
         steps: payload.steps.map((step: GuideStep) => ({
@@ -140,18 +141,19 @@ export function useClient() {
       const bundlePayload = payload as TempGuideBundleInput;
       const bundleMessage: GuideBundleInput = {
         uuid: bundlePayload.uuid,
-        categories: bundlePayload.categories || [],
-        excerpt: bundlePayload.excerpt,
-        content: bundlePayload.content,
-        discordWebhook: bundlePayload.discordWebhook || '',
-        from: web3.value.account,
-        name: bundlePayload.name,
-        space: space.id,
-        thumbnail: bundlePayload.thumbnail || '',
         bundleGuides: bundlePayload.bundleGuides.map(g => ({
           guideUuid: g.guide!.uuid,
           order: g.order
-        }))
+        })),
+        bundleType: bundlePayload.bundleType,
+        categories: bundlePayload.categories || [],
+        content: bundlePayload.content,
+        discordWebhook: bundlePayload.discordWebhook || '',
+        excerpt: bundlePayload.excerpt,
+        from: web3.value.account,
+        name: bundlePayload.name,
+        space: space.id,
+        thumbnail: bundlePayload.thumbnail || ''
       };
       return (await clientEIP712.bundle(
         auth.web3,
