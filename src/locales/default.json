@@ -351,8 +351,8 @@
   },
   "navigation": {
     "onboarding": "Onboarding",
-    "howTo": "How To",
-    "levelUp": "Level Up"
+    "how-to": "How To",
+    "level-up": "Level Up"
   },
   "settings": {
     "header": "Settings",
