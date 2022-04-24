@@ -38,12 +38,12 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: Guides
   },
   {
-    path: 'guides',
+    path: ':guideType/guides',
     name: 'guides',
     component: Guides
   },
   {
-    path: 'guide-bundles',
+    path: ':bundleType/guide-bundles',
     name: 'guideBundles',
     component: GuideBundles
   },
@@ -53,37 +53,37 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: SpaceProposal
   },
   {
-    path: 'guide/view/:uuid',
+    path: ':guideType/guide/view/:uuid',
     name: 'guide',
     component: () => import('@/views/Guide/ViewGuide.vue')
   },
   {
-    path: 'guide-bundle/view/:uuid',
+    path: ':bundleType/guide-bundle/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
   {
-    path: 'guide/create',
+    path: ':guideType/guide/create',
     name: 'guideCreate',
     component: GuideCreate
   },
   {
-    path: 'guide-bundle/create',
+    path: ':bundleType/guide-bundle/create',
     name: 'guideBundleCreate',
     component: GuideBundleCreate
   },
   {
-    path: 'guide/edit/:uuid',
+    path: ':guideType/guide/edit/:uuid',
     name: 'guideEdit',
     component: GuideCreate
   },
   {
-    path: 'guide-bundle/edit/:uuid',
+    path: ':bundleType/guide-bundle/edit/:uuid',
     name: 'guideBundleEdit',
     component: GuideBundleCreate
   },
   {
-    path: 'guide/submissions/:uuid',
+    path: ':guideType/guide/submissions/:uuid',
     name: 'guideSubmissions',
     component: GuideSubmissions
   },

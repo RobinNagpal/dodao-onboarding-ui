@@ -2,8 +2,12 @@
     <h1>DoDAO</h1>
 </div>
 
+## Prerequisites
+Install `yarn` version - `1.22.17`
+Install `node` version - `v16.14.2` 
 
 ## Project setup
+copy `.env.example` and name it as `.env.local`
 
 ```
 yarn

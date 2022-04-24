@@ -16,6 +16,7 @@ import {
 } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
+  GuideType,
   InputType,
   QuestionChoice,
   QuestionType,
@@ -26,7 +27,7 @@ import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { emptyGuide } from './EmptyGuide';
 
 const questionContentLimit = 1024;
@@ -43,13 +44,19 @@ export function useEditGuide(
 ) {
   const { send } = useClient();
   const router = useRouter();
+  const route = useRoute();
+
   const { t } = useI18n();
   const { getExplore } = useApp();
   const { store } = useStore();
   const { web3 } = useWeb3();
 
-  const emptyGuideModel = emptyGuide(web3.value.account, space);
-  const guideRef = ref<GuideInput>(emptyGuideModel);
+  const emptyGuideModel = emptyGuide(
+    web3.value.account,
+    space,
+    (route.params.guideType as string) || GuideType.Onboarding
+  );
+  const guideRef = ref<GuideInput & { id?: string }>(emptyGuideModel);
   const guideErrors = ref<GuideError>({});
   const guideLoaded = ref<boolean>(false);
 

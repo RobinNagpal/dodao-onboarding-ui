@@ -14,6 +14,7 @@ import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   space: Object,
@@ -23,6 +24,9 @@ const props = defineProps({
 
 const { store } = useStore();
 const { domain } = useDomain();
+const route = useRoute();
+
+const bundleType = route.params.bundleType;
 
 const loading = ref(false);
 
@@ -43,6 +47,7 @@ async function loadGuideBundles(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
+        bundleType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
       }
@@ -95,6 +100,7 @@ const loadingData = computed(() => {
           v-else-if="!guideBundlesCount && !loadingData"
           class="mt-2"
           :space="space"
+          :bundleType="bundleType"
         />
         <div v-else>
           <div v-if="!loadingData" class="_3-column-grid features-grid">

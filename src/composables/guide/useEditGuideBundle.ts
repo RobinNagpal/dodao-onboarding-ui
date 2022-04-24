@@ -4,13 +4,14 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
+import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
 const bundleNameLimit = 32;
@@ -24,12 +25,18 @@ export function useEditGuideBundle(
 ) {
   const { send } = useClient();
   const router = useRouter();
+  const route = useRoute();
+
   const { t } = useI18n();
   const { getExplore } = useApp();
   const { store } = useStore();
   const { web3 } = useWeb3();
 
-  const emptyGuideBundleModel = emptyGuideBundle(web3.value.account, space);
+  const emptyGuideBundleModel = emptyGuideBundle(
+    web3.value.account,
+    space,
+    (route.params.bundleType as GuideBundleType) || GuideBundleType.Onboarding
+  );
   const guideBundleRef = ref<TempGuideBundleInput>(emptyGuideBundleModel);
   const guideBundleErrors = ref<GuideBundleError>({});
   const guideBundleLoaded = ref<boolean>(false);
@@ -45,6 +52,7 @@ export function useEditGuideBundle(
         space: space.id,
         thumbnail: guideBundle.thumbnail || undefined,
         discordWebhook: guideBundle.discordWebhook || undefined,
+        bundleType: guideBundle.bundleType as GuideBundleType,
         bundleGuides: guideBundle.bundleGuides.map(g => ({
           uuid: uuidv4(),
           guide: g,

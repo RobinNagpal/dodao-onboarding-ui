@@ -1,3 +1,4 @@
+import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,24 +14,27 @@ export interface TempGuideModelInput {
 }
 
 export interface TempGuideBundleInput {
-  from: string;
+  uuid: string;
+  bundleGuides: TempGuideModelInput[];
+  bundleType: GuideBundleType;
   categories: string[];
-  excerpt: string;
   content: string;
   discordWebhook?: string;
+  excerpt: string;
+  from: string;
   name: string;
   space: string;
-  bundleGuides: TempGuideModelInput[];
   thumbnail?: string;
   timestamp?: number;
-  uuid: string;
 }
 
 export const emptyGuideBundle = (
   from: string,
-  space: SpaceModel
+  space: SpaceModel,
+  bundleType: GuideBundleType
 ): TempGuideBundleInput => {
   return {
+    bundleType,
     from,
     excerpt: 'Provides information for ....',
     uuid: uuidv4(),

@@ -18,12 +18,14 @@ const props = defineProps({
       params: {
         key: guide.space.id,
         uuid: guide.uuid,
+        guideType: guide.guideType,
         from: JSON.stringify({
           displayName: guideBundle.name,
           name: 'guideBundle',
           params: {
             key: guideBundle.space.id,
-            uuid: guideBundle.uuid
+            uuid: guideBundle.uuid,
+            bundleType: guideBundle.bundleType
           }
         })
       }

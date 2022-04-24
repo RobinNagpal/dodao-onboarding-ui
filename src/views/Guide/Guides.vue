@@ -14,6 +14,8 @@ import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
+import { useRoute } from 'vue-router';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const props = defineProps({
   space: Object,
@@ -25,6 +27,9 @@ const { store } = useStore();
 
 const loading = ref(false);
 const { domain } = useDomain();
+const route = useRoute();
+
+const guideType = route.params.guideType || GuideType.Onboarding;
 
 const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members
@@ -36,6 +41,7 @@ const { apolloQuery } = useApolloQuery();
 
 async function loadGuides(skip = 0) {
   loading.value = true;
+
   const guidesObj = await apolloQuery(
     {
       query: GuidesQuery,
@@ -43,6 +49,7 @@ async function loadGuides(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
+        guideType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
       }
@@ -91,6 +98,7 @@ const loadingData = computed(() => {
           v-else-if="!guidesCount && !loadingData"
           class="mt-2"
           :space="space"
+          :guideType="guideType"
         />
         <div v-else>
           <div v-if="!loadingData" class="_3-column-grid features-grid">

@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
+import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
+import LayoutSingle from '@/components/Layout/Single.vue';
+import NoResults from '@/components/NoResults.vue';
+import RowLoading from '@/components/RowLoading.vue';
 import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useViewGuideSubmissions } from '@/composables/guide/useViewSubmissions';
 import { setPageTitle } from '@/helpers/utils';
-import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
-import NoResults from '@/components/NoResults.vue';
-import LayoutSingle from '@/components/Layout/Single.vue';
-import Block from '@/components/Block.vue';
-import RowLoading from '@/components/RowLoading.vue';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { inject, onMounted, PropType } from 'vue';
 import { useRoute } from 'vue-router';

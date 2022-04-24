@@ -227,8 +227,12 @@
     "endDate": "End date",
     "export": "Export",
     "guideBy": "by {0}",
+    "guideType": "Guide Type",
     "import": "Import",
     "multipleChoiceQuestion": "Multiple Choice",
+    "modal": {
+      "selectGuideOrBundleType": "Select Guide Type"
+    },
     "next": "Next",
     "onboardingSteps": "Onboarding Steps",
     "previous": "Previous",
@@ -264,7 +268,8 @@
       "selectGuide": "Select Guide"
     },
     "modal": {
-      "selectGuide": "Select Guide"
+      "selectGuide": "Select Guide",
+      "selectGuideOrBundleType": "Select Guide Type"
     },
     "category": {
       "community": "Community",
@@ -282,6 +287,7 @@
       "sales": "Sales",
       "setup": "Setup"
     },
+    "bundleType": "Bundle Type",
     "delete": "Delete",
     "duplicate": "Duplicate",
     "discordWebhook": "Discord Webhook",
@@ -289,7 +295,6 @@
     "endDate": "End date",
     "guideBundleBy": "by {0}",
     "startDate": "Start date",
-
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
     "votingSystem": "Voting system",
@@ -306,9 +311,17 @@
   "guides": {
     "header": "Guides",
     "new": "New guide",
-    "noGuides": "There aren't any onboarding guides here yet!",
+    "noGuides": {
+      "onboarding": "There aren't any Onboarding guides here yet!",
+      "how-to": "There aren't any How To guides here yet!",
+      "level-up": "There aren't any Level Up guides here yet!"
+    },
     "createGuide": "Create",
-    "createFirstGuide": "Let's create your first onboarding guide",
+    "createFirstGuide": {
+      "onboarding": "Let's create your first Onboarding guide",
+      "how-to": "Let's create your first How To guide",
+      "level-up": "Let's create your first Level Up guide"
+    },
     "states": {
       "all": "All",
       "core": "Core",
@@ -321,9 +334,17 @@
   "guideBundles": {
     "header": "Guide Bundles",
     "new": "New bundle",
-    "noGuideBundles": "There aren't any onboarding guide bundles here yet!",
+    "noGuideBundles": {
+      "onboarding": "There aren't any Onboarding guide bundles here yet!",
+      "how-to": "There aren't any How To guide bundles here yet!",
+      "level-up": "There aren't any Level Up guide bundles here yet!"
+    },
     "createGuideBundle": "Create",
-    "createFirstGuideBundle": "Let's create your first guide bundle",
+    "createFirstGuideBundle": {
+      "onboarding": "Let's create your first Onboarding guide bundle",
+      "how-to": "Let's create your first How To guide bundle",
+      "level-up": "Let's create your first Level Up guide bundle"
+    },
     "states": {
       "all": "All",
       "core": "Core",
@@ -332,6 +353,11 @@
       "pending": "Pending",
       "closed": "Closed"
     }
+  },
+  "navigation": {
+    "onboarding": "Onboarding",
+    "how-to": "How To",
+    "level-up": "Level Up"
   },
   "settings": {
     "header": "Settings",
