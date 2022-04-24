@@ -21,10 +21,12 @@ query GuideBundlesQuery(
     content
     created
     excerpt
+    bundleType
     bundleGuides {
       categories
       content
       created
+      guideType
       name
       order
       thumbnail
@@ -68,6 +70,7 @@ query GuideBundleQuery($uuid: String!) {
       content
       created
       discordWebhook
+      guideType
       link
       name
       order

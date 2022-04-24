@@ -5,6 +5,7 @@ export const bundleTypes = {
   ],
   GuideBundleInput: [
     { name: 'from', type: 'address' },
+    { name: 'bundleType', type: 'string' },
     { name: 'categories', type: 'string[]' },
     { name: 'excerpt', type: 'string' },
     { name: 'content', type: 'string' },

@@ -284,6 +284,7 @@ type GuideInBundle {
   content: String!
   created: Int!
   discordWebhook: String
+  guideType: String!
   name: String!
   order: Int!
   thumbnail: String

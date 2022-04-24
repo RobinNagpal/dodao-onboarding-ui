@@ -3,6 +3,7 @@ import Block from '@/components/Block.vue';
 import GuideBundleGuideSelect from '@/components/GuideBundle/GuideSelect.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
+import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleType.vue';
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
@@ -18,10 +19,11 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
+import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -35,7 +37,6 @@ const { clientLoading } = useClient();
 const notify = inject('notify') as any;
 
 const route = useRoute();
-const router = useRouter();
 
 const bundleType = computed(() => route.params.bundleType);
 
@@ -44,6 +45,8 @@ const uuid = route.params.uuid;
 const preview = ref(false);
 
 const modalCategoryOpen = ref(false);
+
+const modalGuideOrBundleTypeOpen = ref<boolean>(false);
 
 const {
   addEmptyBundleGuideInput,
@@ -140,6 +143,10 @@ onMounted(async () => {
   loadGuides(store.space.guides.length);
   await initialize();
 });
+
+function selectGuideOrBundleType(type: GuideBundleType) {
+  guideBundle.value.bundleType = type;
+}
 </script>
 
 <template>
@@ -215,6 +222,16 @@ onMounted(async () => {
               <template v-slot:selected>
                 <span class="capitalize">
                   {{ categoriesString }}
+                </span>
+              </template>
+            </UiInput>
+            <UiInput @click="modalGuideOrBundleTypeOpen = true">
+              <template v-slot:label>
+                {{ $t(`guideBundle.bundleType`) }}
+              </template>
+              <template v-slot:selected>
+                <span class="capitalize">
+                  {{ $tc('navigation.' + form.bundleType) }}
                 </span>
               </template>
             </UiInput>
@@ -304,6 +321,13 @@ onMounted(async () => {
       :categories="guideBundle.categories"
       @close="modalCategoryOpen = false"
       @add="handleSubmitAddCategories"
+    />
+    <ModalGuideGuideOrBundleType
+      :open="modalGuideOrBundleTypeOpen"
+      :selected-type="form.bundleType"
+      :for-bundle-type="true"
+      @close="modalGuideOrBundleTypeOpen = false"
+      @selectGuideOrBundleType="selectGuideOrBundleType"
     />
   </teleport>
 </template>

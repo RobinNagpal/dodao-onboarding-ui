@@ -113,6 +113,7 @@ const threeDotItems = computed(() => {
       />
     </div>
     <UiNamedToggle
+      v-if="space.id === 'dxdao-eth-1'"
       @update:modelValue="toggleGuidesAndBundles"
       :modelValue="$route.name === 'guideBundles'"
     />

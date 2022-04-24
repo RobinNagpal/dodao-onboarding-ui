@@ -287,6 +287,7 @@
       "sales": "Sales",
       "setup": "Setup"
     },
+    "bundleType": "Bundle Type",
     "delete": "Delete",
     "duplicate": "Duplicate",
     "discordWebhook": "Discord Webhook",
