@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "scripts": {
     "build": "mkdir -p src/graphql/generated && yarn build:graphql && vite build",
-    "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts  --localSchemaFile=schema.graphql --includes='src/**/*.graphql' --target typescript --outputFlat",
+    "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts --target typescript --outputFlat",
     "dev": "run-s init-submodules graphql:dir build:graphql run:app",
     "graphql:dir": "mkdirp ./src/graphql/generated",
     "init-submodules": "git submodule update --init",
