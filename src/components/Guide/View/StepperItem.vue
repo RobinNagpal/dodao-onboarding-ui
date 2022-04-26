@@ -61,7 +61,7 @@ const emit = defineEmits([
 ]);
 
 const stepItems = computed(() => {
-  return  props.step.stepItems;
+  return props.step.stepItems;
 });
 
 const stepContents = computed(() =>

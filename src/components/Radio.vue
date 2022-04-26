@@ -36,10 +36,8 @@ function radioSelected() {
   -ms-user-select: none;
   user-select: none;
   input {
-    z-index: 1;
     position: absolute;
     opacity: 0;
-
     cursor: pointer;
     height: 0;
     width: 0;
