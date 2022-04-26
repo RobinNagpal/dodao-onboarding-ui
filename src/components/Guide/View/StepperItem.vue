@@ -11,7 +11,6 @@ import {
   InputType,
   isQuestion,
   isUserInput,
-  QuestionType,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
@@ -62,9 +61,6 @@ const emit = defineEmits([
 ]);
 
 const stepItems = computed(() => {
-  if (props.step.stepItems[1]) {
-    props.step.stepItems[1].type = QuestionType.SingleChoice
-  }
   return  props.step.stepItems;
 });
 
