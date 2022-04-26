@@ -47,7 +47,7 @@ function selectSingleChoice(choiceKey: string) {
   <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
     <UiMarkdown :body="question.content" class="mb-6" />
     <template v-for="choice in question.choices" :key="choice.key">
-      <div class="flex leading-loose items-baseline">
+      <div class="flex leading-loose items-center">
         <Radio
           v-if="question.type === QuestionType.SingleChoice"
           @update:modelValue="selectSingleChoice(choice.key)"

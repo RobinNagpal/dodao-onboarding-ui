@@ -2,7 +2,12 @@
 defineProps({
   primary: {
     type: Boolean,
-    default: false
+    default: true
+  },
+  variant: {
+    type: String,
+    default: 'outlined',
+    validator: (prop) => ['outlined', 'contained', 'text'].includes(prop)
   },
   loading: Boolean,
   type: String,
@@ -17,8 +22,11 @@ defineProps({
   <button
     :type="type || 'button'"
     :class="[
-      'button px-[24px] focus-within:border-skin-link',
-      { 'button--primary': primary }
+      'inline-flex items-center justify-center button px-[24px] focus-within:border-skin-link',
+      { 'button--primary': primary },
+      { 'button--outlined': variant === 'outlined' },
+      { 'button--contained': variant === 'contained' },
+      { 'button--text': variant === 'text' }
     ]"
     :disabled="disabled || loading"
   >
@@ -29,30 +37,38 @@ defineProps({
 
 <style scoped lang="scss">
 .button {
-  border: 1px solid var(--border-color);
+  border: 1px solid;
+  @apply border-primary;
   background-color: transparent;
   color: var(--link-color);
   border-radius: 0.5rem;
   outline: none;
-  line-height: 46px;
   height: 46px;
   font-size: 18px;
 
-  &.button--primary {
-    color: white;
-    background-color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-
-    &:hover {
+  &.button--outlined {
+    &.button--primary {
+      @apply text-primary border border-primary;
+    }
+  }
+  
+  &.button--contained {
+    &.button--primary {
       color: white;
       background-color: var(--primary-color);
       border: 1px solid var(--primary-color);
-    }
 
-    &:disabled {
-      color: var(--link-color) !important;
-      border: 1px solid var(--border-color);
-      background-color: var(--border-color);
+      &:hover {
+        color: white;
+        background-color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+      }
+
+      &:disabled {
+        color: var(--link-color) !important;
+        border: 1px solid var(--border-color);
+        background-color: var(--border-color);
+      }
     }
   }
 

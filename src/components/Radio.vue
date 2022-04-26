@@ -18,17 +18,17 @@ function radioSelected() {
 </script>
 
 <template>
-  <div class="p-2 radio-container mt-2">
+  <div class="p-2 radio-container"  @click="radioSelected">
+    <div class="overlay absolute top-0 rounded-full right-0 bottom-0 left-0 opacity-10 z-0"></div>
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
-    <span class="checkmark" @click="radioSelected" :class="props.class"></span>
+    <span class="checkmark" :class="props.class"></span>
   </div>
 </template>
 <style scoped lang="scss">
 .radio-container {
   display: block;
   position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+  padding: 4px;
   cursor: pointer;
   font-size: 22px;
   -webkit-user-select: none;
@@ -36,15 +36,16 @@ function radioSelected() {
   -ms-user-select: none;
   user-select: none;
   input {
+    z-index: 1;
     position: absolute;
     opacity: 0;
+
     cursor: pointer;
     height: 0;
     width: 0;
     &:checked {
       ~ {
         .checkmark {
-          background-color: #2196f3;
           &:after {
             display: block;
           }
@@ -52,37 +53,35 @@ function radioSelected() {
       }
     }
   }
+  .overlay {
+    z-index: -1;
+  }
   &:hover {
-    input {
-      ~ {
-        .checkmark {
-          background-color: #ccc;
-        }
-      }
+    .overlay {
+      @apply bg-primary;
     }
   }
   .checkmark {
     &:after {
-      top: 9px;
-      left: 9px;
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: white;
+      @apply bg-primary;
     }
   }
 }
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  margin: 6px;
+  border-width: 3px;
+  @apply border-2 border-primary;
   border-radius: 50%;
   &:after {
     content: '';
-    position: absolute;
     display: none;
   }
 }

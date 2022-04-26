@@ -11,6 +11,7 @@ import {
   InputType,
   isQuestion,
   isUserInput,
+  QuestionType,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { marked } from 'marked';
@@ -61,7 +62,10 @@ const emit = defineEmits([
 ]);
 
 const stepItems = computed(() => {
-  return props.step.stepItems;
+  if (props.step.stepItems[1]) {
+    props.step.stepItems[1].type = QuestionType.SingleChoice
+  }
+  return  props.step.stepItems;
 });
 
 const stepContents = computed(() =>
@@ -157,15 +161,18 @@ async function navigateToNextStep() {
     <div class="mt-2">
       <UiButton
         :aria-label="$t('previous')"
-        class="float-left"
+        class="float-left w-[150px]"
         @click="goToPreviousStep(step)"
         v-if="isNotFirstStep && !isGuideCompletedStep"
       >
+        <span class="mr-2 font-bold ">&#8592;</span>
         <span class="sm:block" v-text="$t('guide.previous')" />
       </UiButton>
       <UiButton
         :aria-label="$t('next')"
-        class="float-right"
+        class="float-right w-[150px]"
+        :primary="true"
+        variant="contained"
         @click="navigateToNextStep"
         :loading="guideSubmitting"
         :disabled="guideSubmitting"
@@ -175,6 +182,7 @@ async function navigateToNextStep() {
           class="sm:block"
           v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
         />
+        <span class="ml-2 font-bold ">&#8594;</span>
       </UiButton>
     </div>
   </div>
