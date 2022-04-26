@@ -2,13 +2,15 @@
   "name": "snapshot",
   "version": "0.1.4",
   "scripts": {
-    "preinstall": "yarn run init-submodules",
-    "dev": "yarn init-submodules && mkdir -p src/graphql/generated && yarn build:graphql && vite",
     "build": "mkdir -p src/graphql/generated && yarn build:graphql && vite build",
+    "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts --target typescript --outputFlat",
+    "dev": "run-s init-submodules graphql:dir build:graphql run:app",
+    "graphql:dir": "mkdirp ./src/graphql/generated",
+    "init-submodules": "git submodule update --init",
     "lint": "eslint \"./src/*/**/*.{ts,vue,json}\" --fix",
     "postinstall": "patch-package && husky install",
-    "init-submodules": "git submodule update --init",
-    "build:graphql": "apollo codegen:generate src/graphql/generated/graphqlDocs.ts  --localSchemaFile=schema.graphql --includes='src/**/*.graphql' --target typescript --outputFlat"
+    "preinstall": "yarn run init-submodules",
+    "run:app": "vite"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
@@ -77,6 +79,8 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.15.1",
     "husky": "^7.0.4",
+    "mkdirp": "^1.0.4",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-imports": "^2.3.4",

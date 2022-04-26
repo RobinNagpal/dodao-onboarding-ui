@@ -32,6 +32,7 @@ jobs:
           VITE_DEFAULT_NETWORK: mainnet
           VITE_BLOCKCHAIN: ONE
           VITE_ENVIRONMENT: prod
+          VITE_HUB_URL: https://api.onboarding.dodao.io:443
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete

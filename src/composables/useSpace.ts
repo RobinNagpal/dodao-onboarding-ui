@@ -1,4 +1,5 @@
 import { useWeb3 } from '@/composables/useWeb3';
+import superAdmins from '@/helpers/jsons/super_admins.json';
 import { getInstance } from '@/utils/auth/auth';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed } from 'vue';
@@ -9,8 +10,8 @@ export function useSpace(space: SpaceModel) {
 
   const isSuperAdmin = computed(
     () =>
-      web3Account.value?.toLowerCase() ===
-      '0x470579d16401a36bf63b1428eaa7189fbde5fee9'
+      web3Account.value &&
+      superAdmins.includes(web3Account.value?.toLowerCase())
   );
 
   const isAdmin = computed(() => {
