@@ -228,7 +228,7 @@ function onClickBackButton() {
           <div class="px-4 md:px-0">
             <template v-if="loaded">
               <div class="flex justify-between">
-                <div v-if="isEthBlockchain || isOneBlockchain">
+                <div>
                   <h1 v-text="guide?.name" class="mb-2" />
                   <div class="mb-4">
                     <div class="flex justify-between">
@@ -236,7 +236,10 @@ function onClickBackButton() {
                     </div>
                   </div>
                 </div>
-                <div class="guide-information mt-4">
+                <div
+                  class="guide-information mt-4"
+                  v-if="isEthBlockchain || isOneBlockchain"
+                >
                   <div class="space-y-1">
                     <div class="w-[180px] flex justify-between">
                       <div>

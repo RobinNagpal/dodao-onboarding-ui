@@ -18,8 +18,9 @@ const props = defineProps({
         guideType: guide.guideType
       }
     }"
+    class="h-full"
   >
-    <div role="listitem" class="card feature-card">
+    <div role="listitem" class="card feature-card h-full">
       <div class="image-wrapper blog-card-thumbnail">
         <UiThumbnail
           :src="guide.thumbnail"

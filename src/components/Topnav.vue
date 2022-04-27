@@ -138,6 +138,8 @@ onMounted(() => setTitle());
             <WalletMultiButton v-if="isSolBlockchain" />
             <UiButton
               v-if="!isSolBlockchain && !$auth.isAuthenticated.value"
+              :primary="true"
+              variant="contained"
               @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
