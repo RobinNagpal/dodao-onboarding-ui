@@ -9,7 +9,8 @@ defineProps({
   disabled: {
     type: Boolean,
     default: false
-  }
+  },
+  size: String
 });
 </script>
 
@@ -17,6 +18,7 @@ defineProps({
   <button
     :type="type || 'button'"
     :class="[
+      { 'px-[16px] sm-button': size === 'sm' },
       'button px-[24px] focus-within:border-skin-link',
       { 'button--primary': primary }
     ]"
@@ -37,6 +39,13 @@ defineProps({
   line-height: 46px;
   height: 46px;
   font-size: 18px;
+
+  &.sm-button {
+    border-radius: 0.2rem;
+    font-size: 14px;
+    line-height: 26px;
+    height: 28px;
+  }
 
   &.button--primary {
     color: white;

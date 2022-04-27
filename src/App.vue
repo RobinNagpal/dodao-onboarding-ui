@@ -35,7 +35,7 @@ watch(modalOpen, val => {
     <div v-else>
       <div class="page-wrapper">
         <Topnav />
-        <div class="flex mt-16">
+        <div class="flex mt-[64px]">
           <Scroller />
           <router-view :key="$route.path" class="flex-auto route-view" />
         </div>

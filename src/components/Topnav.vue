@@ -63,6 +63,16 @@ const logoUrl =
     ? getCDNImageUrl(space.value?.avatar)
     : dodaoLogo;
 onMounted(() => setTitle());
+
+function handleScroll() {
+  if (window.scrollY > 10) {
+    document.getElementById('topnav')?.classList.add('topnav-shadowed');
+  } else {
+    document.getElementById('topnav')?.classList.remove('topnav-shadowed');
+  }
+}
+
+window.addEventListener('scroll', handleScroll);
 </script>
 
 <template>
@@ -75,26 +85,27 @@ onMounted(() => setTitle());
   </div>
   <div id="topnav" class="header w-nav">
     <div class="header-main-wrapper">
-      <Container class="max-w-[100%] container-default w-container">
+      <div class="max-w-[100%] w-container">
         <div
-          class="flex justify-between items-center header-wrapper flex-wrap"
-          style="min-height: 78px"
+          class="flex justify-between items-center header-wrapper flex-wrap h-[50px]"
         >
           <div
-            class="flex items-center header-logo-wrapper w-nav-brand w--current top-nav-left pl-4"
+            class="flex items-center header-logo-wrapper w-nav-brand w--current top-nav-left pl-3"
           >
             <router-link
               :to="{ path: '/' }"
               class="flex items-center"
               style="font-size: 24px; padding-top: 4px"
             >
-              <img :src="logoUrl" alt="arrow" class="logo arrow h-[60px]" />
+              <img :src="logoUrl" alt="arrow" class="logo arrow h-[36px]" />
             </router-link>
           </div>
           <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
               class="flex items-center float-left"
+              primary
+              size="sm"
             >
               <span class="whitespace-nowrap">All DAOs</span>
             </UiButton>
@@ -102,7 +113,7 @@ onMounted(() => setTitle());
           <div v-else class="top-nav-middle flex justify-center">
             <SpaceNavigation :space="space" />
           </div>
-          <div :key="web3.account" class="flex top-nav-right justify-end pr-4">
+          <div :key="web3.account" class="flex top-nav-right justify-end pr-3">
             <template
               v-if="
                 (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
@@ -140,6 +151,8 @@ onMounted(() => setTitle());
               @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
+              primary
+              size="sm"
             >
               <span class="hidden sm:block" v-text="$t('connectWallet')" />
               <Icon
@@ -150,7 +163,7 @@ onMounted(() => setTitle());
             </UiButton>
           </div>
         </div>
-      </Container>
+      </div>
     </div>
   </div>
   <div class="bg-blue text-white text-center py-2" v-if="pendingCount > 0">
@@ -174,8 +187,16 @@ onMounted(() => setTitle());
 </template>
 
 <style scoped lang="scss">
+.header {
+  background: var(--bg-color);
+  position: fixed;
+  z-index: 20;
+}
+.topnav-shadowed {
+  box-shadow: 0px 5px 20px -8px #d9d9d9;
+}
 .header-nav {
-  box-shadow: 0 4px 16px 0 rgb(26 27 30 / 3%);
+  box-shadow: var(--box-shadow);
 }
 .logo {
   transition: transform 300ms ease, -webkit-transform 300ms ease;
