@@ -413,6 +413,7 @@ watchEffect(() => {
           :disabled="!isValid"
           :loading="clientLoading || queryLoading"
           class="block w-full"
+          variant="contained"
           primary
         >
           {{ $t('create.publish') }}

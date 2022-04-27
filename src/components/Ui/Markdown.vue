@@ -47,7 +47,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="markdown-body break-words !mb-3"
+    class="markdown-body break-words !mb-2"
     v-html="markdown"
   />
 </template>

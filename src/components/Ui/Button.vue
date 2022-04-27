@@ -2,7 +2,7 @@
 defineProps({
   primary: {
     type: Boolean,
-    default: true
+    default: false
   },
   variant: {
     type: String,
@@ -22,7 +22,7 @@ defineProps({
   <button
     :type="type || 'button'"
     :class="[
-      'inline-flex items-center justify-center button px-[24px] focus-within:border-skin-link',
+      'inline-flex items-center justify-center button px-[24px]',
       { 'button--primary': primary },
       { 'button--outlined': variant === 'outlined' },
       { 'button--contained': variant === 'contained' },
@@ -38,7 +38,6 @@ defineProps({
 <style scoped lang="scss">
 .button {
   border: 1px solid;
-  @apply border-primary;
   background-color: transparent;
   color: var(--link-color);
   border-radius: 0.5rem;
@@ -47,6 +46,7 @@ defineProps({
   font-size: 18px;
 
   &.button--outlined {
+    @apply border-skin-border;
     &.button--primary {
       @apply text-primary border border-primary;
     }

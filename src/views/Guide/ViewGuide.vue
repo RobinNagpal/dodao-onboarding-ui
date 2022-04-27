@@ -240,19 +240,22 @@ function onClickBackButton() {
               <Block
                 :title="$t('guide.onboardingSteps')"
                 :class="`mt-4`"
+                slim
                 v-if="guideLoaded && guide"
               >
-                <GuideViewStepper
-                  :activeStepId="activeStepId"
-                  :goToNextStep="goToNextStep"
-                  :goToPreviousStep="goToPreviousStep"
-                  :guide="guide"
-                  :guideResponse="guideResponseRef"
-                  :guideSubmitting="guideSubmittingRef"
-                  :selectAnswer="selectAnswer"
-                  :setUserInput="setUserInput"
-                  :submitGuide="submitGuide"
-                />
+                <div class="mt-4">
+                  <GuideViewStepper
+                    :activeStepId="activeStepId"
+                    :goToNextStep="goToNextStep"
+                    :goToPreviousStep="goToPreviousStep"
+                    :guide="guide"
+                    :guideResponse="guideResponseRef"
+                    :guideSubmitting="guideSubmittingRef"
+                    :selectAnswer="selectAnswer"
+                    :setUserInput="setUserInput"
+                    :submitGuide="submitGuide"
+                  />
+                </div>
               </Block>
             </template>
           </div>

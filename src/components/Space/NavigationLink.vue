@@ -24,7 +24,7 @@ const computedVariant = computed(() =>
       params: { guideType: categoryType, key: space.id }
     }"
   >
-    <UiButton :variant="computedVariant"  class="whitespace-nowrap">
+    <UiButton :variant="computedVariant" class="whitespace-nowrap" :primary="true">
       {{ $t(`navigation.${categoryType}`) }}
     </UiButton>
   </router-link>

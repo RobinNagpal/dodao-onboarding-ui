@@ -127,25 +127,27 @@ async function navigateToNextStep() {
 <template>
   <div class="guide-stepper-content w-full p-4 flex flex-col justify-between">
     <div style="min-height: 300px">
-      <div class="mb-2 font-bold">{{ step.name }}</div>
+      <div class="mb-4 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content markdown-body" />
       <template v-for="stepItem in stepItems" :key="stepItem.uuid">
-        <GuideViewUserInput
-          v-if="
-            stepItem.type === InputType.PublicShortInput ||
-            stepItem.type === InputType.PrivateShortInput
-          "
-          :userInput="stepItem"
-          :setUserInput="setUserInput"
-          :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
-        />
-        <GuideViewQuestion
-          v-else
-          :question="stepItem"
-          :selectAnswer="selectAnswer"
-          :questionResponse="stepSubmission[stepItem.uuid] ?? []"
-          @update:questionResponse="selectAnswer"
-        />
+        <div class="mb-6">
+          <GuideViewUserInput
+            v-if="
+              stepItem.type === InputType.PublicShortInput ||
+              stepItem.type === InputType.PrivateShortInput
+            "
+            :userInput="stepItem"
+            :setUserInput="setUserInput"
+            :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
+          />
+          <GuideViewQuestion
+            v-else
+            :question="stepItem"
+            :selectAnswer="selectAnswer"
+            :questionResponse="stepSubmission[stepItem.uuid] ?? []"
+            @update:questionResponse="selectAnswer"
+          />
+        </div>
       </template>
     </div>
     <div v-if="showQuestionsCompletionWarning">

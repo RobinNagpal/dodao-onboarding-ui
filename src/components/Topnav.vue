@@ -94,6 +94,7 @@ onMounted(() => setTitle());
           <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
+              :primary="false"
               class="flex items-center float-left"
             >
               <span class="whitespace-nowrap">All DAOs</span>
@@ -138,7 +139,6 @@ onMounted(() => setTitle());
             <UiButton
               v-if="!isSolBlockchain && !$auth.isAuthenticated.value"
               @click="modalAccountOpen = true"
-              variant="contained"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
             >
