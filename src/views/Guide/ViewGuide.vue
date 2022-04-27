@@ -35,7 +35,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { web3, web3Account } = useWeb3();
+const { isEthBlockchain, isOneBlockchain, web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const { store } = useStore();
@@ -190,55 +190,82 @@ function onClickBackButton() {
     <LayoutSingle v-bind="$attrs">
       <template #content>
         <template v-if="loaded">
-          <div class="px-4 md:px-0 mb-3">
+          <div class="px-4 md:px-0 mb-3 flex justify-between">
             <a class="text-color" @click="onClickBackButton()">
               <Icon name="back" size="22" class="!align-middle" />
               {{ backButtonText }}
             </a>
+            <div class="ml-3 mt-3">
+              <UiDropdown
+                top="2.5rem"
+                right="1.5rem"
+                class="float-right mr-2"
+                @select="selectFromShareDropdown"
+                @clickedNoDropdown="startShare(space, guide)"
+                :items="sharingItems"
+                :hideDropdown="sharingIsSupported"
+              >
+                <div class="pr-1 select-none">
+                  <Icon name="upload" size="25" class="!align-text-bottom" />
+                  Share
+                </div>
+              </UiDropdown>
+              <UiDropdown
+                top="2.5rem"
+                right="1.3rem"
+                class="float-right mr-2"
+                @select="selectFromThreedotDropdown"
+                v-if="isAdmin"
+                :items="threeDotItems"
+              >
+                <div class="pr-3">
+                  <UiLoading v-if="clientLoading" class="w-full" />
+                  <Icon v-else name="threedots" size="25" />
+                </div>
+              </UiDropdown>
+            </div>
           </div>
           <div class="px-4 md:px-0">
             <template v-if="loaded">
-              <h1 v-text="guide?.name" class="mb-2" />
-              <div class="mb-4">
-                <div class="flex justify-between">
-                  <UiMarkdown :body="guide?.content" class="mb-6 w-[80%]" />
-                  <div>
-                    <UiDropdown
-                      top="2.5rem"
-                      right="1.5rem"
-                      class="float-right mr-2"
-                      @select="selectFromShareDropdown"
-                      @clickedNoDropdown="startShare(space, guide)"
-                      :items="sharingItems"
-                      :hideDropdown="sharingIsSupported"
-                    >
-                      <div class="pr-1 select-none">
-                        <Icon
-                          name="upload"
-                          size="25"
-                          class="!align-text-bottom"
+              <div class="flex justify-between">
+                <div v-if="isEthBlockchain || isOneBlockchain">
+                  <h1 v-text="guide?.name" class="mb-2" />
+                  <div class="mb-4">
+                    <div class="flex justify-between">
+                      <UiMarkdown :body="guide?.content" class="mb-6 w-[80%]" />
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-information mt-4">
+                  <div class="space-y-1">
+                    <div>
+                      <b>{{ $t('author') }}</b>
+                      <template v-for="author in guide.authors" :key="author">
+                        <User
+                          :address="author"
+                          :profile="profiles[author]"
+                          :space="space"
+                          :guide="guide"
+                          class="float-right"
                         />
-                        Share
-                      </div>
-                    </UiDropdown>
-                    <UiDropdown
-                      top="2.5rem"
-                      right="1.3rem"
-                      class="float-right mr-2"
-                      @select="selectFromThreedotDropdown"
-                      v-if="isAdmin"
-                      :items="threeDotItems"
-                    >
-                      <div class="pr-3">
-                        <UiLoading v-if="clientLoading" class="w-full" />
-                        <Icon v-else name="threedots" size="25" />
-                      </div>
-                    </UiDropdown>
+                      </template>
+                    </div>
+                    <div>
+                      <b>IPFS</b>
+                      <a
+                        :href="getIpfsUrl(guide.ipfs)"
+                        target="_blank"
+                        class="float-right"
+                      >
+                        #{{ guide.ipfs.slice(0, 7) }}
+                        <Icon name="external-link" class="ml-1" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
               <Block
-                :title="$t('guide.onboardingSteps')"
+                :title="$t('guide.guideSteps')"
                 :class="`mt-4`"
                 slim
                 v-if="guideLoaded && guide"
@@ -263,38 +290,6 @@ function onClickBackButton() {
         <PageLoading v-else />
       </template>
     </LayoutSingle>
-    <template v-if="loaded">
-      <div
-        class="bg-skin-bg mt-4 ml-4 w-[280px] h-[280px] info-bar card guide-right-side-card"
-      >
-        <h3>{{ $t('information') }}</h3>
-        <div class="space-y-1">
-          <div>
-            <b>{{ $t('author') }}</b>
-            <template v-for="author in guide.authors" :key="author">
-              <User
-                :address="author"
-                :profile="profiles[author]"
-                :space="space"
-                :guide="guide"
-                class="float-right"
-              />
-            </template>
-          </div>
-          <div>
-            <b>IPFS</b>
-            <a
-              :href="getIpfsUrl(guide.ipfs)"
-              target="_blank"
-              class="float-right"
-            >
-              #{{ guide.ipfs.slice(0, 7) }}
-              <Icon name="external-link" class="ml-1" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </template>
   </div>
   <teleport to="#modal">
     <ModalConfirm
@@ -318,5 +313,8 @@ function onClickBackButton() {
 .info-bar {
   box-shadow: var(--box-shadow);
   border-color: var(--border-color);
+}
+.guide-information {
+  font-size: 0.9rem;
 }
 </style>

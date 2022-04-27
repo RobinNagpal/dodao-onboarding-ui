@@ -227,6 +227,7 @@
     "endDate": "End date",
     "export": "Export",
     "guideBy": "by {0}",
+    "guideSteps": "Guide Steps",
     "guideType": "Guide Type",
     "import": "Import",
     "multipleChoiceQuestion": "Multiple Choice",
