@@ -119,6 +119,25 @@ export function useEditGuide(
     guideRef.value.steps = orderBy(guideRef.value.steps, 'order');
   }
 
+  function removeStep(stepUuid) {
+    if (activeStepId.value === stepUuid) {
+      const stepIndex = steps.value.findIndex(step => step.uuid === stepUuid);
+      if (stepIndex === steps.value.length - 1) {
+        activeStepId.value = steps.value[stepIndex - 1].uuid;
+      } else {
+        activeStepId.value = steps.value[stepIndex + 1].uuid;
+      }
+    }
+    guideRef.value.steps = guideRef.value.steps.filter(
+      s => s.uuid !== stepUuid
+    );
+
+    guideRef.value.steps = guideRef.value.steps.map((step, index) => ({
+      ...step,
+      order: index
+    }));
+  }
+
   function addStep() {
     guideRef.value.steps = [
       ...guideRef.value.steps,
@@ -256,6 +275,7 @@ export function useEditGuide(
     initialize,
     moveStepUp,
     moveStepDown,
+    removeStep,
     setActiveStep,
     updateStep
   };

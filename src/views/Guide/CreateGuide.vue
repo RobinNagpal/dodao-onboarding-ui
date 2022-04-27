@@ -55,6 +55,7 @@ const {
   initialize,
   moveStepUp,
   moveStepDown,
+  removeStep,
   setActiveStep,
   updateStep
 } = useEditGuide(uuid as string, props.space, notify);
@@ -233,6 +234,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
             :addStep="addStep"
             :moveStepUp="moveStepUp"
             :moveStepDown="moveStepDown"
+            :removeStep="removeStep"
           />
         </Block>
         <div

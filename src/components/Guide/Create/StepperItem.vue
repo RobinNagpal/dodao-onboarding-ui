@@ -31,7 +31,8 @@ const props = defineProps({
   },
   stepErrors: { type: Object as PropType<StepError> },
   moveStepUp: Function,
-  moveStepDown: Function
+  moveStepDown: Function,
+  removeStep: Function
 });
 
 const emit = defineEmits(['update:step']);
@@ -268,6 +269,14 @@ function addInput(type: InputType) {
 <template>
   <div class="w-full border-l-2 p-4">
     <div class="h-40 mb-4" style="min-height: 40px">
+      <UiSidebarButton
+        class="float-right ml-2"
+        :aria-label="$t('toggleSkin')"
+        :disabled="guide.steps.length === 1"
+        @click="removeStep(step.uuid)"
+      >
+        <Icon size="20" class="link-color" name="close" />
+      </UiSidebarButton>
       <UiSidebarButton
         class="float-right ml-2"
         :aria-label="$t('toggleSkin')"
