@@ -317,4 +317,9 @@ function onClickBackButton() {
 .guide-information {
   font-size: 0.9rem;
 }
+@media screen and (max-width: 991px) {
+  .guide-information {
+    display: none;
+  }
+}
 </style>
