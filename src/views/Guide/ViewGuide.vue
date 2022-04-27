@@ -195,7 +195,7 @@ function onClickBackButton() {
               <Icon name="back" size="22" class="!align-middle" />
               {{ backButtonText }}
             </a>
-            <div class="ml-3 mt-3">
+            <div class="ml-3">
               <UiDropdown
                 top="2.5rem"
                 right="1.5rem"
@@ -238,17 +238,23 @@ function onClickBackButton() {
                 </div>
                 <div class="guide-information mt-4">
                   <div class="space-y-1">
-                    <div>
-                      <b>{{ $t('author') }}</b>
-                      <template v-for="author in guide.authors" :key="author">
-                        <User
-                          :address="author"
-                          :profile="profiles[author]"
-                          :space="space"
-                          :guide="guide"
-                          class="float-right"
-                        />
-                      </template>
+                    <div class="w-[180px] flex justify-between">
+                      <div>
+                        <b>{{ $t('author') }}</b>
+                      </div>
+                      <div>
+                        <template v-for="author in guide.authors" :key="author">
+                          <div>
+                            <User
+                              :address="author"
+                              :profile="profiles[author]"
+                              :space="space"
+                              :guide="guide"
+                              class="float-right"
+                            />
+                          </div>
+                        </template>
+                      </div>
                     </div>
                     <div>
                       <b>IPFS</b>
