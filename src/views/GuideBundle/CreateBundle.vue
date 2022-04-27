@@ -307,6 +307,7 @@ function selectGuideOrBundleType(type: GuideBundleType) {
           :disabled="!isValid"
           :loading="clientLoading || !guideBundleLoaded || guideBundleCreating"
           class="block w-full mt-4"
+          variant="contained"
           primary
         >
           {{ $t('create.publish') }}

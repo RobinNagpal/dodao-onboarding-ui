@@ -127,25 +127,27 @@ async function navigateToNextStep() {
 <template>
   <div class="guide-stepper-content w-full p-4 flex flex-col justify-between">
     <div style="min-height: 300px">
-      <div class="mb-2 font-bold">{{ step.name }}</div>
+      <div class="mb-4 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content markdown-body" />
       <template v-for="stepItem in stepItems" :key="stepItem.uuid">
-        <GuideViewUserInput
-          v-if="
-            stepItem.type === InputType.PublicShortInput ||
-            stepItem.type === InputType.PrivateShortInput
-          "
-          :userInput="stepItem"
-          :setUserInput="setUserInput"
-          :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
-        />
-        <GuideViewQuestion
-          v-else
-          :question="stepItem"
-          :selectAnswer="selectAnswer"
-          :questionResponse="stepSubmission[stepItem.uuid] ?? []"
-          @update:questionResponse="selectAnswer"
-        />
+        <div class="mb-6">
+          <GuideViewUserInput
+            v-if="
+              stepItem.type === InputType.PublicShortInput ||
+              stepItem.type === InputType.PrivateShortInput
+            "
+            :userInput="stepItem"
+            :setUserInput="setUserInput"
+            :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
+          />
+          <GuideViewQuestion
+            v-else
+            :question="stepItem"
+            :selectAnswer="selectAnswer"
+            :questionResponse="stepSubmission[stepItem.uuid] ?? []"
+            @update:questionResponse="selectAnswer"
+          />
+        </div>
       </template>
     </div>
     <div v-if="showQuestionsCompletionWarning">
@@ -157,15 +159,18 @@ async function navigateToNextStep() {
     <div class="mt-2">
       <UiButton
         :aria-label="$t('previous')"
-        class="float-left"
+        class="float-left w-[150px]"
         @click="goToPreviousStep(step)"
         v-if="isNotFirstStep && !isGuideCompletedStep"
       >
+        <span class="mr-2 font-bold ">&#8592;</span>
         <span class="sm:block" v-text="$t('guide.previous')" />
       </UiButton>
       <UiButton
         :aria-label="$t('next')"
-        class="float-right"
+        class="float-right w-[150px]"
+        :primary="true"
+        variant="contained"
         @click="navigateToNextStep"
         :loading="guideSubmitting"
         :disabled="guideSubmitting"
@@ -175,6 +180,7 @@ async function navigateToNextStep() {
           class="sm:block"
           v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
         />
+        <span class="ml-2 font-bold ">&#8594;</span>
       </UiButton>
     </div>
   </div>

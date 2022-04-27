@@ -26,7 +26,7 @@ function handleInput(e) {
 
 <template>
   <UiButton
-    class="flex w-full h-96 mb-4 px-[16px]"
+    class="flex w-full h-96 mb-4 px-[16px] py-[10px]"
     style="height: max-content"
     :class="{ '!border-red': error }"
   >

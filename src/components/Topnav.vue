@@ -94,6 +94,7 @@ onMounted(() => setTitle());
           <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
+              :primary="false"
               class="flex items-center float-left"
             >
               <span class="whitespace-nowrap">All DAOs</span>

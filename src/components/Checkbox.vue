@@ -18,12 +18,12 @@ function checkboxClicked() {
 </script>
 
 <template>
-  <div class="p-2 checkmark-container mt-2">
+  <div class="p-2 checkmark-container mr-2 flex-shrink-0">
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
     <span
       class="checkmark"
       @click="checkboxClicked"
-      :class="props.class"
+      :class="[props.class, { checked: props.modelValue }]"
     ></span>
   </div>
 </template>
@@ -31,8 +31,8 @@ function checkboxClicked() {
 .checkmark-container {
   display: block;
   position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+  height: 22px;
+  width: 22px;
   cursor: pointer;
   font-size: 22px;
   -webkit-user-select: none;
@@ -48,7 +48,7 @@ function checkboxClicked() {
     &:checked {
       ~ {
         .checkmark {
-          background-color: #2196f3;
+          @apply bg-primary;
           &:after {
             display: block;
           }
@@ -56,40 +56,32 @@ function checkboxClicked() {
       }
     }
   }
-  &:hover {
-    input {
-      ~ {
-        .checkmark {
-          background-color: #ccc;
-        }
-      }
-    }
-  }
   .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    border: solid 3px;
+    border-color: var(--border-color);
+
+    &.checked {
+      border-color: var(--primary-color);
+    }
     &:after {
-      left: 9px;
-      top: 5px;
-      width: 5px;
-      height: 10px;
+      left: 4px;
+      top: -2px;
+      width: 8px;
+      height: 17px;
       border: solid white;
       border-width: 0 3px 3px 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
       transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      content: '';
+      position: absolute;
+      display: none;
     }
-  }
-}
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  &:after {
-    content: '';
-    position: absolute;
-    display: none;
   }
 }
 </style>

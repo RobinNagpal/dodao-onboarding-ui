@@ -59,7 +59,7 @@ const disableChoiceEdit = false;
       ></i>
     </UiButton>
     <template v-for="choice in question.choices" :key="choice.key">
-      <div class="flex">
+      <div class="flex items-center">
         <Radio
           v-if="question.type === QuestionType.SingleChoice"
           @update:modelValue="setAnswer(question.uuid, choice.key, $event)"
