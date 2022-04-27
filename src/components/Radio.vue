@@ -18,8 +18,10 @@ function radioSelected() {
 </script>
 
 <template>
-  <div class="p-2 radio-container flex-shrink-0"  @click="radioSelected">
-    <div class="overlay absolute top-0 rounded-full right-0 bottom-0 left-0 opacity-10 z-0"></div>
+  <div class="p-2 radio-container flex-shrink-0" @click="radioSelected">
+    <div
+      class="overlay absolute top-0 rounded-full right-0 bottom-0 left-0 opacity-10 z-0"
+    ></div>
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
     <span class="checkmark" :class="props.class"></span>
   </div>
@@ -61,8 +63,8 @@ function radioSelected() {
   }
   .checkmark {
     &:after {
-      width: 8px;
-      height: 8px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       @apply bg-primary;
     }
@@ -72,11 +74,11 @@ function radioSelected() {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
   margin: 6px;
   border-width: 3px;
-  @apply border-2 border-primary;
+  border-color: var(--border-color);
   border-radius: 50%;
   &:after {
     content: '';
