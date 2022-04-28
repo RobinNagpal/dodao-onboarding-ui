@@ -266,7 +266,7 @@ function addInput(type: InputType) {
 }
 </script>
 <template>
-  <div class="w-full border-l-2 p-4">
+  <div class="w-full p-4">
     <div class="h-40 mb-4" style="min-height: 40px">
       <UiSidebarButton
         class="float-right ml-2"
@@ -274,7 +274,9 @@ function addInput(type: InputType) {
         :disabled="step.order === 0"
         @click="moveStepUp(step.uuid)"
       >
-        <Icon size="20" class="link-color" name="arrow-up" />
+        <svg class="text-skin-text" width="20" height="20" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10.265 8.4a.375.375 0 0 0-.53 0l-4.793 4.792a.625.625 0 1 1-.884-.884l4.793-4.793a1.625 1.625 0 0 1 2.298 0l4.793 4.793a.625.625 0 1 1-.884.884l-4.793-4.793Z" fill="currentColor"></path>
+        </svg>
       </UiSidebarButton>
       <UiSidebarButton
         class="float-right ml-2"
@@ -282,7 +284,9 @@ function addInput(type: InputType) {
         :disabled="step.order + 1 === guide.steps.length"
         @click="moveStepDown(step.uuid)"
       >
-        <Icon size="20" class="link-color" name="arrow-down" />
+        <svg class="text-skin-text" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10.265 11.101a.375.375 0 0 1-.53 0L4.942 6.308a.625.625 0 1 0-.884.884l4.793 4.793a1.625 1.625 0 0 0 2.298 0l4.793-4.793a.625.625 0 1 0-.884-.884l-4.793 4.793Z" fill="currentColor"></path>
+        </svg>
       </UiSidebarButton>
 
       <UiSidebarButton
@@ -290,11 +294,9 @@ function addInput(type: InputType) {
         :aria-label="$t('toggleSkin')"
         @click="modalGuideInputOrQuestionOpen = true"
       >
-        <svg height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor">
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
-          />
+        <svg class="text-skin-text" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.875 10.208a.625.625 0 1 0 1.25 0v-3.75h3.75a.625.625 0 1 0 0-1.25h-3.75v-3.75a.625.625 0 1 0-1.25 0v3.75h-3.75a.625.625 0 0 0 0 1.25h3.75v3.75Z" fill="currentColor"></path>
+          <path d="M6.015 3.333H5c-.92 0-1.667.746-1.667 1.667v10c0 .92.746 1.666 1.667 1.666h8.333c.92 0 1.667-.746 1.667-1.666v-2.151h-1.25v2.15c0 .23-.187.417-.417.417H5A.417.417 0 0 1 4.583 15V5c0-.23.187-.417.417-.417h1.015v-1.25Z" fill="currentColor"></path>
         </svg>
       </UiSidebarButton>
     </div>
@@ -307,6 +309,7 @@ function addInput(type: InputType) {
     </UiButtonInput>
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
+        :id="props.step.id" 
         :value="step.content"
         :placeholder="$t(`guide.step.contents`)"
         class="input w-full text-left"

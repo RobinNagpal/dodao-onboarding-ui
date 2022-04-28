@@ -1,4 +1,8 @@
 <script setup>
+import { ref } from 'vue'
+
+const isFocus = ref(false)
+
 const props = defineProps({
   modelValue: [String, Number],
   placeholder: String,
@@ -30,16 +34,12 @@ function handleInput(e) {
     :class="{
       '!border-red': error,
       'cursor-pointer': $slots.selected,
-      'border border-skin-border transition-colors bg-transparent text-skin-link rounded-lg outline-none leading-[46px] text-left w-full mb-2 flex px-3 focus-within:border-skin-link hover:border-skin-link':
-        !hideBorder
+      'pt-3 mb-3 border-b border-skin-border transition-colors bg-transparent text-skin-link outline-none text-left w-full flex pr-3 focus-within:border-skin-link hover:border-skin-link': true
     }"
   >
-    <div class="text-color mr-2 whitespace-nowrap">
-      <slot name="label" />
-    </div>
     <div
       v-if="$slots.selected"
-      class="flex-auto whitespace-nowrap overflow-x-auto"
+      class="slot-selected flex-auto whitespace-nowrap overflow-x-auto"
     >
       <slot name="selected" />
     </div>
@@ -47,14 +47,19 @@ function handleInput(e) {
       v-else
       :value="modelValue"
       @input="handleInput"
-      :placeholder="placeholder"
+      :placeholder="isFocus ? placeholder : ''"
       :type="number ? 'number' : 'text'"
       :disabled="disabled"
       class="input flex-auto w-full"
       :class="additionalInputClass"
       :required="required"
       :maxlength="maxlength"
+      @focus="isFocus=true"
+      @blur="isFocus=false"
     />
+    <div class="input-label text-color mr-2 whitespace-nowrap absolute" :class="modelValue && 'forceFloat'">
+      <slot name="label" />
+    </div>
     <slot name="info" />
     <span
       v-if="error"
@@ -67,3 +72,14 @@ function handleInput(e) {
     </span>
   </div>
 </template>
+
+<style scoped lang="scss">
+  .input-label {
+    z-index: -1;
+  }
+  .slot-selected ~ .input-label, input:focus ~ .input-label, .forceFloat {
+    transform: translatey(-18px);
+    @apply text-xs;
+    transition: transform 0.1s linear, font-size 0.1s linear;
+  }
+</style>

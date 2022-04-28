@@ -223,17 +223,20 @@ function selectGuideOrBundleType(guideType: GuideType) {
           </div>
         </Block>
         <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">
-          <GuideCreateStepper
-            :activeStepId="activeStepId"
-            :guide="form"
-            :guideErrors="guideErrors"
-            :steps="form.steps"
-            :setActiveStep="setActiveStep"
-            :updateStep="updateStep"
-            :addStep="addStep"
-            :moveStepUp="moveStepUp"
-            :moveStepDown="moveStepDown"
-          />
+          <div class="mt-4">
+            <GuideCreateStepper
+              :activeStepId="activeStepId"
+              :guide="form"
+              :guideErrors="guideErrors"
+              :steps="form.steps"
+              :setActiveStep="setActiveStep"
+              :updateStep="updateStep"
+              :addStep="addStep"
+              :moveStepUp="moveStepUp"
+              :moveStepDown="moveStepDown"
+            />
+          </div>
+
         </Block>
         <div
           v-if="Object.values(guideErrors).filter(v => !!v).length"

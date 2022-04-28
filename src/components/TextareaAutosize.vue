@@ -1,7 +1,13 @@
 <script setup>
 import { ref, computed, nextTick, toRefs, watch, onMounted } from 'vue';
+import throttle from '@/helpers/throttle';
+
 
 const props = defineProps({
+  id: {
+    type: [String],
+    default: ''
+  },
   modelValue: {
     type: [String, Number],
     default: ''
@@ -26,7 +32,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const { modelValue, minHeight, maxHeight } = toRefs(props);
+const { modelValue, minHeight, maxHeight, id } = toRefs(props);
 
 // works when content height becomes more then value of the maxHeight property
 const maxHeightScroll = ref(false);
@@ -84,7 +90,10 @@ function resize() {
   return this;
 }
 
+const throttleResize = throttle(resize, 300)
+
 function handleInput(e) {
+  throttleResize()
   const input = e.target.value;
   if (props.number) {
     return emit('update:modelValue', !input ? undefined : parseFloat(input));
@@ -92,7 +101,7 @@ function handleInput(e) {
   emit('update:modelValue', input);
 }
 
-watch([minHeight, maxHeight], () => {
+watch([minHeight, maxHeight, id], () => {
   nextTick(resize);
 });
 
