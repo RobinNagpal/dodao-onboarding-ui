@@ -34,7 +34,8 @@ function handleInput(e) {
     :class="{
       '!border-red': error,
       'cursor-pointer': $slots.selected,
-      'pt-3 mb-3 border-b border-skin-border transition-colors bg-transparent text-skin-link outline-none text-left w-full flex pr-3 focus-within:border-skin-link hover:border-skin-link': true
+      'hover:border-skin-link': !disabled,
+      'pt-3 mb-3 border-b border-skin-border transition-colors bg-transparent text-skin-link outline-none text-left w-full flex pr-3 focus-within:border-skin-link': true
     }"
   >
     <div

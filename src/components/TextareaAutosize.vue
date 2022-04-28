@@ -71,7 +71,7 @@ function resize() {
   const important = isHeightImportant.value ? 'important' : '';
   height.value = `auto${important ? ' !important' : ''}`;
   nextTick(() => {
-    let contentHeight = textarea.value.scrollHeight + 1;
+    let contentHeight = textarea.value.scrollHeight + 16;
     if (props.minHeight) {
       contentHeight =
         contentHeight < props.minHeight ? props.minHeight : contentHeight;
