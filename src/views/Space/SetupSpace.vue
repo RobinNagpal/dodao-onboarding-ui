@@ -289,9 +289,15 @@ onMounted(async () => {
                 <UiInput
                   v-model="form.mission"
                   :error="inputError('mission')"
-                  :placeholder="$t(`settings.missionStatement`) + ' *'"
+                  :placeholder="
+                    $t(`settings.missionStatementPlaceholder`) + ' *'
+                  "
                   maxlength="64"
-                />
+                >
+                  <template v-slot:label
+                    >{{ $t(`settings.missionStatement`) }}*</template
+                  >
+                </UiInput>
                 <UiInput
                   v-model="form.avatar"
                   placeholder="e.g. https://example.com/dao.png"
@@ -325,7 +331,10 @@ onMounted(async () => {
                     {{ $t(`settings.network`) }}*
                   </template>
                 </UiInput>
-                <UiInput @click="modalCategoryOpen = true">
+                <UiInput
+                  @click="modalCategoryOpen = true"
+                  :class="{ 'mt-6': !categoriesString }"
+                >
                   <template v-slot:label>
                     {{ $t(`settings.categories`) }}
                   </template>
@@ -353,6 +362,7 @@ onMounted(async () => {
                 >
                   <template v-slot:label>
                     <Icon name="twitter" />
+                    {{ $t(`settings.twitter`) }}
                   </template>
                 </UiInput>
                 <UiInput
@@ -362,6 +372,7 @@ onMounted(async () => {
                 >
                   <template v-slot:label>
                     <Icon name="github" />
+                    {{ $t(`settings.github`) }}
                   </template>
                 </UiInput>
                 <UiInput
