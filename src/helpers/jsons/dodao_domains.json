@@ -6,7 +6,12 @@
   "balancer.dodao.io": "balancer-eth-1",
   "balancer-localhost": "balancer-eth-1",
 
-  "dxdao.dodao.io": "dxdao-eth-1",
   "curve.dodao.io": "curve-finance-eth-1",
+
+  "dxdao.dodao.io": "dxdao-eth-1",
+
+  "piedao-localhost": "piedao-eth-1",
+  "piedao.dodao.io": "piedao-eth-1",
+
   "swdao.dodao.io": "sw-dao-eth-1"
 }

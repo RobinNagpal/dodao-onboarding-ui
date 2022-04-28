@@ -21,7 +21,8 @@ const props = defineProps({
   updateStep: Function,
   addStep: Function,
   moveStepUp: Function,
-  moveStepDown: Function
+  moveStepDown: Function,
+  removeStep: Function
 });
 
 const errors = unref(props.guideErrors);
@@ -65,6 +66,7 @@ const activeStep = computed(() =>
       @update:step="updateStep"
       :moveStepUp="moveStepUp"
       :moveStepDown="moveStepDown"
+      :removeStep="removeStep"
     />
   </div>
 </template>

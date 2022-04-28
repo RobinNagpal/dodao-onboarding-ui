@@ -33,7 +33,7 @@ function redirectSearch(e) {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex w-full">
     <Search
       :modelValue="routeQuery"
       @update:modelValue="input => $emit('update:modelValue', input)"

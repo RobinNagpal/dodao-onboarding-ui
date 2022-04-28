@@ -7,4 +7,25 @@
   --border-color: #cfcfcf;
   --header-bg: #f3f3f3;
   --block-bg: transparent;
+
+
+  #topnav{
+    margin-top: 40px;
+    border: double 1px transparent;
+    background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    --border-color: #fff;
+    .header-main-wrapper {
+      margin-top: 0px;
+    }
+  }
+
+  .card.feature-card{
+    border: double 1px transparent;
+    background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+  }
+
 }
