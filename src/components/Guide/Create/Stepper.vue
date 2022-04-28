@@ -33,7 +33,7 @@ const activeStep = computed(() =>
 </script>
 <template>
   <div class="w-full flex flex-row">
-    <div class="p-4">
+    <div class="p-4 bg-skin-header-bg rounded-3xl">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
           @click="setActiveStep(step.uuid)"

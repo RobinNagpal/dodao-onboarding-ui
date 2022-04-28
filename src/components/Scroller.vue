@@ -106,12 +106,11 @@ const hasUnseenGuides = false;
             </div>
           </template>
         </Draggable>
-
-        <UiSidebarButton
-          v-if="isNotProdEnv || isSuperAdmin"
-          @click="clickNewSpace()"
-          ><Icon size="20" name="plus"
-        /></UiSidebarButton>
+        <button v-if="isNotProdEnv || isSuperAdmin" 
+          @click="clickNewSpace()" 
+          class="border w-[44px] h-[44px] rounded-lg flex justify-center items-center button">
+          <Icon size="20" name="plus"/>
+        </button>
 
         <div
           class="flex flex-col items-center space-y-2 justify-center !mb-2 !mt-auto py-2"

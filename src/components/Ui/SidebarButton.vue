@@ -8,8 +8,7 @@ defineProps({
 </script>
 <template>
   <button
-    class="border w-[44px] h-[44px] rounded-lg flex justify-center items-center button"
-    style="background: white"
+    class="w-[44px] h-[44px] rounded-full flex justify-center items-center button"
     :disabled="disabled"
   >
     <slot />
@@ -18,10 +17,8 @@ defineProps({
 
 <style scoped lang="scss">
 .button {
-  border: 1px solid var(--border-color);
   background-color: transparent;
   color: black;
-  border-radius: 0.5rem;
   outline: none;
 
   &.button--active {
@@ -29,7 +26,7 @@ defineProps({
   }
 
   &:not(:disabled):hover {
-    border-color: var(--link-color);
+    background-color: var(--header-bg);
   }
 
   &:disabled {
