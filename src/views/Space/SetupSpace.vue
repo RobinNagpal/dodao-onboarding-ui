@@ -292,14 +292,6 @@ onMounted(async () => {
                   :placeholder="$t(`settings.missionStatement`) + ' *'"
                   maxlength="64"
                 />
-                <UiButton class="block w-full px-3 mb-2" style="height: auto">
-                  <TextareaAutosize
-                    v-model="form.about"
-                    :placeholder="$t(`settings.about`)"
-                    class="input w-full text-left"
-                    style="font-size: 18px"
-                  />
-                </UiButton>
                 <UiInput
                   v-model="form.avatar"
                   placeholder="e.g. https://example.com/dao.png"
@@ -380,6 +372,16 @@ onMounted(async () => {
                   <template v-slot:label> {{ $t(`settings.terms`) }} </template>
                 </UiInput>
               </div>
+            </Block>
+            <Block :title="$t('settings.about')" v-if="isOwner">
+              <UiButton class="block w-full px-3 mb-2" style="height: auto">
+                <TextareaAutosize
+                  v-model="form.about"
+                  :placeholder="$t(`settings.about`)"
+                  class="input w-full text-left"
+                  style="font-size: 18px"
+                />
+              </UiButton>
             </Block>
             <Block :title="$t('setupDAO.admins')" v-if="isOwner">
               <Block
