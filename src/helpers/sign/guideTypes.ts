@@ -9,21 +9,21 @@ export const guideTypes = {
     { name: 'choices', type: 'QuestionChoice[]' },
     { name: 'content', type: 'string' },
     { name: 'order', type: 'uint64' },
-    { name: 'questionType', type: 'string' },
+    { name: 'type', type: 'string' },
     { name: 'uuid', type: 'string' }
   ],
   Step: [
     { name: 'content', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'order', type: 'uint64' },
-    { name: 'questions', type: 'Question[]' },
+    { name: 'stepItems', type: 'Question[]' },
     { name: 'uuid', type: 'string' }
   ],
   Guide: [
-    { name: 'from', type: 'address' },
     { name: 'categories', type: 'string[]' },
     { name: 'content', type: 'string' },
     { name: 'discordWebhook', type: 'string' },
+    { name: 'from', type: 'address' },
     { name: 'guideType', type: 'string' },
     { name: 'name', type: 'string' },
     { name: 'space', type: 'string' },

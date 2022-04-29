@@ -90,7 +90,7 @@ export function useClient() {
         uuid: payload.uuid,
         categories: payload.categories || [],
         content: payload.content,
-        discordWebhook: payload.discordWebhook,
+        discordWebhook: payload.discordWebhook || '',
         from: web3.value.account,
         guideType: payload.guideType,
         name: payload.name,
@@ -121,10 +121,13 @@ export function useClient() {
                 const userInput = item as UserInput;
                 return {
                   uuid: userInput.uuid,
+                  content: '',
                   label: userInput.label,
                   required: userInput.required,
                   type: userInput.type,
-                  order: userInput.order
+                  order: userInput.order,
+                  answerKeys: [],
+                  choices: []
                 };
               }
             })
