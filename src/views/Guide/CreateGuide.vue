@@ -55,6 +55,7 @@ const {
   initialize,
   moveStepUp,
   moveStepDown,
+  removeStep,
   setActiveStep,
   updateStep
 } = useEditGuide(uuid as string, props.space, notify);
@@ -190,7 +191,10 @@ function selectGuideOrBundleType(guideType: GuideType) {
                 {{ $t('guide.discordWebhook') }}
               </template>
             </UiInput>
-            <UiInput @click="modalCategoryOpen = true">
+            <UiInput
+              @click="modalCategoryOpen = true"
+              :class="{ 'mt-6': !categoriesString }"
+            >
               <template v-slot:label>
                 {{ $t(`settings.categories`) }}
               </template>
@@ -223,17 +227,20 @@ function selectGuideOrBundleType(guideType: GuideType) {
           </div>
         </Block>
         <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">
-          <GuideCreateStepper
-            :activeStepId="activeStepId"
-            :guide="form"
-            :guideErrors="guideErrors"
-            :steps="form.steps"
-            :setActiveStep="setActiveStep"
-            :updateStep="updateStep"
-            :addStep="addStep"
-            :moveStepUp="moveStepUp"
-            :moveStepDown="moveStepDown"
-          />
+          <div class="mt-4">
+            <GuideCreateStepper
+              :activeStepId="activeStepId"
+              :guide="form"
+              :guideErrors="guideErrors"
+              :steps="form.steps"
+              :setActiveStep="setActiveStep"
+              :updateStep="updateStep"
+              :addStep="addStep"
+              :moveStepUp="moveStepUp"
+              :moveStepDown="moveStepDown"
+              :removeStep="removeStep"
+            />
+          </div>
         </Block>
         <div
           v-if="Object.values(guideErrors).filter(v => !!v).length"
@@ -247,6 +254,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
           :disabled="!isValid"
           :loading="clientLoading || !guideLoaded || guideCreating"
           class="block w-full"
+          variant="contained"
           primary
         >
           {{ $t('create.publish') }}

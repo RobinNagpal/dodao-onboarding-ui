@@ -9,11 +9,12 @@ const props = defineProps({
   categoryType: { type: String, required: true }
 });
 
-const linkClass = computed(() =>
+const computedVariant = computed(() =>
   props.guideOrBundleType === props.categoryType
-    ? 'router-link-exact-active'
-    : ''
+    ? 'contained'
+    : 'outlined'
 );
+
 </script>
 
 <template>
@@ -22,26 +23,9 @@ const linkClass = computed(() =>
       name: 'guides',
       params: { guideType: categoryType, key: space.id }
     }"
-    :class="linkClass"
   >
-    <UiButton class="whitespace-nowrap">
+    <UiButton :variant="computedVariant" class="whitespace-nowrap" :primary="true">
       {{ $t(`navigation.${categoryType}`) }}
     </UiButton>
   </router-link>
 </template>
-<style lang="scss" scoped>
-.router-link-exact-active {
-  button {
-    color: white;
-    background-color: var(--primary-color);
-    border: 1px solid var(--border-color);
-
-    &:hover {
-      color: white;
-      background-color: var(--primary-color);
-      border: 1px solid var(--border-color);
-      cursor: default;
-    }
-  }
-}
-</style>

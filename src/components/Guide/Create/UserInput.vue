@@ -32,26 +32,26 @@ defineProps({
     <Icon size="20" class="link-color" name="close" />
   </UiSidebarButton>
   <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
-    <UiInput maxlength="64" :disabled="true">
-      <template v-slot:label
-        ><UiInput
-          maxlength="64"
-          :modelValue="userInput.label"
-          class="border-r-2"
-          :class="{
-            '!border-red border rounded-lg': userInputErrors?.label
-          }"
-          :hideBorder="true"
-          @update:modelValue="updateUserInputLabel(userInput.uuid, $event)"
-        />
-      </template>
-    </UiInput>
+    <div class="flex">
+      <UiInput
+        maxlength="64"
+        :modelValue="userInput.label"
+        class="w-4/12 flex-shrink-0"
+        :class="{
+          '!border-red border rounded-lg': userInputErrors?.label
+        }"
+        :hideBorder="true"
+        @update:modelValue="updateUserInputLabel(userInput.uuid, $event)"
+      />
+      <UiInput class="ml-2 !bg-skin-header-bg" :disabled="true"/>
+    </div>
+
     <div class="flex mt-2">
       <Checkbox
         @update:modelValue="updateUserInputRequired(userInput.uuid, $event)"
         :modelValue="userInput.required"
       />
-      <div class="mt-2">
+      <div>
         {{ $t('form.required') }}
       </div>
     </div>
@@ -60,7 +60,7 @@ defineProps({
         @update:modelValue="updateUserInputPrivate(userInput.uuid, $event)"
         :modelValue="userInput.type === InputType.PrivateShortInput"
       />
-      <div class="mt-2">
+      <div>
         {{ $t('form.private') }}
       </div>
     </div>

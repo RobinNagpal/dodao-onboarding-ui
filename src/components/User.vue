@@ -13,7 +13,8 @@ const props = defineProps({
   address: { type: String, required: true },
   space: Object,
   proposal: Object,
-  profile: { type: Object as PropType<any> }
+  profile: { type: Object as PropType<any> },
+  shorten: Boolean
 });
 
 const { isEthBlockchain } = useWeb3();
@@ -42,7 +43,9 @@ watchEffect(() => {
             size="18"
             class="mr-2"
           />
-          <span class="truncate">{{ username }}</span>
+          <span class="truncate">{{
+            shorten && username.length > 10 ? shorten(username) : username
+          }}</span>
           <Badges :address="address" :members="space?.members" />
         </a>
       </template>

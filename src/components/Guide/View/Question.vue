@@ -44,10 +44,17 @@ function selectSingleChoice(choiceKey: string) {
 </script>
 
 <template>
-  <div class="border md:rounded-lg p-4 mb-4 bg-skin-block-bg">
-    <UiMarkdown :body="question.content" class="mb-6" />
+  <div class="bg-skin-block-bg">
+    <UiMarkdown :body="question.content" class="mb-2" />
     <template v-for="choice in question.choices" :key="choice.key">
-      <div class="flex leading-loose items-baseline">
+      <div
+        :class="{
+          'flex leading-loose items-center -ml-2':
+            question.type === QuestionType.SingleChoice,
+          'flex leading-loose items-center py-2':
+            question.type === QuestionType.MultipleChoice
+        }"
+      >
         <Radio
           v-if="question.type === QuestionType.SingleChoice"
           @update:modelValue="selectSingleChoice(choice.key)"
@@ -58,7 +65,7 @@ function selectSingleChoice(choiceKey: string) {
           @update:modelValue="selectMultipleChoice(choice.key, $event)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
         />
-        <div>{{ choice.content }}</div>
+        <div class="leading-6">{{ choice.content }}</div>
       </div>
     </template>
   </div>

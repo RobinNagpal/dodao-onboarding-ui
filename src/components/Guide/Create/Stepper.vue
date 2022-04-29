@@ -21,7 +21,8 @@ const props = defineProps({
   updateStep: Function,
   addStep: Function,
   moveStepUp: Function,
-  moveStepDown: Function
+  moveStepDown: Function,
+  removeStep: Function
 });
 
 const errors = unref(props.guideErrors);
@@ -32,7 +33,7 @@ const activeStep = computed(() =>
 </script>
 <template>
   <div class="w-full flex flex-row">
-    <div class="p-4">
+    <div class="p-4 bg-skin-header-bg rounded-3xl">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
         <li
           @click="setActiveStep(step.uuid)"
@@ -65,6 +66,7 @@ const activeStep = computed(() =>
       @update:step="updateStep"
       :moveStepUp="moveStepUp"
       :moveStepDown="moveStepDown"
+      :removeStep="removeStep"
     />
   </div>
 </template>

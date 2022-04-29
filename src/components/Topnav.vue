@@ -103,6 +103,7 @@ window.addEventListener('scroll', handleScroll);
           <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
+              :primary="false"
               class="flex items-center float-left"
               primary
               size="sm"
@@ -148,6 +149,8 @@ window.addEventListener('scroll', handleScroll);
             <WalletMultiButton v-if="isSolBlockchain" />
             <UiButton
               v-if="!isSolBlockchain && !$auth.isAuthenticated.value"
+              :primary="true"
+              variant="contained"
               @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
