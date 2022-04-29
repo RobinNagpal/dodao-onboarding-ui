@@ -215,7 +215,10 @@ function selectGuideOrBundleType(type: GuideBundleType) {
                 {{ $t('guideBundle.discordWebhook') }}
               </template>
             </UiInput>
-            <UiInput @click="modalCategoryOpen = true">
+            <UiInput
+              @click="modalCategoryOpen = true"
+              :class="{ 'mt-6': !categoriesString }"
+            >
               <template v-slot:label>
                 {{ $t(`settings.categories`) }}
               </template>
