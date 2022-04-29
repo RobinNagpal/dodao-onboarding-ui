@@ -103,9 +103,9 @@ window.addEventListener('scroll', handleScroll);
           <div v-if="!domain" class="top-nav-middle flex justify-center">
             <UiButton
               @click="modalBlockchainsOpen = true"
-              :primary="false"
+              :primary="true"
+              variant="contained"
               class="flex items-center float-left"
-              primary
               size="sm"
             >
               <span class="whitespace-nowrap">All DAOs</span>
@@ -154,7 +154,6 @@ window.addEventListener('scroll', handleScroll);
               @click="modalAccountOpen = true"
               :loading="loading || web3.authLoading"
               :aria-label="$t('connectWallet')"
-              primary
               size="sm"
             >
               <span class="hidden sm:block" v-text="$t('connectWallet')" />
