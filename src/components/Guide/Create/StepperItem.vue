@@ -320,7 +320,7 @@ function addInput(type: InputType) {
     </UiButtonInput>
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
-        :id="props.step.id" 
+        :id="step.uuid"
         :value="step.content"
         :placeholder="$t(`guide.step.contents`)"
         class="input w-full text-left"
