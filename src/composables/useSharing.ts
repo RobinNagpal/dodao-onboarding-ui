@@ -53,13 +53,13 @@ export function useSharing() {
     uuid: string,
     window
   ) {
+    const twitterShareUrl = `/api/share/twitter/${space.id}/guide/${uuid}?hostName=${window.location.host}`;
+
+    const guideUrl = import.meta.env.VITE_HUB_URL + twitterShareUrl;
+
     const url = `https://twitter.com/intent/tweet?text=@${
       space.twitter || space.name
-    }%20${encodeURIComponent(entityName)}%20${encodedProposalUrl(
-      space.id,
-      entityUrl,
-      uuid
-    )}`;
+    }&url=${guideUrl}`;
     window.open(url, '_blank').focus();
   }
 
