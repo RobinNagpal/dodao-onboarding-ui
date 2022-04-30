@@ -59,7 +59,7 @@ const styleObject = computed(
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
           @click="setActiveStep(step.uuid)"
-          class="ob-nav-step"
+          class="ob-nav-step flex items-center"
           role="presentation"
           v-for="step in steps"
           :key="step.uuid"
@@ -230,7 +230,6 @@ const styleObject = computed(
   .step-link {
     display: block;
     text-decoration: none;
-    margin-top: 8px;
   }
   &:not(.ob-nav-stepper-sm) {
     &:not(.ob-nav-stepper-lg) {
