@@ -53,9 +53,9 @@ export function useSharing() {
     uuid: string,
     window
   ) {
-    const twitterShareUrl = `/api/share/twitter/${space.id}/guide/${uuid}?hostName=${window.location.host}`;
+    const twitterShareUrl = `/social-share/twitter/${space.id}/guide/${uuid}?hostName=${window.location.host}`;
 
-    const guideUrl = import.meta.env.VITE_HUB_URL + twitterShareUrl;
+    const guideUrl = window.location.origin + twitterShareUrl;
 
     const url = `https://twitter.com/intent/tweet?text=@${
       space.twitter || space.name
