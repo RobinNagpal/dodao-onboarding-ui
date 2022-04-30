@@ -121,6 +121,10 @@ const styleObject = computed(
   }
 }
 
+.active  .checkmark {
+  background-color: var(--primary-color);
+}
+
 .ob-nav-stepper {
   .ob-nav-step.success.ob-feedback {
     &::before {
@@ -142,9 +146,9 @@ const styleObject = computed(
       content: counter(li-counter);
       counter-increment: li-counter;
       text-align: center;
-      color: #069;
+      color: var(--primary-color);
       background-color: #fff;
-      border: 1px solid #069;
+      border: 1px solid var(--primary-color);
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
       z-index: 1;
@@ -156,7 +160,7 @@ const styleObject = computed(
       right: 0;
       bottom: 0;
       left: 0;
-      border-color: #069;
+      border-color: var(--primary-color);
     }
     &:hover {
       &::before {
@@ -170,21 +174,21 @@ const styleObject = computed(
   .ob-nav-step.active {
     &::before {
       color: #fff;
-      background-color: #069;
-      border-color: #069;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
     }
     &::after {
-      border-color: #069;
+      border-color: var(--primary-color);
       border-style: solid;
     }
   }
   .ob-nav-step.success {
     &::before {
       color: #00813a;
-      border-color: #00813a;
+      border-color: var(--success-color);
     }
     &::after {
-      border-color: #00813a;
+      border-color: var(--success-color);
       border-style: solid;
     }
     &:hover {
@@ -198,7 +202,7 @@ const styleObject = computed(
     &::before {
       color: white;
       background-color: var(--error-color);
-      border: 1px solid rgba(255, 56, 86, var(--tw-border-opacity));
+      border: 1px solid rgba(var(--error-color), var(--tw-border-opacity));
     }
   }
 
