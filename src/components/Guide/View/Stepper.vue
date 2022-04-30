@@ -57,36 +57,42 @@ const isReachingLastStep = computed(
   () => props.guide.steps.length - 1 === activeStep.value.order
 );
 
-const styleObject = computed(
-  () => {
-    return {
-      "--error-color": props.errorColor,
-      "--success-color": props.successColor,
-      "--primary-color": props.primaryColor
-    }
-  }
-);
-
+const styleObject = computed(() => {
+  return {
+    '--error-color': props.errorColor,
+    '--success-color': props.successColor,
+    '--primary-color': props.primaryColor
+  };
+});
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 guide-stepper bg-skin-header-bg rounded-3xl">
-      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
+      <ol
+        class="ob-nav-stepper ob-nav-stepper-lg"
+        role="menu"
+        :style="styleObject"
+      >
         <li
           class="ob-nav-step"
           :class="[
-          { 'success': isReachingLastStep || step.order  < activeStep.order },
-          {'active': step.uuid === activeStep.uuid},
-          {'disabled' : step.uuid !== activeStep.uuid}
+            { success: isReachingLastStep || step.order < activeStep.order },
+            { active: step.uuid === activeStep.uuid },
+            { disabled: step.uuid !== activeStep.uuid }
           ]"
           role="presentation"
           v-for="step in guide.steps"
           :key="step.uuid"
         >
-          <div v-if="isReachingLastStep || step.order< activeStep.order" class="checkmark"></div>
+          <div
+            v-if="isReachingLastStep || step.order < activeStep.order"
+            class="checkmark"
+          ></div>
           <div class="step-link ml-2 -mt-1">
-            <span class="text-small font-medium">Step {{step.order + 1}}</span>
-            <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+            <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
+            <a class="step-link text-sm" role="menuitem">{{
+              step.name || '&nbsp;'
+            }}</a>
           </div>
         </li>
       </ol>
@@ -131,7 +137,6 @@ const styleObject = computed(
   }
 }
 .ob-nav-stepper {
-
   .ob-nav-step.success.ob-feedback {
     &::before {
       content: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBvbHlnb24gcG9pbnRzPSI5LjUgMTcuMzU0IDQuNTg3IDEyLjQ0MiA1LjExOCAxMS45MTEgOS41IDE2LjI5NCAxOC44ODIgNi45MTEgMTkuNDEzIDcuNDQyIDkuNSAxNy4zNTQiIGZpbGw9IiMwMDgxM2EiLz48L3N2Zz4=');
@@ -142,7 +147,6 @@ const styleObject = computed(
   flex-wrap: nowrap;
   list-style-type: none;
   margin-bottom: 0;
-  padding-left: 20px;
   counter-reset: li-counter;
   .ob-nav-step {
     flex-basis: auto;
@@ -204,7 +208,6 @@ const styleObject = computed(
     }
   }
   .ob-nav-step.success {
-
     &::before {
       content: '';
       box-shadow: none;
@@ -248,7 +251,6 @@ const styleObject = computed(
           padding-left: 31.2px;
           &::after {
             left: 12px;
-            
           }
         }
       }

@@ -34,7 +34,7 @@ const props = defineProps({
   addStep: Function,
   moveStepUp: Function,
   moveStepDown: Function,
-  removeStep: Function,
+  removeStep: Function
 });
 
 const errors = unref(props.guideErrors);
@@ -43,20 +43,22 @@ const activeStep = computed(() =>
   props.steps.find(step => step.uuid === props.activeStepId)
 );
 
-const styleObject = computed(
-  () => {
-    return {
-      "--error-color": props.errorColor,
-      "--success-color": props.successColor,
-      "--primary-color": props.primaryColor
-    }
-  }
-);
+const styleObject = computed(() => {
+  return {
+    '--error-color': props.errorColor,
+    '--success-color': props.successColor,
+    '--primary-color': props.primaryColor
+  };
+});
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 bg-skin-header-bg rounded-3xl">
-      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
+      <ol
+        class="ob-nav-stepper ob-nav-stepper-lg"
+        role="menu"
+        :style="styleObject"
+      >
         <li
           @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
@@ -71,8 +73,10 @@ const styleObject = computed(
         >
           <div v-if="!errors.steps?.[step.order]" class="checkmark"></div>
           <div class="step-link ml-2 -mt-1">
-            <span class="text-small font-medium">Step {{step.order + 1}}</span>
-            <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+            <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
+            <a class="step-link text-sm" role="menuitem">{{
+              step.name || '&nbsp;'
+            }}</a>
           </div>
         </li>
 
@@ -123,7 +127,7 @@ const styleObject = computed(
   }
 }
 
-.active  .checkmark {
+.active .checkmark {
   background-color: var(--primary-color);
 }
 
