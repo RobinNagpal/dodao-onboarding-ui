@@ -73,7 +73,7 @@ const styleObject = computed(
     <div class="p-4 guide-stepper bg-skin-header-bg rounded-3xl">
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
-          class="ob-nav-step flex items-center"
+          class="ob-nav-step"
           :class="[
           { 'success': isReachingLastStep || step.order  < activeStep.order },
           {'active': step.uuid === activeStep.uuid},
@@ -84,7 +84,10 @@ const styleObject = computed(
           :key="step.uuid"
         >
           <div v-if="isReachingLastStep || step.order< activeStep.order" class="checkmark"></div>
-          <a class="step-link" role="menuitem">{{ step.name || '&nbsp;'}}</a>
+          <div class="step-link ml-2 -mt-1">
+            <span class="text-small font-medium">Step {{step.order + 1}}</span>
+            <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+          </div>
         </li>
       </ol>
     </div>
@@ -105,21 +108,21 @@ const styleObject = computed(
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
 .checkmark {
   position: absolute;
-  width: 38px;
-  left: 0;
-  height: 38px;
+  top: 4px;
+  left: 4px;
+  height: 30px;
+  width: 30px;
   text-align: center;
   background-color: var(--success-color);
   border: 1px solid var(--success-color);
   border-radius: 50%;
-  box-shadow: 0 0 2px 2px #fff;
   z-index: 1;
   &:after {
     content: '';
-    left: 14px;
+    left: 11px;
     top: 6px;
-    width: 8px;
-    height: 17px;
+    width: 6px;
+    height: 14px;
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
@@ -191,7 +194,7 @@ const styleObject = computed(
       background-color: #fff;
       border-color: #757575;
     }
-    &::after {
+    &:after {
       border-color: #757575;
       border-style: solid;
     }
@@ -201,8 +204,12 @@ const styleObject = computed(
     }
   }
   .ob-nav-step.success {
+
     &::before {
       content: '';
+      box-shadow: none;
+      background: transparent;
+      border: 0;
     }
     &::after {
       border-color: var(--success-color);
@@ -241,6 +248,7 @@ const styleObject = computed(
           padding-left: 31.2px;
           &::after {
             left: 12px;
+            
           }
         }
       }
@@ -259,7 +267,7 @@ const styleObject = computed(
         position: absolute;
         left: 0;
       }
-      &::after {
+      &:not(:last-child):after {
         border-left-width: 4px;
       }
       &:not(:last-child) {
@@ -334,6 +342,8 @@ const styleObject = computed(
       padding-left: 45.6px;
       &::after {
         left: 18px;
+        top: 8px;
+        bottom: -4px;
       }
     }
   }

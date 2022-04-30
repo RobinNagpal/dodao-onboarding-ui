@@ -59,7 +59,7 @@ const styleObject = computed(
       <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
           @click="setActiveStep(step.uuid)"
-          class="ob-nav-step flex items-center"
+          class="ob-nav-step"
           role="presentation"
           v-for="step in steps"
           :key="step.uuid"
@@ -70,11 +70,14 @@ const styleObject = computed(
           }"
         >
           <div v-if="!errors.steps?.[step.order]" class="checkmark"></div>
-          <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+          <div class="step-link ml-2 -mt-1">
+            <span class="text-small font-medium">Step {{step.order + 1}}</span>
+            <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+          </div>
         </li>
 
         <li
-          class="ob-nav-step"
+          class="ob-nav-step flex items-center"
           role="presentation"
           data-step-label="+"
           @click="addStep"
@@ -98,21 +101,20 @@ const styleObject = computed(
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
 .checkmark {
   position: absolute;
-  width: 38px;
-  left: 0;
-  height: 38px;
+  top: 4px;
+  left: 4px;
+  height: 30px;
+  width: 30px;
   text-align: center;
   background-color: var(--success-color);
-  border: 1px solid var(--success-color);
   border-radius: 50%;
-  box-shadow: 0 0 2px 2px #fff;
   z-index: 1;
   &:after {
     content: '';
-    left: 14px;
+    left: 12px;
     top: 6px;
-    width: 8px;
-    height: 17px;
+    width: 6px;
+    height: 14px;
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
@@ -182,9 +184,12 @@ const styleObject = computed(
       border-style: solid;
     }
   }
-  .ob-nav-step.success {
+  .ob-nav-step.success:not(.active) {
     &::before {
+      box-shadow: none;
+      background: transparent;
       color: #00813a;
+      border: 0;
       border-color: var(--success-color);
     }
     &::after {
@@ -200,7 +205,9 @@ const styleObject = computed(
 
   .ob-nav-step.error {
     &::before {
+      content: '!';
       color: white;
+      font-weight: bold;
       background-color: var(--error-color);
       border: 1px solid rgba(var(--error-color), var(--tw-border-opacity));
     }
@@ -347,6 +354,8 @@ const styleObject = computed(
       padding-left: 45.6px;
       &::after {
         left: 18px;
+        top: 8px;
+        bottom: -4px;
       }
     }
   }
