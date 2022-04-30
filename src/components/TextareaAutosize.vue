@@ -1,7 +1,5 @@
 <script setup>
 import { ref, computed, nextTick, toRefs, watch, onMounted } from 'vue';
-import throttle from '@/helpers/throttle';
-
 
 const props = defineProps({
   id: {
@@ -90,10 +88,8 @@ function resize() {
   return this;
 }
 
-const throttleResize = throttle(resize, 300)
-
 function handleInput(e) {
-  throttleResize()
+  resize()
   const input = e.target.value;
   if (props.number) {
     return emit('update:modelValue', !input ? undefined : parseFloat(input));

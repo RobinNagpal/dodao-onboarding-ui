@@ -17,12 +17,24 @@ const props = defineProps({
     type: Array as PropType<Array<GuideStepInput>>,
     required: true
   },
+  errorColor: {
+    type: String,
+    default: '#d32f2f'
+  },
+  successColor: {
+    type: String,
+    default: '#00813a'
+  },
+  primaryColor: {
+    type: String,
+    default: '#069'
+  },
   setActiveStep: Function,
   updateStep: Function,
   addStep: Function,
   moveStepUp: Function,
   moveStepDown: Function,
-  removeStep: Function
+  removeStep: Function,
 });
 
 const errors = unref(props.guideErrors);
@@ -30,11 +42,21 @@ const errors = unref(props.guideErrors);
 const activeStep = computed(() =>
   props.steps.find(step => step.uuid === props.activeStepId)
 );
+
+const styleObject = computed(
+  () => {
+    return {
+      "--error-color": props.errorColor,
+      "--success-color": props.successColor,
+      "--primary-color": props.primaryColor
+    }
+  }
+);
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 bg-skin-header-bg rounded-3xl">
-      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
+      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
           @click="setActiveStep(step.uuid)"
           class="ob-nav-step"
@@ -43,14 +65,19 @@ const activeStep = computed(() =>
           :key="step.uuid"
           :class="{
             active: step.uuid === activeStep.uuid,
-            error: errors.steps?.[step.order]
+            error: errors.steps?.[step.order],
+            success: !errors.steps?.[step.order]
           }"
         >
-          <a class="step-link" role="menuitem">{{ step.name }}</a>
+          <div v-if="!errors.steps?.[step.order]" class="checkmark"></div>
+          <div class="step-link ml-2 -mt-1">
+            <span class="text-small font-medium">Step {{step.order + 1}}</span>
+            <a class="step-link" role="menuitem">{{ step.name || '&nbsp;' }}</a>
+          </div>
         </li>
 
         <li
-          class="ob-nav-step"
+          class="ob-nav-step flex items-center"
           role="presentation"
           data-step-label="+"
           @click="addStep"
@@ -72,6 +99,34 @@ const activeStep = computed(() =>
 </template>
 <style scoped lang="scss">
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
+.checkmark {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  background-color: var(--success-color);
+  border-radius: 50%;
+  z-index: 1;
+  &:after {
+    content: '';
+    left: 12px;
+    top: 6px;
+    width: 6px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    position: absolute;
+  }
+}
+
+.active  .checkmark {
+  background-color: var(--primary-color);
+}
+
 .ob-nav-stepper {
   .ob-nav-step.success.ob-feedback {
     &::before {
@@ -93,9 +148,9 @@ const activeStep = computed(() =>
       content: counter(li-counter);
       counter-increment: li-counter;
       text-align: center;
-      color: #069;
+      color: var(--primary-color);
       background-color: #fff;
-      border: 1px solid #069;
+      border: 1px solid var(--primary-color);
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
       z-index: 1;
@@ -107,7 +162,7 @@ const activeStep = computed(() =>
       right: 0;
       bottom: 0;
       left: 0;
-      border-color: #069;
+      border-color: var(--primary-color);
     }
     &:hover {
       &::before {
@@ -121,22 +176,24 @@ const activeStep = computed(() =>
   .ob-nav-step.active {
     &::before {
       color: #fff;
-      background-color: #069;
-      border-color: #069;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
     }
     &::after {
-      border-color: #069;
+      border-color: var(--primary-color);
       border-style: solid;
     }
   }
-  .ob-nav-step.success {
+  .ob-nav-step.success:not(.active) {
     &::before {
+      box-shadow: none;
+      background: transparent;
       color: #00813a;
-      background-color: #fff;
-      border-color: #00813a;
+      border: 0;
+      border-color: var(--success-color);
     }
     &::after {
-      border-color: #00813a;
+      border-color: var(--success-color);
       border-style: solid;
     }
     &:hover {
@@ -145,9 +202,17 @@ const activeStep = computed(() =>
       }
     }
   }
-  .ob-nav-step.error::before {
-    border: 1px solid rgba(255, 56, 86, var(--tw-border-opacity));
+
+  .ob-nav-step.error {
+    &::before {
+      content: '!';
+      color: white;
+      font-weight: bold;
+      background-color: var(--error-color);
+      border: 1px solid rgba(var(--error-color), var(--tw-border-opacity));
+    }
   }
+
   .ob-nav-step.disabled {
     &::before {
       color: #757575;
@@ -163,6 +228,7 @@ const activeStep = computed(() =>
       cursor: default;
     }
   }
+
   .ob-nav-step[data-step-label] {
     &::before {
       content: attr(data-step-label);
@@ -171,7 +237,6 @@ const activeStep = computed(() =>
   .step-link {
     display: block;
     text-decoration: none;
-    margin-top: 8px;
   }
   &:not(.ob-nav-stepper-sm) {
     &:not(.ob-nav-stepper-lg) {
@@ -217,11 +282,8 @@ const activeStep = computed(() =>
       &::after {
         border-left-width: 4px;
       }
-      &:not(:first-child) {
-        padding-top: 16px;
-      }
       &:not(:last-child) {
-        padding-bottom: 16px;
+        padding-bottom: 32px;
       }
     }
   }
@@ -276,22 +338,24 @@ const activeStep = computed(() =>
       font-size: 20px;
       width: 38px;
       height: 38px;
-      line-height: 40px;
+      line-height: 36px;
     }
   }
   .ob-step-link {
     font-size: 16px;
-    line-height: 40px;
+    line-height: 36px;
   }
   .ob-step-title {
     font-size: 16px;
-    line-height: 40px;
+    line-height: 36px;
   }
   &:not(.ob-nav-horizontal) {
     .ob-nav-step {
       padding-left: 45.6px;
       &::after {
         left: 18px;
+        top: 8px;
+        bottom: -4px;
       }
     }
   }
