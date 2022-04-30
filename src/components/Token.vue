@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCDNImageUrl } from '@/utils/platform/imageUtils';
+import { getCDNImageUrl } from '@dodao/onboarding-schemas/helpers/getCDNImageUrl';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { formatBytes32String } from '@ethersproject/strings';

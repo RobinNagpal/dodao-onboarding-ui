@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCDNImageUrl } from '@/utils/platform/imageUtils';
+import { getCDNImageUrl } from '@dodao/onboarding-schemas/helpers/getCDNImageUrl';
 import { formatBytes32String } from '@ethersproject/strings';
 import { getUrl } from '@snapshot-labs/snapshot.js/src/utils';
 import { computed, ref } from 'vue';
