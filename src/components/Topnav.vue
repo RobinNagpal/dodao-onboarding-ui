@@ -13,7 +13,7 @@ import { useTxStatus } from '@/composables/useTxStatus';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { getIpfsUrl, shorten } from '@/helpers/utils';
-import { getCDNImageUrl } from '@/utils/platform/imageUtils';
+import { getCDNImageUrl } from '@dodao/onboarding-schemas/helpers/getCDNImageUrl';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
