@@ -42,10 +42,6 @@ const props = defineProps({
   successColor: {
     type: String,
     default: '#00813a'
-  },
-  primaryColor: {
-    type: String,
-    default: '#069'
   }
 });
 
@@ -62,8 +58,7 @@ const isReachingLastStep = computed(
 const styleObject = computed(() => {
   return {
     '--error-color': props.errorColor,
-    '--success-color': props.successColor,
-    '--primary-color': props.primaryColor
+    '--success-color': props.successColor
   };
 });
 </script>

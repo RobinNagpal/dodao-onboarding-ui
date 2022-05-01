@@ -24,10 +24,6 @@ const props = defineProps({
     type: String,
     default: '#00813a'
   },
-  primaryColor: {
-    type: String,
-    default: '#069'
-  },
   setActiveStep: Function,
   updateStep: Function,
   addStep: Function,
@@ -45,8 +41,7 @@ const activeStep = computed(() =>
 const styleObject = computed(() => {
   return {
     '--error-color': props.errorColor,
-    '--success-color': props.successColor,
-    '--primary-color': props.primaryColor
+    '--success-color': props.successColor
   };
 });
 </script>
@@ -133,7 +128,7 @@ const styleObject = computed(() => {
       box-shadow: 0 0 2px 2px #fff;
       z-index: 1;
     }
-    &.success:before {
+    &.success:not(.active):before {
       content: '';
       text-align: center;
       color: var(--primary-color);
@@ -150,7 +145,7 @@ const styleObject = computed(() => {
       right: 0;
       bottom: 0;
       left: 0;
-      border-color: var(--primary-color);
+      border-color: #757575;
     }
     &:hover {
       &::before {
@@ -167,22 +162,15 @@ const styleObject = computed(() => {
       background-color: var(--primary-color);
       border-color: var(--primary-color);
     }
-    &::after {
-      border-color: var(--primary-color);
-      border-style: solid;
-    }
   }
   .ob-nav-step.success:not(.active) {
     &::before {
       color: var(--primary-color);
       background-color: var(--success-color);
-      border-color: var(--primary-color);
-      .success {
-        background-color: var(--success-color);
-      }
+      border-color: var(--success-color);
     }
     &::after {
-      border-color: #cccc;
+      border-color: #757575;
       border-style: solid;
       .success {
         background-color: var(--success-color);
