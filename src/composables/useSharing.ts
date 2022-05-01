@@ -59,7 +59,7 @@ export function useSharing() {
 
     const url = `https://twitter.com/intent/tweet?text=@${
       space.twitter || space.name
-    }&url=${guideUrl}`;
+    }%20${entityName}&url=${guideUrl}`;
     window.open(url, '_blank').focus();
   }
 
