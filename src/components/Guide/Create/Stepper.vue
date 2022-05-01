@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import GuideCreateStepperItem from '@/components/Guide/Create/StepperItem.vue';
-import {
-  GuideInput,
-  GuideStepInput
-} from '@dodao/onboarding-schemas/inputs/GuideInput';
+import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
+import { EditGuideType } from '@/composables/guide/useEditGuide';
+import { GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { computed, PropType, unref } from 'vue';
 
 const props = defineProps({
   activeStepId: String,
   guide: {
-    type: Object as PropType<GuideInput>,
+    type: Object as PropType<EditGuideType>,
     required: true
   },
   guideErrors: Object,
@@ -68,10 +67,14 @@ const styleObject = computed(() => {
           :class="{
             active: step.uuid === activeStep.uuid,
             error: errors.steps?.[step.order],
-            success: !errors.steps?.[step.order]
+            success: !errors.steps?.[step.order] && !guide.isPristine
           }"
         >
-          <div v-if="!errors.steps?.[step.order]" class="checkmark"></div>
+          <div
+            v-if="!errors.steps?.[step.order] & !guide.isPristine"
+            class="checkmark"
+          ></div>
+          <GuideStepperIcon class="stepper-icon" :step="step" />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
             <a class="step-link text-sm" role="menuitem">{{
@@ -103,34 +106,6 @@ const styleObject = computed(() => {
 </template>
 <style scoped lang="scss">
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
-.checkmark {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-  background-color: var(--success-color);
-  border-radius: 50%;
-  z-index: 1;
-  &:after {
-    content: '';
-    left: 12px;
-    top: 6px;
-    width: 6px;
-    height: 14px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    position: absolute;
-  }
-}
-
-.active .checkmark {
-  background-color: var(--primary-color);
-}
-
 .ob-nav-stepper {
   .ob-nav-step.success.ob-feedback {
     &::before {
@@ -149,14 +124,23 @@ const styleObject = computed(() => {
     flex-grow: 1;
     position: relative;
     &:before {
-      content: counter(li-counter);
-      counter-increment: li-counter;
+      content: '';
       text-align: center;
       color: var(--primary-color);
       background-color: #fff;
       border: 1px solid var(--primary-color);
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
+      z-index: 1;
+    }
+    &.success:before {
+      content: '';
+      text-align: center;
+      color: var(--primary-color);
+      background-color: var(--success-color);
+      border: 1px solid var(--success-color);
+      border-radius: 50%;
+      box-shadow: 0 0 2px 2px var(--success-color);
       z-index: 1;
     }
     &:after {
@@ -190,15 +174,19 @@ const styleObject = computed(() => {
   }
   .ob-nav-step.success:not(.active) {
     &::before {
-      box-shadow: none;
-      background: transparent;
-      color: #00813a;
-      border: 0;
-      border-color: var(--success-color);
+      color: var(--primary-color);
+      background-color: var(--success-color);
+      border-color: var(--primary-color);
+      .success {
+        background-color: var(--success-color);
+      }
     }
     &::after {
-      border-color: var(--success-color);
+      border-color: #cccc;
       border-style: solid;
+      .success {
+        background-color: var(--success-color);
+      }
     }
     &:hover {
       &::before {

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
+import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import {
   GuideModel,
   GuideStep
 } from '@dodao/onboarding-schemas/models/GuideModel';
+
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
@@ -88,6 +90,7 @@ const styleObject = computed(() => {
             v-if="isReachingLastStep || step.order < activeStep.order"
             class="checkmark"
           ></div>
+          <GuideStepperIcon v-else class="stepper-icon" :step="step" />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
             <a class="step-link text-sm" role="menuitem">{{
@@ -153,7 +156,7 @@ const styleObject = computed(() => {
     flex-grow: 1;
     position: relative;
     &:before {
-      content: counter(li-counter);
+      content: '';
       counter-increment: li-counter;
       text-align: center;
       color: var(--primary-color);
@@ -179,6 +182,13 @@ const styleObject = computed(() => {
     }
     &:not(.disabled) {
       cursor: pointer;
+    }
+
+    .stepper-icon {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     }
   }
   .ob-nav-step.active {

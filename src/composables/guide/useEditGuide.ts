@@ -17,9 +17,9 @@ import {
 import {
   GuideQuestion,
   GuideType,
-  InputType,
+  isQuestion,
+  isUserInput,
   QuestionChoice,
-  QuestionType,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -36,6 +36,10 @@ const stepContentLimit = 14400;
 const guideExceptContentLimit = 64;
 const choiceContentLimit = 256;
 const nameLimit = 32;
+
+export type EditGuideType = GuideInput & { id?: string } & {
+  isPristine: boolean;
+};
 
 export function useEditGuide(
   uuid: string | null,
@@ -56,7 +60,7 @@ export function useEditGuide(
     space,
     (route.params.guideType as string) || GuideType.Onboarding
   );
-  const guideRef = ref<GuideInput & { id?: string }>(emptyGuideModel);
+  const guideRef = ref<EditGuideType>(emptyGuideModel);
   const guideErrors = ref<GuideError>({});
   const guideLoaded = ref<boolean>(false);
 
@@ -73,6 +77,7 @@ export function useEditGuide(
       const guide = await getGuide(uuid);
       guideRef.value = {
         ...guide,
+        isPristine: true,
         from: web3.value.account,
         space: space.id,
         thumbnail: guide.thumbnail || undefined,
@@ -170,15 +175,9 @@ export function useEditGuide(
         stepError.content = true;
       }
       step.stepItems.forEach((item: GuideQuestion | UserInput) => {
-        if (
-          item.type === QuestionType.MultipleChoice ||
-          item.type === QuestionType.SingleChoice
-        ) {
+        if (isQuestion(item)) {
           validateQuestion(item as GuideQuestion, stepError);
-        } else if (
-          item.type === InputType.PublicShortInput ||
-          item.type === InputType.PrivateShortInput
-        ) {
+        } else if (isUserInput(item)) {
           validateUserInput(item as UserInput, stepError);
         }
       });
@@ -219,7 +218,8 @@ export function useEditGuide(
       }
       stepError.stepItems[question.order] = questionError;
     } else {
-      delete stepError.stepItems;
+      stepError.stepItems?.[question.order] &&
+        delete stepError.stepItems[question.order];
     }
   }
 
@@ -243,6 +243,7 @@ export function useEditGuide(
 
   async function handleSubmit() {
     const valid = validateGuide(guideRef.value);
+    guideRef.value.isPristine = false;
     if (!valid) {
       console.log('Guide invalid', valid, guideErrors);
       return;
