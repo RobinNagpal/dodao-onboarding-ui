@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
+import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import {
   GuideModel,
   GuideStep
 } from '@dodao/onboarding-schemas/models/GuideModel';
+
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
@@ -32,6 +34,14 @@ const props = defineProps({
   submitGuide: {
     type: Function,
     required: true
+  },
+  errorColor: {
+    type: String,
+    default: '#d32f2f'
+  },
+  successColor: {
+    type: String,
+    default: '#00813a'
   }
 });
 
@@ -40,19 +50,48 @@ const activeStep = computed<GuideStep>(
     props.guide.steps.find(step => step.uuid === props.activeStepId) ||
     props.guide.steps[0]!
 );
+
+const isReachingLastStep = computed(
+  () => props.guide.steps.length - 1 === activeStep.value.order
+);
+
+const styleObject = computed(() => {
+  return {
+    '--error-color': props.errorColor,
+    '--success-color': props.successColor
+  };
+});
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 guide-stepper bg-skin-header-bg rounded-3xl">
-      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu">
+      <ol
+        class="ob-nav-stepper ob-nav-stepper-lg"
+        role="menu"
+        :style="styleObject"
+      >
         <li
           class="ob-nav-step"
-          :class="step.uuid === activeStep.uuid ? 'active' : 'disabled'"
+          :class="[
+            { success: isReachingLastStep || step.order < activeStep.order },
+            { active: step.uuid === activeStep.uuid },
+            { disabled: step.uuid !== activeStep.uuid }
+          ]"
           role="presentation"
           v-for="step in guide.steps"
           :key="step.uuid"
         >
-          <a class="step-link" role="menuitem">{{ step.name }}</a>
+          <div
+            v-if="isReachingLastStep || step.order < activeStep.order"
+            class="checkmark"
+          ></div>
+          <GuideStepperIcon v-else class="stepper-icon" :step="step" />
+          <div class="step-link ml-2 -mt-1">
+            <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
+            <a class="step-link text-sm" role="menuitem">{{
+              step.name || '&nbsp;'
+            }}</a>
+          </div>
         </li>
       </ol>
     </div>
@@ -71,6 +110,30 @@ const activeStep = computed<GuideStep>(
 </template>
 <style scoped lang="scss">
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
+.checkmark {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  background-color: var(--success-color);
+  border: 1px solid var(--success-color);
+  border-radius: 50%;
+  z-index: 1;
+  &:after {
+    content: '';
+    left: 11px;
+    top: 6px;
+    width: 6px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    position: absolute;
+  }
+}
 .ob-nav-stepper {
   .ob-nav-step.success.ob-feedback {
     &::before {
@@ -82,19 +145,18 @@ const activeStep = computed<GuideStep>(
   flex-wrap: nowrap;
   list-style-type: none;
   margin-bottom: 0;
-  padding-left: 20px;
   counter-reset: li-counter;
   .ob-nav-step {
     flex-basis: auto;
     flex-grow: 1;
     position: relative;
     &:before {
-      content: counter(li-counter);
+      content: '';
       counter-increment: li-counter;
       text-align: center;
-      color: #069;
+      color: var(--primary-color);
       background-color: #fff;
-      border: 1px solid #069;
+      border: 1px solid #757575;
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
       z-index: 1;
@@ -106,7 +168,7 @@ const activeStep = computed<GuideStep>(
       right: 0;
       bottom: 0;
       left: 0;
-      border-color: #069;
+      border-color: var(--primary-color);
     }
     &:hover {
       &::before {
@@ -116,32 +178,31 @@ const activeStep = computed<GuideStep>(
     &:not(.disabled) {
       cursor: pointer;
     }
+
+    .stepper-icon {
+      position: absolute;
+      top: 8px;
+      left: 7px;
+      text-align: center;
+      border-radius: 50%;
+      z-index: 1;
+      color: #757575;
+    }
+    &.active {
+      .stepper-icon {
+        color: white;
+      }
+    }
   }
   .ob-nav-step.active {
     &::before {
       color: #fff;
-      background-color: #069;
-      border-color: #069;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
     }
     &::after {
-      border-color: #069;
+      border-color: var(--primary-color);
       border-style: solid;
-    }
-  }
-  .ob-nav-step.success {
-    &::before {
-      color: #00813a;
-      background-color: #fff;
-      border-color: #00813a;
-    }
-    &::after {
-      border-color: #00813a;
-      border-style: solid;
-    }
-    &:hover {
-      &::before {
-        background-color: #c3e8cd;
-      }
     }
   }
   .ob-nav-step.disabled {
@@ -150,13 +211,25 @@ const activeStep = computed<GuideStep>(
       background-color: #fff;
       border-color: #757575;
     }
-    &::after {
+    &:after {
       border-color: #757575;
       border-style: solid;
     }
     .ob-step-link {
       color: #757575;
       cursor: default;
+    }
+  }
+  .ob-nav-step.success {
+    &::before {
+      content: '';
+      box-shadow: none;
+      background: transparent;
+      border: 0;
+    }
+    &::after {
+      border-color: var(--success-color);
+      border-style: solid;
     }
   }
   .ob-nav-step[data-step-label] {
@@ -167,7 +240,6 @@ const activeStep = computed<GuideStep>(
   .step-link {
     display: block;
     text-decoration: none;
-    margin-top: 8px;
   }
   &:not(.ob-nav-stepper-sm) {
     &:not(.ob-nav-stepper-lg) {
@@ -210,14 +282,11 @@ const activeStep = computed<GuideStep>(
         position: absolute;
         left: 0;
       }
-      &::after {
+      &:not(:last-child):after {
         border-left-width: 4px;
       }
-      &:not(:first-child) {
-        padding-top: 16px;
-      }
       &:not(:last-child) {
-        padding-bottom: 16px;
+        padding-bottom: 32px;
       }
     }
   }
@@ -288,6 +357,8 @@ const activeStep = computed<GuideStep>(
       padding-left: 45.6px;
       &::after {
         left: 18px;
+        top: 8px;
+        bottom: -4px;
       }
     }
   }

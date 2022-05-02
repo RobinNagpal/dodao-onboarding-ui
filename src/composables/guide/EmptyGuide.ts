@@ -10,9 +10,10 @@ export const emptyGuide = (
   from: string,
   space: SpaceModel,
   guideType: string
-): GuideInput => {
+): GuideInput & { isPristine: boolean } => {
   return {
     from,
+    isPristine: true,
     uuid: uuidv4(),
     name: 'Guide Name',
     categories: [],
