@@ -4,6 +4,7 @@ import { UserInput } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
 
 defineProps({
+  modelValue: [String, Number],
   userInput: {
     type: Object as PropType<UserInput>,
     required: true
@@ -15,6 +16,7 @@ defineProps({
 
 <template>
   <UiInput
+    :model-value="modelValue"
     maxlength="64"
     class="mt-4"
     @update:modelValue="setUserInput(userInput.uuid, $event)"

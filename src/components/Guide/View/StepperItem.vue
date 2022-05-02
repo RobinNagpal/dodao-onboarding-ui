@@ -136,6 +136,7 @@ async function navigateToNextStep() {
               stepItem.type === InputType.PublicShortInput ||
               stepItem.type === InputType.PrivateShortInput
             "
+            :model-value="stepSubmission[stepItem.uuid]"
             :userInput="stepItem"
             :setUserInput="setUserInput"
             :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
@@ -163,7 +164,7 @@ async function navigateToNextStep() {
         @click="goToPreviousStep(step)"
         v-if="isNotFirstStep && !isGuideCompletedStep"
       >
-        <span class="mr-2 font-bold ">&#8592;</span>
+        <span class="mr-2 font-bold">&#8592;</span>
         <span class="sm:block" v-text="$t('guide.previous')" />
       </UiButton>
       <UiButton
@@ -180,7 +181,7 @@ async function navigateToNextStep() {
           class="sm:block"
           v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
         />
-        <span class="ml-2 font-bold ">&#8594;</span>
+        <span class="ml-2 font-bold">&#8594;</span>
       </UiButton>
     </div>
   </div>

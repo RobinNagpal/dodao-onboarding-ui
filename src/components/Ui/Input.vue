@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const isFocus = ref(false)
+const isFocus = ref(false);
 
 const props = defineProps({
   modelValue: [String, Number],
@@ -48,17 +48,20 @@ function handleInput(e) {
       v-else
       :value="modelValue"
       @input="handleInput"
-      :placeholder="isFocus ? placeholder : ''"
+      :placeholder="isFocus ? placeholder : modelValue || ''"
       :type="number ? 'number' : 'text'"
       :disabled="disabled"
       class="input flex-auto w-full"
       :class="additionalInputClass"
       :required="required"
       :maxlength="maxlength"
-      @focus="isFocus=true"
-      @blur="isFocus=false"
+      @focus="isFocus = true"
+      @blur="isFocus = false"
     />
-    <div class="input-label text-color mr-2 whitespace-nowrap absolute" :class="modelValue && 'forceFloat'">
+    <div
+      class="input-label text-color mr-2 whitespace-nowrap absolute"
+      :class="modelValue && 'forceFloat'"
+    >
       <slot name="label" />
     </div>
     <slot name="info" />
@@ -75,12 +78,14 @@ function handleInput(e) {
 </template>
 
 <style scoped lang="scss">
-  .input-label {
-    z-index: -1;
-  }
-  .slot-selected ~ .input-label, input:focus ~ .input-label, .forceFloat {
-    transform: translatey(-18px);
-    @apply text-xs;
-    transition: transform 0.1s linear, font-size 0.1s linear;
-  }
+.input-label {
+  z-index: -1;
+}
+.slot-selected ~ .input-label,
+input:focus ~ .input-label,
+.forceFloat {
+  transform: translatey(-18px);
+  @apply text-xs;
+  transition: transform 0.1s linear, font-size 0.1s linear;
+}
 </style>
