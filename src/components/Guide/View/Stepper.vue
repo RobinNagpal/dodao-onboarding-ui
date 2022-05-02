@@ -156,7 +156,7 @@ const styleObject = computed(() => {
       text-align: center;
       color: var(--primary-color);
       background-color: #fff;
-      border: 1px solid var(--primary-color);
+      border: 1px solid #757575;
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
       z-index: 1;
@@ -180,10 +180,18 @@ const styleObject = computed(() => {
     }
 
     .stepper-icon {
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      position: absolute;
+      top: 8px;
+      left: 7px;
+      text-align: center;
+      border-radius: 50%;
+      z-index: 1;
+      color: #757575;
+    }
+    &.active {
+      .stepper-icon {
+        color: white;
+      }
     }
   }
   .ob-nav-step.active {

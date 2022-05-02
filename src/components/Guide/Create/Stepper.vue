@@ -69,7 +69,7 @@ const styleObject = computed(() => {
             v-if="!errors.steps?.[step.order] & !guide.isPristine"
             class="checkmark"
           ></div>
-          <GuideStepperIcon class="stepper-icon" :step="step" />
+          <GuideStepperIcon v-else-if="!errors.steps?.[step.order]" class="stepper-icon" :step="step" />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
             <a class="step-link text-sm" role="menuitem">{{
@@ -101,6 +101,30 @@ const styleObject = computed(() => {
 </template>
 <style scoped lang="scss">
 // https://oblique.bit.admin.ch/components/stepper#stepper-snippet-source
+.checkmark {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  background-color: var(--success-color);
+  border: 1px solid var(--success-color);
+  border-radius: 50%;
+  z-index: 1;
+  &:after {
+    content: '';
+    left: 11px;
+    top: 6px;
+    width: 6px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    position: absolute;
+  }
+}
 .ob-nav-stepper {
   .ob-nav-step.success.ob-feedback {
     &::before {
@@ -123,19 +147,9 @@ const styleObject = computed(() => {
       text-align: center;
       color: var(--primary-color);
       background-color: #fff;
-      border: 1px solid var(--primary-color);
+      border: 1px solid #757575;
       border-radius: 50%;
       box-shadow: 0 0 2px 2px #fff;
-      z-index: 1;
-    }
-    &.success:not(.active):before {
-      content: '';
-      text-align: center;
-      color: var(--primary-color);
-      background-color: var(--success-color);
-      border: 1px solid var(--success-color);
-      border-radius: 50%;
-      box-shadow: 0 0 2px 2px var(--success-color);
       z-index: 1;
     }
     &:after {
@@ -155,9 +169,23 @@ const styleObject = computed(() => {
     &:not(.disabled) {
       cursor: pointer;
     }
+    .stepper-icon {
+      position: absolute;
+      top: 8px;
+      left: 7px;
+      text-align: center;
+      border-radius: 50%;
+      z-index: 1;
+      color: #757575;
+    }
+    &.active {
+      .stepper-icon {
+        color: white;
+      }
+    }
   }
   .ob-nav-step.active {
-    &::before {
+    &:not(.success, .error):before {
       color: #fff;
       background-color: var(--primary-color);
       border-color: var(--primary-color);
@@ -168,20 +196,33 @@ const styleObject = computed(() => {
       color: var(--primary-color);
       background-color: var(--success-color);
       border-color: var(--success-color);
+      content: '';
+      box-shadow: none;
+      background: transparent;
+      border: 0;
     }
     &::after {
-      border-color: #757575;
+      border-color: var(--success-color);
       border-style: solid;
       .success {
         background-color: var(--success-color);
       }
     }
-    &:hover {
-      &::before {
-        background-color: #c3e8cd;
+  }
+
+  .ob-nav-step {
+    &.active, &:hover {
+      &.success::before {
+        background: var(--success-color);
+        border: 0;
+        box-shadow: 0 0 14px 4px var(--success-color);
+      }
+      &.error::before {
+        box-shadow: 0 0 2px 2px #fff, 0 0 8px 6px var(--error-color);;
       }
     }
   }
+
 
   .ob-nav-step.error {
     &::before {
@@ -383,4 +424,5 @@ const styleObject = computed(() => {
     flex-grow: 1;
   }
 }
+
 </style>
