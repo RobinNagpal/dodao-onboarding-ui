@@ -11,6 +11,8 @@ export const bundleTypes = {
     { name: 'content', type: 'string' },
     { name: 'discordWebhook', type: 'string' },
     { name: 'name', type: 'string' },
+    { name: 'publishStatus', type: 'string' },
+    { name: 'socialShareImage', type: 'string' },
     { name: 'space', type: 'string' },
     { name: 'bundleGuides', type: 'GuideInBundleInput[]' },
     { name: 'thumbnail', type: 'string' },

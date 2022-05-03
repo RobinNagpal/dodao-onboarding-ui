@@ -4,7 +4,10 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
-import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import {
+  GuideBundlePublishStatus,
+  GuideBundleType
+} from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
@@ -57,7 +60,9 @@ export function useEditGuideBundle(
           uuid: uuidv4(),
           guide: g,
           order: g.order
-        }))
+        })),
+        socialShareImage: guideBundle.socialShareImage || undefined,
+        publishStatus: guideBundle.publishStatus as GuideBundlePublishStatus
       };
     }
 

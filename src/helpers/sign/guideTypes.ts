@@ -26,6 +26,8 @@ export const guideTypes = {
     { name: 'from', type: 'address' },
     { name: 'guideType', type: 'string' },
     { name: 'name', type: 'string' },
+    { name: 'publishStatus', type: 'string' },
+    { name: 'socialShareImage', type: 'string' },
     { name: 'space', type: 'string' },
     { name: 'steps', type: 'Step[]' },
     { name: 'thumbnail', type: 'string' },

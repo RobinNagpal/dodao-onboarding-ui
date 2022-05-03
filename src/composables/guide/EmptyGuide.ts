@@ -1,5 +1,6 @@
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
+  GuidePublishStatus,
   InputType,
   QuestionType
 } from '@dodao/onboarding-schemas/models/GuideModel';
@@ -19,6 +20,7 @@ export const emptyGuide = (
     categories: [],
     content: 'New Guide',
     guideType: guideType,
+    publishStatus: GuidePublishStatus.Live,
     steps: [
       {
         uuid: uuidv4(),
