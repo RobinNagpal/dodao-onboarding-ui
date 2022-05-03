@@ -47,6 +47,8 @@ const { apolloQuery } = useApolloQuery();
 async function loadGuides(skip = 0) {
   loading.value = true;
 
+  const isAdminOrSuperAdmin = isAdmin.value || isSuperAdmin.value;
+
   const guidesObj = await apolloQuery(
     {
       query: GuidesQuery,
@@ -57,10 +59,9 @@ async function loadGuides(skip = 0) {
         guideType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : [],
-        publish_status_in:
-          isAdmin.value || isSuperAdmin.value
-            ? [GuidePublishStatus.Live, GuidePublishStatus.Draft]
-            : [GuidePublishStatus.Live]
+        publish_status_in: isAdminOrSuperAdmin
+          ? [GuidePublishStatus.Live, GuidePublishStatus.Draft]
+          : [GuidePublishStatus.Live]
       }
     },
     'guides'
@@ -73,13 +74,17 @@ async function loadGuides(skip = 0) {
 onMounted(() => {
   store.space.guides = [];
   setPageTitle('page.title.dao.guides', { dao: props.space.name });
-  loadGuides(store.space.guides.length);
+  loadGuides();
 });
 
 const { profiles, loadProfiles } = useProfiles();
 
 watch(store.space.guides, () => {
   loadProfiles(store.space.guides.map(guide => guide.author));
+});
+
+watch(isAdmin, () => {
+  loadGuides();
 });
 
 const guidesCount = computed(() => {
