@@ -279,7 +279,7 @@ const guideStatuses = [
                 :items="guideStatuses"
               >
                 <div class="pr-1 select-none">
-                  {{ guide.publishStatus === 'live' ? 'Live' : 'Draft' }}
+                  {{ guide.publishStatus === 'Live' ? 'Live' : 'Draft' }}
                 </div>
               </UiDropdown>
               <div

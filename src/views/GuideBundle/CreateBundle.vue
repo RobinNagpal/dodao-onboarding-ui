@@ -161,11 +161,10 @@ function selectGuideOrBundleType(type: GuideBundleType) {
 }
 
 function selectPublishStatus(status) {
-  console.log(status);
-  guideBundle.value.publishStatus = status;
+  form.value.publishStatus = status;
 }
 
-const guideStatuses = [
+const guideBundleStatuses = [
   {
     text: 'Live',
     action: GuideBundlePublishStatus.Live
@@ -294,8 +293,26 @@ const guideStatuses = [
                 >{{ $t(`guideBundle.create.excerpt`) }}*</template
               >
             </UiInput>
+            <div class="status-wrapper pt-3">
+              <UiDropdown
+                top="2.5rem"
+                right="2.5rem"
+                class="mr-2 w-[5rem] status-drop-down"
+                @select="selectPublishStatus($event)"
+                :items="guideBundleStatuses"
+              >
+                <div class="pr-1 select-none">
+                  {{ form.publishStatus === 'Live' ? 'Live' : 'Draft' }}
+                </div>
+              </UiDropdown>
+              <div
+                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
+              >
+                Publish Status*
+              </div>
+            </div>
             <UiButton
-              class="w-full h-96 mb-4 px-[16px] flex items-center"
+              class="w-full h-96 mb-4 mt-6 px-[16px] flex items-center"
               style="height: max-content"
               :class="{ '!border-red': guideBundleErrors.content }"
             >
@@ -313,24 +330,6 @@ const guideStatuses = [
                 v-if="guideBundleErrors.content"
               ></i>
             </UiButton>
-            <div class="status-wrapper pt-3">
-              <UiDropdown
-                top="2.5rem"
-                right="2.5rem"
-                class="mr-2 w-[5rem] status-drop-down"
-                @select="selectPublishStatus($event)"
-                :items="guideStatuses"
-              >
-                <div class="pr-1 select-none">
-                  {{ guideBundle.publishStatus === 'live' ? 'Live' : 'Draft' }}
-                </div>
-              </UiDropdown>
-              <div
-                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
-              >
-                Publish Status*
-              </div>
-            </div>
           </div>
         </Block>
         <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
