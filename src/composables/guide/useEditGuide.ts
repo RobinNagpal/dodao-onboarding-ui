@@ -81,7 +81,8 @@ export function useEditGuide(
         from: web3.value.account,
         space: space.id,
         thumbnail: guide.thumbnail || undefined,
-        discordWebhook: guide.discordWebhook || undefined
+        discordWebhook: guide.discordWebhook || undefined,
+        socialShareImage: guide.socialShareImage || undefined
       };
       const minOrder = Math.min(...steps.value.map(step => step.order));
       activeStepId.value = steps.value.find(

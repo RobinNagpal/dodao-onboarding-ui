@@ -253,7 +253,8 @@
     "submissions": "Submissions",
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
-    "votingSystem": "Voting system"
+    "votingSystem": "Voting system",
+    "socialShareImage": "Twitter Share Image"
   },
   "guideBundle": {
     "create": {
@@ -307,7 +308,8 @@
     "multipleChoiceQuestion": "Multiple Choice",
     "singleChoiceQuestion": "Single Choice",
     "publicInput": "Public Input",
-    "privateInput": "Private Input"
+    "privateInput": "Private Input",
+    "socialShareImage": "Twitter Share Image"
   },
   "guides": {
     "header": "Guides",

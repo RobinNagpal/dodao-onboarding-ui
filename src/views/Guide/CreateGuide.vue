@@ -4,10 +4,11 @@ import GuideCreateStepper from '@/components/Guide/Create/Stepper.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ModalGuideGuideImport from '@/components/Modal/Guide/GuideImport.vue';
-import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleType.vue';
+import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useEditGuide } from '@/composables/guide/useEditGuide';
@@ -16,8 +17,11 @@ import { useModal } from '@/composables/useModal';
 import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
+import {
+  GuidePublishStatus,
+  GuideType
+} from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -74,7 +78,8 @@ function clickSubmit() {
 
 const errors = unref(guideErrors);
 
-const uploadLoading = ref(false);
+const uploadThumbnailLoading = ref(false);
+const uploadSocialShareImageLoading = ref(false);
 
 const categoriesString = computed(() => {
   return form.value.categories ? form.value.categories.join(', ') : '';
@@ -88,8 +93,16 @@ function setThumbnailUrl(url) {
   if (typeof url === 'string') form.value.thumbnail = url;
 }
 
-function setUploadLoading(s) {
-  uploadLoading.value = s;
+function setSocialShareImageUrl(url) {
+  if (typeof url === 'string') form.value.socialShareImage = url;
+}
+
+function setUploadLoadingThumbnail(s) {
+  uploadThumbnailLoading.value = s;
+}
+
+function setUploadSocialShareImage(s) {
+  uploadSocialShareImageLoading.value = s;
 }
 
 function inputError(field: string) {
@@ -111,6 +124,21 @@ const guideExists = !!guide.value?.id;
 function selectGuideOrBundleType(guideType: GuideType) {
   guide.value.guideType = guideType;
 }
+
+function selectPublishStatus(status) {
+  guide.value.publishStatus = status;
+}
+
+const guideStatuses = [
+  {
+    text: 'Live',
+    action: GuidePublishStatus.Live
+  },
+  {
+    text: 'Draft',
+    action: GuidePublishStatus.Draft
+  }
+];
 </script>
 
 <template>
@@ -176,7 +204,25 @@ function selectGuideOrBundleType(guideType: GuideType) {
                 <Upload
                   class="!ml-2"
                   @input="setThumbnailUrl"
-                  @loading="setUploadLoading"
+                  @loading="setUploadLoadingThumbnail"
+                >
+                  {{ $t('upload') }}
+                </Upload>
+              </template>
+            </UiInput>
+            <UiInput
+              v-model="form.socialShareImage"
+              placeholder="e.g. https://example.com/guide.png ideally 800px by 418px"
+              :error="inputError('socialShareImage')"
+            >
+              <template v-slot:label>
+                {{ $t('guide.socialShareImage') }}
+              </template>
+              <template v-slot:info>
+                <Upload
+                  class="!ml-2"
+                  @input="setSocialShareImageUrl"
+                  @loading="setUploadSocialShareImage"
                 >
                   {{ $t('upload') }}
                 </Upload>
@@ -224,6 +270,24 @@ function selectGuideOrBundleType(guideType: GuideType) {
                 >{{ $t(`guide.create.excerpt`) }}*</template
               >
             </UiInput>
+            <div class="status-wrapper pt-3">
+              <UiDropdown
+                top="2.5rem"
+                right="2.5rem"
+                class="mr-2 w-[5rem] status-drop-down"
+                @select="selectPublishStatus($event)"
+                :items="guideStatuses"
+              >
+                <div class="pr-1 select-none">
+                  {{ guide.publishStatus === 'live' ? 'Live' : 'Draft' }}
+                </div>
+              </UiDropdown>
+              <div
+                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
+              >
+                Publish Status*
+              </div>
+            </div>
           </div>
         </Block>
         <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">
@@ -283,3 +347,17 @@ function selectGuideOrBundleType(guideType: GuideType) {
     />
   </teleport>
 </template>
+<style scoped lang="scss">
+.status-wrapper {
+  border-bottom: 1px solid var(--border-color);
+}
+.forceFloat {
+  transform: translatey(-44px);
+  @apply text-xs;
+  transition: transform 0.1s linear, font-size 0.1s linear;
+}
+
+.status-drop-down {
+  color: var(--link-color);
+}
+</style>
