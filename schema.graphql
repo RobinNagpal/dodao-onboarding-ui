@@ -75,20 +75,22 @@ input SpaceWhere {
 input GuideWhere {
   id: String
   id_in: [String]
-  ipfs: String
-  ipfs_in: [String]
-  space: String
-  space_in: [String]
-  guide_type: String
-  guide_type_in: [String]
   author: String
   author_in: [String]
+  guide_type: String
+  guide_type_in: [String]
+  ipfs: String
+  ipfs_in: [String]
+  publish_status: String
+  publish_status_in: [String!]
   created: Int
   created_in: [Int]
   created_gt: Int
   created_gte: Int
   created_lt: Int
   created_lte: Int
+  space: String
+  space_in: [String]
 }
 
 input GuideBundleWhere {
@@ -108,6 +110,8 @@ input GuideBundleWhere {
   created_gte: Int
   created_lt: Int
   created_lte: Int
+  publish_status: String
+  publish_status_in: [String!]
 }
 
 input GuideSubmissionWhere {
@@ -271,9 +275,11 @@ type Guide {
   ipfs: String!
   name: String!
   previousId: String
-  thumbnail: String
+  publishStatus: String!
+  socialShareImage: String
   space: Space!
   steps: [GuideStep!]!
+  thumbnail: String
   uuid: String!
   version: Int!
   link: String!
@@ -295,6 +301,7 @@ type GuideInBundle {
 type GuideBundle {
   authors: [String!]!
   bundleType: String!
+  bundleGuides: [GuideInBundle!]!
   categories: [String!]!
   content: String!
   created: Int!
@@ -303,9 +310,10 @@ type GuideBundle {
   id: String!
   ipfs: String!
   name: String!
-  thumbnail: String
+  publishStatus: String!
+  socialShareImage: String
   space: Space!
-  bundleGuides: [GuideInBundle!]!
+  thumbnail: String
   uuid: String!
   version: Int!
   link: String!
