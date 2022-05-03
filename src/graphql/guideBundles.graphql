@@ -39,7 +39,8 @@ query GuideBundlesQuery(
       avatar
       symbol
     }
-
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
   }
@@ -62,6 +63,8 @@ query GuideBundleQuery($uuid: String!) {
       id
       name
     }
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
     version

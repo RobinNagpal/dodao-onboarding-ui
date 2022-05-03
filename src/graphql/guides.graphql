@@ -27,6 +27,8 @@ query GuidesQuery(
       avatar
       symbol
     }
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
   }
@@ -80,6 +82,8 @@ query GuideQuery($uuid: String!) {
       order
       uuid
     }
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
     version
