@@ -3,6 +3,7 @@ import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GuideCreate from '@/views/Guide/CreateGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
+import DiscordRedirect from '@/views/DiscordRedirect.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
 import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
 import GuideBundles from '@/views/GuideBundle/GuideBundles.vue';
@@ -20,6 +21,7 @@ import Timeline from '@/views/Timeline.vue';
 import {
   createRouter,
   createWebHashHistory,
+  createWebHistory,
   RouteLocation,
   RouteRecordRaw
 } from 'vue-router';
@@ -111,6 +113,7 @@ const spaceRoutes: RouteRecordRaw[] = [
 if (domain) {
   routes.push(
     { path: '/', name: 'home', component: Space, children: spaceRoutes },
+    { path: '/discord-redirect', name: 'discordRedirect', component: DiscordRedirect},
     { path: '/delegate/:key?/:to?', name: 'delegate', component: Delegate },
     {
       path: `/${domain}`,
@@ -130,6 +133,7 @@ if (domain) {
   // prefix space routes with space domain (/:key).
   routes.push(
     { path: '/', name: 'home', component: Home },
+    { path: '/discord-redirect', name: 'discordRedirect', component: DiscordRedirect},
     { path: '/setup', name: 'setup', component: Setup },
     { path: '/setup-dao', name: 'setup-dao', component: SetupSpace },
     {
@@ -158,7 +162,7 @@ routes.push({
 });
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedGuide) {
     if (savedGuide) {
