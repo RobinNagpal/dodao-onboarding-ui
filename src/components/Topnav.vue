@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
+import blockchains from '@/helpers/jsons/blockchains.json';
 import Icon from '@/components/Icon.vue';
-import ModalAccount from '@/components/Modal/Account.vue';
-import ModalBlockchains from '@/components/Modal/Blockchains.vue';
-import SpaceNavigation from '@/components/Space/Navigation.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import { WalletMultiButton } from '@/components/Wallet/Solana';
 import { useApp } from '@/composables/useApp';
@@ -92,12 +90,36 @@ onMounted(() => setTitle());
             </router-link>
           </div>
           <div v-if="!domain" class="top-nav-middle flex justify-center">
+            <img
+              v-if="isEthBlockchain"
+              :src="blockchains.ETH.logo"
+              class="mr-2 w-[32px] h-auto"
+              :alt="blockchains.ETH.name"
+            />
+            <img
+              v-if="isNearBlockchain"
+              :src="blockchains.NEAR.logo"
+              class="mr-2 w-[32px] h-auto"
+              :alt="blockchains.NEAR.name"
+            />
+            <img
+              v-if="isSolBlockchain"
+              :src="blockchains.SOL.logo"
+              class="mr-2 w-[32px] h-auto"
+              :alt="blockchains.SOL.name"
+            />
+            <img
+              v-if="isOneBlockchain"
+              :src="blockchains.ONE.logo"
+              class="mr-2 w-[32px] h-auto"
+              :alt="blockchains.ONE.name"
+            />
             <UiButton
               @click="modalBlockchainsOpen = true"
               :primary="false"
               class="flex items-center float-left"
             >
-              <span class="whitespace-nowrap">All DAOs</span>
+              <span class="whitespace-nowrap">Change</span>
             </UiButton>
           </div>
           <div v-else class="top-nav-middle flex justify-center">
