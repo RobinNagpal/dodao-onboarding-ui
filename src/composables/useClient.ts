@@ -94,6 +94,8 @@ export function useClient() {
         from: web3.value.account,
         guideType: payload.guideType,
         name: payload.name,
+        publishStatus: payload.publishStatus,
+        socialShareImage: payload.socialShareImage || '',
         space: space.id,
         steps: payload.steps.map((step: GuideStep) => ({
           uuid: step.uuid,
@@ -155,6 +157,8 @@ export function useClient() {
         excerpt: bundlePayload.excerpt,
         from: web3.value.account,
         name: bundlePayload.name,
+        publishStatus: payload.publishStatus,
+        socialShareImage: payload.socialShareImage || '',
         space: space.id,
         thumbnail: bundlePayload.thumbnail || ''
       };

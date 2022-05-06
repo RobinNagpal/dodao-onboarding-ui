@@ -48,7 +48,7 @@ function handleInput(e) {
       v-else
       :value="modelValue"
       @input="handleInput"
-      :placeholder="isFocus ? placeholder : modelValue || ''"
+      :placeholder="isFocus ? placeholder : ''"
       :type="number ? 'number' : 'text'"
       :disabled="disabled"
       class="input flex-auto w-full"

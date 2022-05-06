@@ -243,6 +243,7 @@ import unitprotocol from './unitprotocol.scss';
 import universe from './universe.scss';
 import velotoken from './velotoken.scss';
 import visor from './visor.scss';
+import vitadao from './vitadao.scss';
 import votewarp from './votewarp.scss';
 import wassies from './wassies.scss';
 import web3Api from './web3-api.scss';
@@ -510,6 +511,7 @@ export default {
   universe,
   velotoken,
   visor,
+  vitadao,
   votewarp,
   wassies,
   'web3-api': web3Api,

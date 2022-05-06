@@ -15,7 +15,11 @@ import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
 import { useRoute } from 'vue-router';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
+import {
+  GuidePublishStatus,
+  GuideType
+} from '@dodao/onboarding-schemas/models/GuideModel';
+import { useSpace } from '@/composables/useSpace';
 
 const props = defineProps({
   space: Object,
@@ -28,6 +32,7 @@ const { store } = useStore();
 const loading = ref(false);
 const { domain } = useDomain();
 const route = useRoute();
+const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const guideType = route.params.guideType || GuideType.Onboarding;
 
@@ -42,6 +47,8 @@ const { apolloQuery } = useApolloQuery();
 async function loadGuides(skip = 0) {
   loading.value = true;
 
+  const isAdminOrSuperAdmin = isAdmin.value || isSuperAdmin.value;
+
   const guidesObj = await apolloQuery(
     {
       query: GuidesQuery,
@@ -51,7 +58,10 @@ async function loadGuides(skip = 0) {
         space: props.spaceId,
         guideType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
-        author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
+        author_in: store.space.filterBy === 'core' ? spaceMembers.value : [],
+        publish_status_in: isAdminOrSuperAdmin
+          ? [GuidePublishStatus.Live, GuidePublishStatus.Draft]
+          : [GuidePublishStatus.Live]
       }
     },
     'guides'
@@ -64,13 +74,17 @@ async function loadGuides(skip = 0) {
 onMounted(() => {
   store.space.guides = [];
   setPageTitle('page.title.dao.guides', { dao: props.space.name });
-  loadGuides(store.space.guides.length);
+  loadGuides();
 });
 
 const { profiles, loadProfiles } = useProfiles();
 
 watch(store.space.guides, () => {
   loadProfiles(store.space.guides.map(guide => guide.author));
+});
+
+watch(isAdmin, () => {
+  loadGuides();
 });
 
 const guidesCount = computed(() => {

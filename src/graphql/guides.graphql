@@ -3,6 +3,7 @@ query GuidesQuery(
   $guideType: String
   $space_in: [String]
   $author_in: [String]
+  $publish_status_in: [String!]
 ) {
   guides(
     where: {
@@ -10,6 +11,7 @@ query GuidesQuery(
       guide_type: $guideType
       space_in: $space_in
       author_in: $author_in
+      publish_status_in: $publish_status_in
     }
   ) {
     id
@@ -27,6 +29,8 @@ query GuidesQuery(
       avatar
       symbol
     }
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
   }
@@ -80,6 +84,8 @@ query GuideQuery($uuid: String!) {
       order
       uuid
     }
+    publishStatus
+    socialShareImage
     thumbnail
     uuid
     version

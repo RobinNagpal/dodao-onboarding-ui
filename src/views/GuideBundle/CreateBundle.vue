@@ -19,7 +19,10 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
-import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import {
+  GuideBundlePublishStatus,
+  GuideBundleType
+} from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
@@ -83,7 +86,8 @@ function clickSubmit() {
 
 const errors = unref(guideBundleErrors);
 
-const uploadLoading = ref(false);
+const uploadThumbnailLoading = ref(false);
+const uploadSocialShareImageLoading = ref(false);
 
 const loadingGuides = ref(false);
 const guides = ref<GuideModel[]>([]);
@@ -110,8 +114,16 @@ function setThumbnailUrl(url) {
   if (typeof url === 'string') form.value.thumbnail = url;
 }
 
+function setSocialShareImageUrl(url) {
+  if (typeof url === 'string') form.value.socialShareImage = url;
+}
+
 function setUploadLoading(s) {
-  uploadLoading.value = s;
+  uploadThumbnailLoading.value = s;
+}
+
+function setUploadSocialShareImage(s) {
+  uploadSocialShareImageLoading.value = s;
 }
 
 function inputError(field: string) {
@@ -147,6 +159,21 @@ onMounted(async () => {
 function selectGuideOrBundleType(type: GuideBundleType) {
   guideBundle.value.bundleType = type;
 }
+
+function selectPublishStatus(status) {
+  form.value.publishStatus = status;
+}
+
+const guideBundleStatuses = [
+  {
+    text: 'Live',
+    action: GuideBundlePublishStatus.Live
+  },
+  {
+    text: 'Draft',
+    action: GuideBundlePublishStatus.Draft
+  }
+];
 </script>
 
 <template>
@@ -207,6 +234,24 @@ function selectGuideOrBundleType(type: GuideBundleType) {
               </template>
             </UiInput>
             <UiInput
+              v-model="form.socialShareImage"
+              placeholder="e.g. https://example.com/-bundle.png ideally 800px by 418px"
+              :error="inputError('socialShareImage')"
+            >
+              <template v-slot:label>
+                {{ $t('guideBundle.socialShareImage') }}
+              </template>
+              <template v-slot:info>
+                <Upload
+                  class="!ml-2"
+                  @input="setSocialShareImageUrl"
+                  @loading="setUploadSocialShareImage"
+                >
+                  {{ $t('upload') }}
+                </Upload>
+              </template>
+            </UiInput>
+            <UiInput
               v-model="form.discordWebhook"
               placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
               :error="inputError('discordWebhook')"
@@ -248,8 +293,26 @@ function selectGuideOrBundleType(type: GuideBundleType) {
                 >{{ $t(`guideBundle.create.excerpt`) }}*</template
               >
             </UiInput>
+            <div class="status-wrapper pt-3">
+              <UiDropdown
+                top="2.5rem"
+                right="2.5rem"
+                class="mr-2 w-[5rem] status-drop-down"
+                @select="selectPublishStatus($event)"
+                :items="guideBundleStatuses"
+              >
+                <div class="pr-1 select-none">
+                  {{ form.publishStatus === 'Live' ? 'Live' : 'Draft' }}
+                </div>
+              </UiDropdown>
+              <div
+                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
+              >
+                Publish Status*
+              </div>
+            </div>
             <UiButton
-              class="w-full h-96 mb-4 px-[16px] flex items-center"
+              class="w-full h-96 mb-4 mt-6 px-[16px] flex items-center"
               style="height: max-content"
               :class="{ '!border-red': guideBundleErrors.content }"
             >
@@ -335,3 +398,17 @@ function selectGuideOrBundleType(type: GuideBundleType) {
     />
   </teleport>
 </template>
+<style scoped lang="scss">
+.status-wrapper {
+  border-bottom: 1px solid var(--border-color);
+}
+.forceFloat {
+  transform: translatey(-44px);
+  @apply text-xs;
+  transition: transform 0.1s linear, font-size 0.1s linear;
+}
+
+.status-drop-down {
+  color: var(--link-color);
+}
+</style>
