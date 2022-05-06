@@ -1,30 +1,33 @@
 <script setup lang="ts">
-import FollowButton from '@/components/FollowButton.vue';
-import Icon from '@/components/Icon.vue';
-import NoResults from '@/components/NoResults.vue';
-import SearchWithFilters from '@/components/SearchWithFilters.vue';
-import UiButton from '@/components/Ui/Button.vue';
-import UiCounter from '@/components/Ui/Counter.vue';
-import UiDropdown from '@/components/Ui/Dropdown.vue';
-import UiThumbnail from '@/components/Ui/Thumbnail.vue';
-import { useApp } from '@/composables/useApp';
-import { useCategories } from '@/composables/useCategories';
-import { useScrollMonitor } from '@/composables/useScrollMonitor';
-import { useWeb3 } from '@/composables/useWeb3';
-import { n, setPageTitle, shorten } from '@/helpers/utils';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
-import { onMounted, ref } from 'vue';
+import {
+  AddDiscordCredentials_payload,
+  AddDiscordCredentialsVariables
+} from '@/graphql/generated/graphqlDocs';
+import { useMutation } from '@vue/apollo-composable';
+import { addDiscordCredentials } from '@/graphql/space/addDiscordCredentials.mutation.graphql';
+import { setPageTitle } from '@/helpers/utils';
+import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
 const route = useRoute();
 const router = useRouter();
+
+const { mutate } = useMutation<
+  AddDiscordCredentials_payload,
+  AddDiscordCredentialsVariables
+>(addDiscordCredentials);
+
 onMounted(() => {
   setPageTitle('page.title.home');
   const code = route.query?.code?.toString();
   const redirectUrl = route.query?.state?.toString();
+
   if (code && redirectUrl) {
+    mutate({
+      code,
+      spaceId: 'spaceId'
+    });
     //CALL API
-
-
     // THEN REDIRECT
     // router.push({
     //   path: redirectUrl,
@@ -36,7 +39,12 @@ onMounted(() => {
 
 <template>
   <div class="flex justify-center items-center mt-[300px]">
-    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
@@ -75,5 +83,4 @@ onMounted(() => {
     transform: rotate(360deg);
   }
 }
-
 </style>
