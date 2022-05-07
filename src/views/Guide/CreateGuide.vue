@@ -311,7 +311,10 @@ const guideStatuses = [
           class="!text-red flex text-center justify-center mb-2 align-baseline"
         >
           <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
-          <span class="ml-1">Fix errors to proceed</span>
+          <span class="ml-1"
+            >Fix errors to proceed. Make sure you have selected a correct answer
+            for each question</span
+          >
         </div>
         <UiButton
           @click="clickSubmit"

@@ -141,6 +141,7 @@ import maker from './maker.scss';
 import mantraDao from './mantra-dao.scss';
 import masknetwork from './masknetwork.scss';
 import mate from './mate.scss';
+import meandao from './meandao.scss';
 import mee from './mee.scss';
 import metacartel from './metacartel.scss';
 import metafactory from './metafactory.scss';
@@ -409,6 +410,7 @@ export default {
   mate,
   'mantra-dao': mantraDao,
   masknetwork,
+  meandao,
   mee,
   metacartel,
   metafactory,
