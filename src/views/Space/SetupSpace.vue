@@ -11,7 +11,6 @@ import TextareaArray from '@/components/TextareaArray.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
-import DiscordConnect from '@/components/DiscordConnect.vue';
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
@@ -275,11 +274,16 @@ onMounted(async () => {
         <div class="px-4 md:px-0 flex mb-4">
           <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="flex-1" />
           <PageLoading v-else />
-          <DiscordConnect v-slot="{url}">
-            <UiButton>
-              <a :href="url">Discord</a>
+          <router-link
+            :to="{
+              name: 'spaceDiscord',
+              params: { key: spaceId, spaceId: spaceId }
+            }"
+          >
+            <UiButton class="whitespace-nowrap" :primary="true">
+              Discord
             </UiButton>
-          </DiscordConnect>
+          </router-link>
         </div>
         <template v-if="loaded">
           <div v-if="space || isOwner">

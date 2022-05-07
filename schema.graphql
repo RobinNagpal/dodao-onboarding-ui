@@ -68,7 +68,11 @@ type Query {
 }
 
 type Mutation {
-  addDiscordCredentials(spaceId: String!, code: String!): SpaceDiscord!
+  addDiscordCredentials(
+    spaceId: String!
+    code: String!
+    redirectUri: String!
+  ): Space!
 }
 
 input SpaceWhere {
@@ -199,6 +203,7 @@ type Space {
   categories: [String]
   creator: String!
   domain: String
+  discordAccessToken: String
   filters: SpaceFilters
   github: String
   location: String
