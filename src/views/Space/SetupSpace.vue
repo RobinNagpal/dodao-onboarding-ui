@@ -271,9 +271,19 @@ onMounted(async () => {
             {{ space.name }}
           </router-link>
         </div>
-        <div class="px-4 md:px-0">
-          <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="mb-4" />
+        <div class="px-4 md:px-0 flex mb-4">
+          <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="flex-1" />
           <PageLoading v-else />
+          <router-link
+            :to="{
+              name: 'spaceDiscord',
+              params: { key: spaceId, spaceId: spaceId }
+            }"
+          >
+            <UiButton class="whitespace-nowrap" :primary="true">
+              Discord
+            </UiButton>
+          </router-link>
         </div>
         <template v-if="loaded">
           <div v-if="space || isOwner">

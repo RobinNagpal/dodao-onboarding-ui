@@ -1,0 +1,43 @@
+query ExtendedSpace($spaceId: String!) {
+  space(id: $spaceId) {
+    id
+    about
+    creator
+    mission
+    name
+    network
+    symbol
+    network
+    terms
+    skin
+    avatar
+    twitter
+    github
+    private
+    domain
+    members
+    admins
+    categories
+    plugins
+    voting {
+      delay
+      period
+      type
+      quorum
+      hideAbstain
+    }
+    strategies {
+      name
+      params
+    }
+    validation {
+      name
+      params
+    }
+    filters {
+      minScore
+      onlyMembers
+    }
+    discordAccessToken
+  }
+}

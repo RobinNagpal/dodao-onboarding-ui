@@ -55,7 +55,10 @@ function createNewBundle() {
 }
 
 function editSpaceSettings() {
-  router.push({ name: 'spaceEdit', params: { spaceId: props.space.id } });
+  router.push({
+    name: 'spaceEdit',
+    params: { spaceId: props.space.id, key: props.space.id }
+  });
 }
 
 function selectFromThreedotDropdown(e) {

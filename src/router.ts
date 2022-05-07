@@ -1,6 +1,7 @@
 import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
+import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
 import GuideCreate from '@/views/Guide/CreateGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
@@ -10,6 +11,7 @@ import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
 import Space from '@/views/Space.vue';
+import SpaceDiscord from '@/views/Space/Discord.vue';
 import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
@@ -19,7 +21,7 @@ import Strategy from '@/views/Strategy.vue';
 import Timeline from '@/views/Timeline.vue';
 import {
   createRouter,
-  createWebHashHistory,
+  createWebHistory,
   RouteLocation,
   RouteRecordRaw
 } from 'vue-router';
@@ -102,6 +104,18 @@ const spaceRoutes: RouteRecordRaw[] = [
     path: 'settings/:from?',
     name: 'spaceSettings',
     component: SpaceSettings
+  },
+  {
+    path: 'discord-settings',
+    name: 'spaceDiscord',
+    props: true,
+    component: SpaceDiscord
+  },
+  {
+    path: 'dao-settings',
+    name: 'spaceEdit',
+    props: true,
+    component: SetupSpace
   }
 ];
 
@@ -123,6 +137,11 @@ if (domain) {
       alias: `/${alias ?? domain}/:path(.*)`,
       name: 'space-redirect',
       redirect: (to: RouteLocation) => ({ path: `/${to.params.path}` })
+    },
+    {
+      path: '/generic-discord-redirect',
+      name: 'genericDiscordRedirect',
+      component: GenericDiscordRedirect
     }
   );
 } else {
@@ -130,14 +149,13 @@ if (domain) {
   // prefix space routes with space domain (/:key).
   routes.push(
     { path: '/', name: 'home', component: Home },
+    {
+      path: '/generic-discord-redirect',
+      name: 'genericDiscordRedirect',
+      component: GenericDiscordRedirect
+    },
     { path: '/setup', name: 'setup', component: Setup },
     { path: '/setup-dao', name: 'setup-dao', component: SetupSpace },
-    {
-      path: '/space/edit/:spaceId',
-      name: 'spaceEdit',
-      props: true,
-      component: SetupSpace
-    },
     { path: '/networks', name: 'networks', component: Explore },
     { path: '/strategies', name: 'strategies', component: Explore },
     { path: '/plugins', name: 'plugins', component: Explore },
@@ -158,7 +176,7 @@ routes.push({
 });
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedGuide) {
     if (savedGuide) {

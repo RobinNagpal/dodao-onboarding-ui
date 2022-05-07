@@ -67,6 +67,14 @@ type Query {
   ): [Subscription]
 }
 
+type Mutation {
+  addDiscordCredentials(
+    spaceId: String!
+    code: String!
+    redirectUri: String!
+  ): Space!
+}
+
 input SpaceWhere {
   id: String
   id_in: [String]
@@ -195,6 +203,7 @@ type Space {
   categories: [String]
   creator: String!
   domain: String
+  discordAccessToken: String
   filters: SpaceFilters
   github: String
   location: String
@@ -227,6 +236,11 @@ type SpaceVoting {
   quorum: Float
   blind: Boolean
   hideAbstain: Boolean
+}
+
+type SpaceDiscord {
+  space: Space!
+  accessToken: String!
 }
 
 type QuestionChoice {
@@ -334,6 +348,7 @@ type GuideSubmissionResult {
   wrongQuestions: [String!]!
   allQuestions: [String!]!
 }
+
 type GuideSubmission {
   id: String!
   ipfs: String!
