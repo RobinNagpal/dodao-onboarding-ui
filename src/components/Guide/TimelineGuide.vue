@@ -9,26 +9,27 @@ const props = defineProps({
 </script>
 
 <template>
-  <router-link
-    :to="{
-      name: 'guide',
-      params: {
-        key: guide.space.id,
-        uuid: guide.uuid,
-        guideType: guide.guideType
-      }
-    }"
-    class="h-full"
-  >
-    <div role="listitem" class="card feature-card h-full">
-      <div class="image-wrapper blog-card-thumbnail">
+  <div role="listitem" class="card feature-card h-full">
+    <router-link
+      :to="{
+        name: 'guide',
+        params: {
+          key: guide.space.id,
+          uuid: guide.uuid,
+          guideType: guide.guideType
+        }
+      }"
+      class="card blog-card w-inline-block h-full w-full"
+    >
+      <div class="image-wrapper blog-card-thumbnail w-full">
         <UiThumbnail
           :src="guide.thumbnail"
           :entityId="guide.uuid"
           :title="guide.name"
           size="350"
-          class="mb-1"
+          class="mb-1 w-full"
           big_tile
+          :image-class="'w-full'"
         />
       </div>
       <div class="p-4 text-center">
@@ -50,8 +51,8 @@ const props = defineProps({
           {{ $t('guide.category.' + category) }}
         </div>
       </div>
-    </div>
-  </router-link>
+    </router-link>
+  </div>
 </template>
 
 <style scoped lang="scss">
