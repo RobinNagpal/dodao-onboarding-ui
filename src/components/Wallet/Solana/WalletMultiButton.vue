@@ -86,67 +86,69 @@ export default defineComponent({
   >
     <template #default="modalScope">
       <slot v-bind="{ ...modalScope, ...scope }">
-        <button
-          v-if="!wallet"
-          class="swv-button swv-button-trigger"
-          @click="modalScope.openModal"
-        >
-          Select Wallet
-        </button>
-        <wallet-connect-button
-          v-else-if="!publicKeyBase58"
-        ></wallet-connect-button>
-        <div v-else class="swv-dropdown">
-          <slot name="dropdown-button" v-bind="{ ...modalScope, ...scope }">
-            <button
-              class="swv-button swv-button-trigger"
-              :style="{ pointerEvents: dropdownOpened ? 'none' : 'auto' }"
-              :aria-expanded="dropdownOpened"
-              :title="publicKeyBase58"
-              @click="openDropdown"
-            >
-              <wallet-icon :wallet="wallet"></wallet-icon>
-              <p v-text="publicKeyTrimmed"></p>
-            </button>
-          </slot>
-          <slot name="dropdown" v-bind="{ ...modalScope, ...scope }">
-            <ul
-              aria-label="dropdown-list"
-              class="swv-dropdown-list"
-              :class="{ 'swv-dropdown-list-active': dropdownOpened }"
-              ref="dropdownPanel"
-              role="menu"
-            >
-              <slot name="dropdown-list" v-bind="{ ...modalScope, ...scope }">
-                <li
-                  v-if="canCopy"
-                  @click="copyAddress"
-                  class="swv-dropdown-list-item"
-                  role="menuitem"
-                >
-                  {{ addressCopied ? 'Copied' : 'Copy address' }}
-                </li>
-                <li
-                  @click="
-                    modalScope.openModal();
-                    closeDropdown();
-                  "
-                  class="swv-dropdown-list-item"
-                  role="menuitem"
-                >
-                  Change wallet
-                </li>
-                <li
-                  @click="logoutWrapper"
-                  class="swv-dropdown-list-item"
-                  role="menuitem"
-                >
-                  Disconnect
-                </li>
-              </slot>
-            </ul>
-          </slot>
-        </div>
+        <span class="custom-theme">
+          <button
+            v-if="!wallet"
+            class="swv-button swv-button-trigger"
+            @click="modalScope.openModal"
+          >
+            Select Wallet
+          </button>
+          <wallet-connect-button
+            v-else-if="!publicKeyBase58"
+          ></wallet-connect-button>
+          <div v-else class="swv-dropdown">
+            <slot name="dropdown-button" v-bind="{ ...modalScope, ...scope }">
+              <button
+                class="swv-button swv-button-trigger"
+                :style="{ pointerEvents: dropdownOpened ? 'none' : 'auto' }"
+                :aria-expanded="dropdownOpened"
+                :title="publicKeyBase58"
+                @click="openDropdown"
+              >
+                <wallet-icon :wallet="wallet"></wallet-icon>
+                <p v-text="publicKeyTrimmed"></p>
+              </button>
+            </slot>
+            <slot name="dropdown" v-bind="{ ...modalScope, ...scope }">
+              <ul
+                aria-label="dropdown-list"
+                class="swv-dropdown-list"
+                :class="{ 'swv-dropdown-list-active': dropdownOpened }"
+                ref="dropdownPanel"
+                role="menu"
+              >
+                <slot name="dropdown-list" v-bind="{ ...modalScope, ...scope }">
+                  <li
+                    v-if="canCopy"
+                    @click="copyAddress"
+                    class="swv-dropdown-list-item"
+                    role="menuitem"
+                  >
+                    {{ addressCopied ? 'Copied' : 'Copy address' }}
+                  </li>
+                  <li
+                    @click="
+                      modalScope.openModal();
+                      closeDropdown();
+                    "
+                    class="swv-dropdown-list-item"
+                    role="menuitem"
+                  >
+                    Change wallet
+                  </li>
+                  <li
+                    @click="logoutWrapper"
+                    class="swv-dropdown-list-item"
+                    role="menuitem"
+                  >
+                    Disconnect
+                  </li>
+                </slot>
+              </ul>
+            </slot>
+          </div>
+        </span>
       </slot>
     </template>
 
@@ -159,3 +161,11 @@ export default defineComponent({
     </template>
   </wallet-modal-provider>
 </template>
+<style scoped lang="scss">
+.custom-theme {
+  --swv-button-background-color: var(--primary-color);
+  --swv-button-text-color: white;
+  --swv-button-outline-color: var(--primary-color);
+  --swv-button-hover-background-color: var(--primary-color);
+}
+</style>

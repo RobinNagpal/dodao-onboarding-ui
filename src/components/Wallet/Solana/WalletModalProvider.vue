@@ -114,7 +114,7 @@ export default defineComponent({
     <div
       aria-labelledby="swv-modal-title"
       aria-modal="true"
-      class="swv-modal"
+      class="swv-modal custom-theme"
       :class="dark ? 'swv-dark' : ''"
       role="dialog"
     >
@@ -178,3 +178,21 @@ export default defineComponent({
     </div>
   </teleport>
 </template>
+<style scoped lang="scss">
+.custom-theme {
+  --swv-button-background-color: var(--primary-color);
+  --swv-button-text-color: white;
+  --swv-button-outline-color: var(--primary-color);
+  --swv-button-hover-background-color: var(--primary-color);
+
+  --swv-overlay-background-color: rgb(120, 120, 120, 0.5);
+  --swv-modal-background-color: var(--bg-color);
+  --swv-modal-text-color: var(--text-color);
+  --swv-modal-close-button-background-color: var(--primary-color);
+  --swv-modal-close-button-text-color: var(--text-color);
+  --swv-modal-close-button-hover-text-color: var(--primary-color);
+  --swv-modal-button-text-color: var(--text-color);
+  --swv-modal-button-hover-background-color: var(--primary-color);
+  --swv-modal-button-outline-color: var(--swv-button-outline-color);
+}
+</style>
