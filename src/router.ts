@@ -106,7 +106,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: SpaceSettings
   },
   {
-    path: 'discord-connect',
+    path: 'discord-settings',
     name: 'spaceDiscord',
     props: true,
     component: SpaceDiscord

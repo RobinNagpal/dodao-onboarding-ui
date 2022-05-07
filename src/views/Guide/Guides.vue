@@ -27,8 +27,6 @@ const props = defineProps({
   spaceLoading: Boolean
 });
 
-console.log('props', props);
-
 const { store } = useStore();
 
 const loading = ref(false);

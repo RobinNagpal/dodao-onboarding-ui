@@ -17,8 +17,6 @@ const space = computed(() =>
 );
 
 onMounted(() => loadExtendedSpace(spaceId.value));
-
-console.log('space', space);
 </script>
 
 <template>
