@@ -29,10 +29,8 @@
   top: 0%;
   right: 0%;
   bottom: auto;
-  max-width: 1248px;
   margin-right: auto;
   margin-left: auto;
-  //margin-left: 50px;
 }
 
 .page-main {
@@ -239,13 +237,9 @@
 }
 
 .header-main-wrapper {
-  margin-top: 40px;
-  padding: 28px 26px;
-  border-radius: 14px;
-  background-color: var(--background-color);
-  box-shadow: var(--box-shadow);
-  border-color: var(--border-color);
-  border-width: var(--border-width, 1px);
+  border-bottom-color: var(--border-color);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 }
 
 .logo-grid {
@@ -522,15 +516,19 @@
   .home-hero-tab {
     padding: 20px 20px;
     border-radius: 16px;
-    box-shadow: 0 6px 54px 0 rgba(163, 166, 255, 0.13), 0 24px 94px 0 rgba(12, 12, 12, 0.04);
-    -webkit-transition: opacity 200ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
-    transition: opacity 200ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
+    box-shadow: 0 6px 54px 0 rgba(163, 166, 255, 0.13),
+      0 24px 94px 0 rgba(12, 12, 12, 0.04);
+    -webkit-transition: opacity 200ms ease, opacity 300ms ease,
+      -webkit-transform 300ms ease;
+    transition: opacity 200ms ease, opacity 300ms ease,
+      -webkit-transform 300ms ease;
     transition: opacity 200ms ease, transform 300ms ease, opacity 300ms ease;
-    transition: opacity 200ms ease, transform 300ms ease, opacity 300ms ease, -webkit-transform 300ms ease;
+    transition: opacity 200ms ease, transform 300ms ease, opacity 300ms ease,
+      -webkit-transform 300ms ease;
     text-decoration: none;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
-    &:hover{
+    &:hover {
       opacity: 1 !important;
     }
   }
@@ -569,8 +567,6 @@
   }
 }
 
-
-
 .card {
   border-radius: 20px;
   background-color: var(--bg-color);
@@ -579,7 +575,6 @@
   border-width: var(--border-width, 1px);
   transition: transform 300ms ease;
   transition: transform 300ms ease, -webkit-transform 300ms ease;
-
 
   &.feature-card {
     overflow: hidden;
@@ -699,10 +694,6 @@
     -ms-flex-align: stretch;
     align-items: stretch;
   }
-  .header {
-    top: 0px;
-    margin-left: 50px;
-  }
   .header-navigation {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -740,10 +731,6 @@
     font-size: 181px;
   }
 
-  .header-main-wrapper {
-    margin-top: 24px;
-    padding: 24px 0px;
-  }
   .page-main-wrapper {
     margin-top: 24px;
     padding: 24px 0px;
@@ -791,7 +778,6 @@
       }
     }
   }
-
 }
 
 @media screen and (max-width: 767px) {
@@ -881,24 +867,12 @@
     grid-template-columns: 1fr;
   }
 
-  .header-main-wrapper {
-    flex-wrap:wrap;
+  .header-logo-wrapper {
+    padding-left: 8px;
+  }
 
-
-    .top-nav-middle {
-      padding-top: 10px;
-      width: 100%;
-      order: 3;
-    }
-
-    .top-nav-left{
-      width: 50%;
-    }
-    .top-nav-right {
-      width:50%;
-      order:2;
-
-    }
+  .top-nav-right {
+    padding-right: 8px;
   }
 
   .hamburger-menu-icon {
@@ -958,11 +932,6 @@
     flex-direction: column;
   }
   .header-main-wrapper {
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-left: 0px;
-    border-radius: 0px;
-
     width: 100%;
 
     .topnav-domain-navigation-three-dots {
@@ -999,7 +968,6 @@
     padding: 0;
   }
   .card {
-
     .p-4 {
       padding: 8px;
     }
@@ -1008,7 +976,7 @@
       padding: 8px;
     }
 
-    &.feature-card{
+    &.feature-card {
       margin: 0 24px 0 24px;
     }
     &.integration-main-card {
@@ -1023,11 +991,10 @@
       }
     }
   }
-  .space-details{
+  .space-details {
     display: none;
-
   }
-  .integration-content{
+  .integration-content {
     .integration-top-content {
       justify-content: center;
     }

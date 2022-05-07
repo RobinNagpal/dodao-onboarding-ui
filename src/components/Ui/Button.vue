@@ -7,14 +7,15 @@ defineProps({
   variant: {
     type: String,
     default: 'outlined',
-    validator: (prop) => ['outlined', 'contained', 'text'].includes(prop)
+    validator: prop => ['outlined', 'contained', 'text'].includes(prop)
   },
   loading: Boolean,
   type: String,
   disabled: {
     type: Boolean,
     default: false
-  }
+  },
+  size: String
 });
 </script>
 
@@ -23,6 +24,7 @@ defineProps({
     :type="type || 'button'"
     :class="[
       'inline-flex items-center justify-center button px-[24px]',
+      { 'px-[16px] sm-button': size === 'sm' },
       { 'button--primary': primary },
       { 'button--outlined': variant === 'outlined' },
       { 'button--contained': variant === 'contained' },
@@ -45,13 +47,20 @@ defineProps({
   height: 46px;
   font-size: 18px;
 
+  &.sm-button {
+    border-radius: 0.2rem;
+    font-size: 14px;
+    line-height: 26px;
+    height: 28px;
+  }
+
   &.button--outlined {
     @apply border-skin-border;
     &.button--primary {
       @apply text-primary border border-primary;
     }
   }
-  
+
   &.button--contained {
     &.button--primary {
       color: white;
