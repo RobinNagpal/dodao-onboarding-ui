@@ -271,7 +271,7 @@ onMounted(async () => {
             {{ space.name }}
           </router-link>
         </div>
-        <div class="px-4 md:px-0 flex mb-4">
+        <div class="px-4 md:px-0 flex mb-4" v-if="spaceId">
           <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="flex-1" />
           <PageLoading v-else />
           <router-link
