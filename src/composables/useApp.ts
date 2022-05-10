@@ -2,7 +2,7 @@ import verifiedSpacesCategories from '@/../snapshot-spaces/spaces/categories.jso
 import verified from '@/../snapshot-spaces/spaces/verified.json';
 import { useFollowSpace } from '@/composables/useFollowSpace';
 import { useSpaceSkin } from '@/composables/useSpaceSkin';
-import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
+import { useWeb3 } from '@/composables/useWeb3';
 import { getBlockchain, getNetworks } from '@/helpers/network';
 import { getInstance } from '@/utils/auth/auth';
 import orderBy from 'lodash/orderBy';
@@ -23,7 +23,7 @@ const appSkin: any = ref('default');
 
 export function useApp() {
   const route = useRoute();
-  const { loginWrapper } = useWeb3Wrapper();
+  const { restoreSession } = useWeb3();
   const { followingSpaces } = useFollowSpace();
   const { spaceIdForDomain } = useSpaceSkin();
 
@@ -40,7 +40,7 @@ export function useApp() {
 
     if (connector) {
       try {
-        loginWrapper(connector);
+        await restoreSession();
       } catch (e) {
         console.error(e);
       }

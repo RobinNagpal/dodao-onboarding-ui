@@ -2,6 +2,7 @@ import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
 import { AuthConnector, isSolanaConnector } from '@/utils/auth/authConnector';
+import { getValidDecodedToken } from '@/utils/auth/jwtUtil';
 import useNearWallet from '@/utils/near/useNearWallet';
 import { useSolanaWallet } from '@/utils/solana';
 import { Web3Provider } from '@ethersproject/providers';
@@ -43,6 +44,18 @@ const state = reactive<Web3Account>({
 const nearWallet = useNearWallet();
 
 export function useWeb3() {
+  async function restoreSession() {
+    const decodedToken = getValidDecodedToken();
+    console.log('restoreSession - decodedToken', decodedToken);
+    if (decodedToken) {
+      const acc = decodedToken.accountId;
+      const profiles = await getProfiles([acc]);
+      state.account = acc;
+      state.profile = profiles[acc];
+    }
+
+    console.log('restoreSession - state', state);
+  }
   async function login(connector: AuthConnector = AuthConnector.injected) {
     state.isTrezor = connector === AuthConnector.trezor;
     if (state.blockchain === 'NEAR') {
@@ -167,6 +180,7 @@ export function useWeb3() {
     login,
     logout,
     handleChainChanged,
+    restoreSession,
     web3: computed(() => state),
     isEthBlockchain: computed(() => state.blockchain === 'ETH'),
     isSolBlockchain: computed(() => state.blockchain === 'SOL'),
