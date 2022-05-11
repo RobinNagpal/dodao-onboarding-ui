@@ -39,5 +39,6 @@ query ExtendedSpace($spaceId: String!) {
       onlyMembers
     }
     discordAccessToken
+    discordGuidId
   }
 }

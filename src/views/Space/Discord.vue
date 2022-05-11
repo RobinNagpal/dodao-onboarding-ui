@@ -4,17 +4,27 @@ import UiButton from '@/components/Ui/Button.vue';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import {
   AddDiscordCredentials_payload,
-  AddDiscordCredentialsVariables
+  AddDiscordCredentialsVariables,
+  SetDiscordGuildId_payload,
+  SetDiscordGuildIdVariables
 } from '@/graphql/generated/graphqlDocs';
-import { addDiscordCredentials } from '@/graphql/space/addDiscordCredentials.mutation.graphql';
+import {
+  AddDiscordCredentials,
+  SetDiscordGuildId
+} from '@/graphql/space/spaceDiscord.mutation.graphql';
+import { getGuild, getGuilds } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
+import {
+  APIGuild,
+  APIPartialGuild
+} from 'discord-api-types/payloads/v10/guild';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 
-const { loadExtendedSpace, extentedSpaces } = useExtendedSpaces();
+const { loadExtendedSpace } = useExtendedSpaces();
 const discordClientId =
   import.meta.env.VITE_DISCORD_CLIENT_ID?.toString() || '';
 
@@ -39,38 +49,48 @@ const url = computed(() => {
   return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
 });
 
-const { mutate } = useMutation<
+const { mutate: addDiscordCredentialsMutation } = useMutation<
   AddDiscordCredentials_payload,
   AddDiscordCredentialsVariables
->(addDiscordCredentials);
+>(AddDiscordCredentials);
 
-const discordServerOpts = ref([]);
-const selectedServer = ref(null);
+const { mutate: setDiscordGuildIdMutation } = useMutation<
+  SetDiscordGuildId_payload,
+  SetDiscordGuildIdVariables
+>(SetDiscordGuildId);
 
-function handleSelectServer(item) {
+const discordServerOpts = ref<APIPartialGuild[]>([]);
+const selectedServer = ref<APIPartialGuild | null>(null);
+
+async function handleSelectServer(item: APIGuild) {
   selectedServer.value = item;
+  await setDiscordGuildIdMutation({
+    guildId: item.id,
+    spaceId: props.space.id
+  });
+  await loadExtendedSpace(props.space.id);
 }
 
 onMounted(async () => {
   setPageTitle('page.title.home');
   if (props.discordCode) {
-    await mutate({
+    await addDiscordCredentialsMutation({
       code: props.discordCode,
       redirectUri: `${window.location.origin}/generic-discord-redirect`,
-      spaceId: props.spaceId
+      spaceId: props.space.id
     });
-    await loadExtendedSpace(props.spaceId!);
+    await loadExtendedSpace(props.space.id);
   }
 
-  if (props.space?.discordAccessToken) {
-    const discordResponse: any = await fetch(
-      'https://discord.com/api/users/@me/guilds', {
-        headers: {
-          Authorization: `Bearer ${props.space?.discordAccessToken}`
-        }
-      }
-    ).then(res => res.json());
-    discordServerOpts.value = discordResponse;
+  const accessToken = props.space.discordAccessToken;
+  if (accessToken) {
+    discordServerOpts.value = await getGuilds(accessToken);
+    if (props.space.discordGuidId) {
+      selectedServer.value = await getGuild(
+        accessToken,
+        props.space.discordGuidId
+      );
+    }
   }
 });
 </script>
@@ -84,7 +104,7 @@ onMounted(async () => {
           <div v-if="space.discordAccessToken">
             {{ 'Discord Access Token: ' + space.discordAccessToken }}
           </div>
-          <UiButton v-else>
+          <UiButton>
             <a :href="url">Connect Discord</a>
           </UiButton>
           <div>
@@ -98,7 +118,7 @@ onMounted(async () => {
               <UiButton class="discord-server-btn" v-if="selectedServer">
                 <img
                   class="h-[24px] mr-2"
-                  :src="`https://cdn.discordapp.com/icons/${selectedServer.id}/${selectedServer.icon}.png`" 
+                  :src="`https://cdn.discordapp.com/icons/${selectedServer.id}/${selectedServer.icon}.png`"
                 />
                 <span>{{ selectedServer.name }}</span>
               </UiButton>
@@ -110,7 +130,7 @@ onMounted(async () => {
                   <div class="flex mr-4 items-center">
                     <img
                       class="h-[24px] mr-2"
-                      :src="`https://cdn.discordapp.com/icons/${item.id}/${item.icon}.png`" 
+                      :src="`https://cdn.discordapp.com/icons/${item.id}/${item.icon}.png`"
                     />
                     <span>{{ item.name }}</span>
                   </div>

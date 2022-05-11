@@ -73,6 +73,8 @@ type Mutation {
     code: String!
     redirectUri: String!
   ): Space!
+
+  setDiscordGuildId(spaceId: String!, guildId: String!): Space!
 }
 
 input SpaceWhere {
@@ -204,6 +206,7 @@ type Space {
   creator: String!
   domain: String
   discordAccessToken: String
+  discordGuidId: String
   filters: SpaceFilters
   github: String
   location: String
@@ -236,11 +239,6 @@ type SpaceVoting {
   quorum: Float
   blind: Boolean
   hideAbstain: Boolean
-}
-
-type SpaceDiscord {
-  space: Space!
-  accessToken: String!
 }
 
 type QuestionChoice {
