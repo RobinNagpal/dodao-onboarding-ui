@@ -12,6 +12,7 @@ import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
 
 const { loadExtendedSpace, extentedSpaces } = useExtendedSpaces();
 const discordClientId =
@@ -43,6 +44,13 @@ const { mutate } = useMutation<
   AddDiscordCredentialsVariables
 >(addDiscordCredentials);
 
+const discordServerOpts = ref([]);
+const selectedServer = ref(null);
+
+function handleSelectServer(item) {
+  selectedServer.value = item;
+}
+
 onMounted(async () => {
   setPageTitle('page.title.home');
   if (props.discordCode) {
@@ -52,6 +60,17 @@ onMounted(async () => {
       spaceId: props.spaceId
     });
     await loadExtendedSpace(props.spaceId!);
+  }
+
+  if (props.space?.discordAccessToken) {
+    const discordResponse: any = await fetch(
+      'https://discord.com/api/users/@me/guilds', {
+        headers: {
+          Authorization: `Bearer ${props.space?.discordAccessToken}`
+        }
+      }
+    ).then(res => res.json());
+    discordServerOpts.value = discordResponse;
   }
 });
 </script>
@@ -63,13 +82,50 @@ onMounted(async () => {
       <div class="py-24 flex justify-center align-center">
         <div class="px-4 md:px-0 mb-4">
           <div v-if="space.discordAccessToken">
-            {{ 'Discord Access Code :' + space.discordAccessToken }}
+            {{ 'Discord Access Token: ' + space.discordAccessToken }}
           </div>
-          <UiButton>
+          <UiButton v-else>
             <a :href="url">Connect Discord</a>
           </UiButton>
+          <div>
+            <UiDropdown
+              top="2.5rem"
+              right="1.5rem"
+              class="inline-block mt-4"
+              :items="discordServerOpts"
+              @select="handleSelectServer($event)"
+            >
+              <UiButton class="discord-server-btn" v-if="selectedServer">
+                <img
+                  class="h-[24px] mr-2"
+                  :src="`https://cdn.discordapp.com/icons/${selectedServer.id}/${selectedServer.icon}.png`" 
+                />
+                <span>{{ selectedServer.name }}</span>
+              </UiButton>
+              <UiButton class="discord-server-btn" v-else>
+                <span>Choose Discord Server</span>
+              </UiButton>
+              <template v-slot:item="{ item }">
+                <div class="">
+                  <div class="flex mr-4 items-center">
+                    <img
+                      class="h-[24px] mr-2"
+                      :src="`https://cdn.discordapp.com/icons/${item.id}/${item.icon}.png`" 
+                    />
+                    <span>{{ item.name }}</span>
+                  </div>
+                </div>
+              </template>
+            </UiDropdown>
+          </div>
         </div>
       </div>
     </template>
   </LayoutSingle>
 </template>
+
+<style scoped>
+.discord-server-btn {
+  min-width: 200px;
+}
+</style>

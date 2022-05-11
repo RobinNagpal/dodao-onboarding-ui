@@ -48,7 +48,7 @@ onBeforeUnmount(() => window.removeEventListener('click', close));
         <li
           v-for="item in items"
           :key="item"
-          @click="handleClick(item.action)"
+          @click="handleClick(item.action || item)"
           :class="{ selected: item.selected }"
         >
           <slot name="item" :item="item">
