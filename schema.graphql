@@ -5,6 +5,8 @@ scalar Any
 type Query {
   space(id: String): Space
 
+  spaceDiscordGuild(spaceId: String!): Any
+
   spaces(
     first: Int
     skip: Int
@@ -206,7 +208,7 @@ type Space {
   creator: String!
   domain: String
   discordAccessToken: String
-  discordGuidId: String
+  discordGuildId: String
   filters: SpaceFilters
   github: String
   location: String

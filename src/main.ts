@@ -13,7 +13,10 @@ import {
   PhantomWalletAdapter,
   SolflareWalletAdapter
 } from '@solana/wallet-adapter-wallets';
-import { DefaultApolloClient } from '@vue/apollo-composable';
+import {
+  DefaultApolloClient,
+  provideApolloClient
+} from '@vue/apollo-composable';
 import { Buffer } from 'buffer';
 // You can either import the default styles or create your own.
 import 'solana-wallets-vue/styles.css';
@@ -34,6 +37,7 @@ const walletOptions = {
 const app = createApp({
   setup() {
     provide(DefaultApolloClient, apolloClient);
+    provideApolloClient(apolloClient);
   },
   render: () => h(App)
 })

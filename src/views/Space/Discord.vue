@@ -6,19 +6,25 @@ import {
   AddDiscordCredentials_payload,
   AddDiscordCredentialsVariables,
   SetDiscordGuildId_payload,
-  SetDiscordGuildIdVariables
+  SetDiscordGuildIdVariables,
+  SpaceDiscordGuild as SpaceDiscordGuildResult,
+  SpaceDiscordGuildVariables
 } from '@/graphql/generated/graphqlDocs';
 import {
   AddDiscordCredentials,
   SetDiscordGuildId
 } from '@/graphql/space/spaceDiscord.mutation.graphql';
+import { SpaceDiscordGuild } from '@/graphql/space/extendedSpace.graphql';
 import { getGuild, getGuilds } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
+import { OperationVariables } from '@apollo/client';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
+import { UseQueryReturn } from '@vue/apollo-composable/dist/useQuery';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
+import { useQuery } from '@vue/apollo-composable';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const discordClientId =
@@ -35,9 +41,11 @@ const route = useRoute();
 
 const url = computed(() => {
   const params = new URLSearchParams({
-    scope: 'identify guilds guilds.join guilds.members.read email connections',
+    scope:
+      'identify bot guilds guilds.join guilds.members.read email connections',
     client_id: discordClientId,
     response_type: 'code',
+    permissions: '2048',
     state: `spaceId=${props.spaceId}&target=space`,
     redirect_uri: `${window.location.origin}/generic-discord-redirect`
   });
@@ -56,10 +64,10 @@ const { mutate: setDiscordGuildIdMutation } = useMutation<
 >(SetDiscordGuildId);
 
 const discordServerOpts = ref<any[]>([]);
-const selectedServer = ref<any>(null);
+const selectedServerInfo = ref<any>(null);
 
 async function handleSelectServer(item) {
-  selectedServer.value = item;
+  selectedServerInfo.value = item;
   await setDiscordGuildIdMutation({
     guildId: item.id,
     spaceId: props.space.id
@@ -81,11 +89,18 @@ onMounted(async () => {
   const accessToken = props.space.discordAccessToken;
   if (accessToken) {
     discordServerOpts.value = await getGuilds(accessToken);
-    if (props.space.discordGuidId) {
-      selectedServer.value = await getGuild(
-        accessToken,
-        props.space.discordGuidId
-      );
+    if (props.space.discordGuildId) {
+      const queryReturn: UseQueryReturn<
+        SpaceDiscordGuildResult,
+        OperationVariables
+      > = await useQuery<SpaceDiscordGuildResult>(SpaceDiscordGuild, {
+        spaceId: props.space.id
+      });
+      const { onResult } = queryReturn;
+      onResult(result => {
+        console.log('queryReturn', result.data.payload);
+        selectedServerInfo.value = result.data.payload;
+      });
     }
   }
 });
@@ -111,12 +126,12 @@ onMounted(async () => {
               :items="discordServerOpts"
               @select="handleSelectServer($event)"
             >
-              <UiButton class="discord-server-btn" v-if="selectedServer">
+              <UiButton class="discord-server-btn" v-if="selectedServerInfo">
                 <img
                   class="h-[24px] mr-2"
-                  :src="`https://cdn.discordapp.com/icons/${selectedServer.id}/${selectedServer.icon}.png`"
+                  :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
                 />
-                <span>{{ selectedServer.name }}</span>
+                <span>{{ selectedServerInfo.name }}</span>
               </UiButton>
               <UiButton class="discord-server-btn" v-else>
                 <span>Choose Discord Server</span>
