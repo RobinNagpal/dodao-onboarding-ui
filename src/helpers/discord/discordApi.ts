@@ -25,6 +25,6 @@ export async function getGuild(
   accessToken: string,
   guildId: string
 ): Promise<APIGuild> {
-  const apiUrl = `https://discord.com/api/guilds/${guildId}/preview`;
+  const apiUrl = `https://discord.com/api/guilds/${guildId}`;
   return (await getDiscordApiResponse(apiUrl, accessToken)) as APIGuild;
 }
