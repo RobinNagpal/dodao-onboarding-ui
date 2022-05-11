@@ -1,30 +1,27 @@
 <script setup lang="ts">
 import LayoutSingle from '@/components/Layout/Single.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import {
   AddDiscordCredentials_payload,
   AddDiscordCredentialsVariables,
   SetDiscordGuildId_payload,
   SetDiscordGuildIdVariables,
-  SpaceDiscordGuild as SpaceDiscordGuildResult,
-  SpaceDiscordGuildVariables
+  SpaceDiscordGuild as SpaceDiscordGuildResult
 } from '@/graphql/generated/graphqlDocs';
+import { SpaceDiscordGuild } from '@/graphql/space/extendedSpace.graphql';
 import {
   AddDiscordCredentials,
   SetDiscordGuildId
 } from '@/graphql/space/spaceDiscord.mutation.graphql';
-import { SpaceDiscordGuild } from '@/graphql/space/extendedSpace.graphql';
-import { getGuild, getGuilds } from '@/helpers/discord/discordApi';
+import { getGuilds } from '@/helpers/discord/discordApi';
+import { genPermissions } from '@/helpers/discord/discordPermissions';
 import { setPageTitle } from '@/helpers/utils';
-import { OperationVariables } from '@apollo/client';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { useMutation } from '@vue/apollo-composable';
-import { UseQueryReturn } from '@vue/apollo-composable/dist/useQuery';
+import { useMutation, useQuery } from '@vue/apollo-composable';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import UiDropdown from '@/components/Ui/Dropdown.vue';
-import { useQuery } from '@vue/apollo-composable';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const discordClientId =
@@ -88,15 +85,18 @@ onMounted(async () => {
 
   const accessToken = props.space.discordAccessToken;
   if (accessToken) {
-    discordServerOpts.value = await getGuilds(accessToken);
+    const allGuilds = await getGuilds(accessToken);
+
+    discordServerOpts.value = allGuilds.filter(guild => {
+      return genPermissions(guild.permissions_new).includes('MANAGE_GUILD');
+    });
     if (props.space.discordGuildId) {
-      const queryReturn: UseQueryReturn<
-        SpaceDiscordGuildResult,
-        OperationVariables
-      > = await useQuery<SpaceDiscordGuildResult>(SpaceDiscordGuild, {
-        spaceId: props.space.id
-      });
-      const { onResult } = queryReturn;
+      const { onResult } = await useQuery<SpaceDiscordGuildResult>(
+        SpaceDiscordGuild,
+        {
+          spaceId: props.space.id
+        }
+      );
       onResult(result => {
         console.log('queryReturn', result.data.payload);
         selectedServerInfo.value = result.data.payload;
