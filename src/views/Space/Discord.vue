@@ -16,10 +16,6 @@ import { getGuild, getGuilds } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
-import {
-  APIGuild,
-  APIPartialGuild
-} from 'discord-api-types/payloads/v10/guild';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
@@ -59,10 +55,10 @@ const { mutate: setDiscordGuildIdMutation } = useMutation<
   SetDiscordGuildIdVariables
 >(SetDiscordGuildId);
 
-const discordServerOpts = ref<APIPartialGuild[]>([]);
-const selectedServer = ref<APIPartialGuild | null>(null);
+const discordServerOpts = ref<any[]>([]);
+const selectedServer = ref<any>(null);
 
-async function handleSelectServer(item: APIGuild) {
+async function handleSelectServer(item) {
   selectedServer.value = item;
   await setDiscordGuildIdMutation({
     guildId: item.id,
