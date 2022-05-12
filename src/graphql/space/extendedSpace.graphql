@@ -38,6 +38,10 @@ query ExtendedSpace($spaceId: String!) {
       minScore
       onlyMembers
     }
-    discordAccessToken
+    discordGuildId
   }
+}
+
+query SpaceDiscordGuild($spaceId: String!) {
+  payload: spaceDiscordGuild(spaceId: $spaceId)
 }

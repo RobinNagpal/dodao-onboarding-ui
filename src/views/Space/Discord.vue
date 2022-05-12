@@ -6,14 +6,16 @@ import {
   AddDiscordCredentials_payload,
   AddDiscordCredentialsVariables
 } from '@/graphql/generated/graphqlDocs';
-import { addDiscordCredentials } from '@/graphql/space/addDiscordCredentials.mutation.graphql';
+
+import { AddDiscordCredentials } from '@/graphql/space/spaceDiscord.mutation.graphql';
+import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-const { loadExtendedSpace, extentedSpaces } = useExtendedSpaces();
+const { loadExtendedSpace } = useExtendedSpaces();
 const discordClientId =
   import.meta.env.VITE_DISCORD_CLIENT_ID?.toString() || '';
 
@@ -28,9 +30,11 @@ const route = useRoute();
 
 const url = computed(() => {
   const params = new URLSearchParams({
-    scope: 'identify guilds guilds.join guilds.members.read email connections',
+    scope:
+      'identify bot guilds guilds.join guilds.members.read email connections',
     client_id: discordClientId,
     response_type: 'code',
+    permissions: '2048',
     state: `spaceId=${props.spaceId}&target=space`,
     redirect_uri: `${window.location.origin}/generic-discord-redirect`
   });
@@ -38,21 +42,24 @@ const url = computed(() => {
   return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
 });
 
-const { mutate } = useMutation<
+const { mutate: addDiscordCredentialsMutation } = useMutation<
   AddDiscordCredentials_payload,
   AddDiscordCredentialsVariables
->(addDiscordCredentials);
+>(AddDiscordCredentials);
+
+const selectedServerInfo = ref<any>(null);
 
 onMounted(async () => {
   setPageTitle('page.title.home');
   if (props.discordCode) {
-    await mutate({
+    await addDiscordCredentialsMutation({
       code: props.discordCode,
       redirectUri: `${window.location.origin}/generic-discord-redirect`,
-      spaceId: props.spaceId
+      spaceId: props.space.id
     });
-    await loadExtendedSpace(props.spaceId!);
   }
+  await loadExtendedSpace(props.space.id);
+  selectedServerInfo.value = await getSelectedGuild(props.space.id);
 });
 </script>
 
@@ -60,16 +67,31 @@ onMounted(async () => {
   <LayoutSingle v-bind="$attrs">
     <template #content>
       <h1 v-text="$t('setupDAO.header')" class="flex-1" />
-      <div class="py-24 flex justify-center align-center">
-        <div class="px-4 md:px-0 mb-4">
+      <div class="py-24 flex justify-center align-center flex-col items-center">
+        <div class="my-6">
           <div v-if="space.discordAccessToken">
-            {{ 'Discord Access Code :' + space.discordAccessToken }}
+            {{ 'Discord Access Token: ' + space.discordAccessToken }}
           </div>
           <UiButton>
             <a :href="url">Connect Discord</a>
+          </UiButton>
+        </div>
+        <div class="my-6">
+          <UiButton class="discord-server-btn" v-if="selectedServerInfo">
+            <img
+              class="h-[24px] mr-2"
+              :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
+            />
+            <span>{{ selectedServerInfo.name }}</span>
           </UiButton>
         </div>
       </div>
     </template>
   </LayoutSingle>
 </template>
+
+<style scoped>
+.discord-server-btn {
+  min-width: 200px;
+}
+</style>
