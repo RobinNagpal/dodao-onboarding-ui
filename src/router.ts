@@ -3,6 +3,7 @@ import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
 import GuideCreate from '@/views/Guide/CreateGuide.vue';
+import AdvancedSetting from '@/views/Guide/AdvancedSetting.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
 import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
@@ -68,6 +69,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     path: ':guideType/guide/create',
     name: 'guideCreate',
     component: GuideCreate
+  },
+  {
+    path: ':guideType/guide/advanced-settings',
+    name: 'advancedSetting',
+    component: AdvancedSetting
   },
   {
     path: ':bundleType/guide-bundle/create',

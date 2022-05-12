@@ -29,6 +29,7 @@ defineEmits(['submit']);
       >
         <Icon :name="icon" size="22" />
       </a>
+      <slot name="actions"></slot>
     </h4>
     <div v-if="loading" class="block px-4 py-4">
       <div
