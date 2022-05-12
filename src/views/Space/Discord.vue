@@ -69,9 +69,6 @@ onMounted(async () => {
       <h1 v-text="$t('setupDAO.header')" class="flex-1" />
       <div class="py-24 flex justify-center align-center flex-col items-center">
         <div class="my-6">
-          <div v-if="space.discordAccessToken">
-            {{ 'Discord Access Token: ' + space.discordAccessToken }}
-          </div>
           <UiButton>
             <a :href="url">Connect Discord</a>
           </UiButton>
