@@ -38,7 +38,6 @@ query ExtendedSpace($spaceId: String!) {
       minScore
       onlyMembers
     }
-    discordAccessToken
     discordGuildId
   }
 }

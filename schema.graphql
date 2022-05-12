@@ -75,8 +75,6 @@ type Mutation {
     code: String!
     redirectUri: String!
   ): Space!
-
-  setDiscordGuildId(spaceId: String!, guildId: String!): Space!
 }
 
 input SpaceWhere {
@@ -207,7 +205,6 @@ type Space {
   categories: [String]
   creator: String!
   domain: String
-  discordAccessToken: String
   discordGuildId: String
   filters: SpaceFilters
   github: String

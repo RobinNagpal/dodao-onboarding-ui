@@ -6,7 +6,6 @@ fragment SpaceFragment on Space {
   categories
   creator
   domain
-  discordAccessToken
   github
   location
   members
