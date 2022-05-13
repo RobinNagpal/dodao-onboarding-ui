@@ -50,7 +50,7 @@ const BasicOrAdvanced = computed(() => {
 </script>
 
 <template>
-  <BasicOrAdvanced v-bind="{ ...$props, ...$attrs }"></BasicOrAdvanced>
+  <BasicOrAdvanced v-bind="{ ...$props }"></BasicOrAdvanced>
 </template>
 <style scoped lang="scss">
 .gear-icon {
