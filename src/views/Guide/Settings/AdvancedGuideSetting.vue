@@ -1,30 +1,38 @@
 <script setup lang="ts">
 import LayoutSingle from '@/components/Layout/Single.vue';
-import UiButton from '@/components/Ui/Button.vue';
-
-import { AddDiscordCredentials } from '@/graphql/space/spaceDiscord.mutation.graphql';
-import { getSelectedGuild, setSelectedRoles } from '@/helpers/discord/discordApi';
+import SettingNavigation from '@/views/Guide/Settings/SettingNavigation.vue';
+import {
+  getSelectedGuild,
+  setSelectedRoles
+} from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { onMounted, PropType, ref } from 'vue';
+import { onMounted, PropType, ref, computed } from 'vue';
 
 const props = defineProps({
   space: { type: Object as PropType<SpaceModel>, required: true },
   spaceId: String,
   spaceLoading: Boolean,
-  discordCode: String
+  discordCode: String,
+  discordRoleIds: {
+    type: Array as PropType<string[]>,
+    default: () => []
+  }
 });
 
 const selectedServerInfo = ref<any>(null);
 const currentSelectedRoles = ref<string[]>(
   // will do
-  // [...selectedServerInfo.value.selectedRoles]
-  []
+  [...props.discordRoleIds]
 );
 
 onMounted(async () => {
-  setPageTitle('page.title.home');
-  selectedServerInfo.value = await getSelectedGuild(props.space.id);
+  setPageTitle('Advanced Guide Setting');
+  try {
+    selectedServerInfo.value = await getSelectedGuild(props.space.id);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 function selectMultipleRoles(roleId: string, selected: boolean) {
@@ -32,6 +40,12 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
     ? [...currentSelectedRoles.value, roleId]
     : currentSelectedRoles.value.filter(role => role !== roleId);
 }
+
+const paramsMap = computed(() => {
+  return {
+    basic: { discordRoleIds: [...currentSelectedRoles.value] }
+  };
+});
 
 async function handleSubmit() {
   //call api
@@ -42,16 +56,9 @@ async function handleSubmit() {
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
-      <router-link
-        :to="{
-          name: 'guideCreate',
-          params: { key: spaceId, spaceId: spaceId }
-        }"
-        class="text-color"
-      >
-        <Icon name="back" size="22" class="!align-middle" />
-        Back
-      </router-link>
+      <div class="mb-4">
+        <SettingNavigation :paramsMap="paramsMap" />
+      </div>
       <h1 v-text="'Setup Discord Roles'" class="flex-1" />
       <div class="py-24">
         <div class="my-6">
@@ -74,9 +81,6 @@ async function handleSubmit() {
             <div class="leading-6">{{ role.name }}</div>
           </div>
         </template>
-      </div>
-      <div class="mt-4">
-        <UiButton :primary="true" variant="contained" @click="handleSubmit()">Save</UiButton>
       </div>
     </template>
   </LayoutSingle>

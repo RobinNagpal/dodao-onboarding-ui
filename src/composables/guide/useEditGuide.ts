@@ -44,7 +44,8 @@ export type EditGuideType = GuideInput & { id?: string } & {
 export function useEditGuide(
   uuid: string | null,
   space: SpaceModel,
-  notify: any
+  notify: any,
+  discordRoleIds: string[]
 ) {
   const { send } = useClient();
   const router = useRouter();
@@ -58,7 +59,8 @@ export function useEditGuide(
   const emptyGuideModel = emptyGuide(
     web3.value.account,
     space,
-    (route.params.guideType as string) || GuideType.Onboarding
+    (route.params.guideType as string) || GuideType.Onboarding,
+    discordRoleIds
   );
   const guideRef = ref<EditGuideType>(emptyGuideModel);
   const guideErrors = ref<GuideError>({});
@@ -78,6 +80,7 @@ export function useEditGuide(
       guideRef.value = {
         ...guide,
         isPristine: true,
+        discordRoleIds,
         from: web3.value.account,
         space: space.id,
         thumbnail: guide.thumbnail || undefined,
