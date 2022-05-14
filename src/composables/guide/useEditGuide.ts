@@ -41,6 +41,18 @@ export type EditGuideType = GuideInput & { id?: string } & {
   isPristine: boolean;
 };
 
+type KeyOfGuideInput = keyof EditGuideType;
+
+export type UpdateGuideFunctions = {
+  moveStepDown: (stepUuid) => void;
+  addStep: () => void;
+  updateGuideField: (field: KeyOfGuideInput, value: any) => void;
+  updateStep: (step) => void;
+  removeStep: (stepUuid) => void;
+  moveStepUp: (stepUuid) => void;
+  setActiveStep: (uuid) => void;
+};
+
 export function useEditGuide(
   uuid: string | null,
   space: SpaceModel,
@@ -269,19 +281,31 @@ export function useEditGuide(
     guideCreating.value = false;
   }
 
-  return {
-    activeStepId,
+  function updateGuideField(field: KeyOfGuideInput, value: any) {
+    guideRef.value = {
+      ...guideRef.value,
+      [field]: value
+    };
+  }
+
+  const updateGuideFunctions: UpdateGuideFunctions = {
     addStep,
-    guideCreating,
-    guideLoaded,
-    guideRef,
-    guideErrors,
-    handleSubmit,
-    initialize,
     moveStepUp,
     moveStepDown,
     removeStep,
     setActiveStep,
+    updateGuideField,
     updateStep
+  };
+
+  return {
+    activeStepId,
+    guideCreating,
+    guideLoaded,
+    guideRef,
+    guideErrors,
+    updateGuideFunctions,
+    handleSubmit,
+    initialize
   };
 }

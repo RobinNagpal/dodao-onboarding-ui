@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Block from '@/components/Block.vue';
-import GuideCreateStepper from '@/components/Guide/Create/Stepper.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ModalGuideGuideImport from '@/components/Modal/Guide/GuideImport.vue';
@@ -8,8 +6,6 @@ import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleT
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import UiDropdown from '@/components/Ui/Dropdown.vue';
-import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useEditGuide } from '@/composables/guide/useEditGuide';
 import { useClient } from '@/composables/useClient';
@@ -17,15 +13,12 @@ import { useModal } from '@/composables/useModal';
 import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
-import {
-  GuidePublishStatus,
-  GuideType
-} from '@dodao/onboarding-schemas/models/GuideModel';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
-import { useRoute } from 'vue-router';
-import { getSelectedGuild } from '@/helpers/discord/discordApi';
+import BasicGuideSettings from '@/views/Guide/Settings/BasicGuideSettings.vue';
 import SettingNavigation from '@/views/Guide/Settings/SettingNavigation.vue';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { computed, inject, onMounted, PropType, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   spaceId: String,
@@ -56,18 +49,13 @@ const modalGuideImportOpen = ref(false);
 
 const {
   activeStepId,
-  addStep,
   guideCreating,
   guideLoaded,
   guideRef: guide,
   guideErrors,
   handleSubmit,
   initialize,
-  moveStepUp,
-  moveStepDown,
-  removeStep,
-  setActiveStep,
-  updateStep
+  updateGuideFunctions
 } = useEditGuide(uuid as string, props.space, notify, props.discordRoleIds);
 
 const form = ref(guide);
@@ -82,37 +70,16 @@ function clickSubmit() {
   !web3Account.value ? (modalAccountOpen.value = true) : handleSubmit();
 }
 
-const errors = unref(guideErrors);
-
-const uploadThumbnailLoading = ref(false);
-const uploadSocialShareImageLoading = ref(false);
-
-const categoriesString = computed(() => {
-  return form.value.categories ? form.value.categories.join(', ') : '';
-});
-
 function handleSubmitAddCategories(categories) {
-  guide.value.categories = categories;
+  updateGuideFunctions.updateGuideField('categories', categories);
 }
 
-function setThumbnailUrl(url) {
-  if (typeof url === 'string') form.value.thumbnail = url;
+function updateModalCategoryOpen(value: boolean) {
+  modalCategoryOpen.value = value;
 }
 
-function setSocialShareImageUrl(url) {
-  if (typeof url === 'string') form.value.socialShareImage = url;
-}
-
-function setUploadLoadingThumbnail(s) {
-  uploadThumbnailLoading.value = s;
-}
-
-function setUploadSocialShareImage(s) {
-  uploadSocialShareImageLoading.value = s;
-}
-
-function inputError(field: string) {
-  return errors[field];
+function updateModalGuideOrBundleTypeOpen(value: boolean) {
+  modalGuideOrBundleTypeOpen.value = value;
 }
 
 function importGuide(importedGuide: any) {
@@ -130,36 +97,13 @@ const guideExists = !!guide.value?.id;
 function selectGuideOrBundleType(guideType: GuideType) {
   guide.value.guideType = guideType;
 }
-
-function selectPublishStatus(status) {
-  guide.value.publishStatus = status;
-}
-
-const guideStatuses = [
-  {
-    text: 'Live',
-    action: GuidePublishStatus.Live
-  },
-  {
-    text: 'Draft',
-    action: GuidePublishStatus.Draft
-  }
-];
 </script>
 
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
       selected Roles Ids: {{ guide.discordRoleIds }}
-      <div class="mb-4">
-        <SettingNavigation
-          :paramsMap="{
-            advanced: {
-              discordRoleIds
-            }
-          }"
-        />
-      </div>
+
       <div class="px-4 md:px-0 overflow-hidden">
         <router-link
           :to="
@@ -179,6 +123,15 @@ const guideStatuses = [
           <Icon name="back" size="22" class="!align-middle" />
           {{ guide.id ? guide.name : 'Back to Guides' }}
         </router-link>
+        <div class="float-right ml-2">
+          <SettingNavigation
+            :paramsMap="{
+              advanced: {
+                discordRoleIds
+              }
+            }"
+          />
+        </div>
         <UiSidebarButton
           v-if="isSuperAdmin"
           class="float-right ml-2"
@@ -199,139 +152,17 @@ const guideStatuses = [
       </div>
 
       <template v-if="guideLoaded">
-        <Block :title="$t('guide.create.basicInfo')" :class="`mt-4`">
-          <div class="mb-2">
-            <UiInput
-              v-model="form.name"
-              :error="inputError('name')"
-              maxlength="32"
-            >
-              <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
-            </UiInput>
-            <UiInput
-              v-model="form.thumbnail"
-              placeholder="e.g. https://example.com/guide.png"
-              :error="inputError('avatar')"
-            >
-              <template v-slot:label>
-                {{ $t('guide.thumbnail') }}
-              </template>
-              <template v-slot:info>
-                <Upload
-                  class="!ml-2"
-                  @input="setThumbnailUrl"
-                  @loading="setUploadLoadingThumbnail"
-                >
-                  {{ $t('upload') }}
-                </Upload>
-              </template>
-            </UiInput>
-            <UiInput
-              v-model="form.socialShareImage"
-              placeholder="e.g. https://example.com/guide.png ideally 800px by 418px"
-              :error="inputError('socialShareImage')"
-            >
-              <template v-slot:label>
-                {{ $t('guide.socialShareImage') }}
-              </template>
-              <template v-slot:info>
-                <Upload
-                  class="!ml-2"
-                  @input="setSocialShareImageUrl"
-                  @loading="setUploadSocialShareImage"
-                >
-                  {{ $t('upload') }}
-                </Upload>
-              </template>
-            </UiInput>
-            <UiInput
-              v-model="form.discordWebhook"
-              placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
-              :error="inputError('discordWebhook')"
-            >
-              <template v-slot:label>
-                {{ $t('guide.discordWebhook') }}
-              </template>
-            </UiInput>
-            <UiInput
-              @click="modalCategoryOpen = true"
-              :class="{ 'mt-6': !categoriesString }"
-            >
-              <template v-slot:label>
-                {{ $t(`settings.categories`) }}
-              </template>
-              <template v-slot:selected>
-                <span class="capitalize">
-                  {{ categoriesString }}
-                </span>
-              </template>
-            </UiInput>
-            <UiInput @click="modalGuideOrBundleTypeOpen = true">
-              <template v-slot:label>
-                {{ $t(`guide.guideType`) }}
-              </template>
-              <template v-slot:selected>
-                <span class="capitalize">
-                  {{ $tc('navigation.' + guide.guideType) }}
-                </span>
-              </template>
-            </UiInput>
-            <UiInput
-              v-model="form.content"
-              :error="inputError('content')"
-              :placeholder="$t(`guide.create.excerpt`)"
-              maxlength="64"
-            >
-              <template v-slot:label
-                >{{ $t(`guide.create.excerpt`) }}*</template
-              >
-            </UiInput>
-            <div class="status-wrapper pt-3">
-              <UiDropdown
-                top="2.5rem"
-                right="2.5rem"
-                class="mr-2 w-[5rem] status-drop-down"
-                @select="selectPublishStatus($event)"
-                :items="guideStatuses"
-              >
-                <div class="pr-1 select-none">
-                  {{ guide.publishStatus === 'Live' ? 'Live' : 'Draft' }}
-                </div>
-              </UiDropdown>
-              <div
-                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
-              >
-                Publish Status*
-              </div>
-            </div>
-          </div>
-        </Block>
-        <Block :title="$t('guide.create.stepByStep')" :slim="true" v-if="guide">
-          <div class="mt-4">
-            <GuideCreateStepper
-              :activeStepId="activeStepId"
-              :guide="form"
-              :guideErrors="guideErrors"
-              :steps="form.steps"
-              :setActiveStep="setActiveStep"
-              :updateStep="updateStep"
-              :addStep="addStep"
-              :moveStepUp="moveStepUp"
-              :moveStepDown="moveStepDown"
-              :removeStep="removeStep"
-            />
-          </div>
-        </Block>
-        <div
-          v-if="Object.values(guideErrors).filter(v => !!v).length"
-          class="!text-red flex text-center justify-center mb-2 align-baseline"
-        >
-          <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
-          <span class="ml-1"
-            >Fix errors to proceed. Make sure you have selected a correct answer
-            for each question</span
-          >
-        </div>
+        <BasicGuideSettings
+          :active-step-id="activeStepId"
+          :guide="form"
+          :guide-errors="guideErrors"
+          :steps="form.steps"
+          :update-guide-functions="updateGuideFunctions"
+          :update-modal-category-open="updateModalCategoryOpen"
+          :update-modal-guide-or-bundle-type-open="
+            updateModalGuideOrBundleTypeOpen
+          "
+        />
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"
