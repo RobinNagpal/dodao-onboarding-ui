@@ -10,7 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 export const emptyGuide = (
   from: string,
   space: SpaceModel,
-  guideType: string
+  guideType: string,
+  discordRoleIds: string[]
 ): GuideInput & { isPristine: boolean } => {
   return {
     from,
@@ -20,6 +21,7 @@ export const emptyGuide = (
     categories: [],
     content: 'New Guide',
     guideType: guideType,
+    discordRoleIds,
     publishStatus: GuidePublishStatus.Live,
     steps: [
       {

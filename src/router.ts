@@ -3,7 +3,8 @@ import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
 import GuideCreate from '@/views/Guide/CreateGuide.vue';
-import AdvancedSetting from '@/views/Guide/AdvancedSetting.vue';
+import SettingsGuide from '@/views/Guide/Settings/Index.vue';
+import AdvancedGuideSetting from '@/views/Guide/Settings/AdvancedGuideSetting.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
 import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
@@ -66,14 +67,10 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
   {
-    path: ':guideType/guide/create',
+    path: ':guideType/guide/create/:settingTab?',
     name: 'guideCreate',
-    component: GuideCreate
-  },
-  {
-    path: ':guideType/guide/advanced-settings',
-    name: 'advancedSetting',
-    component: AdvancedSetting
+    component: SettingsGuide,
+    props: true
   },
   {
     path: ':bundleType/guide-bundle/create',
@@ -81,9 +78,10 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: GuideBundleCreate
   },
   {
-    path: ':guideType/guide/edit/:uuid',
+    path: ':guideType/guide/edit/:uuid/:settingTab?',
     name: 'guideEdit',
-    component: GuideCreate
+    component: SettingsGuide,
+    props: true
   },
   {
     path: ':bundleType/guide-bundle/edit/:uuid',

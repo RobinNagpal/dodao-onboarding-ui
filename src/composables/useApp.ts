@@ -88,7 +88,7 @@ export function useApp() {
       ? explore.value.spaces[spaceIdForDomain]
       : null;
 
-    const selectedSkin = spaceWithSkin?.skin || 'dodao';
+    const selectedSkin = spaceWithSkin?.skin || 'badger';
     appSkin.value = selectedSkin;
     console.log('selected skin', selectedSkin);
     document.body.classList.add(selectedSkin);
