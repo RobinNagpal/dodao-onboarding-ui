@@ -88,7 +88,7 @@ const styleObject = computed(() => {
           class="ob-nav-step flex items-center"
           role="presentation"
           data-step-label="+"
-          @click="addStep"
+          @click="updateGuideFunctions.addStep"
         >
           <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
         </li>

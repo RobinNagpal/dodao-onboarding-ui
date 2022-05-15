@@ -201,6 +201,7 @@
       "name": "Name",
       "excerpt": "Guide excerpt...",
       "basicInfo": "Basic Information",
+      "advancedInfo": "Advanced Information",
       "stepByStep": "Step by Step Guide"
     },
     "category": {

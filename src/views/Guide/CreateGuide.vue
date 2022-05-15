@@ -13,6 +13,7 @@ import { useModal } from '@/composables/useModal';
 import { useSpace } from '@/composables/useSpace';
 import { useWeb3 } from '@/composables/useWeb3';
 import { setPageTitle } from '@/helpers/utils';
+import AdvancedGuideSettings from '@/views/Guide/Settings/AdvancedGuideSettings.vue';
 import BasicGuideSettings from '@/views/Guide/Settings/BasicGuideSettings.vue';
 import SettingNavigation from '@/views/Guide/Settings/SettingNavigation.vue';
 import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
@@ -23,11 +24,14 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
   spaceId: String,
   space: { type: Object as PropType<SpaceModel>, required: true },
+  spaceLoading: Boolean,
   from: String,
   uuid: String,
-  discordRoleIds: {
-    type: Array as PropType<string[]>,
-    default: () => []
+  // this is the prop passed when the guide is getting edited
+  editGuide: String,
+  settingTab: {
+    type: String,
+    default: 'basic'
   }
 });
 
@@ -56,7 +60,12 @@ const {
   handleSubmit,
   initialize,
   updateGuideFunctions
-} = useEditGuide(uuid as string, props.space, notify, props.discordRoleIds);
+} = useEditGuide(
+  uuid as string,
+  props.space,
+  notify,
+  props.editGuide ? JSON.parse(props.editGuide) : undefined
+);
 
 const form = ref(guide);
 
@@ -90,6 +99,8 @@ onMounted(async () => {
   setPageTitle('page.title.guide.create', { space: props.space?.name });
 
   await initialize();
+  console.log('Initialized', guide.value);
+  console.log('activeStepId', activeStepId.value);
 });
 
 const guideExists = !!guide.value?.id;
@@ -102,8 +113,6 @@ function selectGuideOrBundleType(guideType: GuideType) {
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
-      selected Roles Ids: {{ guide.discordRoleIds }}
-
       <div class="px-4 md:px-0 overflow-hidden">
         <router-link
           :to="
@@ -124,13 +133,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
           {{ guide.id ? guide.name : 'Back to Guides' }}
         </router-link>
         <div class="float-right ml-2">
-          <SettingNavigation
-            :paramsMap="{
-              advanced: {
-                discordRoleIds
-              }
-            }"
-          />
+          <SettingNavigation :guide="guide" />
         </div>
         <UiSidebarButton
           v-if="isSuperAdmin"
@@ -152,7 +155,21 @@ function selectGuideOrBundleType(guideType: GuideType) {
       </div>
 
       <template v-if="guideLoaded">
+        <AdvancedGuideSettings
+          v-if="settingTab === 'advanced' && !spaceLoading"
+          :active-step-id="activeStepId"
+          :guide="form"
+          :guide-errors="guideErrors"
+          :steps="form.steps"
+          :update-guide-functions="updateGuideFunctions"
+          :update-modal-category-open="updateModalCategoryOpen"
+          :update-modal-guide-or-bundle-type-open="
+            updateModalGuideOrBundleTypeOpen
+          "
+          :space="space"
+        />
         <BasicGuideSettings
+          v-if="settingTab === 'basic'"
           :active-step-id="activeStepId"
           :guide="form"
           :guide-errors="guideErrors"

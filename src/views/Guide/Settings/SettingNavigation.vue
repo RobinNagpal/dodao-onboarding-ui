@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import SpaceNavigationLink from '@/components/Space/NavigationLink.vue';
-import UiDropdown from '@/components/Ui/Dropdown.vue';
-import UiNamedToggle from '@/components/Ui/NamedToggle.vue';
-import { useDomain } from '@/composables/useDomain';
-import { useSpace } from '@/composables/useSpace';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import UiButton from '@/components/Ui/Button.vue';
+import { EditGuideType } from '@/composables/guide/useEditGuide';
 import { computed, PropType } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
-  paramsMap: {
-    type: Object as PropType<any>,
-    default: () => ({
-      basic: {
-        discordRoleIds: []
-      },
-      advanced: {
-        discordRoleIds: []
-      }
-    })
+  guide: {
+    type: Object as PropType<EditGuideType>,
+    required: true
   }
 });
 
@@ -38,11 +25,11 @@ const settingTabs = ['basic', 'advanced'];
         v-for="tab in settingTabs"
         :key="tab"
         :to="{
-          name: route.params?.uuid ? 'guideEdit' : 'guideCreate',
+          name: 'guideEdit',
           params: {
             ...(route.params || {}),
             settingTab: tab,
-            ...(props.paramsMap[tab] || {})
+            editGuide: JSON.stringify(guide)
           }
         }"
       >

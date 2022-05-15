@@ -42,6 +42,7 @@ query GuideQuery($uuid: String!) {
     categories
     content
     created
+    discordRoleIds
     discordWebhook
     id
     guideType
