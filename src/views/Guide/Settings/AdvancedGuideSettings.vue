@@ -17,10 +17,6 @@ const props = defineProps({
     required: true
   },
   space: { type: Object as PropType<SpaceModel>, required: true },
-  discordRoleIds: {
-    type: Array as PropType<string[]>,
-    default: () => []
-  },
   updateGuideFunctions: {
     type: Object as PropType<UpdateGuideFunctions>,
     required: true
@@ -28,10 +24,10 @@ const props = defineProps({
 });
 
 const selectedServerInfo = ref<any>(null);
-const currentSelectedRoles = ref<string[]>([...props.discordRoleIds]);
+const currentSelectedRoles = ref<string[]>(props.guide.discordRoleIds);
 
 onMounted(async () => {
-  setPageTitle('Advanced Guide Setting');
+  setPageTitle('guide.create.advancedInfo');
   try {
     selectedServerInfo.value = await getSelectedGuild(props.space.id);
   } catch (e) {
@@ -43,6 +39,7 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
   currentSelectedRoles.value = selected
     ? [...currentSelectedRoles.value, roleId]
     : currentSelectedRoles.value.filter(role => role !== roleId);
+
   props.updateGuideFunctions.updateGuideField(
     'discordRoleIds',
     currentSelectedRoles
