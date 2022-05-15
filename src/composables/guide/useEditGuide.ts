@@ -41,10 +41,23 @@ export type EditGuideType = GuideInput & { id?: string } & {
   isPristine: boolean;
 };
 
+type KeyOfGuideInput = keyof EditGuideType;
+
+export type UpdateGuideFunctions = {
+  moveStepDown: (stepUuid) => void;
+  addStep: () => void;
+  updateGuideField: (field: KeyOfGuideInput, value: any) => void;
+  updateStep: (step) => void;
+  removeStep: (stepUuid) => void;
+  moveStepUp: (stepUuid) => void;
+  setActiveStep: (uuid) => void;
+};
+
 export function useEditGuide(
   uuid: string | null,
   space: SpaceModel,
-  notify: any
+  notify: any,
+  editGuide?: EditGuideType
 ) {
   const { send } = useClient();
   const router = useRouter();
@@ -73,7 +86,11 @@ export function useEditGuide(
   const guideCreating = ref(false);
 
   async function initialize() {
-    if (uuid) {
+    if (editGuide) {
+      guideRef.value = editGuide;
+      activeStepId.value = editGuide.steps[0].uuid;
+      guideLoaded.value = true;
+    } else if (uuid) {
       const guide = await getGuide(uuid);
       guideRef.value = {
         ...guide,
@@ -266,19 +283,31 @@ export function useEditGuide(
     guideCreating.value = false;
   }
 
-  return {
-    activeStepId,
+  function updateGuideField(field: KeyOfGuideInput, value: any) {
+    guideRef.value = {
+      ...guideRef.value,
+      [field]: value
+    };
+  }
+
+  const updateGuideFunctions: UpdateGuideFunctions = {
     addStep,
-    guideCreating,
-    guideLoaded,
-    guideRef,
-    guideErrors,
-    handleSubmit,
-    initialize,
     moveStepUp,
     moveStepDown,
     removeStep,
     setActiveStep,
+    updateGuideField,
     updateStep
+  };
+
+  return {
+    activeStepId,
+    guideCreating,
+    guideLoaded,
+    guideRef,
+    guideErrors,
+    updateGuideFunctions,
+    handleSubmit,
+    initialize
   };
 }

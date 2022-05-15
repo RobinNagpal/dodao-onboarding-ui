@@ -95,7 +95,10 @@ async function deleteGuide() {
 }
 
 async function editGuide() {
-  await router.push({ name: 'guideEdit', params: { uuid: guide.value?.uuid } });
+  await router.push({
+    name: 'guideEdit',
+    params: { uuid: guide.value?.uuid, settingTab: 'basic' }
+  });
 }
 
 async function viewSubmissions() {

@@ -2,7 +2,8 @@ import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
-import GuideCreate from '@/views/Guide/CreateGuide.vue';
+import CreateGuide from '@/views/Guide/CreateGuide.vue';
+import EditGuide from '@/views/Guide/EditGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
 import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
@@ -65,9 +66,9 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
   {
-    path: ':guideType/guide/create',
+    path: ':guideType/create',
     name: 'guideCreate',
-    component: GuideCreate
+    component: CreateGuide
   },
   {
     path: ':bundleType/guide-bundle/create',
@@ -75,9 +76,10 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: GuideBundleCreate
   },
   {
-    path: ':guideType/guide/edit/:uuid',
+    path: ':guideType/guide/edit/:uuid/:settingTab',
     name: 'guideEdit',
-    component: GuideCreate
+    component: EditGuide,
+    props: true
   },
   {
     path: ':bundleType/guide-bundle/edit/:uuid',

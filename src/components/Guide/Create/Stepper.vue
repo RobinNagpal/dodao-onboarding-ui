@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import GuideCreateStepperItem from '@/components/Guide/Create/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
-import { EditGuideType } from '@/composables/guide/useEditGuide';
+import {
+  EditGuideType,
+  UpdateGuideFunctions
+} from '@/composables/guide/useEditGuide';
 import { GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import { computed, PropType, unref } from 'vue';
 
@@ -24,12 +27,11 @@ const props = defineProps({
     type: String,
     default: '#00813a'
   },
-  setActiveStep: Function,
-  updateStep: Function,
-  addStep: Function,
-  moveStepUp: Function,
-  moveStepDown: Function,
-  removeStep: Function
+
+  updateGuideFunctions: {
+    type: Object as PropType<UpdateGuideFunctions>,
+    required: true
+  }
 });
 
 const errors = unref(props.guideErrors);
@@ -54,7 +56,7 @@ const styleObject = computed(() => {
         :style="styleObject"
       >
         <li
-          @click="setActiveStep(step.uuid)"
+          @click="updateGuideFunctions.setActiveStep(step.uuid)"
           class="ob-nav-step"
           role="presentation"
           v-for="step in steps"
@@ -69,7 +71,11 @@ const styleObject = computed(() => {
             v-if="!errors.steps?.[step.order] & !guide.isPristine"
             class="checkmark"
           ></div>
-          <GuideStepperIcon v-else-if="!errors.steps?.[step.order]" class="stepper-icon" :step="step" />
+          <GuideStepperIcon
+            v-else-if="!errors.steps?.[step.order]"
+            class="stepper-icon"
+            :step="step"
+          />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
             <a class="step-link text-sm" role="menuitem">{{
@@ -82,7 +88,7 @@ const styleObject = computed(() => {
           class="ob-nav-step flex items-center"
           role="presentation"
           data-step-label="+"
-          @click="addStep"
+          @click="updateGuideFunctions.addStep"
         >
           <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
         </li>
@@ -92,10 +98,10 @@ const styleObject = computed(() => {
       :guide="guide"
       :step="activeStep"
       :stepErrors="errors.steps?.[activeStep.order]"
-      @update:step="updateStep"
-      :moveStepUp="moveStepUp"
-      :moveStepDown="moveStepDown"
-      :removeStep="removeStep"
+      @update:step="updateGuideFunctions.updateStep"
+      :moveStepUp="updateGuideFunctions.moveStepUp"
+      :moveStepDown="updateGuideFunctions.moveStepDown"
+      :removeStep="updateGuideFunctions.removeStep"
     />
   </div>
 </template>
@@ -211,18 +217,18 @@ const styleObject = computed(() => {
   }
 
   .ob-nav-step {
-    &.active, &:hover {
+    &.active,
+    &:hover {
       &.success::before {
         background: var(--success-color);
         border: 0;
         box-shadow: 0 0 14px 4px var(--success-color);
       }
       &.error::before {
-        box-shadow: 0 0 2px 2px #fff, 0 0 8px 6px var(--error-color);;
+        box-shadow: 0 0 2px 2px #fff, 0 0 8px 6px var(--error-color);
       }
     }
   }
-
 
   .ob-nav-step.error {
     &::before {
@@ -424,5 +430,4 @@ const styleObject = computed(() => {
     flex-grow: 1;
   }
 }
-
 </style>

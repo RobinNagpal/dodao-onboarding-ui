@@ -22,6 +22,7 @@ export const guideTypes = {
   Guide: [
     { name: 'categories', type: 'string[]' },
     { name: 'content', type: 'string' },
+    { name: 'discordRoleIds', type: 'string[]' },
     { name: 'discordWebhook', type: 'string' },
     { name: 'from', type: 'address' },
     { name: 'guideType', type: 'string' },

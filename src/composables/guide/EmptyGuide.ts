@@ -20,6 +20,7 @@ export const emptyGuide = (
     categories: [],
     content: 'New Guide',
     guideType: guideType,
+    discordRoleIds: [],
     publishStatus: GuidePublishStatus.Live,
     steps: [
       {

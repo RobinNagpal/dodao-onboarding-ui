@@ -66,7 +66,7 @@ onMounted(async () => {
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
-      <h1 v-text="$t('setupDAO.header')" class="flex-1" />
+      <h1 v-text="'Setup Discord'" class="flex-1" />
       <div class="py-24 flex justify-center align-center flex-col items-center">
         <div class="my-6">
           <UiButton>

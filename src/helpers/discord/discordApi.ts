@@ -27,6 +27,19 @@ export async function getSelectedGuild(spaceId: string): Promise<any> {
     query: SpaceDiscordGuild,
     variables: { spaceId }
   });
-
   return data.payload;
+}
+
+export async function setSelectedRoles(rolesIds: string[]): Promise<any> {
+  // const client = useApolloClient();
+  return Promise.resolve(true);
+  // const { data } = await client.client.query<
+  //   SpaceDiscordGuildResult,
+  //   SpaceDiscordGuildVariables
+  // >({
+  //   query: SpaceDiscordGuild,
+  //   variables: { spaceId }
+  // });
+
+  // return data.payload;
 }
