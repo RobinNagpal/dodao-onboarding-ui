@@ -51,7 +51,6 @@ function inputError(field: string) {
 }
 
 const uploadThumbnailLoading = ref(false);
-const uploadSocialShareImageLoading = ref(false);
 
 const categoriesString = computed(() => {
   return props.guide.categories ? props.guide.categories.join(', ') : '';
@@ -63,18 +62,8 @@ function setThumbnailUrl(url) {
   }
 }
 
-function setSocialShareImageUrl(url) {
-  if (typeof url === 'string') {
-    props.updateGuideFunctions.updateGuideField('socialShareImage', url);
-  }
-}
-
 function setUploadLoadingThumbnail(s) {
   uploadThumbnailLoading.value = s;
-}
-
-function setUploadSocialShareImage(s) {
-  uploadSocialShareImageLoading.value = s;
 }
 
 function selectPublishStatus(status) {
@@ -106,6 +95,17 @@ const guideStatuses = [
         <template v-slot:label>{{ $t(`guide.create.name`) }}*</template>
       </UiInput>
       <UiInput
+        :model-value="guide.content"
+        :error="inputError('content')"
+        :placeholder="$t(`guide.create.excerpt`)"
+        maxlength="64"
+        @update:modelValue="
+          updateGuideFunctions.updateGuideField('content', $event)
+        "
+      >
+        <template v-slot:label>{{ $t(`guide.create.excerpt`) }}*</template>
+      </UiInput>
+      <UiInput
         :model-value="guide.thumbnail"
         placeholder="e.g. https://example.com/guide.png"
         :error="inputError('avatar')"
@@ -121,27 +121,6 @@ const guideStatuses = [
             class="!ml-2"
             @input="setThumbnailUrl"
             @loading="setUploadLoadingThumbnail"
-          >
-            {{ $t('upload') }}
-          </Upload>
-        </template>
-      </UiInput>
-      <UiInput
-        :model-value="guide.socialShareImage"
-        placeholder="e.g. https://example.com/guide.png ideally 800px by 418px"
-        :error="inputError('socialShareImage')"
-        @update:modelValue="
-          updateGuideFunctions.updateGuideField('socialShareImage', $event)
-        "
-      >
-        <template v-slot:label>
-          {{ $t('guide.socialShareImage') }}
-        </template>
-        <template v-slot:info>
-          <Upload
-            class="!ml-2"
-            @input="setSocialShareImageUrl"
-            @loading="setUploadSocialShareImage"
           >
             {{ $t('upload') }}
           </Upload>
@@ -170,17 +149,7 @@ const guideStatuses = [
           </span>
         </template>
       </UiInput>
-      <UiInput
-        :model-value="guide.content"
-        :error="inputError('content')"
-        :placeholder="$t(`guide.create.excerpt`)"
-        maxlength="64"
-        @update:modelValue="
-          updateGuideFunctions.updateGuideField('content', $event)
-        "
-      >
-        <template v-slot:label>{{ $t(`guide.create.excerpt`) }}*</template>
-      </UiInput>
+
       <div class="status-wrapper pt-3">
         <UiDropdown
           top="2.5rem"

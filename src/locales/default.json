@@ -204,9 +204,9 @@
       "advancedInfo": "Advanced Information",
       "stepByStep": "Step by Step Guide",
       "connectDiscord": "Connect Discord",
-      "changeDiscordServer": "Change Discord Server",
+      "changeDiscordServer": "Change Server",
+      "discordRoles": "Discord Roles",
       "chooseDiscordRoles": "Choose Discord roles"
-
     },
     "category": {
       "community": "Community",
