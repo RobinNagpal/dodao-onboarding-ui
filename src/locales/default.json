@@ -202,7 +202,11 @@
       "excerpt": "Guide excerpt...",
       "basicInfo": "Basic Information",
       "advancedInfo": "Advanced Information",
-      "stepByStep": "Step by Step Guide"
+      "stepByStep": "Step by Step Guide",
+      "connectDiscord": "Connect Discord",
+      "changeDiscordServer": "Change Discord Server",
+      "chooseDiscordRoles": "Choose Discord roles"
+
     },
     "category": {
       "community": "Community",

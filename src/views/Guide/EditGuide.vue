@@ -154,32 +154,36 @@ function selectGuideOrBundleType(guideType: GuideType) {
         </UiSidebarButton>
       </div>
 
-      <template v-if="guideLoaded">
-        <AdvancedGuideSettings
-          v-if="settingTab === 'advanced' && !spaceLoading"
-          :active-step-id="activeStepId"
-          :guide="form"
-          :guide-errors="guideErrors"
-          :steps="form.steps"
-          :update-guide-functions="updateGuideFunctions"
-          :update-modal-category-open="updateModalCategoryOpen"
-          :update-modal-guide-or-bundle-type-open="
-            updateModalGuideOrBundleTypeOpen
-          "
-          :space="space"
-        />
-        <BasicGuideSettings
-          v-if="settingTab === 'basic'"
-          :active-step-id="activeStepId"
-          :guide="form"
-          :guide-errors="guideErrors"
-          :steps="form.steps"
-          :update-guide-functions="updateGuideFunctions"
-          :update-modal-category-open="updateModalCategoryOpen"
-          :update-modal-guide-or-bundle-type-open="
-            updateModalGuideOrBundleTypeOpen
-          "
-        />
+      <div v-if="guideLoaded">
+        <div class="wrapper">
+          <AdvancedGuideSettings
+            v-if="settingTab === 'advanced' && !spaceLoading"
+            :active-step-id="activeStepId"
+            :guide="form"
+            :guide-errors="guideErrors"
+            :steps="form.steps"
+            :update-guide-functions="updateGuideFunctions"
+            :update-modal-category-open="updateModalCategoryOpen"
+            :update-modal-guide-or-bundle-type-open="
+              updateModalGuideOrBundleTypeOpen
+            "
+            :space="space"
+          />
+
+          <BasicGuideSettings
+            v-if="settingTab === 'basic'"
+            :active-step-id="activeStepId"
+            :guide="form"
+            :guide-errors="guideErrors"
+            :steps="form.steps"
+            :update-guide-functions="updateGuideFunctions"
+            :update-modal-category-open="updateModalCategoryOpen"
+            :update-modal-guide-or-bundle-type-open="
+              updateModalGuideOrBundleTypeOpen
+            "
+          />
+        </div>
+
         <UiButton
           @click="clickSubmit"
           :disabled="!isValid"
@@ -190,7 +194,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
         >
           {{ $t('create.publish') }}
         </UiButton>
-      </template>
+      </div>
       <PageLoading v-else />
     </template>
   </LayoutSingle>
@@ -215,6 +219,9 @@ function selectGuideOrBundleType(guideType: GuideType) {
   </teleport>
 </template>
 <style scoped lang="scss">
+.wrapper {
+  min-height: 484px;
+}
 .gear-icon {
   svg {
     fill: var(--link-color);

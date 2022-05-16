@@ -148,18 +148,6 @@ const guideStatuses = [
         </template>
       </UiInput>
       <UiInput
-        :model-value="guide.discordWebhook"
-        placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
-        :error="inputError('discordWebhook')"
-        @update:modelValue="
-          updateGuideFunctions.updateGuideField('discordWebhook', $event)
-        "
-      >
-        <template v-slot:label>
-          {{ $t('guide.discordWebhook') }}
-        </template>
-      </UiInput>
-      <UiInput
         @click="updateModalCategoryOpen(true)"
         :class="{ 'mt-6': !categoriesString }"
       >

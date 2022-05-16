@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="flex justify-center items-center mt-[300px]">
+  <div class="flex justify-center items-center">
     <div class="lds-ring">
       <div></div>
       <div></div>
@@ -21,10 +21,10 @@
   box-sizing: border-box;
   display: block;
   position: absolute;
-  width: 64px;
-  height: 64px;
+  width: 50px;
+  height: 50px;
   margin: 8px;
-  border: 8px solid var(--primary-color);
+  border: 4px solid var(--primary-color);
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: var(--primary-color) transparent transparent transparent;

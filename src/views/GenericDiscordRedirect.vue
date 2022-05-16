@@ -22,5 +22,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <LoadingSpinner />
+  <div class="wrapper">
+    <LoadingSpinner />
+  </div>
 </template>
+<style scoped>
+.wrapper {
+  margin-top: 100px;
+}
+</style>
