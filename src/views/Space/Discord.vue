@@ -73,7 +73,7 @@ onMounted(async () => {
         :to="{
           name: 'spaceEdit'
         }"
-        class="white-color"
+        class="text-color"
       >
         <Icon name="back" size="22" class="!align-middle" />
         Back
