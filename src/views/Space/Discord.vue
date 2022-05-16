@@ -76,7 +76,7 @@ onMounted(async () => {
         class="text-color"
       >
         <Icon name="back" size="22" class="!align-middle" />
-        Back
+        Basic Settings
       </router-link>
       <h1 v-text="'Setup Discord'" class="flex-1" />
       <div
