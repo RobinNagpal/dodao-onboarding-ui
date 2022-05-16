@@ -73,12 +73,12 @@ onMounted(async () => {
         :to="{
           name: 'spaceEdit'
         }"
-        class="text-color"
+        class="text-color mb-4"
       >
         <Icon name="back" size="22" class="!align-middle" />
         Basic Settings
       </router-link>
-      <h1 v-text="'Setup Discord'" class="flex-1" />
+      <h1 v-text="'Setup Discord'" class="flex-1 mt-3" />
       <div
         class="wrapper py-24 flex justify-center align-center flex-col items-center"
       >
@@ -99,7 +99,7 @@ onMounted(async () => {
                 </div>
                 <span>{{ selectedServerInfo.name }}</span>
               </div>
-              <a class="ml-2 text-primary underline text-xs" :href="url">
+              <a class="ml-2 text-primary underline text-xs mt-2" :href="url">
                 {{ $t('guide.create.changeDiscordServer') }}
               </a>
             </div>
