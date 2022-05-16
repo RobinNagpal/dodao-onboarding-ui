@@ -36,7 +36,7 @@ export function useExtendedSpaces() {
     }
   }
 
-  async function loadExtendedSpace(spaceId: string) {
+  async function loadExtendedSpace(spaceId: string): Promise<SpaceModel> {
     loading.value = true;
     try {
       const response = await apolloQuery(
@@ -50,22 +50,21 @@ export function useExtendedSpaces() {
       );
 
       console.log('loadExtendedSpace', response);
+      const spaceInfo = { ...response, extendedSpace: true };
       if (extentedSpaces.value.some(space => space.id === spaceId)) {
         extentedSpaces.value = extentedSpaces.value.map(space =>
-          space.id === spaceId ? { ...response, extendedSpace: true } : space
+          space.id === spaceId ? spaceInfo : space
         );
       } else {
-        extentedSpaces.value = [
-          ...extentedSpaces.value,
-          { ...response, extendedSpace: true }
-        ];
+        extentedSpaces.value = [...extentedSpaces.value, spaceInfo];
       }
 
       loading.value = false;
+      return spaceInfo;
     } catch (e) {
       loading.value = false;
       console.error(e);
-      return e;
+      throw e;
     }
   }
 
