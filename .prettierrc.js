@@ -7,7 +7,14 @@ module.exports = {
     {
       files: '*.vue',
       options: {
-        parser: 'vue'
+        parser: 'vue',
+        printWidth: 120
+      }
+    },
+    {
+      files: '*.json',
+      options: {
+        printWidth: '160'
       }
     }
   ]

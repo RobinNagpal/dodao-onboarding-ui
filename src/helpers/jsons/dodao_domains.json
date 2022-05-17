@@ -1,26 +1,58 @@
 {
-  "aave.dodao.io": "aave-eth-1",
-
-  "babylon.dodao.io": "babylon-finance-eth-1",
-
-  "badger.dodao.io": "badger-eth-1",
-  "badger-localhost": "badgerdao-eth-1",
-
-  "balancer.dodao.io": "balancer-eth-1",
-  "balancer-localhost": "balancer-eth-1",
-
-  "curve.dodao.io": "curve-finance-eth-1",
-
-  "dxdao.dodao.io": "dxdao-eth-1",
-
-  "meandao.dodao.io": "meandao-sol-mainnet",
-
-  "piedao-localhost": "piedao-eth-1",
-  "piedao.dodao.io": "piedao-eth-1",
-
-  "swdao.dodao.io": "sw-dao-eth-1",
-
-  "synthetix.dodao.io": "synthetix-eth-1",
-
-  "vitadao.dodao.io": "vitadao-eth-1"
+  "aave.dodao.io": {
+    "spaceId": "aave-eth-1",
+    "siteType": "Onboarding"
+  },
+  "babylon.dodao.io": {
+    "spaceId": "babylon-finance-eth-1",
+    "siteType": "Onboarding"
+  },
+  "badger.dodao.io": {
+    "spaceId": "badger-eth-1",
+    "siteType": "Onboarding"
+  },
+  "badger-localhost": {
+    "spaceId": "badgerdao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "balancer.dodao.io": {
+    "spaceId": "balancer-eth-1",
+    "siteType": "Onboarding"
+  },
+  "balancer-localhost": {
+    "spaceId": "balancer-eth-1",
+    "siteType": "Onboarding"
+  },
+  "curve.dodao.io": {
+    "spaceId": "curve-finance-eth-1",
+    "siteType": "Onboarding"
+  },
+  "dxdao.dodao.io": {
+    "spaceId": "dxdao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "meandao.dodao.io": {
+    "spaceId": "meandao-sol-mainnet",
+    "siteType": "Onboarding"
+  },
+  "piedao-localhost": {
+    "spaceId": "piedao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "piedao.dodao.io": {
+    "spaceId": "piedao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "swdao.dodao.io": {
+    "spaceId": "sw-dao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "synthetix.dodao.io": {
+    "spaceId": "synthetix-eth-1",
+    "siteType": "Onboarding"
+  },
+  "vitadao.dodao.io": {
+    "spaceId": "vitadao-eth-1",
+    "siteType": "Onboarding"
+  }
 }

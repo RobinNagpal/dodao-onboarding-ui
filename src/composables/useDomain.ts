@@ -9,10 +9,10 @@ export function useDomain() {
   let domain = domains[domainName];
 
   if (env === 'local') {
-    domain = import.meta.env.VITE_VIEW_AS_SPACE ?? domain;
+    domain = import.meta.env.VITE_VIEW_AS_SPACE ?? domain?.spaceId;
   }
 
   const alias = Object.keys(aliases).find(alias => aliases[alias] === domain);
 
-  return { domain, alias, env };
+  return { domain, alias, env, siteType: domain?.siteType };
 }

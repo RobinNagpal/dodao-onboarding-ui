@@ -7,14 +7,12 @@ import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 
 const route = useRoute();
 const { domain } = useDomain();
-const { loadExtendedSpace, loadExtentedSpaces, extentedSpaces, spaceLoading } =
-  useExtendedSpaces();
+const { loadExtendedSpace, loadExtentedSpaces, extentedSpaces, spaceLoading } = useExtendedSpaces();
 
+console.log('domain', domain);
 const spaceId = computed(() => domain || route.params.key);
 
-const space = computed(() =>
-  formatSpace(extentedSpaces.value?.find(s => s.id === spaceId.value))
-);
+const space = computed(() => formatSpace(extentedSpaces.value?.find(s => s.id === spaceId.value)));
 
 onMounted(() => loadExtendedSpace(spaceId.value));
 </script>
@@ -24,9 +22,7 @@ onMounted(() => loadExtendedSpace(spaceId.value));
     v-if="space"
     :spaceId="spaceId"
     :space="space"
-    :spaceLoading="
-      spaceLoading || spaceId !== space.id || !space?.extendedSpace
-    "
+    :spaceLoading="spaceLoading || spaceId !== space.id || !space?.extendedSpace"
     :loadExtentedSpaces="loadExtentedSpaces"
   />
 </template>
