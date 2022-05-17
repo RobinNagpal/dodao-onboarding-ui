@@ -1,5 +1,6 @@
 {
   "aave.dodao.io": "aave-eth-1",
+  "arbitrum.dodao.io": "arbitrum-eth-1",
 
   "babylon.dodao.io": "babylon-finance-eth-1",
 
@@ -11,13 +12,16 @@
 
   "curve.dodao.io": "curve-finance-eth-1",
 
+  "dhedge.dodao.io": "dhedge-eth-1",
   "dxdao.dodao.io": "dxdao-eth-1",
 
+  "juicebox.dodao.io": "juicebox-eth-1",
   "meandao.dodao.io": "meandao-sol-mainnet",
 
   "piedao-localhost": "piedao-eth-1",
   "piedao.dodao.io": "piedao-eth-1",
 
+  "superfluid.dodao.io": "superfluid-eth-1",
   "swdao.dodao.io": "sw-dao-eth-1",
 
   "synthetix.dodao.io": "synthetix-eth-1",

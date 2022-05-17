@@ -19,6 +19,7 @@ import apetroop from './apetroop.scss';
 import apy from './apy.scss';
 import aragon from './aragon.scss';
 import aragonchina from './aragonchina.scss';
+import arbitrum from './arbitrum.scss';
 import arckyf from './arckyf.scss';
 import babylon from './babylon.scss';
 import badger from './badger.scss';
@@ -123,6 +124,7 @@ import itam from './itam.scss';
 import iwan from './iwan.scss';
 import iyffinance from './iyffinance.scss';
 import jiaozi from './jiaozi.scss';
+import juicebox from './juicebox.scss';
 import julpad from './julpad.scss';
 import julswap from './julswap.scss';
 import kebabfinance from './kebabfinance.scss';
@@ -219,6 +221,7 @@ import stakewise from './stakewise.scss';
 import status from './status.scss';
 import steakbank from './steakbank.scss';
 import streamr from './streamr.scss';
+import superfluid from './superfluid.scss';
 import sushi from './sushi.scss';
 import sushipowah from './sushipowah.scss';
 import swagg from './swagg.scss';
@@ -289,6 +292,7 @@ export default {
   apy,
   aragon,
   aragonchina,
+  arbitrum,
   arckyf,
   babylon,
   badger,
@@ -393,6 +397,7 @@ export default {
   iwan,
   iyffinance,
   jiaozi,
+  juicebox,
   julpad,
   julswap,
   kebabfinance,
@@ -489,6 +494,7 @@ export default {
   status,
   steakbank,
   streamr,
+  superfluid,
   sushi,
   sushipowah,
   swagg,
