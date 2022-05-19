@@ -282,6 +282,7 @@ type Guide {
   created: Int!
   discordWebhook: String
   discordRoleIds: [String!]!
+  passingCount: Int!
   guideType: String!
   id: String!
   ipfs: String!

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import Block from '@/components/Block.vue';
-import Checkbox from '@/components/Checkbox.vue';
 import {
   EditGuideType,
   UpdateGuideFunctions
 } from '@/composables/guide/useEditGuide';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
+import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { onMounted, PropType, ref, unref } from 'vue';
+import { computed, onMounted, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: {
@@ -51,10 +50,8 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
   );
 }
 
-const errors = unref(props.guideErrors);
-
 function inputError(field: string) {
-  return errors?.[field];
+  return props.guideErrors?.[field];
 }
 
 const uploadSocialShareImageLoading = ref(false);
@@ -68,6 +65,33 @@ function setSocialShareImageUrl(url) {
 function setUploadSocialShareImage(s) {
   uploadSocialShareImageLoading.value = s;
 }
+
+const totalQuestion = computed(() => {
+  const questionsNumber = props.guide.steps.reduce(
+    (previousValue, currentValue) => {
+      return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
+        if (
+          curr.type === QuestionType.SingleChoice ||
+          curr.type === QuestionType.MultipleChoice
+        ) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0));
+    },
+    0
+  );
+  return questionsNumber;
+});
+
+const handlePassingcountInput = (value: string) => {
+  props.updateGuideFunctions.updateGuideField('passingCount', value);
+  if (parseInt(value) > totalQuestion.value) {
+    props.updateGuideFunctions.updateGuideErrorField('passingCount', true);
+  } else {
+    props.updateGuideFunctions.updateGuideErrorField('passingCount', false);
+  }
+};
 </script>
 
 <template>
@@ -135,6 +159,34 @@ function setUploadSocialShareImage(s) {
           <div class="leading-6">{{ role.name }}</div>
         </div>
       </template>
+    </div>
+  </Block>
+
+  <Block
+    :title="$t('guide.create.discordRolesPassingCount')"
+    :class="`mt-4 wrapper`"
+  >
+    <div>
+      <div class="w-full md:w-8/12 flex">
+        <UiInput
+          class=""
+          :model-value="guide.passingCount"
+          :error="inputError('passingCount')"
+          :number="true"
+          :max="totalQuestion"
+          @update:modelValue="handlePassingcountInput($event)"
+        >
+          <template v-slot:label>
+            {{ $t(`guide.create.discordRolesPassingCount`) }}
+          </template>
+        </UiInput>
+        <span class="text-2xl ml-2 -mt-1">/</span>
+        <UiInput
+          class="w-[50px] ml-2 !bg-skin-header-bg"
+          :model-value="totalQuestion"
+          :disabled="true"
+        />
+      </div>
     </div>
   </Block>
 </template>

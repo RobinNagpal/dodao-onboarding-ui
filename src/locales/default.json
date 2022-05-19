@@ -206,7 +206,8 @@
       "connectDiscord": "Connect Discord",
       "changeDiscordServer": "Change Server",
       "discordRoles": "Discord Roles",
-      "chooseDiscordRoles": "Choose Discord roles"
+      "chooseDiscordRoles": "Choose Discord roles",
+      "discordRolesPassingCount": "Passing Answers count"
     },
     "category": {
       "community": "Community",

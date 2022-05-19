@@ -91,6 +91,7 @@ export function useClient() {
         categories: payload.categories || [],
         content: payload.content,
         discordRoleIds: payload.discordRoleIds,
+        passingCount: payload.passingCount,
         discordWebhook: payload.discordWebhook || '',
         from: web3.value.account,
         guideType: payload.guideType,
