@@ -23,7 +23,7 @@ export const guideTypes = {
     { name: 'categories', type: 'string[]' },
     { name: 'content', type: 'string' },
     { name: 'discordRoleIds', type: 'string[]' },
-    { name: 'passingCount', type: 'number' },
+    { name: 'discordRolePassingCount', type: 'number' },
     { name: 'discordWebhook', type: 'string' },
     { name: 'from', type: 'address' },
     { name: 'guideType', type: 'string' },

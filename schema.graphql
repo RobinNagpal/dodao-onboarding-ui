@@ -280,9 +280,10 @@ type Guide {
   categories: [String!]!
   content: String!
   created: Int!
-  discordWebhook: String
   discordRoleIds: [String!]!
-  passingCount: Int!
+  # number of answers that should be correct in order to get discord score
+  discordRolePassingCount: Int
+  discordWebhook: String
   guideType: String!
   id: String!
   ipfs: String!

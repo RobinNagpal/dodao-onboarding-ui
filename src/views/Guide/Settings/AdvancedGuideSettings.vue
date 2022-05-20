@@ -85,11 +85,17 @@ const totalQuestion = computed(() => {
 });
 
 const handlePassingcountInput = (value: string) => {
-  props.updateGuideFunctions.updateGuideField('passingCount', value);
+  props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
   if (parseInt(value) > totalQuestion.value) {
-    props.updateGuideFunctions.updateGuideErrorField('passingCount', true);
+    props.updateGuideFunctions.updateGuideErrorField(
+      'discordRolePassingCount',
+      true
+    );
   } else {
-    props.updateGuideFunctions.updateGuideErrorField('passingCount', false);
+    props.updateGuideFunctions.updateGuideErrorField(
+      'discordRolePassingCount',
+      false
+    );
   }
 };
 </script>
