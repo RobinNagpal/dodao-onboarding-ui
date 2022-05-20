@@ -3,6 +3,10 @@
     "spaceId": "aave-eth-1",
     "siteType": "Onboarding"
   },
+  "arbitrum.dodao.io": {
+    "spaceId": "arbitrum-eth-1",
+    "siteType": "Onboarding"
+  },
   "babylon.dodao.io": {
     "spaceId": "babylon-finance-eth-1",
     "siteType": "Onboarding"
@@ -27,8 +31,20 @@
     "spaceId": "curve-finance-eth-1",
     "siteType": "Onboarding"
   },
+  "dhedge.dodao.io": {
+    "spaceId": "dhedge-eth-1",
+    "siteType": "Onboarding"
+  },
   "dxdao.dodao.io": {
     "spaceId": "dxdao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "juicebox.dodao.io": {
+    "spaceId": "juicebox-eth-1",
+    "siteType": "Onboarding"
+  },
+  "kleros.dodao.io": {
+    "spaceId": "kleros-eth-1",
     "siteType": "Onboarding"
   },
   "meandao.dodao.io": {
@@ -41,6 +57,10 @@
   },
   "piedao.dodao.io": {
     "spaceId": "piedao-eth-1",
+    "siteType": "Onboarding"
+  },
+  "superfluid.dodao.io": {
+    "spaceId": "superfluid-finance-eth-1",
     "siteType": "Onboarding"
   },
   "swdao.dodao.io": {

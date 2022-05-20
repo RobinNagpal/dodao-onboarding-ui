@@ -43,6 +43,7 @@ query GuideQuery($uuid: String!) {
     content
     created
     discordRoleIds
+    discordRolePassingCount
     discordWebhook
     id
     guideType

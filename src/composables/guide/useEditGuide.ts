@@ -47,6 +47,7 @@ export type UpdateGuideFunctions = {
   moveStepDown: (stepUuid) => void;
   addStep: () => void;
   updateGuideField: (field: KeyOfGuideInput, value: any) => void;
+  updateGuideErrorField: (field: KeyOfGuideInput, value: any) => void;
   updateStep: (step) => void;
   removeStep: (stepUuid) => void;
   moveStepUp: (stepUuid) => void;
@@ -290,12 +291,20 @@ export function useEditGuide(
     };
   }
 
+  function updateGuideErrorField(field: KeyOfGuideInput, value: any) {
+    guideErrors.value = {
+      ...guideErrors.value,
+      [field]: value
+    };
+  }
+
   const updateGuideFunctions: UpdateGuideFunctions = {
     addStep,
     moveStepUp,
     moveStepDown,
     removeStep,
     setActiveStep,
+    updateGuideErrorField,
     updateGuideField,
     updateStep
   };

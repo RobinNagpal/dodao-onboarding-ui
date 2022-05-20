@@ -10,6 +10,8 @@ const props = defineProps({
   number: Boolean,
   disabled: Boolean,
   maxlength: [Number, String],
+  min: [Number, String],
+  max: [Number, String],
   additionalInputClass: String,
   required: {
     type: Boolean,
@@ -35,7 +37,7 @@ function handleInput(e) {
       '!border-red': error,
       'cursor-pointer': $slots.selected,
       'hover:border-skin-link': !disabled,
-      'pt-3 mb-3 border-b border-skin-border transition-colors bg-transparent text-skin-link outline-none text-left w-full flex pr-3 focus-within:border-skin-link': true
+      'relative overflow-hidden pt-3 mb-3 border-b border-skin-border transition-colors bg-transparent text-skin-link outline-none text-left w-full flex pr-3 focus-within:border-skin-link': true
     }"
   >
     <div
@@ -55,6 +57,8 @@ function handleInput(e) {
       :class="additionalInputClass"
       :required="required"
       :maxlength="maxlength"
+      :min="min"
+      :max="max"
       @focus="isFocus = true"
       @blur="isFocus = false"
     />

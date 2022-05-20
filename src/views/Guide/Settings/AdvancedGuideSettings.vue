@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
 import Checkbox from '@/components/Checkbox.vue';
+import UiInput from '@/components/Ui/Input.vue';
 import {
   EditGuideType,
   UpdateGuideFunctions
 } from '@/composables/guide/useEditGuide';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
+import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { onMounted, PropType, ref, unref } from 'vue';
+import { computed, onMounted, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: {
@@ -51,10 +53,8 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
   );
 }
 
-const errors = unref(props.guideErrors);
-
 function inputError(field: string) {
-  return errors?.[field];
+  return props.guideErrors?.[field];
 }
 
 const uploadSocialShareImageLoading = ref(false);
@@ -68,6 +68,39 @@ function setSocialShareImageUrl(url) {
 function setUploadSocialShareImage(s) {
   uploadSocialShareImageLoading.value = s;
 }
+
+const totalQuestion = computed(() => {
+  const questionsNumber = props.guide.steps.reduce(
+    (previousValue, currentValue) => {
+      return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
+        if (
+          curr.type === QuestionType.SingleChoice ||
+          curr.type === QuestionType.MultipleChoice
+        ) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0));
+    },
+    0
+  );
+  return questionsNumber;
+});
+
+const handlePassingcountInput = (value: string) => {
+  props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
+  if (parseInt(value) > totalQuestion.value) {
+    props.updateGuideFunctions.updateGuideErrorField(
+      'discordRolePassingCount',
+      true
+    );
+  } else {
+    props.updateGuideFunctions.updateGuideErrorField(
+      'discordRolePassingCount',
+      false
+    );
+  }
+};
 </script>
 
 <template>
@@ -107,35 +140,54 @@ function setUploadSocialShareImage(s) {
     </UiInput>
   </Block>
   <Block :title="$t('guide.create.discordRoles')" :class="`mt-4 wrapper`">
-    <div class="py-24">
-      <div class="my-6">
-        <div
-          v-if="selectedServerInfo && selectedServerInfo.id"
-          class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
-        >
-          <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
-            <img
-              v-if="selectedServerInfo && selectedServerInfo.icon"
-              class="h-full"
-              :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
-            />
+    <div v-if="selectedServerInfo && selectedServerInfo.id">
+      <div class="py-24">
+        <div class="my-6">
+          <div
+            class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
+          >
+            <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
+              <img
+                v-if="selectedServerInfo && selectedServerInfo.icon"
+                class="h-full"
+                :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
+              />
+            </div>
+            <span>{{ selectedServerInfo.name }}</span>
           </div>
-          <span>{{ selectedServerInfo.name }}</span>
+        </div>
+      </div>
+      <div v-if="selectedServerInfo && selectedServerInfo.roles?.length > 0">
+        <div class="mb-3">{{ $t('guide.create.chooseDiscordRoles') }}:</div>
+        <template v-for="role in selectedServerInfo.roles" :key="role.id">
+          <div class="flex leading-loose items-center py-2 ml-2">
+            <Checkbox
+              @update:modelValue="selectMultipleRoles(role.id, $event)"
+              :modelValue="currentSelectedRoles.includes(role.id)"
+            />
+            <div class="leading-6">{{ role.name }}</div>
+          </div>
+        </template>
+      </div>
+      <div class="w-full flex">
+        <UiInput
+          :model-value="guide.discordRolePassingCount"
+          :error="inputError('discordRolePassingCount')"
+          :number="true"
+          :max="totalQuestion"
+          @update:modelValue="handlePassingcountInput($event)"
+        >
+          <template v-slot:label>
+            {{ $t(`guide.create.discordRolesPassingCount`) }}
+          </template>
+        </UiInput>
+        <span class="text-2xl ml-2 -mt-1">/</span>
+        <div class="w-[280px] pt-3">
+          {{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})
         </div>
       </div>
     </div>
-    <div v-if="selectedServerInfo && selectedServerInfo.roles?.length > 0">
-      <div class="mb-3">{{ $t('guide.create.chooseDiscordRoles') }}:</div>
-      <template v-for="role in selectedServerInfo.roles" :key="role.id">
-        <div class="flex leading-loose items-center py-2 ml-2">
-          <Checkbox
-            @update:modelValue="selectMultipleRoles(role.id, $event)"
-            :modelValue="currentSelectedRoles.includes(role.id)"
-          />
-          <div class="leading-6">{{ role.name }}</div>
-        </div>
-      </template>
-    </div>
+    <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
   </Block>
 </template>
 
