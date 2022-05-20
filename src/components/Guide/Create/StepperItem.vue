@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
 import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
-import Icon from '@/components/Icon.vue';
 import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';

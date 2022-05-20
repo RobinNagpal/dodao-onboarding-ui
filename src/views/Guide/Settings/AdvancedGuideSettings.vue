@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
+import Checkbox from '@/components/Checkbox.vue';
+import UiInput from '@/components/Ui/Input.vue';
 import {
   EditGuideType,
   UpdateGuideFunctions
@@ -137,47 +140,39 @@ const handlePassingcountInput = (value: string) => {
     </UiInput>
   </Block>
   <Block :title="$t('guide.create.discordRoles')" :class="`mt-4 wrapper`">
-    <div class="py-24">
-      <div class="my-6">
-        <div
-          v-if="selectedServerInfo && selectedServerInfo.id"
-          class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
-        >
-          <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
-            <img
-              v-if="selectedServerInfo && selectedServerInfo.icon"
-              class="h-full"
-              :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
-            />
+    <div v-if="selectedServerInfo && selectedServerInfo.id">
+      <div class="py-24">
+        <div class="my-6">
+          <div
+            class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
+          >
+            <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
+              <img
+                v-if="selectedServerInfo && selectedServerInfo.icon"
+                class="h-full"
+                :src="`https://cdn.discordapp.com/icons/${selectedServerInfo.id}/${selectedServerInfo.icon}.png`"
+              />
+            </div>
+            <span>{{ selectedServerInfo.name }}</span>
           </div>
-          <span>{{ selectedServerInfo.name }}</span>
         </div>
       </div>
-    </div>
-    <div v-if="selectedServerInfo && selectedServerInfo.roles?.length > 0">
-      <div class="mb-3">{{ $t('guide.create.chooseDiscordRoles') }}:</div>
-      <template v-for="role in selectedServerInfo.roles" :key="role.id">
-        <div class="flex leading-loose items-center py-2 ml-2">
-          <Checkbox
-            @update:modelValue="selectMultipleRoles(role.id, $event)"
-            :modelValue="currentSelectedRoles.includes(role.id)"
-          />
-          <div class="leading-6">{{ role.name }}</div>
-        </div>
-      </template>
-    </div>
-  </Block>
-
-  <Block
-    :title="$t('guide.create.discordRolesPassingCount')"
-    :class="`mt-4 wrapper`"
-  >
-    <div>
-      <div class="w-full md:w-8/12 flex">
+      <div v-if="selectedServerInfo && selectedServerInfo.roles?.length > 0">
+        <div class="mb-3">{{ $t('guide.create.chooseDiscordRoles') }}:</div>
+        <template v-for="role in selectedServerInfo.roles" :key="role.id">
+          <div class="flex leading-loose items-center py-2 ml-2">
+            <Checkbox
+              @update:modelValue="selectMultipleRoles(role.id, $event)"
+              :modelValue="currentSelectedRoles.includes(role.id)"
+            />
+            <div class="leading-6">{{ role.name }}</div>
+          </div>
+        </template>
+      </div>
+      <div class="w-full flex">
         <UiInput
-          class=""
-          :model-value="guide.passingCount"
-          :error="inputError('passingCount')"
+          :model-value="guide.discordRolePassingCount"
+          :error="inputError('discordRolePassingCount')"
           :number="true"
           :max="totalQuestion"
           @update:modelValue="handlePassingcountInput($event)"
@@ -187,13 +182,12 @@ const handlePassingcountInput = (value: string) => {
           </template>
         </UiInput>
         <span class="text-2xl ml-2 -mt-1">/</span>
-        <UiInput
-          class="w-[50px] ml-2 !bg-skin-header-bg"
-          :model-value="totalQuestion"
-          :disabled="true"
-        />
+        <div class="w-[280px] pt-3">
+          {{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})
+        </div>
       </div>
     </div>
+    <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
   </Block>
 </template>
 

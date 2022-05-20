@@ -158,15 +158,9 @@ function selectGuideOrBundleType(guideType: GuideType) {
         <div class="wrapper">
           <AdvancedGuideSettings
             v-if="settingTab === 'advanced' && !spaceLoading"
-            :active-step-id="activeStepId"
             :guide="form"
             :guide-errors="guideErrors"
-            :steps="form.steps"
             :update-guide-functions="updateGuideFunctions"
-            :update-modal-category-open="updateModalCategoryOpen"
-            :update-modal-guide-or-bundle-type-open="
-              updateModalGuideOrBundleTypeOpen
-            "
             :space="space"
           />
 
