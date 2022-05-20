@@ -205,8 +205,11 @@
       "stepByStep": "Step by Step Guide",
       "connectDiscord": "Connect Discord",
       "changeDiscordServer": "Change Server",
+      "connectToDiscordForFeatures": "Connect to discord from project settings to access smart features like granting roles on guide completion",
       "discordRoles": "Discord Roles",
-      "chooseDiscordRoles": "Choose Discord roles"
+      "chooseDiscordRoles": "Choose Discord roles",
+      "discordRolesPassingCount": "Passing Answers count",
+      "totalQuestionCount": "Total Question Count"
     },
     "category": {
       "community": "Community",
@@ -469,7 +472,8 @@
     "saved": "Saved!",
     "proposalCreated": "Proposal created",
     "voteSuccessful": "Your vote is in!",
-    "youDidIt": "You did it!"
+    "youDidIt": "You did it!",
+    "spaceSaved": "Dao Saved. Please reload the page after 20 seconds to see the changes."
   },
   "explore": {
     "createStrategy": "Create strategy",

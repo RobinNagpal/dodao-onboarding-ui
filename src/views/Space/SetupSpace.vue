@@ -143,7 +143,7 @@ async function handleSubmit() {
     );
     console.log('Result', result);
     if (result?.id) {
-      notify(['green', t('notify.saved')]);
+      notify(['green', t('notify.spaceSaved')]);
       await loadExtentedSpaces([result.id]);
       await getExplore();
       await router.push({
@@ -265,10 +265,16 @@ onMounted(async () => {
   <LayoutSingle v-bind="$attrs">
     <template #content>
       <div class="px-16">
-        <div v-if="space?.name" class="px-4 md:px-0 mb-3">
-          <router-link :to="{ name: 'spaceProposals' }" class="text-color">
+        <div v-if="spaceId" class="px-4 md:px-0 mb-3">
+          <router-link
+            :to="{
+              name: 'spaceHome',
+              params: { guideType: 'onboarding', key: spaceId }
+            }"
+            class="text-color"
+          >
             <Icon name="back" size="22" class="!align-middle" />
-            {{ space.name }}
+            {{ $t('backToHome') }}
           </router-link>
         </div>
         <div class="px-4 md:px-0 flex mb-4" v-if="spaceId">
@@ -433,8 +439,8 @@ onMounted(async () => {
             </UiButton>
           </div>
         </template>
-      </div></template
-    >
+      </div>
+    </template>
   </LayoutSingle>
   <teleport to="#modal">
     <ModalNetworks
