@@ -1,78 +1,82 @@
 {
   "aave.dodao.io": {
     "spaceId": "aave-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "arbitrum.dodao.io": {
     "spaceId": "arbitrum-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "babylon.dodao.io": {
     "spaceId": "babylon-finance-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "badger.dodao.io": {
     "spaceId": "badger-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "badger-localhost": {
     "spaceId": "badgerdao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "balancer.dodao.io": {
     "spaceId": "balancer-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "balancer-localhost": {
     "spaceId": "balancer-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "curve.dodao.io": {
     "spaceId": "curve-finance-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "dhedge.dodao.io": {
     "spaceId": "dhedge-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "dxdao.dodao.io": {
     "spaceId": "dxdao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "juicebox.dodao.io": {
     "spaceId": "juicebox-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "kleros.dodao.io": {
     "spaceId": "kleros-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
+  },
+  "loozr.dodao.io": {
+    "spaceId": "loozr-near-mainnet",
+    "siteType": "onboarding"
   },
   "meandao.dodao.io": {
     "spaceId": "meandao-sol-mainnet",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "piedao-localhost": {
     "spaceId": "piedao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "piedao.dodao.io": {
     "spaceId": "piedao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "superfluid.dodao.io": {
     "spaceId": "superfluid-finance-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "swdao.dodao.io": {
     "spaceId": "sw-dao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "synthetix.dodao.io": {
     "spaceId": "synthetix-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   },
   "vitadao.dodao.io": {
     "spaceId": "vitadao-eth-1",
-    "siteType": "Onboarding"
+    "siteType": "onboarding"
   }
 }
