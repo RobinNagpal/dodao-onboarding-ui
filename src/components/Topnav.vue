@@ -20,9 +20,6 @@ const { modalAccountOpen } = useModal();
 
 const { env, domain, siteType } = useDomain();
 
-console.log('Top Nav - siteType', siteType);
-console.log('Top Nav - domain', domain);
-
 const route = useRoute();
 
 const { explore } = useApp();

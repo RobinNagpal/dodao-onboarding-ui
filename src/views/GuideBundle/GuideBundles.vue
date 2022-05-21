@@ -29,8 +29,6 @@ const route = useRoute();
 
 const bundleType = props.bundleType || route.params.bundleType;
 
-console.log('GuideBundle.vue - bundleType', bundleType);
-
 const loading = ref(false);
 
 const spaceMembers = computed(() => (props.space.members.length < 1 ? ['none'] : props.space.members));
