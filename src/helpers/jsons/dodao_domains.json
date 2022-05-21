@@ -51,6 +51,10 @@
     "spaceId": "loozr-near-mainnet",
     "siteType": "onboarding"
   },
+  "onboarding.loozr.io": {
+    "spaceId": "loozr-near-mainnet",
+    "siteType": "onboarding"
+  },
   "meandao.dodao.io": {
     "spaceId": "meandao-sol-mainnet",
     "siteType": "onboarding"
