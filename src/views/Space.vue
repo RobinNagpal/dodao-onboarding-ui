@@ -9,7 +9,6 @@ const route = useRoute();
 const { domain } = useDomain();
 const { loadExtendedSpace, loadExtentedSpaces, extentedSpaces, spaceLoading } = useExtendedSpaces();
 
-console.log('domain', domain);
 const spaceId = computed(() => domain || route.params.key);
 
 const space = computed(() => formatSpace(extentedSpaces.value?.find(s => s.id === spaceId.value)));

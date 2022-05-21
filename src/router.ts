@@ -36,7 +36,7 @@ const routes: RouteRecordRaw[] = [];
 // or they get mounted at "/" in the single space scenario.
 
 const spaceHomeRoute: RouteRecordRaw =
-  siteType === 'Courses'
+  siteType === 'courses'
     ? {
         path: '',
         name: 'spaceHome',
