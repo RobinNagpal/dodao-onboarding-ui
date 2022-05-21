@@ -22,18 +22,13 @@ const router = useRouter();
 const guideType = computed(() => route.params.guideType);
 const bundleType = computed(() => route.params.bundleType);
 
-const guideOrBundleType = computed(
-  () =>
-    route.params.guideType || route.params.bundleType || GuideType.Onboarding
-);
+const guideOrBundleType = computed(() => route.params.guideType || route.params.bundleType || GuideType.Onboarding);
 
 const routeName = computed(() => route.name);
 
 function toggleGuidesAndBundles() {
   const typeParam =
-    routeName.value === 'guides'
-      ? { bundleType: guideOrBundleType.value }
-      : { guideType: guideOrBundleType.value };
+    routeName.value === 'guides' ? { bundleType: guideOrBundleType.value } : { guideType: guideOrBundleType.value };
 
   router.push({
     name: routeName.value === 'guides' ? 'guideBundles' : 'guides',
@@ -99,27 +94,11 @@ const threeDotItems = computed(() => {
 <template>
   <div class="flex topnav-domain-navigation">
     <div class="pl-3 flex nav-links">
-      <SpaceNavigationLink
-        :space="space"
-        :guide-or-bundle-type="guideOrBundleType"
-        :category-type="'onboarding'"
-      />
-      <SpaceNavigationLink
-        :space="space"
-        :guide-or-bundle-type="guideOrBundleType"
-        :category-type="'how-to'"
-      />
-      <SpaceNavigationLink
-        :space="space"
-        :guide-or-bundle-type="guideOrBundleType"
-        :category-type="'level-up'"
-      />
+      <SpaceNavigationLink :space="space" :guide-or-bundle-type="guideOrBundleType" :category-type="'onboarding'" />
+      <SpaceNavigationLink :space="space" :guide-or-bundle-type="guideOrBundleType" :category-type="'how-to'" />
+      <SpaceNavigationLink :space="space" :guide-or-bundle-type="guideOrBundleType" :category-type="'level-up'" />
     </div>
-    <UiNamedToggle
-      v-if="space.id === 'dxdao-eth-1'"
-      @update:modelValue="toggleGuidesAndBundles"
-      :modelValue="$route.name === 'guideBundles'"
-    />
+
     <div class="pt-2 pl-6">
       <UiDropdown
         top="2.5rem"

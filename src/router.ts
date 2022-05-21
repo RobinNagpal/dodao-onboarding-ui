@@ -40,7 +40,10 @@ const spaceHomeRoute: RouteRecordRaw =
     ? {
         path: '',
         name: 'spaceHome',
-        component: GuideBundles
+        component: GuideBundles,
+        props: {
+          bundleType: 'courses'
+        }
       }
     : {
         path: '',

@@ -346,6 +346,7 @@
     "header": "Guide Bundles",
     "new": "New bundle",
     "noGuideBundles": {
+      "courses": "There aren't any Courses here yet!",
       "onboarding": "There aren't any Onboarding guide bundles here yet!",
       "how-to": "There aren't any How To guide bundles here yet!",
       "level-up": "There aren't any Level Up guide bundles here yet!"

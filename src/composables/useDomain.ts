@@ -6,13 +6,15 @@ export function useDomain() {
   let env = 'master';
   if (domainName.includes('localhost')) env = 'local';
   if (domainName === 'demo.snapshot.org') env = 'develop';
-  let domain = domains[domainName];
 
-  if (env === 'local') {
-    domain = import.meta.env.VITE_VIEW_AS_SPACE ?? domain?.spaceId;
-  }
+  const domainObject = domains[domainName];
+
+  const domain =
+    env === 'local'
+      ? import.meta.env.VITE_VIEW_AS_SPACE ?? domainObject?.spaceId
+      : domainObject?.spaceId;
 
   const alias = Object.keys(aliases).find(alias => aliases[alias] === domain);
 
-  return { domain, alias, env, siteType: domain?.siteType };
+  return { domain, alias, env, siteType: domainObject?.siteType };
 }

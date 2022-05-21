@@ -39,6 +39,10 @@
     "spaceId": "dxdao-eth-1",
     "siteType": "onboarding"
   },
+  "dxdao-localhost": {
+    "spaceId": "dxdao-eth-1",
+    "siteType": "courses"
+  },
   "juicebox.dodao.io": {
     "spaceId": "juicebox-eth-1",
     "siteType": "onboarding"
