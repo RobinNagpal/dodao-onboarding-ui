@@ -5,7 +5,7 @@ export function useSpaceSkin() {
   let env = 'master';
   if (domainName.includes('localhost')) env = 'local';
   if (domainName === 'demo.snapshot.org') env = 'develop';
-  let spaceId = domains[domainName];
+  let spaceId = domains[domainName]?.spaceId;
 
   if (env === 'local') {
     spaceId = import.meta.env.VITE_VIEW_AS_SPACE_WITH_SKIN ?? spaceId;
