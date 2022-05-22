@@ -69,7 +69,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: SpaceProposal
   },
   {
-    path: ':guideType/guide/view/:uuid',
+    path: ':guideType/guide/view/:uuid/:stepOrder?',
     name: 'guide',
     component: () => import('@/views/Guide/ViewGuide.vue')
   },
