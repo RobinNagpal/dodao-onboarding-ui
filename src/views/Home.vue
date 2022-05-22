@@ -63,10 +63,7 @@ onMounted(() => {
               }))
           ]"
         >
-          <UiButton
-            class="pr-3 whitespace-nowrap"
-            :disabled="!orderedSpaces.length"
-          >
+          <UiButton class="pr-3 whitespace-nowrap" :disabled="!orderedSpaces.length">
             <Icon size="14" name="apps" class="mt-1 mr-2" />
             <span v-if="selectedCategory">
               {{ $tc('explore.categories.' + selectedCategory) }}
@@ -80,10 +77,7 @@ onMounted(() => {
             <div class="flex">
               <span class="mr-3">{{ item.text }}</span>
               <span class="flex ml-auto mt-[-3px]">
-                <UiCounter
-                  :counter="item.count"
-                  class="my-auto category-counter"
-                />
+                <UiCounter :counter="item.count" class="my-auto category-counter" />
               </span>
             </div>
           </template>
@@ -92,7 +86,7 @@ onMounted(() => {
           {{ $tc('daoCount', [n(orderedSpacesByCategory.length)]) }}
         </div>
       </div>
-      <div class="_3-column-grid features-grid">
+      <div class="_4-column-grid features-grid">
         <div
           role="listitem"
           class="card feature-card"
@@ -130,10 +124,7 @@ onMounted(() => {
               <div class="h-[85px] overflow-hidden text-xs">
                 {{ space.mission }}
               </div>
-              <div
-                class="flex flex-col"
-                v-if="isEthBlockchain || isOneBlockchain"
-              >
+              <div class="flex flex-col" v-if="isEthBlockchain || isOneBlockchain">
                 <div>
                   <div class="mb-[12px] text-color">
                     {{
@@ -156,10 +147,7 @@ onMounted(() => {
               </div>
             </div>
           </router-link>
-          <NoResults
-            :block="true"
-            v-if="Object.keys(orderedSpacesByCategory).length < 1"
-          />
+          <NoResults :block="true" v-if="Object.keys(orderedSpacesByCategory).length < 1" />
         </div>
       </div>
 
