@@ -18,17 +18,12 @@ import { useRoute } from 'vue-router';
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
 
-const { env, domain } = useDomain();
+const { env, domain, siteType } = useDomain();
+
 const route = useRoute();
 
 const { explore } = useApp();
-const {
-  web3,
-  isEthBlockchain,
-  isNearBlockchain,
-  isOneBlockchain,
-  isSolBlockchain
-} = useWeb3();
+const { web3, isEthBlockchain, isNearBlockchain, isOneBlockchain, isSolBlockchain } = useWeb3();
 
 const { loginWrapper } = useWeb3Wrapper();
 
@@ -56,10 +51,7 @@ watch(space, () => {
   setTitle();
 });
 
-const logoUrl =
-  domain && space.value?.avatar
-    ? getCDNImageUrl(space.value?.avatar)
-    : dodaoLogo;
+const logoUrl = domain && space.value?.avatar ? getCDNImageUrl(space.value?.avatar) : dodaoLogo;
 onMounted(() => setTitle());
 </script>
 
@@ -74,18 +66,9 @@ onMounted(() => setTitle());
   <div id="topnav" class="header w-nav">
     <div class="header-main-wrapper">
       <Container class="max-w-[100%] container-default w-container">
-        <div
-          class="flex justify-between items-center header-wrapper flex-wrap"
-          style="min-height: 78px"
-        >
-          <div
-            class="flex items-center header-logo-wrapper w-nav-brand w--current top-nav-left pl-4"
-          >
-            <router-link
-              :to="{ path: '/' }"
-              class="flex items-center"
-              style="font-size: 24px; padding-top: 4px"
-            >
+        <div class="flex justify-between items-center header-wrapper flex-wrap" style="min-height: 78px">
+          <div class="flex items-center header-logo-wrapper w-nav-brand w--current top-nav-left pl-4">
+            <router-link :to="{ path: '/' }" class="flex items-center" style="font-size: 24px; padding-top: 4px">
               <img :src="logoUrl" alt="arrow" class="logo arrow h-[60px]" />
             </router-link>
           </div>
@@ -114,33 +97,22 @@ onMounted(() => setTitle());
               class="mr-2 w-[32px] h-auto"
               :alt="blockchains.ONE.name"
             />
-            <UiButton
-              @click="modalBlockchainsOpen = true"
-              :primary="false"
-              class="flex items-center float-left"
-            >
+            <UiButton @click="modalBlockchainsOpen = true" :primary="false" class="flex items-center float-left">
               <span class="whitespace-nowrap">Change</span>
             </UiButton>
           </div>
-          <div v-else class="top-nav-middle flex justify-center">
+          <div v-else-if="domain && siteType !== 'courses' && space" class="top-nav-middle flex justify-center">
             <SpaceNavigation :space="space" />
           </div>
           <div :key="web3.account" class="flex top-nav-right justify-end pr-4">
-            <template
-              v-if="
-                (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
-                $auth.isAuthenticated.value
-              "
-            >
+            <template v-if="(isEthBlockchain || isNearBlockchain || isOneBlockchain) && $auth.isAuthenticated.value">
               <UiButton
                 @click="modalAccountOpen = true"
                 :loading="web3.authLoading"
                 class="flex items-center float-right"
               >
                 <UiAvatar
-                  :imgsrc="
-                    web3.profile?.image ? getIpfsUrl(web3.profile.image) : ''
-                  "
+                  :imgsrc="web3.profile?.image ? getIpfsUrl(web3.profile.image) : ''"
                   :address="web3.account"
                   size="18"
                   class="-mr-1 sm:mr-2 md:mr-2 lg:mr-2 xl:mr-2 -ml-1"
@@ -150,11 +122,7 @@ onMounted(() => setTitle());
                   v-text="web3.profile.name || web3.profile.ens"
                   class="hidden sm:block"
                 />
-                <span
-                  v-else
-                  v-text="shorten(web3.account)"
-                  class="hidden sm:block"
-                />
+                <span v-else v-text="shorten(web3.account)" class="hidden sm:block" />
               </UiButton>
             </template>
             <WalletMultiButton v-if="isSolBlockchain" />
@@ -167,11 +135,7 @@ onMounted(() => setTitle());
               :aria-label="$t('connectWallet')"
             >
               <span class="hidden sm:block" v-text="$t('connectWallet')" />
-              <Icon
-                name="login"
-                size="20"
-                class="sm:hidden -ml-2 -mr-2 block align-text-bottom"
-              />
+              <Icon name="login" size="20" class="sm:hidden -ml-2 -mr-2 block align-text-bottom" />
             </UiButton>
           </div>
         </div>
@@ -184,17 +148,11 @@ onMounted(() => setTitle());
   </div>
   <teleport to="#modal">
     <ModalAccount
-      :open="
-        (isEthBlockchain || isNearBlockchain || isOneBlockchain) &&
-        modalAccountOpen
-      "
+      :open="(isEthBlockchain || isNearBlockchain || isOneBlockchain) && modalAccountOpen"
       @close="modalAccountOpen = false"
       @login="handleLogin"
     />
-    <ModalBlockchains
-      :open="modalBlockchainsOpen"
-      @close="modalBlockchainsOpen = false"
-    />
+    <ModalBlockchains :open="modalBlockchainsOpen" @close="modalBlockchainsOpen = false" />
   </teleport>
 </template>
 

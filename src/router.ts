@@ -29,17 +29,30 @@ import {
 
 // The frontend shows all spaces or just a single one, when being accessed
 // through that space's custom domain.
-const { domain, alias } = useDomain();
+const { domain, alias, siteType } = useDomain();
 const routes: RouteRecordRaw[] = [];
 
 // These routes get prefixed with the respective space's ENS domain (/:key)
 // or they get mounted at "/" in the single space scenario.
+
+const spaceHomeRoute: RouteRecordRaw =
+  siteType === 'courses'
+    ? {
+        path: '',
+        name: 'spaceHome',
+        component: GuideBundles,
+        props: {
+          bundleType: 'courses'
+        }
+      }
+    : {
+        path: '',
+        name: 'spaceHome',
+        component: Guides
+      };
+
 const spaceRoutes: RouteRecordRaw[] = [
-  {
-    path: '',
-    name: 'spaceHome',
-    component: Guides
-  },
+  spaceHomeRoute,
   {
     path: ':guideType/guides',
     name: 'guides',

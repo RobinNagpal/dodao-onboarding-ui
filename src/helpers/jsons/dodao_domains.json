@@ -1,34 +1,90 @@
 {
-  "aave.dodao.io": "aave-eth-1",
-  "arbitrum.dodao.io": "arbitrum-eth-1",
-
-  "babylon.dodao.io": "babylon-finance-eth-1",
-
-  "badger.dodao.io": "badger-eth-1",
-  "badger-localhost": "badgerdao-eth-1",
-
-  "balancer.dodao.io": "balancer-eth-1",
-  "balancer-localhost": "balancer-eth-1",
-
-  "curve.dodao.io": "curve-finance-eth-1",
-
-  "dhedge.dodao.io": "dhedge-eth-1",
-  "dxdao.dodao.io": "dxdao-eth-1",
-
-  "juicebox.dodao.io": "juicebox-eth-1",
-  "kleros.dodao.io": "kleros-eth-1",
-  "loozr.dodao.io": "loozr-near-mainnet",
-  "onboarding.loozr.io": "loozr-near-mainnet",
-
-  "meandao.dodao.io": "meandao-sol-mainnet",
-
-  "piedao-localhost": "piedao-eth-1",
-  "piedao.dodao.io": "piedao-eth-1",
-
-  "superfluid.dodao.io": "superfluid-finance-eth-1",
-  "swdao.dodao.io": "sw-dao-eth-1",
-
-  "synthetix.dodao.io": "synthetix-eth-1",
-
-  "vitadao.dodao.io": "vitadao-eth-1"
+  "aave.dodao.io": {
+    "spaceId": "aave-eth-1",
+    "siteType": "onboarding"
+  },
+  "arbitrum.dodao.io": {
+    "spaceId": "arbitrum-eth-1",
+    "siteType": "onboarding"
+  },
+  "babylon.dodao.io": {
+    "spaceId": "babylon-finance-eth-1",
+    "siteType": "onboarding"
+  },
+  "badger.dodao.io": {
+    "spaceId": "badger-eth-1",
+    "siteType": "onboarding"
+  },
+  "badger-localhost": {
+    "spaceId": "badgerdao-eth-1",
+    "siteType": "onboarding"
+  },
+  "balancer.dodao.io": {
+    "spaceId": "balancer-eth-1",
+    "siteType": "onboarding"
+  },
+  "balancer-localhost": {
+    "spaceId": "balancer-eth-1",
+    "siteType": "onboarding"
+  },
+  "curve.dodao.io": {
+    "spaceId": "curve-finance-eth-1",
+    "siteType": "onboarding"
+  },
+  "dhedge.dodao.io": {
+    "spaceId": "dhedge-eth-1",
+    "siteType": "onboarding"
+  },
+  "dxdao.dodao.io": {
+    "spaceId": "dxdao-eth-1",
+    "siteType": "onboarding"
+  },
+  "dxdao-localhost": {
+    "spaceId": "dxdao-eth-1",
+    "siteType": "courses"
+  },
+  "juicebox.dodao.io": {
+    "spaceId": "juicebox-eth-1",
+    "siteType": "onboarding"
+  },
+  "kleros.dodao.io": {
+    "spaceId": "kleros-eth-1",
+    "siteType": "onboarding"
+  },
+  "loozr.dodao.io": {
+    "spaceId": "loozr-near-mainnet",
+    "siteType": "onboarding"
+  },
+  "onboarding.loozr.io": {
+    "spaceId": "loozr-near-mainnet",
+    "siteType": "onboarding"
+  },
+  "meandao.dodao.io": {
+    "spaceId": "meandao-sol-mainnet",
+    "siteType": "onboarding"
+  },
+  "piedao-localhost": {
+    "spaceId": "piedao-eth-1",
+    "siteType": "onboarding"
+  },
+  "piedao.dodao.io": {
+    "spaceId": "piedao-eth-1",
+    "siteType": "onboarding"
+  },
+  "superfluid.dodao.io": {
+    "spaceId": "superfluid-finance-eth-1",
+    "siteType": "onboarding"
+  },
+  "swdao.dodao.io": {
+    "spaceId": "sw-dao-eth-1",
+    "siteType": "onboarding"
+  },
+  "synthetix.dodao.io": {
+    "spaceId": "synthetix-eth-1",
+    "siteType": "onboarding"
+  },
+  "vitadao.dodao.io": {
+    "spaceId": "vitadao-eth-1",
+    "siteType": "onboarding"
+  }
 }

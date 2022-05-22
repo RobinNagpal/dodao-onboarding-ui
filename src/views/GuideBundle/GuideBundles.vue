@@ -19,20 +19,19 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
   space: Object,
   spaceId: String,
-  spaceLoading: Boolean
+  spaceLoading: Boolean,
+  bundleType: String
 });
 
 const { store } = useStore();
 const { domain } = useDomain();
 const route = useRoute();
 
-const bundleType = route.params.bundleType;
+const bundleType = props.bundleType || route.params.bundleType;
 
 const loading = ref(false);
 
-const spaceMembers = computed(() =>
-  props.space.members.length < 1 ? ['none'] : props.space.members
-);
+const spaceMembers = computed(() => (props.space.members.length < 1 ? ['none'] : props.space.members));
 
 const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
 
@@ -88,14 +87,7 @@ const loadingData = computed(() => {
     </template>
     <template #content-bottom>
       <div class="mt-6">
-        <NoResults
-          :block="true"
-          v-if="
-            !loadingData &&
-            guideBundlesCount &&
-            store.space.guideBundles.length < 1
-          "
-        />
+        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
         <GuideBundleNoGuideBundles
           v-else-if="!guideBundlesCount && !loadingData"
           class="mt-2"
@@ -112,10 +104,7 @@ const loadingData = computed(() => {
             />
           </div>
         </div>
-        <div
-          style="height: 10px; width: 10px; position: absolute"
-          ref="endElement"
-        />
+        <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
         <Block v-if="loadingData" :slim="true">
           <RowLoading class="my-2" />
         </Block>
