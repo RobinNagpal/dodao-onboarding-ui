@@ -27,17 +27,14 @@ watch(modalOpen, val => {
 </script>
 
 <template>
-  <div
-    :class="appSkin"
-    class="pb-6 font-serif text-base min-h-screen text-skin-text antialiased"
-  >
+  <div :class="appSkin" class="pb-6 font-serif text-base min-h-screen text-skin-text antialiased">
     <UiLoading v-if="app.loading || !app.init" class="overlay big" />
     <div v-else>
       <div class="page-wrapper">
         <Topnav />
         <div class="flex mt-16">
           <Scroller />
-          <router-view :key="$route.path" class="flex-auto route-view" />
+          <router-view class="flex-auto route-view" />
         </div>
       </div>
     </div>
