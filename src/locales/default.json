@@ -227,6 +227,7 @@
       "sales": "Sales",
       "setup": "Setup"
     },
+    "completedStepContent": "Completed Step Content",
     "complete": "Complete",
     "delete": "Delete",
     "duplicate": "Duplicate",

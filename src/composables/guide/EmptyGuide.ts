@@ -22,6 +22,7 @@ export const emptyGuide = (
     guideType: guideType,
     discordRoleIds: [],
     publishStatus: GuidePublishStatus.Live,
+    showIncorrectOnCompletion: true,
     steps: [
       {
         uuid: uuidv4(),

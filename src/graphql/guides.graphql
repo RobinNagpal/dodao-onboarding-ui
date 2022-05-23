@@ -40,6 +40,7 @@ query GuideQuery($uuid: String!) {
   guide(uuid: $uuid) {
     authors
     categories
+    completedStepContent
     content
     created
     discordRoleIds
@@ -51,6 +52,7 @@ query GuideQuery($uuid: String!) {
     link
     name
     previousId
+    showIncorrectOnCompletion
     space {
       id
       name

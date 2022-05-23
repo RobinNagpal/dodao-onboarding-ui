@@ -2,10 +2,10 @@
 import Block from '@/components/Block.vue';
 import Checkbox from '@/components/Checkbox.vue';
 import UiInput from '@/components/Ui/Input.vue';
-import {
-  EditGuideType,
-  UpdateGuideFunctions
-} from '@/composables/guide/useEditGuide';
+
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
@@ -47,10 +47,7 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
     ? [...currentSelectedRoles.value, roleId]
     : currentSelectedRoles.value.filter(role => role !== roleId);
 
-  props.updateGuideFunctions.updateGuideField(
-    'discordRoleIds',
-    currentSelectedRoles
-  );
+  props.updateGuideFunctions.updateGuideField('discordRoleIds', currentSelectedRoles);
 }
 
 function inputError(field: string) {
@@ -70,35 +67,23 @@ function setUploadSocialShareImage(s) {
 }
 
 const totalQuestion = computed(() => {
-  const questionsNumber = props.guide.steps.reduce(
-    (previousValue, currentValue) => {
-      return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
-        if (
-          curr.type === QuestionType.SingleChoice ||
-          curr.type === QuestionType.MultipleChoice
-        ) {
-          return acc + 1;
-        }
-        return acc;
-      }, 0));
-    },
-    0
-  );
+  const questionsNumber = props.guide.steps.reduce((previousValue, currentValue) => {
+    return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
+      if (curr.type === QuestionType.SingleChoice || curr.type === QuestionType.MultipleChoice) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0));
+  }, 0);
   return questionsNumber;
 });
 
 const handlePassingcountInput = (value: string) => {
   props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
   if (parseInt(value) > totalQuestion.value) {
-    props.updateGuideFunctions.updateGuideErrorField(
-      'discordRolePassingCount',
-      true
-    );
+    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', true);
   } else {
-    props.updateGuideFunctions.updateGuideErrorField(
-      'discordRolePassingCount',
-      false
-    );
+    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', false);
   }
 };
 </script>
@@ -109,19 +94,13 @@ const handlePassingcountInput = (value: string) => {
       :model-value="guide.socialShareImage"
       placeholder="e.g. https://example.com/guide.png ideally 800px by 418px"
       :error="inputError('socialShareImage')"
-      @update:modelValue="
-        updateGuideFunctions.updateGuideField('socialShareImage', $event)
-      "
+      @update:modelValue="updateGuideFunctions.updateGuideField('socialShareImage', $event)"
     >
       <template v-slot:label>
         {{ $t('guide.socialShareImage') }}
       </template>
       <template v-slot:info>
-        <Upload
-          class="!ml-2"
-          @input="setSocialShareImageUrl"
-          @loading="setUploadSocialShareImage"
-        >
+        <Upload class="!ml-2" @input="setSocialShareImageUrl" @loading="setUploadSocialShareImage">
           {{ $t('upload') }}
         </Upload>
       </template>
@@ -130,22 +109,27 @@ const handlePassingcountInput = (value: string) => {
       :model-value="guide.discordWebhook"
       placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
       :error="inputError('discordWebhook')"
-      @update:modelValue="
-        updateGuideFunctions.updateGuideField('discordWebhook', $event)
-      "
+      @update:modelValue="updateGuideFunctions.updateGuideField('discordWebhook', $event)"
     >
       <template v-slot:label>
         {{ $t('guide.discordWebhook') }}
       </template>
     </UiInput>
+    <UiButton class="w-full h-96 mb-4" style="height: max-content">
+      <TextareaAutosize
+        :value="guide.completedStepContent"
+        :placeholder="$t(`guide.completedStepContent`)"
+        class="input w-full text-left"
+        style="font-size: 18px"
+        @update:modelValue="updateGuideFunctions.updateGuideField('completedStepContent', $event)"
+      />
+    </UiButton>
   </Block>
   <Block :title="$t('guide.create.discordRoles')" :class="`mt-4 wrapper`">
     <div v-if="selectedServerInfo && selectedServerInfo.id">
       <div class="py-24">
         <div class="my-6">
-          <div
-            class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
-          >
+          <div class="text-white discord-btn inline-flex items-center justify-center button px-[24px]">
             <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
               <img
                 v-if="selectedServerInfo && selectedServerInfo.icon"
@@ -182,9 +166,7 @@ const handlePassingcountInput = (value: string) => {
           </template>
         </UiInput>
         <span class="text-2xl ml-2 -mt-1">/</span>
-        <div class="w-[280px] pt-3">
-          {{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})
-        </div>
+        <div class="w-[280px] pt-3">{{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})</div>
       </div>
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>

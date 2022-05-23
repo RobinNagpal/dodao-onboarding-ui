@@ -89,6 +89,7 @@ export function useClient() {
       const guideMessage: GuideInput = {
         uuid: payload.uuid,
         categories: payload.categories || [],
+        completedStepContent: payload.completedStepContent || '',
         content: payload.content,
         discordRoleIds: payload.discordRoleIds,
         discordRolePassingCount: payload.discordRolePassingCount || 0,
@@ -97,6 +98,7 @@ export function useClient() {
         guideType: payload.guideType,
         name: payload.name,
         publishStatus: payload.publishStatus,
+        showIncorrectOnCompletion: payload.showIncorrectOnCompletion,
         socialShareImage: payload.socialShareImage || '',
         space: space.id,
         steps: payload.steps.map((step: GuideStep) => ({
