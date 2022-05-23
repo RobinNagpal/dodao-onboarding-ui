@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
 import Checkbox from '@/components/Checkbox.vue';
-import UiInput from '@/components/Ui/Input.vue';
-
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
+import UiInput from '@/components/Ui/Input.vue';
 import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, onMounted, PropType, ref } from 'vue';
+import { computed, onMounted, onRenderTriggered, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: {
@@ -78,7 +78,7 @@ const totalQuestion = computed(() => {
   return questionsNumber;
 });
 
-const handlePassingcountInput = (value: string) => {
+const handlePassingCountInput = (value: string) => {
   props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
   if (parseInt(value) > totalQuestion.value) {
     props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', true);
@@ -86,6 +86,17 @@ const handlePassingcountInput = (value: string) => {
     props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', false);
   }
 };
+
+const showIncorrectChoices = [
+  {
+    text: 'Yes',
+    value: true
+  },
+  {
+    text: 'No',
+    value: false
+  }
+];
 </script>
 
 <template>
@@ -115,6 +126,22 @@ const handlePassingcountInput = (value: string) => {
         {{ $t('guide.discordWebhook') }}
       </template>
     </UiInput>
+    <div class="show-incorrect-wrapper pt-3">
+      <UiDropdown
+        top="2.5rem"
+        right="2.5rem"
+        class="mr-2 w-[5rem] status-drop-down"
+        @select="updateGuideFunctions.updateGuideField('showIncorrectOnCompletion', $event.value)"
+        :items="showIncorrectChoices"
+      >
+        <div class="pr-1 select-none">
+          {{ guide.showIncorrectOnCompletion ? 'Yes' : 'No' }}
+        </div>
+      </UiDropdown>
+      <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Show Incorrect Questions*</div>
+    </div>
+  </Block>
+  <Block :title="$t('guide.postSubmissionStepContent')" :class="`mt-4 wrapper`">
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
         :value="guide.postSubmissionStepContent"
@@ -159,7 +186,7 @@ const handlePassingcountInput = (value: string) => {
           :error="inputError('discordRolePassingCount')"
           :number="true"
           :max="totalQuestion"
-          @update:modelValue="handlePassingcountInput($event)"
+          @update:modelValue="handlePassingCountInput($event)"
         >
           <template v-slot:label>
             {{ $t(`guide.create.discordRolesPassingCount`) }}
@@ -184,5 +211,15 @@ const handlePassingcountInput = (value: string) => {
   padding: 8px 16px;
   font-size: 18px;
   font-weight: 500;
+}
+
+.show-incorrect-wrapper {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.forceFloat {
+  transform: translatey(-44px);
+  @apply text-xs;
+  transition: transform 0.1s linear, font-size 0.1s linear;
 }
 </style>

@@ -7,27 +7,21 @@ import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
+  GuideQuestion,
   GuideStep,
   InputType,
   isQuestion,
   isUserInput,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
 
 const renderer = new marked.Renderer();
 
 renderer.link = function (href, title, text) {
-  return (
-    '<a target="_blank" href="' +
-    href +
-    '" title="' +
-    title +
-    '">' +
-    text +
-    '</a>'
-  );
+  return '<a target="_blank" href="' + href + '" title="' + title + '">' + text + '</a>';
 };
 
 const props = defineProps({
@@ -41,6 +35,9 @@ const props = defineProps({
     type: Object as PropType<GuideModel>,
     required: true
   },
+  guideSubmission: {
+    type: Object as PropType<GuideSubmission>
+  },
   guideSubmitting: Boolean,
   stepSubmission: {
     type: Object as PropType<UserGuideQuestionSubmission>,
@@ -52,20 +49,35 @@ const props = defineProps({
   }
 });
 
+const renderIncorrectQuestions = ref<boolean>(false);
+
 const { web3Account } = useWeb3();
 const { modalAccountOpen } = useModal();
 
-const emit = defineEmits([
-  'update:questionResponse',
-  'update:userInputResponse'
-]);
+const emit = defineEmits(['update:questionResponse', 'update:userInputResponse']);
 
 const stepItems = computed(() => {
   return props.step.stepItems;
 });
 
-const stepContents = computed(() =>
-  marked.parse(props.step.content, { renderer })
+const wrongQuestions = computed(() => {
+  if (props.guideSubmission) {
+    return props.guide.steps.reduce<GuideQuestion[]>((wrongQuestions: GuideQuestion[], guideStep: GuideStep) => {
+      const wrongOnes: GuideQuestion[] =
+        (guideStep.stepItems
+          .filter(item => isQuestion(item))
+          .filter(item => props.guideSubmission?.result?.wrongQuestions?.includes(item.uuid)) as GuideQuestion[]) || [];
+
+      return [...wrongQuestions, ...wrongOnes];
+    }, new Array<GuideQuestion>());
+  }
+  return [];
+});
+
+const stepContents = computed(() => marked.parse(props.step.content, { renderer }));
+
+const postSubmissionContent = computed(() =>
+  props.guide.postSubmissionStepContent ? marked.parse(props.guide.postSubmissionStepContent, { renderer }) : null
 );
 
 function selectAnswer(questionId: string, selectedAnswers: string[]) {
@@ -86,9 +98,7 @@ function isEveryQuestionAnswered(): boolean {
   const allRequiredFieldsAnswered = props.step.stepItems
     .filter(isUserInput)
     .filter(input => (input as UserInput).required)
-    .every(
-      userInput => !!(props.stepSubmission[userInput.uuid] as string)?.trim()
-    );
+    .every(userInput => !!(props.stepSubmission[userInput.uuid] as string)?.trim());
 
   return allQuestionsAnswered && allRequiredFieldsAnswered;
 }
@@ -99,13 +109,11 @@ const showQuestionsCompletionWarning = computed<boolean>(() => {
 
 const isNotFirstStep = computed(() => props.step.order !== 0);
 
-const isLastStep = computed(
-  () => props.guide.steps.length - 2 === props.step.order
-);
+const isLastStep = computed(() => props.guide.steps.length - 2 === props.step.order);
 
-const isGuideCompletedStep = computed(
-  () => props.guide.steps.length - 1 === props.step.order
-);
+const isPostSubmissionStep = computed(() => props.guide.steps.length - 1 === props.step.order);
+
+const isGuideCompletedStep = computed(() => props.guide.steps.length - 1 === props.step.order);
 
 async function navigateToNextStep() {
   nextButtonClicked.value = true;
@@ -129,13 +137,40 @@ async function navigateToNextStep() {
     <div style="min-height: 300px">
       <div class="mb-4 font-bold">{{ step.name }}</div>
       <div v-html="stepContents" class="step-content markdown-body" />
+      <div v-if="isPostSubmissionStep" v-html="postSubmissionContent" class="step-content markdown-body pt-6" />
+
+      <div v-if="isPostSubmissionStep && guide.showIncorrectOnCompletion" class="flex align-center justify-center mt-4">
+        <UiButton
+          :aria-label="$t('next')"
+          class="w-[300px]"
+          :primary="true"
+          variant="contained"
+          @click="renderIncorrectQuestions = !renderIncorrectQuestions"
+          :loading="guideSubmitting"
+          :disabled="guideSubmitting"
+        >
+          <span
+            class="sm:block"
+            v-text="$t(renderIncorrectQuestions ? 'guide.hideQuestions' : 'guide.showIncorrectChoices')"
+          />
+        </UiButton>
+      </div>
+      <div v-if="isPostSubmissionStep && renderIncorrectQuestions" class="mt-4 border-2 rounded-lg border-red p-4">
+        <template v-for="wrongQuestion in wrongQuestions" :key="wrongQuestion.uuid">
+          <div class="mb-6">
+            <GuideViewQuestion
+              :question="wrongQuestion"
+              :selectAnswer="() => {}"
+              :questionResponse="wrongQuestion.answerKeys"
+            />
+          </div>
+        </template>
+      </div>
+
       <template v-for="stepItem in stepItems" :key="stepItem.uuid">
         <div class="mb-6">
           <GuideViewUserInput
-            v-if="
-              stepItem.type === InputType.PublicShortInput ||
-              stepItem.type === InputType.PrivateShortInput
-            "
+            v-if="stepItem.type === InputType.PublicShortInput || stepItem.type === InputType.PrivateShortInput"
             :model-value="stepSubmission[stepItem.uuid]"
             :userInput="stepItem"
             :setUserInput="setUserInput"
@@ -153,7 +188,7 @@ async function navigateToNextStep() {
     </div>
     <div v-if="showQuestionsCompletionWarning">
       <div class="float-left mb-2 !text-red">
-        <i class="iconfont iconwarning" data-v-abc9f7ae=""></i>
+        <i class="iconfont iconwarning"></i>
         <span class="ml-1">Answer all questions to proceed</span>
       </div>
     </div>
@@ -177,10 +212,7 @@ async function navigateToNextStep() {
         :disabled="guideSubmitting"
         v-if="!isGuideCompletedStep"
       >
-        <span
-          class="sm:block"
-          v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')"
-        />
+        <span class="sm:block" v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')" />
         <span class="ml-2 font-bold">&#8594;</span>
       </UiButton>
     </div>
