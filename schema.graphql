@@ -278,7 +278,7 @@ type GuideStep {
 type Guide {
   authors: [String!]!
   categories: [String!]!
-  completedStepContent: String
+  postSubmissionStepContent: String
   content: String!
   created: Int!
   discordRoleIds: [String!]!

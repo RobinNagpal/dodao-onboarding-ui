@@ -21,7 +21,7 @@ export const guideTypes = {
   ],
   Guide: [
     { name: 'categories', type: 'string[]' },
-    { name: 'completedStepContent', type: 'string' },
+    { name: 'postSubmissionStepContent', type: 'string' },
     { name: 'content', type: 'string' },
     { name: 'discordRoleIds', type: 'string[]' },
     { name: 'discordRolePassingCount', type: 'number' },

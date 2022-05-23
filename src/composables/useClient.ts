@@ -89,7 +89,7 @@ export function useClient() {
       const guideMessage: GuideInput = {
         uuid: payload.uuid,
         categories: payload.categories || [],
-        completedStepContent: payload.completedStepContent || '',
+        postSubmissionStepContent: payload.postSubmissionStepContent || '',
         content: payload.content,
         discordRoleIds: payload.discordRoleIds,
         discordRolePassingCount: payload.discordRolePassingCount || 0,

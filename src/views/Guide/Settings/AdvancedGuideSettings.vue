@@ -117,11 +117,11 @@ const handlePassingcountInput = (value: string) => {
     </UiInput>
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
       <TextareaAutosize
-        :value="guide.completedStepContent"
-        :placeholder="$t(`guide.completedStepContent`)"
+        :value="guide.postSubmissionStepContent"
+        :placeholder="$t(`guide.postSubmissionStepContent`)"
         class="input w-full text-left"
         style="font-size: 18px"
-        @update:modelValue="updateGuideFunctions.updateGuideField('completedStepContent', $event)"
+        @update:modelValue="updateGuideFunctions.updateGuideField('postSubmissionStepContent', $event)"
       />
     </UiButton>
   </Block>
