@@ -15,10 +15,7 @@ import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
 import { useRoute } from 'vue-router';
-import {
-  GuidePublishStatus,
-  GuideType
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuidePublishStatus, GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { useSpace } from '@/composables/useSpace';
 
 const props = defineProps({
@@ -36,9 +33,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const guideType = route.params.guideType || GuideType.Onboarding;
 
-const spaceMembers = computed(() =>
-  props.space.members.length < 1 ? ['none'] : props.space.members
-);
+const spaceMembers = computed(() => (props.space.members.length < 1 ? ['none'] : props.space.members));
 
 const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
 
@@ -104,30 +99,14 @@ const loadingData = computed(() => {
     </template>
     <template #content-bottom>
       <div class="mt-6">
-        <NoResults
-          :block="true"
-          v-if="!loadingData && guidesCount && store.space.guides.length < 1"
-        />
-        <GuideNoGuides
-          v-else-if="!guidesCount && !loadingData"
-          class="mt-2"
-          :space="space"
-          :guideType="guideType"
-        />
+        <NoResults :block="true" v-if="!loadingData && guidesCount && store.space.guides.length < 1" />
+        <GuideNoGuides v-else-if="!guidesCount && !loadingData" class="mt-2" :space="space" :guideType="guideType" />
         <div v-else>
-          <div v-if="!loadingData" class="_3-column-grid features-grid">
-            <GuideTimelineGuide
-              v-for="(guide, i) in store.space.guides"
-              :key="i"
-              :guide="guide"
-              :profiles="profiles"
-            />
+          <div v-if="!loadingData" class="_4-column-grid features-grid">
+            <GuideTimelineGuide v-for="(guide, i) in store.space.guides" :key="i" :guide="guide" :profiles="profiles" />
           </div>
         </div>
-        <div
-          style="height: 10px; width: 10px; position: absolute"
-          ref="endElement"
-        />
+        <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
         <Block v-if="loadingData" :slim="true">
           <RowLoading class="my-2" />
         </Block>
