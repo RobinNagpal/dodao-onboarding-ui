@@ -34,7 +34,7 @@ onMounted(async () => {
     });
   } else if (target === 'guideView') {
     const guideUuid = params.get('guideUuid');
-    const discordUser: any = await getUserInfo(accessToken)
+    const discordUser: any = await getUserInfo(accessToken);
     router.push({
       name: 'guide',
       params: {
@@ -42,7 +42,9 @@ onMounted(async () => {
         guideType: GuideBundleType.Onboarding,
         uuid: guideUuid,
         stepOrder: params.get('stepOrder'),
-        discordId: discordUser.id
+        stepUuid: params.get('stepUuid'),
+        discordId: discordUser.id,
+        itemUuid: params.get('itemUuid')
       }
     });
   }

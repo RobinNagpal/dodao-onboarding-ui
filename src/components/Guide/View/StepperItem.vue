@@ -194,6 +194,9 @@ async function navigateToNextStep() {
             :spaceId="route.params.key"
             :guideUuid="guide.uuid"
             :stepOrder="step.order"
+            :stepUuid="step.uuid"
+            :userDiscord="stepItem"
+            :discordResponse="stepSubmission[stepItem.uuid] ?? ''"
           ></GuideViewUserDiscord>
           <GuideViewQuestion
             v-else

@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue';
-import { InputType, QuestionType, UserDiscord } from '@dodao/onboarding-schemas/models/GuideModel';
-import { toRefs } from 'vue';
-import UiModal from '@/components/Ui/Modal.vue';
-import UiButton from '@/components/Ui/Button.vue';
+import { computed, PropType } from 'vue';
+import { UserDiscord } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const discordClientId = import.meta.env.VITE_DISCORD_CLIENT_ID?.toString() || '';
 
@@ -18,7 +15,12 @@ const props = defineProps({
   stepOrder: {
     type: Number,
     default: 0
-  }
+  },
+  stepUuid: {
+    type: String,
+    default: ''
+  },
+  discordResponse: { type: String, required: true }
 });
 
 const url = computed(() => {
@@ -26,7 +28,9 @@ const url = computed(() => {
     scope: 'identify email',
     client_id: discordClientId,
     response_type: 'token',
-    state: `spaceId=${props.spaceId}&guideUuid=${props.guideUuid}&stepOrder=${props.stepOrder + 1}&target=guideView`,
+    state: `spaceId=${props.spaceId}&guideUuid=${props.guideUuid}&stepUuid=${props.stepUuid}&stepOrder=${
+      props.stepOrder + 1
+    }&itemUuid=${props.userDiscord.uuid}&target=guideView`,
     redirect_uri: `${window.location.origin}/generic-discord-redirect`
   });
 
@@ -43,9 +47,12 @@ const url = computed(() => {
         />
       </svg>
       <div class="h-[32px] w-full overflow-hidden rounded-full mr-2 items-center justify-center">
-        <span class="text-white ml-2">
+        <span v-if="!discordResponse" class="text-white ml-2">
           {{ $t('guide.create.connectDiscord') }}
         </span>
+        <span v-else class="text-white ml-2">{{
+          `${discordResponse.slice(0, 3)}xxxxxx${discordResponse.slice(-2)}`
+        }}</span>
       </div>
     </a>
   </div>

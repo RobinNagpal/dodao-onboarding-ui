@@ -24,7 +24,6 @@ export type UserGuideQuestionSubmission = Record<string, string[] | string>;
 
 export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const route = useRoute();
-  const discordId = route.params.discordId;
   const router = useRouter();
   const { send } = useClient();
   const { web3 } = useWeb3();
@@ -240,13 +239,23 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   watch(stepOrder, newVal => {
     activeStepOrder.value = newVal - 1;
   });
-
-  watch(web3.value, newVal => {
-    if (newVal.account) {
-      guideSubmissionCache.setAccount(newVal.account);
-    }
-    readGuideSubmissions();
-  });
+  watch(
+    web3.value,
+    newVal => {
+      if (newVal.account) {
+        guideSubmissionCache.setAccount(newVal.account);
+      }
+      if (route.params.discordId && route.params.itemUuid) {
+        setUserDiscord(
+          route.params.stepUuid?.toString(),
+          route.params.itemUuid?.toString(),
+          route.params.discordId?.toString()
+        );
+      }
+      readGuideSubmissions();
+    },
+    { immediate: true }
+  );
 
   return {
     activeStepOrder,
