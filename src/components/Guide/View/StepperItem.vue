@@ -159,6 +159,7 @@ async function navigateToNextStep() {
         <template v-for="wrongQuestion in wrongQuestions" :key="wrongQuestion.uuid">
           <div class="mb-6">
             <GuideViewQuestion
+              :answer-class="'correct-answer'"
               :question="wrongQuestion"
               :selectAnswer="() => {}"
               :questionResponse="wrongQuestion.answerKeys"
@@ -221,6 +222,13 @@ async function navigateToNextStep() {
 <style lang="scss">
 .step-content li {
   margin-bottom: 0.5rem;
+}
+.correct-answer {
+  background-color: green !important;
+  border-color: green !important;
+  &:after {
+    background-color: green !important;
+  }
 }
 
 .step-content p {

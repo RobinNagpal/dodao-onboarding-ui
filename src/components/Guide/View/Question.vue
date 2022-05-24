@@ -2,14 +2,15 @@
 import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';
 import UiMarkdown from '@/components/Ui/Markdown.vue';
-import {
-  GuideQuestion,
-  QuestionType
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuideQuestion, QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 
 const props = defineProps({
+  answerClass: {
+    type: String,
+    default: ''
+  },
   question: {
     type: Object as PropType<GuideQuestion>,
     required: true
@@ -22,9 +23,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:questionResponse']);
 
-const currentlySelectedChoices = computed<string[]>(
-  () => props.questionResponse || []
-);
+const currentlySelectedChoices = computed<string[]>(() => props.questionResponse || []);
 
 function selectMultipleChoice(choiceKey: string, selected: boolean) {
   const selectedAnswers = selected
@@ -35,9 +34,7 @@ function selectMultipleChoice(choiceKey: string, selected: boolean) {
 }
 
 function selectSingleChoice(choiceKey: string) {
-  const selectedAnswers = isEqual(currentlySelectedChoices.value, [choiceKey])
-    ? []
-    : [choiceKey];
+  const selectedAnswers = isEqual(currentlySelectedChoices.value, [choiceKey]) ? [] : [choiceKey];
 
   emit('update:questionResponse', props.question.uuid, selectedAnswers);
 }
@@ -49,21 +46,21 @@ function selectSingleChoice(choiceKey: string) {
     <template v-for="choice in question.choices" :key="choice.key">
       <div
         :class="{
-          'flex leading-loose items-center -ml-2':
-            question.type === QuestionType.SingleChoice,
-          'flex leading-loose items-center py-2':
-            question.type === QuestionType.MultipleChoice
+          'flex leading-loose items-center -ml-2': question.type === QuestionType.SingleChoice,
+          'flex leading-loose items-center py-2': question.type === QuestionType.MultipleChoice
         }"
       >
         <Radio
           v-if="question.type === QuestionType.SingleChoice"
           @update:modelValue="selectSingleChoice(choice.key)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
+          :class="answerClass"
         />
         <Checkbox
           v-else
           @update:modelValue="selectMultipleChoice(choice.key, $event)"
           :modelValue="currentlySelectedChoices.includes(choice.key)"
+          :class="answerClass"
         />
         <div class="leading-6">{{ choice.content }}</div>
       </div>
