@@ -156,6 +156,7 @@ async function navigateToNextStep() {
         </UiButton>
       </div>
       <div v-if="isPostSubmissionStep && renderIncorrectQuestions" class="mt-4 border-2 rounded-lg border-red p-4">
+        <h3 class="mb-2">{{ $t('guide.correctAnswers') }}</h3>
         <template v-for="wrongQuestion in wrongQuestions" :key="wrongQuestion.uuid">
           <div class="mb-6">
             <GuideViewQuestion
