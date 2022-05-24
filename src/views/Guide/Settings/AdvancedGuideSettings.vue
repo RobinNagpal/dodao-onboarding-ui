@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
 import Checkbox from '@/components/Checkbox.vue';
+import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
-import {
-  EditGuideType,
-  UpdateGuideFunctions
-} from '@/composables/guide/useEditGuide';
+import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, onMounted, PropType, ref } from 'vue';
+import { computed, onMounted, onRenderTriggered, PropType, ref } from 'vue';
 
 const props = defineProps({
   guide: {
@@ -47,10 +47,7 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
     ? [...currentSelectedRoles.value, roleId]
     : currentSelectedRoles.value.filter(role => role !== roleId);
 
-  props.updateGuideFunctions.updateGuideField(
-    'discordRoleIds',
-    currentSelectedRoles
-  );
+  props.updateGuideFunctions.updateGuideField('discordRoleIds', currentSelectedRoles);
 }
 
 function inputError(field: string) {
@@ -70,37 +67,36 @@ function setUploadSocialShareImage(s) {
 }
 
 const totalQuestion = computed(() => {
-  const questionsNumber = props.guide.steps.reduce(
-    (previousValue, currentValue) => {
-      return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
-        if (
-          curr.type === QuestionType.SingleChoice ||
-          curr.type === QuestionType.MultipleChoice
-        ) {
-          return acc + 1;
-        }
-        return acc;
-      }, 0));
-    },
-    0
-  );
+  const questionsNumber = props.guide.steps.reduce((previousValue, currentValue) => {
+    return (previousValue += currentValue.stepItems.reduce((acc, curr) => {
+      if (curr.type === QuestionType.SingleChoice || curr.type === QuestionType.MultipleChoice) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0));
+  }, 0);
   return questionsNumber;
 });
 
-const handlePassingcountInput = (value: string) => {
+const handlePassingCountInput = (value: string) => {
   props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
   if (parseInt(value) > totalQuestion.value) {
-    props.updateGuideFunctions.updateGuideErrorField(
-      'discordRolePassingCount',
-      true
-    );
+    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', true);
   } else {
-    props.updateGuideFunctions.updateGuideErrorField(
-      'discordRolePassingCount',
-      false
-    );
+    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', false);
   }
 };
+
+const showIncorrectChoices = [
+  {
+    text: 'Yes',
+    value: true
+  },
+  {
+    text: 'No',
+    value: false
+  }
+];
 </script>
 
 <template>
@@ -109,19 +105,13 @@ const handlePassingcountInput = (value: string) => {
       :model-value="guide.socialShareImage"
       placeholder="e.g. https://example.com/guide.png ideally 800px by 418px"
       :error="inputError('socialShareImage')"
-      @update:modelValue="
-        updateGuideFunctions.updateGuideField('socialShareImage', $event)
-      "
+      @update:modelValue="updateGuideFunctions.updateGuideField('socialShareImage', $event)"
     >
       <template v-slot:label>
         {{ $t('guide.socialShareImage') }}
       </template>
       <template v-slot:info>
-        <Upload
-          class="!ml-2"
-          @input="setSocialShareImageUrl"
-          @loading="setUploadSocialShareImage"
-        >
+        <Upload class="!ml-2" @input="setSocialShareImageUrl" @loading="setUploadSocialShareImage">
           {{ $t('upload') }}
         </Upload>
       </template>
@@ -130,22 +120,43 @@ const handlePassingcountInput = (value: string) => {
       :model-value="guide.discordWebhook"
       placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
       :error="inputError('discordWebhook')"
-      @update:modelValue="
-        updateGuideFunctions.updateGuideField('discordWebhook', $event)
-      "
+      @update:modelValue="updateGuideFunctions.updateGuideField('discordWebhook', $event)"
     >
       <template v-slot:label>
         {{ $t('guide.discordWebhook') }}
       </template>
     </UiInput>
+    <div class="show-incorrect-wrapper pt-3">
+      <UiDropdown
+        top="2.5rem"
+        right="2.5rem"
+        class="mr-2 w-[5rem] status-drop-down"
+        @select="updateGuideFunctions.updateGuideField('showIncorrectOnCompletion', $event.value)"
+        :items="showIncorrectChoices"
+      >
+        <div class="pr-1 select-none">
+          {{ guide.showIncorrectOnCompletion ? 'Yes' : 'No' }}
+        </div>
+      </UiDropdown>
+      <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Show Incorrect Questions*</div>
+    </div>
+  </Block>
+  <Block :title="$t('guide.postSubmissionStepContent')" :class="`mt-4 wrapper`">
+    <UiButton class="w-full h-96 mb-4" style="height: max-content">
+      <TextareaAutosize
+        :value="guide.postSubmissionStepContent"
+        :placeholder="$t(`guide.postSubmissionStepContent`)"
+        class="input w-full text-left"
+        style="font-size: 18px"
+        @update:modelValue="updateGuideFunctions.updateGuideField('postSubmissionStepContent', $event)"
+      />
+    </UiButton>
   </Block>
   <Block :title="$t('guide.create.discordRoles')" :class="`mt-4 wrapper`">
     <div v-if="selectedServerInfo && selectedServerInfo.id">
       <div class="py-24">
         <div class="my-6">
-          <div
-            class="text-white discord-btn inline-flex items-center justify-center button px-[24px]"
-          >
+          <div class="text-white discord-btn inline-flex items-center justify-center button px-[24px]">
             <div class="h-[32px] w-[32px] overflow-hidden rounded-full mr-2">
               <img
                 v-if="selectedServerInfo && selectedServerInfo.icon"
@@ -175,16 +186,14 @@ const handlePassingcountInput = (value: string) => {
           :error="inputError('discordRolePassingCount')"
           :number="true"
           :max="totalQuestion"
-          @update:modelValue="handlePassingcountInput($event)"
+          @update:modelValue="handlePassingCountInput($event)"
         >
           <template v-slot:label>
             {{ $t(`guide.create.discordRolesPassingCount`) }}
           </template>
         </UiInput>
         <span class="text-2xl ml-2 -mt-1">/</span>
-        <div class="w-[280px] pt-3">
-          {{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})
-        </div>
+        <div class="w-[280px] pt-3">{{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})</div>
       </div>
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
@@ -202,5 +211,15 @@ const handlePassingcountInput = (value: string) => {
   padding: 8px 16px;
   font-size: 18px;
   font-weight: 500;
+}
+
+.show-incorrect-wrapper {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.forceFloat {
+  transform: translatey(-44px);
+  @apply text-xs;
+  transition: transform 0.1s linear, font-size 0.1s linear;
 }
 </style>

@@ -19,11 +19,9 @@ function radioSelected() {
 
 <template>
   <div class="p-2 radio-container flex-shrink-0" @click="radioSelected">
-    <div
-      class="overlay absolute top-0 rounded-full right-0 bottom-0 left-0 opacity-10 z-0"
-    ></div>
+    <div class="overlay absolute top-0 rounded-full right-0 bottom-0 left-0 opacity-10 z-0"></div>
     <input type="checkbox" v-model="input" :checked="props.modelValue" />
-    <span class="checkmark" :class="props.class"></span>
+    <span class="checkmark" :class="{ [props.class]: props.modelValue }"></span>
   </div>
 </template>
 <style scoped lang="scss">

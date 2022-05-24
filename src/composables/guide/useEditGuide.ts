@@ -96,11 +96,13 @@ export function useEditGuide(
       guideRef.value = {
         ...guide,
         isPristine: true,
-        from: web3.value.account,
-        space: space.id,
-        thumbnail: guide.thumbnail || undefined,
+        discordRolePassingCount: guide.discordRolePassingCount || undefined,
         discordWebhook: guide.discordWebhook || undefined,
-        socialShareImage: guide.socialShareImage || undefined
+        from: web3.value.account,
+        postSubmissionStepContent: guide.postSubmissionStepContent || undefined,
+        socialShareImage: guide.socialShareImage || undefined,
+        space: space.id,
+        thumbnail: guide.thumbnail || undefined
       };
       const minOrder = Math.min(...steps.value.map(step => step.order));
       activeStepId.value = steps.value.find(

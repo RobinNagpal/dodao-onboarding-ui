@@ -10,6 +10,7 @@ import { InputType } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
   GuideStepItemSubmission,
   GuideStepSubmission,
+  GuideSubmission,
   StepItemSubmissionType
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -31,6 +32,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   );
   const guideLoaded = ref<boolean>(false);
   const guideSubmittingRef = ref<boolean>(false);
+  const guideSubmission = ref<GuideSubmission | null>(null);
   const activeStepId = ref();
 
   async function initialize() {
@@ -159,7 +161,8 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
       notify(['green', t('notify.guideResponseSubmitted')]);
     }
 
-    const result = submissionResponse?.result.result;
+    guideSubmission.value = submissionResponse?.result;
+    const result = guideSubmission.value?.result;
     if (result) {
       console.log('result', result);
       const lastStepContent = `
@@ -196,6 +199,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     guideLoaded,
     guideRef,
     guideResponseRef: guideSubmissionRef,
+    guideSubmission,
     guideSubmittingRef,
     initialize,
     selectAnswer,
