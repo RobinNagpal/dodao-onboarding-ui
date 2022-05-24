@@ -8,8 +8,7 @@ import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissio
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
-  activeStepId: String,
-
+  activeStepOrder: Number,
   goToNextStep: Function,
   goToPreviousStep: Function,
   guide: {
@@ -32,6 +31,10 @@ const props = defineProps({
     type: Function,
     required: true
   },
+  setUserDiscord: {
+    type: Function,
+    required: true
+  },
   submitGuide: {
     type: Function,
     required: true
@@ -46,9 +49,9 @@ const props = defineProps({
   }
 });
 
-const activeStep = computed<GuideStep>(
-  () => props.guide.steps.find(step => step.uuid === props.activeStepId) || props.guide.steps[0]!
-);
+const activeStep = computed<GuideStep>(() => {
+  return props.guide.steps.find(step => step.order === props.activeStepOrder) || props.guide?.steps[0] || undefined;
+});
 
 const isReachingLastStep = computed(() => props.guide.steps.length - 1 === activeStep.value.order);
 
@@ -90,10 +93,12 @@ const styleObject = computed(() => {
       :guideSubmission="guideSubmission"
       :guideSubmitting="guideSubmitting"
       :step="activeStep"
+      :activeStepOrder="activeStepOrder"
       :stepSubmission="guideResponse[activeStep.uuid] ?? {}"
       :submitGuide="submitGuide"
       @update:questionResponse="selectAnswer"
       @update:userInputResponse="setUserInput"
+      @update:userDiscordResponse="setUserDiscord"
     />
   </div>
 </template>

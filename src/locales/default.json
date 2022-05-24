@@ -196,6 +196,7 @@
   },
   "guide": {
     "addInputOrQuestion": "Add Input or Question",
+    "discordPoupDesc": "This button will be used by the members to connect their Discord",
     "castVote": "Cast your vote",
     "create": {
       "name": "Name",
@@ -259,6 +260,7 @@
       "name": "Step Name",
       "contents": "Contents"
     },
+    "addDiscord": "Discord Connect",
 
     "submissions": "Submissions",
     "thumbnail": "Thumbnail Image",

@@ -1,23 +1,51 @@
 <script setup lang="ts">
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { getUserInfo } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
+import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { access } from 'fs';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
   setPageTitle('page.title.home');
+  const hash = window.location.hash.slice(1);
+  let state = '';
+  let accessToken = '';
 
-  const code = route.query?.code?.toString();
-  const state = route.query?.state?.toString();
+  if (hash) {
+    const fragment = new URLSearchParams(hash);
+    accessToken = fragment.get('access_token') || '';
+    state = fragment.get('state') || '';
+  } else {
+    state = route.query?.state?.toString() || '';
+  }
+
   const params = new URLSearchParams(decodeURIComponent(state!));
-
-  router.push({
-    name: 'spaceDiscord',
-    params: { key: params.get('spaceId'), discordCode: code }
-  });
+  const target = params.get('target');
+  if (target === 'space') {
+    const code = route.query?.code?.toString();
+    router.push({
+      name: 'spaceDiscord',
+      params: { key: params.get('spaceId'), discordCode: code }
+    });
+  } else if (target === 'guideView') {
+    const guideUuid = params.get('guideUuid');
+    const discordUser: any = await getUserInfo(accessToken)
+    router.push({
+      name: 'guide',
+      params: {
+        key: params.get('spaceId'),
+        guideType: GuideBundleType.Onboarding,
+        uuid: guideUuid,
+        stepOrder: params.get('stepOrder'),
+        discordId: discordUser.id
+      }
+    });
+  }
 });
 </script>
 

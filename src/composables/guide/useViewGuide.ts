@@ -1,33 +1,38 @@
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
-  GuideQuery_guide,
-  GuideQuery_guide_steps
+GuideQuery_guide,
+GuideQuery_guide_steps
 } from '@/graphql/generated/graphqlDocs';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { InputType } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
-  GuideStepItemSubmission,
-  GuideStepSubmission,
-  GuideSubmission,
-  StepItemSubmissionType
+GuideStepItemSubmission,
+GuideStepSubmission,
+GuideSubmission,
+StepItemSubmissionType
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
-import { ref, watch } from 'vue';
+import { computed,ref,watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 
 export type UserGuideQuestionSubmission = Record<string, string[] | string>;
 
 export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const route = useRoute();
+  const discordId = route.params.discordId;
   const router = useRouter();
   const { send } = useClient();
   const { web3 } = useWeb3();
   const { t } = useI18n();
+
+  const stepOrder = computed<number>(
+    () => parseInt(route.params.stepOrder?.toString()) || 1
+  );
 
   const guideRef = ref<GuideQuery_guide>();
   const guideStepsMap = ref<{ [uuid: string]: GuideQuery_guide_steps }>({});
@@ -37,9 +42,10 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const guideLoaded = ref<boolean>(false);
   const guideSubmittingRef = ref<boolean>(false);
   const guideSubmission = ref<GuideSubmission | null>(null);
-  const activeStepId = ref();
+  const activeStepOrder = ref<number>(0);
 
   async function initialize() {
+    activeStepOrder.value = stepOrder.value - 1;
     const guide = await getGuide(uuid);
     guideRef.value = {
       ...guide,
@@ -58,17 +64,10 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
         }
       ]
     };
-
     if (web3.value.account) {
       guideSubmissionCache.setAccount(web3.value.account);
     }
-    getGuideSubmissions();
-
-    const minOrder = Math.min(...guide.steps.map(step => step.order));
-    const stepParam = parseInt(route.params.stepOrder?.toString());
-    activeStepId.value = guide.steps.find(
-      step => step.order === (stepParam ? stepParam - 1 : 0)
-    )?.uuid;
+    readGuideSubmissions();
     guideStepsMap.value = Object.fromEntries<GuideQuery_guide_steps>(
       guide.steps.map(step => [step.uuid, step])
     );
@@ -76,15 +75,11 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     guideLoaded.value = true;
   }
 
-  function setActiveStep(uuid) {
-    activeStepId.value = uuid;
+  function setActiveStep(order) {
+    activeStepOrder.value = order;
   }
 
   function goToNextStep(currentStep: GuideQuery_guide_steps) {
-    // const steps = guideRef.value?.steps || [];
-    // const nextStep = steps.find(step => step?.order === currentStep.order + 1);
-    // activeStepId.value = nextStep?.uuid;
-
     router.push({
       name: 'guide',
       params: {
@@ -94,13 +89,6 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   }
 
   function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
-    // const steps = guideRef.value?.steps || [];
-    // const nextStep = steps?.find(step => step?.order === currentStep.order - 1);
-    // if (nextStep && nextStep?.uuid) {
-    //   activeStepId.value = nextStep?.uuid;
-    // } else {
-    //   activeStepId.value = steps[steps.length - 1]?.uuid;
-    // }
     router.push({
       name: 'guide',
       params: {
@@ -138,6 +126,24 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
       [stepUuid]: {
         ...guideSubmissionRef.value[stepUuid],
         [userInputUuid]: userInput
+      }
+    };
+    guideSubmissionCache.saveGuideSubmission(uuid, {
+      // fetchedFromServer: false,
+      data: guideSubmissionRef.value
+    });
+  }
+
+  function setUserDiscord(
+    stepUuid: string,
+    userDiscordUuid: string,
+    userDiscordId: string
+  ) {
+    guideSubmissionRef.value = {
+      ...guideSubmissionRef.value,
+      [stepUuid]: {
+        ...guideSubmissionRef.value[stepUuid],
+        [userDiscordUuid]: userDiscordId
       }
     };
     guideSubmissionCache.saveGuideSubmission(uuid, {
@@ -223,23 +229,27 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     guideSubmittingRef.value = false;
   }
 
-  function getGuideSubmissions() {
-    const answerCache = guideSubmissionCache.getGuideSubmissionsCache(uuid);
+  function readGuideSubmissions() {
+    const answerCache = guideSubmissionCache.readGuideSubmissionsCache(uuid);
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
       ...(answerCache?.data || {})
     };
   }
 
+  watch(stepOrder, newVal => {
+    activeStepOrder.value = newVal - 1;
+  });
+
   watch(web3.value, newVal => {
     if (newVal.account) {
       guideSubmissionCache.setAccount(newVal.account);
     }
-    getGuideSubmissions();
+    readGuideSubmissions();
   });
 
   return {
-    activeStepId,
+    activeStepOrder,
     goToNextStep,
     goToPreviousStep,
     guideLoaded,
@@ -251,6 +261,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     selectAnswer,
     setActiveStep,
     submitGuide,
-    setUserInput
+    setUserInput,
+    setUserDiscord
   };
 }

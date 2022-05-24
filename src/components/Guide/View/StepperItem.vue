@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
+import GuideViewUserDiscord from '@/components/Guide/View/UserDiscord.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import { useModal } from '@/composables/useModal';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
@@ -10,13 +11,16 @@ import {
   GuideQuestion,
   GuideStep,
   InputType,
+  DiscordType,
   isQuestion,
   isUserInput,
-  UserInput
+  UserInput,
+  UserDiscord
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const renderer = new marked.Renderer();
 
@@ -48,16 +52,23 @@ const props = defineProps({
     required: true
   }
 });
+const route = useRoute();
 
 const renderIncorrectQuestions = ref<boolean>(false);
 
 const { web3Account } = useWeb3();
 const { modalAccountOpen } = useModal();
 
-const emit = defineEmits(['update:questionResponse', 'update:userInputResponse']);
+const emit = defineEmits(['update:questionResponse', 'update:userInputResponse', 'update:userDiscordResponse']);
 
 const stepItems = computed(() => {
-  return props.step.stepItems;
+  // fake user discord button, delete later
+  const x: UserDiscord = {
+    uuid: 'dfgsdfg',
+    type: DiscordType.DiscordButton,
+    order: props.step.stepItems.length
+  };
+  return [...props.step.stepItems, x];
 });
 
 const wrongQuestions = computed(() => {
@@ -178,6 +189,12 @@ async function navigateToNextStep() {
             :setUserInput="setUserInput"
             :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
           />
+          <GuideViewUserDiscord
+            v-if="stepItem.type === DiscordType.DiscordButton"
+            :spaceId="route.params.key"
+            :guideUuid="guide.uuid"
+            :stepOrder="step.order"
+          ></GuideViewUserDiscord>
           <GuideViewQuestion
             v-else
             :question="stepItem"

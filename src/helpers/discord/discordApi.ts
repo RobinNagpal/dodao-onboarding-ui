@@ -18,6 +18,11 @@ export async function getGuilds(accessToken: string): Promise<any[]> {
   return (await getDiscordApiResponse(apiUrl, accessToken)) as any[];
 }
 
+export async function getUserInfo(accessToken: string): Promise<any[]> {
+  const apiUrl = 'https://discord.com/api/users/@me';
+  return (await getDiscordApiResponse(apiUrl, accessToken)) as any[];
+}
+
 export async function getSelectedGuild(spaceId: string): Promise<any> {
   const client = useApolloClient();
   const { data } = await client.client.query<
@@ -28,18 +33,4 @@ export async function getSelectedGuild(spaceId: string): Promise<any> {
     variables: { spaceId }
   });
   return data.payload;
-}
-
-export async function setSelectedRoles(rolesIds: string[]): Promise<any> {
-  // const client = useApolloClient();
-  return Promise.resolve(true);
-  // const { data } = await client.client.query<
-  //   SpaceDiscordGuildResult,
-  //   SpaceDiscordGuildVariables
-  // >({
-  //   query: SpaceDiscordGuild,
-  //   variables: { spaceId }
-  // });
-
-  // return data.payload;
 }

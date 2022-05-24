@@ -35,7 +35,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { isEthBlockchain, isOneBlockchain, web3, web3Account } = useWeb3();
+const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const { store } = useStore();
@@ -50,7 +50,7 @@ const modalGuideExportOpen = ref(false);
 const backButtonText = props.from ? JSON.parse(props.from)?.displayName || props.space.name : props.space.name;
 
 const {
-  activeStepId,
+  activeStepOrder,
   goToNextStep,
   goToPreviousStep,
   guideRef: guide,
@@ -61,7 +61,8 @@ const {
   initialize,
   selectAnswer,
   submitGuide,
-  setUserInput
+  setUserInput,
+  setUserDiscord
 } = useViewGuide(uuid as string, notify, props.space);
 
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
@@ -168,6 +169,7 @@ function onClickBackButton() {
 }
 </script>
 
+
 <template>
   <div class="page-main flex mx-auto justify-between">
     <LayoutSingle v-bind="$attrs">
@@ -252,7 +254,7 @@ function onClickBackButton() {
               <Block :title="$t('guide.guideSteps')" :class="`mt-4`" slim v-if="guideLoaded && guide">
                 <div class="mt-4">
                   <GuideViewStepper
-                    :activeStepId="activeStepId"
+                    :activeStepOrder="activeStepOrder"
                     :goToNextStep="goToNextStep"
                     :goToPreviousStep="goToPreviousStep"
                     :guide="guide"
@@ -261,6 +263,7 @@ function onClickBackButton() {
                     :guideSubmitting="guideSubmittingRef"
                     :selectAnswer="selectAnswer"
                     :setUserInput="setUserInput"
+                    :setUserDiscord="setUserDiscord"
                     :submitGuide="submitGuide"
                   />
                 </div>

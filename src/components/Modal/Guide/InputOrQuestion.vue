@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import {
-  InputType,
-  QuestionType
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { InputType, QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { toRefs } from 'vue';
 import UiModal from '@/components/Ui/Modal.vue';
 import UiButton from '@/components/Ui/Button.vue';
 
-const props = defineProps(['open']);
+const props = defineProps(['open', 'hasDiscord']);
 
-const emit = defineEmits(['close', 'addQuestion', 'addInput']);
+const emit = defineEmits(['close', 'addQuestion', 'addInput', 'addDiscord']);
 
-const { open } = toRefs(props);
+const { open, hasDiscord } = toRefs(props);
 
 const addQuestion = (questionType: QuestionType) => {
   emit('addQuestion', questionType);
@@ -20,6 +17,11 @@ const addQuestion = (questionType: QuestionType) => {
 
 const addInput = (inputType: InputType) => {
   emit('addInput', inputType);
+  emit('close');
+};
+
+const addDiscord = () => {
+  emit('addDiscord');
   emit('close');
 };
 </script>
@@ -55,6 +57,13 @@ const addInput = (inputType: InputType) => {
           @click="addQuestion(QuestionType.SingleChoice)"
         >
           {{ $t('guide.singleChoiceQuestion') }}
+        </UiButton>
+        <UiButton
+          :disabled="hasDiscord"
+          class="button-outline w-full flex justify-center items-center"
+          @click="addDiscord()"
+        >
+          {{ $t('guide.addDiscord') }}
         </UiButton>
       </div>
     </div>
