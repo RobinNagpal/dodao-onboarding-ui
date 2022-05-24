@@ -227,6 +227,8 @@
       "sales": "Sales",
       "setup": "Setup"
     },
+    "correctAnswers": "Correct Answers",
+    "postSubmissionStepContent": "After Submission Content",
     "complete": "Complete",
     "delete": "Delete",
     "duplicate": "Duplicate",
@@ -262,6 +264,8 @@
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
     "votingSystem": "Voting system",
+    "showIncorrectChoices": "Show Incorrect Questions",
+    "hideQuestions": "Hide Questions",
     "socialShareImage": "Twitter Share Image"
   },
   "guideBundle": {
