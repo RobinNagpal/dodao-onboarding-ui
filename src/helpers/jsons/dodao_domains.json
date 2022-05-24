@@ -59,6 +59,10 @@
     "spaceId": "loozr-near-mainnet",
     "siteType": "onboarding"
   },
+  "oceanprotocol.dodao.io": {
+    "spaceId": "ocean-protocol-eth-1",
+    "siteType": "onboarding"
+  },
   "meandao.dodao.io": {
     "spaceId": "meandao-sol-mainnet",
     "siteType": "onboarding"
