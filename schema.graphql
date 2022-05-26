@@ -202,10 +202,11 @@ type Space {
   about: String
   admins: [String!]!
   avatar: String
+  blogSite: String
   categories: [String]
   creator: String!
   domain: String
-  discord: String
+  discordInvite: String
   discordGuildId: String
   filters: SpaceFilters
   github: String
@@ -213,7 +214,6 @@ type Space {
   guidesPageHeaderContent: String
   guidesBundlePageFooterContent: String
   guidesBundlePageHeaderContent: String
-  medium: String
   location: String
   members: [String!]!
   mission: String!
@@ -225,7 +225,7 @@ type Space {
   symbol: String
   skin: String!
   strategies: [Strategy]
-  telegram: String
+  telegramInvite: String
   terms: String
   twitter: String
   validation: Strategy
