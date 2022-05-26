@@ -205,18 +205,27 @@ type Space {
   categories: [String]
   creator: String!
   domain: String
+  discord: String
   discordGuildId: String
   filters: SpaceFilters
   github: String
+  guidesPageFooterContent: String
+  guidesPageHeaderContent: String
+  guidesBundlePageFooterContent: String
+  guidesBundlePageHeaderContent: String
+  medium: String
   location: String
   members: [String!]!
   mission: String!
   name: String
   plugins: Any
   private: Boolean
+  publicForumWebsite: String
+  referenceDocsWebsite: String
   symbol: String
   skin: String!
   strategies: [Strategy]
+  telegram: String
   terms: String
   twitter: String
   validation: Strategy
@@ -322,7 +331,9 @@ type GuideBundle {
   content: String!
   created: Int!
   discordWebhook: String
+  duration: String!
   excerpt: String!
+  highlights: [String!]!
   id: String!
   ipfs: String!
   name: String!

@@ -56,7 +56,9 @@ query GuideBundleQuery($uuid: String!) {
     content
     created
     discordWebhook
+    duration
     excerpt
+    highlights
     id
     ipfs
     link

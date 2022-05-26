@@ -1,27 +1,30 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { onBeforeUpdate } from '@vue/runtime-core';
 
 const props = defineProps({
-  modelValue: Array
+  modelValue: Array,
+  splitArrayFunction: Function
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-const input = ref(props.modelValue?.join('\n') || '');
+const input = ref<string | undefined>(props.modelValue?.join('\n') || '');
 
 onBeforeUpdate(() => {
   input.value = input.value || props.modelValue?.join('\n');
 });
 
 function updateModel(inputString) {
-  const inputStrings = inputString
-    .replace(/\n/g, ' ')
-    .replace(/,/g, ' ')
-    .replace(/;/g, ' ')
-    .split(' ')
-    .map(item => item.trim())
-    .filter(item => !!item);
+  const inputStrings = props.splitArrayFunction
+    ? props.splitArrayFunction(inputString)
+    : inputString
+        .replace(/\n/g, ' ')
+        .replace(/,/g, ' ')
+        .replace(/;/g, ' ')
+        .split(' ')
+        .map(item => item.trim())
+        .filter(item => !!item);
   emit('update:modelValue', inputStrings);
 }
 </script>

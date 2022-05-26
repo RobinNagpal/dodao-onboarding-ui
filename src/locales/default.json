@@ -630,7 +630,7 @@
         "guides": "{dao} Guides",
         "proposal": "{dao} proposal: {proposal}",
         "guide": "{dao} guide: {guide}",
-        "bundle": "{dao} bundle: {bundle}",
+        "bundle": "{dao} Courses",
         "settings": "{dao} Settings"
       },
       "guide": {

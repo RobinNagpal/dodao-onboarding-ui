@@ -12,6 +12,12 @@ module.exports = {
       }
     },
     {
+      files: '*.ts',
+      options: {
+        printWidth: 120
+      }
+    },
+    {
       files: '*.json',
       options: {
         printWidth: 160
