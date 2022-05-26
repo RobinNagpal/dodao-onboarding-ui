@@ -22,6 +22,7 @@ export const emptyGuide = (
     guideType: guideType,
     discordRoleIds: [],
     publishStatus: GuidePublishStatus.Live,
+    showIncorrectOnCompletion: true,
     steps: [
       {
         uuid: uuidv4(),
@@ -32,7 +33,7 @@ Introduction Comments
         stepItems: [
           {
             label: 'Full Name',
-            order: 1,
+            order: 0,
             type: InputType.PublicShortInput,
             uuid: uuidv4()
           }

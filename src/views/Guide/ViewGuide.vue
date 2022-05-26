@@ -35,7 +35,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { isEthBlockchain, isOneBlockchain, web3, web3Account } = useWeb3();
+const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const { store } = useStore();
@@ -47,22 +47,22 @@ const modalOpen = ref(false);
 
 const modalGuideExportOpen = ref(false);
 
-const backButtonText = props.from
-  ? JSON.parse(props.from)?.displayName || props.space.name
-  : props.space.name;
+const backButtonText = props.from ? JSON.parse(props.from)?.displayName || props.space.name : props.space.name;
 
 const {
-  activeStepId,
+  activeStepOrder,
   goToNextStep,
   goToPreviousStep,
   guideRef: guide,
   guideLoaded,
   guideResponseRef,
+  guideSubmission,
   guideSubmittingRef,
   initialize,
   selectAnswer,
   submitGuide,
-  setUserInput
+  setUserInput,
+  setUserDiscord
 } = useViewGuide(uuid as string, notify, props.space);
 
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
@@ -112,14 +112,8 @@ async function exportGuide() {
   modalGuideExportOpen.value = true;
 }
 
-const {
-  shareToTwitter,
-  shareToFacebook,
-  shareToClipboard,
-  startShare,
-  sharingIsSupported,
-  sharingItems
-} = useSharing();
+const { shareToTwitter, shareToFacebook, shareToClipboard, startShare, sharingIsSupported, sharingItems } =
+  useSharing();
 
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteGuide();
@@ -138,23 +132,10 @@ function selectFromThreedotDropdown(e) {
 
 function selectFromShareDropdown(e) {
   if (e === 'shareToTwitter')
-    shareToTwitter(
-      props.space,
-      guide.value?.name ?? '',
-      'guide/view',
-      guide.value?.uuid ?? '',
-      window
-    );
+    shareToTwitter(props.space, guide.value?.name ?? '', 'guide/view', guide.value?.uuid ?? '', window);
   else if (e === 'shareToFacebook')
-    shareToFacebook(
-      props.space,
-      guide.value?.name ?? '',
-      'guide/view',
-      guide.value?.uuid ?? '',
-      window
-    );
-  else if (e === 'shareToClipboard')
-    shareToClipboard(props.space, 'guide/view', guide.value?.uuid ?? '');
+    shareToFacebook(props.space, guide.value?.name ?? '', 'guide/view', guide.value?.uuid ?? '', window);
+  else if (e === 'shareToClipboard') shareToClipboard(props.space, 'guide/view', guide.value?.uuid ?? '');
 }
 
 const { profiles, loadProfiles } = useProfiles();
@@ -187,6 +168,7 @@ function onClickBackButton() {
   }
 }
 </script>
+
 
 <template>
   <div class="page-main flex mx-auto justify-between">
@@ -239,10 +221,7 @@ function onClickBackButton() {
                     </div>
                   </div>
                 </div>
-                <div
-                  class="guide-information mt-4"
-                  v-if="isEthBlockchain || isOneBlockchain"
-                >
+                <div class="guide-information mt-4" v-if="isEthBlockchain || isOneBlockchain">
                   <div class="space-y-1">
                     <div class="w-[180px] flex justify-between">
                       <div>
@@ -264,11 +243,7 @@ function onClickBackButton() {
                     </div>
                     <div>
                       <b>IPFS</b>
-                      <a
-                        :href="getIpfsUrl(guide.ipfs)"
-                        target="_blank"
-                        class="float-right"
-                      >
+                      <a :href="getIpfsUrl(guide.ipfs)" target="_blank" class="float-right">
                         #{{ guide.ipfs.slice(0, 7) }}
                         <Icon name="external-link" class="ml-1" />
                       </a>
@@ -276,22 +251,19 @@ function onClickBackButton() {
                   </div>
                 </div>
               </div>
-              <Block
-                :title="$t('guide.guideSteps')"
-                :class="`mt-4`"
-                slim
-                v-if="guideLoaded && guide"
-              >
+              <Block :title="$t('guide.guideSteps')" :class="`mt-4`" slim v-if="guideLoaded && guide">
                 <div class="mt-4">
                   <GuideViewStepper
-                    :activeStepId="activeStepId"
+                    :activeStepOrder="activeStepOrder"
                     :goToNextStep="goToNextStep"
                     :goToPreviousStep="goToPreviousStep"
                     :guide="guide"
                     :guideResponse="guideResponseRef"
+                    :guideSubmission="guideSubmission"
                     :guideSubmitting="guideSubmittingRef"
                     :selectAnswer="selectAnswer"
                     :setUserInput="setUserInput"
+                    :setUserDiscord="setUserDiscord"
                     :submitGuide="submitGuide"
                   />
                 </div>

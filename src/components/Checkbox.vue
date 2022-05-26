@@ -23,7 +23,7 @@ function checkboxClicked() {
     <span
       class="checkmark"
       @click="checkboxClicked"
-      :class="[props.class, { checked: props.modelValue }]"
+      :class="[{ [props.class]: props.modelValue }, { checked: props.modelValue }]"
     ></span>
   </div>
 </template>

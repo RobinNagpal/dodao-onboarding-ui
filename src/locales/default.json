@@ -196,6 +196,7 @@
   },
   "guide": {
     "addInputOrQuestion": "Add Input or Question",
+    "discordPoupDesc": "This button will be used by the members to connect their Discord",
     "castVote": "Cast your vote",
     "create": {
       "name": "Name",
@@ -227,6 +228,8 @@
       "sales": "Sales",
       "setup": "Setup"
     },
+    "correctAnswers": "Correct Answers",
+    "postSubmissionStepContent": "After Submission Content",
     "complete": "Complete",
     "delete": "Delete",
     "duplicate": "Duplicate",
@@ -257,11 +260,14 @@
       "name": "Step Name",
       "contents": "Contents"
     },
+    "addDiscord": "Discord Connect",
 
     "submissions": "Submissions",
     "thumbnail": "Thumbnail Image",
     "vote": "Vote",
     "votingSystem": "Voting system",
+    "showIncorrectChoices": "Show Incorrect Questions",
+    "hideQuestions": "Hide Questions",
     "socialShareImage": "Twitter Share Image"
   },
   "guideBundle": {

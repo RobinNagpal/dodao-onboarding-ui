@@ -23,7 +23,7 @@ const saveGuideSubmission = (
   );
 };
 
-const getGuideSubmissionsCache = (guideUuid: string) => {
+const readGuideSubmissionsCache = (guideUuid: string) => {
   const result = JSON.parse(
     localStorage.getItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`) || '{}'
   );
@@ -31,4 +31,4 @@ const getGuideSubmissionsCache = (guideUuid: string) => {
   return result;
 };
 
-export default { setAccount, saveGuideSubmission, getGuideSubmissionsCache };
+export default { setAccount, saveGuideSubmission, readGuideSubmissionsCache };

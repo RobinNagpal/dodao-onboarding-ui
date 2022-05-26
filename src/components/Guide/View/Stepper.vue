@@ -2,16 +2,13 @@
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
-import {
-  GuideModel,
-  GuideStep
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuideModel, GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
-  activeStepId: String,
-
+  activeStepOrder: Number,
   goToNextStep: Function,
   goToPreviousStep: Function,
   guide: {
@@ -22,12 +19,19 @@ const props = defineProps({
     type: Object as PropType<Record<string, UserGuideQuestionSubmission>>,
     required: true
   },
+  guideSubmission: {
+    type: Object as PropType<GuideSubmission>
+  },
   guideSubmitting: Boolean,
   selectAnswer: {
     type: Function,
     required: true
   },
   setUserInput: {
+    type: Function,
+    required: true
+  },
+  setUserDiscord: {
     type: Function,
     required: true
   },
@@ -45,15 +49,11 @@ const props = defineProps({
   }
 });
 
-const activeStep = computed<GuideStep>(
-  () =>
-    props.guide.steps.find(step => step.uuid === props.activeStepId) ||
-    props.guide.steps[0]!
-);
+const activeStep = computed<GuideStep>(() => {
+  return props.guide.steps.find(step => step.order === props.activeStepOrder) || props.guide?.steps[0] || undefined;
+});
 
-const isReachingLastStep = computed(
-  () => props.guide.steps.length - 1 === activeStep.value.order
-);
+const isReachingLastStep = computed(() => props.guide.steps.length - 1 === activeStep.value.order);
 
 const styleObject = computed(() => {
   return {
@@ -65,11 +65,7 @@ const styleObject = computed(() => {
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 guide-stepper bg-skin-header-bg rounded-3xl">
-      <ol
-        class="ob-nav-stepper ob-nav-stepper-lg"
-        role="menu"
-        :style="styleObject"
-      >
+      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
           class="ob-nav-step"
           :class="[
@@ -81,16 +77,11 @@ const styleObject = computed(() => {
           v-for="step in guide.steps"
           :key="step.uuid"
         >
-          <div
-            v-if="isReachingLastStep || step.order < activeStep.order"
-            class="checkmark"
-          ></div>
+          <div v-if="isReachingLastStep || step.order < activeStep.order" class="checkmark"></div>
           <GuideStepperIcon v-else class="stepper-icon" :step="step" />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
-            <a class="step-link text-sm" role="menuitem">{{
-              step.name || '&nbsp;'
-            }}</a>
+            <a class="step-link text-sm" role="menuitem">{{ step.name || '&nbsp;' }}</a>
           </div>
         </li>
       </ol>
@@ -99,12 +90,15 @@ const styleObject = computed(() => {
       :goToNextStep="goToNextStep"
       :goToPreviousStep="goToPreviousStep"
       :guide="guide"
+      :guideSubmission="guideSubmission"
       :guideSubmitting="guideSubmitting"
       :step="activeStep"
+      :activeStepOrder="activeStepOrder"
       :stepSubmission="guideResponse[activeStep.uuid] ?? {}"
       :submitGuide="submitGuide"
       @update:questionResponse="selectAnswer"
       @update:userInputResponse="setUserInput"
+      @update:userDiscordResponse="setUserDiscord"
     />
   </div>
 </template>
