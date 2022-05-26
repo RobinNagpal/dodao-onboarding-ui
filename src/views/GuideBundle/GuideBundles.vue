@@ -89,24 +89,7 @@ const loadingData = computed(() => {
       <div>
         <div class="section pricing wf-section">
           <div class="container-default w-container">
-            <div class="w-full mb-6">
-              <h1 class="w-full text-center">Courses</h1>
-              <div class="w-full flex justify-center">
-                <p
-                  style="
-                    opacity: 1;
-                    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-                      skew(0deg, 0deg);
-                    transform-style: preserve-3d;
-                  "
-                  class="paragraph pricing text-center max-w-lg"
-                >
-                  Sometimes you want all the control because you know best how you like to learn. Explore courses and
-                  tools that will help you learn about Dxdao at your own pace.
-                </p>
-              </div>
-            </div>
-            <div class="pricing-wrapper w-dyn-list mt-6">
+            <div class="pricing-wrapper w-dyn-list pt-8">
               <div role="list" class="_3-column-grid pricing w-dyn-items">
                 <div
                   style="

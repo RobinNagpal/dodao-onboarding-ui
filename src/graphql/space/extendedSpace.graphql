@@ -2,8 +2,9 @@ query ExtendedSpace($spaceId: String!) {
   space(id: $spaceId) {
     id
     about
+    blogSite
     creator
-    discord
+    discordInvite
     mission
     name
     network
@@ -18,7 +19,6 @@ query ExtendedSpace($spaceId: String!) {
     guidesPageHeaderContent
     guidesBundlePageFooterContent
     guidesBundlePageHeaderContent
-    medium
     private
     publicForumWebsite
     referenceDocsWebsite
@@ -27,7 +27,7 @@ query ExtendedSpace($spaceId: String!) {
     admins
     categories
     plugins
-    telegram
+    telegramInvite
     voting {
       delay
       period

@@ -20,12 +20,7 @@ import SpaceProposal from '@/views/SpaceProposal.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Strategy from '@/views/Strategy.vue';
 import Timeline from '@/views/Timeline.vue';
-import {
-  createRouter,
-  createWebHistory,
-  RouteLocation,
-  RouteRecordRaw
-} from 'vue-router';
+import { createRouter, createWebHistory, RouteLocation, RouteRecordRaw } from 'vue-router';
 
 // The frontend shows all spaces or just a single one, when being accessed
 // through that space's custom domain.
@@ -59,7 +54,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: Guides
   },
   {
-    path: ':bundleType/guide-bundles',
+    path: 'guide-bundles',
     name: 'guideBundles',
     component: GuideBundles
   },
@@ -74,7 +69,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/Guide/ViewGuide.vue')
   },
   {
-    path: ':bundleType/guide-bundle/view/:uuid',
+    path: 'guide-bundle/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
@@ -84,7 +79,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: CreateGuide
   },
   {
-    path: ':bundleType/guide-bundle/create',
+    path: 'guide-bundle/create',
     name: 'guideBundleCreate',
     component: GuideBundleCreate
   },
@@ -95,7 +90,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     props: true
   },
   {
-    path: ':bundleType/guide-bundle/edit/:uuid',
+    path: 'guide-bundle/edit/:uuid',
     name: 'guideBundleEdit',
     component: GuideBundleCreate
   },
