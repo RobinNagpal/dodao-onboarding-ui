@@ -3,7 +3,6 @@ query ExtendedSpace($spaceId: String!) {
     id
     about
     creator
-    discord
     mission
     name
     network
@@ -14,20 +13,12 @@ query ExtendedSpace($spaceId: String!) {
     avatar
     twitter
     github
-    guidesPageFooterContent
-    guidesPageHeaderContent
-    guidesBundlePageFooterContent
-    guidesBundlePageHeaderContent
-    medium
     private
-    publicForumWebsite
-    referenceDocsWebsite
     domain
     members
     admins
     categories
     plugins
-    telegram
     voting {
       delay
       period
