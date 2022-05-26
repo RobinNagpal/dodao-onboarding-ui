@@ -11,11 +11,11 @@ import {
   GuideQuestion,
   GuideStep,
   InputType,
-  DiscordType,
+  ConnectDiscord,
   isQuestion,
   isUserInput,
   UserInput,
-  UserDiscord
+  UserDiscordConnect
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
@@ -62,13 +62,7 @@ const { modalAccountOpen } = useModal();
 const emit = defineEmits(['update:questionResponse', 'update:userInputResponse', 'update:userDiscordResponse']);
 
 const stepItems = computed(() => {
-  // fake user discord button, delete later
-  const x: UserDiscord = {
-    uuid: 'dfgsdfg',
-    type: DiscordType.DiscordButton,
-    order: props.step.stepItems.length
-  };
-  return [...props.step.stepItems, x];
+  return [...props.step.stepItems];
 });
 
 const wrongQuestions = computed(() => {
@@ -190,14 +184,14 @@ async function navigateToNextStep() {
             :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
           />
           <GuideViewUserDiscord
-            v-if="stepItem.type === DiscordType.DiscordButton"
+            v-else-if="stepItem.type === ConnectDiscord.DiscordButton"
             :spaceId="route.params.key"
             :guideUuid="guide.uuid"
             :stepOrder="step.order"
             :stepUuid="step.uuid"
             :userDiscord="stepItem"
             :discordResponse="stepSubmission[stepItem.uuid] ?? ''"
-          ></GuideViewUserDiscord>
+          />
           <GuideViewQuestion
             v-else
             :question="stepItem"

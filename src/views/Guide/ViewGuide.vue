@@ -35,7 +35,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { web3, web3Account } = useWeb3();
+const { isEthBlockchain, isOneBlockchain, web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const { store } = useStore();
@@ -168,7 +168,6 @@ function onClickBackButton() {
   }
 }
 </script>
-
 
 <template>
   <div class="page-main flex mx-auto justify-between">

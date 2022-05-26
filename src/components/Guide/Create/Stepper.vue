@@ -3,7 +3,7 @@ import GuideCreateStepperItem from '@/components/Guide/Create/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
 import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
 import { GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import { DiscordType } from '@dodao/onboarding-schemas/models/GuideModel';
+import { ConnectDiscord } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType, unref } from 'vue';
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const styleObject = computed(() => {
 const hasDiscord = computed(() => {
   for (let i = 0; i < props.steps.length; i++) {
     for (let j = 0; j < props.steps[i].stepItems.length; j++) {
-      if (props.steps[i].stepItems[j].type === DiscordType.DiscordButton) {
+      if (props.steps[i].stepItems[j].type === ConnectDiscord.DiscordButton) {
         return true;
       }
     }
