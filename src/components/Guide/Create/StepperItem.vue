@@ -10,7 +10,7 @@ import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { StepError } from '@/types/error';
 import { GuideInput, GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
-  ConnectDiscord,
+  UserDiscordConnectType,
   GuideQuestion,
   GuideStepItem,
   InputType,
@@ -92,7 +92,7 @@ const inputsAndQuestions = computed(() => {
     ...props.step.stepItems.map((q: GuideStepItem) => ({
       ...q,
       isQuestion: q.type === QuestionType.MultipleChoice || q.type === QuestionType.SingleChoice,
-      isDiscord: q.type === ConnectDiscord.DiscordButton
+      isDiscord: q.type === UserDiscordConnectType
     }))
   ];
 });
@@ -261,7 +261,7 @@ function addDiscord() {
   const discord = {
     uuid: uuidv4(),
     order: props.step.stepItems.length,
-    type: ConnectDiscord.DiscordButton
+    type: UserDiscordConnectType
   };
   const steps = [...(props.step.stepItems || []), discord];
   emit('update:step', { ...props.step, stepItems: steps });

@@ -13,8 +13,8 @@ import { SpaceSettingsInput } from '@dodao/onboarding-schemas/inputs/SpaceInput'
 import {
   GuideQuestion,
   GuideStep,
-  isConnectDiscord,
   isQuestion,
+  isUserDiscordConnect,
   isUserInput,
   UserDiscordConnect,
   UserInput
@@ -137,7 +137,7 @@ export function useClient() {
                   answerKeys: [],
                   choices: []
                 };
-              } else if (isConnectDiscord(item)) {
+              } else if (isUserDiscordConnect(item)) {
                 const userInput = item as UserDiscordConnect;
                 return {
                   uuid: userInput.uuid,

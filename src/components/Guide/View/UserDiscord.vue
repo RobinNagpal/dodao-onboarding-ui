@@ -38,7 +38,7 @@ const url = computed(() => {
 </script>
 <template>
   <div class="w-full flex justify-center">
-    <div class="mb-4">
+    <div class="my-4">
       <a :href="url" class="text-white discord-btn inline-flex button px-[24px]">
         <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 100 100" viewBox="0 0 100 100">
           <path

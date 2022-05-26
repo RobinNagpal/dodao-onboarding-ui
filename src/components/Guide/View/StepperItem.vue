@@ -11,7 +11,7 @@ import {
   GuideQuestion,
   GuideStep,
   InputType,
-  ConnectDiscord,
+  UserDiscordConnectType,
   isQuestion,
   isUserInput,
   UserInput,
@@ -184,7 +184,7 @@ async function navigateToNextStep() {
             :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
           />
           <GuideViewUserDiscord
-            v-else-if="stepItem.type === ConnectDiscord.DiscordButton"
+            v-else-if="stepItem.type === UserDiscordConnectType"
             :spaceId="route.params.key"
             :guideUuid="guide.uuid"
             :stepOrder="step.order"
