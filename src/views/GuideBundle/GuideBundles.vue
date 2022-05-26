@@ -160,7 +160,7 @@ const loadingData = computed(() => {
             </div>
           </div>
         </div>
-                <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
+        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
         <GuideBundleNoGuideBundles
           v-else-if="!guideBundlesCount && !loadingData"
           class="mt-2"
