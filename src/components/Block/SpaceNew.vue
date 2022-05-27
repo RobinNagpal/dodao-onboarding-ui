@@ -2,7 +2,7 @@
 import FollowButton from '@/components/FollowButton.vue';
 import UiLoading from '@/components/Ui/Loading.vue';
 import Icon from '@/components/Icon.vue';
-import SpaceNavigation from '@/components/Space/Navigation.vue';
+import SpaceNavigation from '@/components/Space/OnboardingNavigation.vue';
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useWeb3 } from '@/composables/useWeb3';
@@ -24,13 +24,9 @@ const { isEthBlockchain, isOneBlockchain } = useWeb3();
 const nbrMembers = explore.value.spaces[props.space.id].followers;
 const isVerified = verified[props.space.id] || 0;
 
-const {
-  loading,
-  toggleSubscription,
-  isSubscribed,
-  loadSubscriptions,
-  subscriptions
-} = useSpaceSubscription(props.space.id);
+const { loading, toggleSubscription, isSubscribed, loadSubscriptions, subscriptions } = useSpaceSubscription(
+  props.space.id
+);
 
 const { isFollowing } = useFollowSpace(props.space);
 
@@ -55,9 +51,7 @@ watchEffect(() => {
       </a>
     </div>
     <div class="flex">
-      <div
-        class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2"
-      >
+      <div class="image-wrapper integration-icon-wrapper flex flex-col items-center px-12 mb-2">
         <UiThumbnail
           :src="space.avatar"
           :entityId="space.id"
@@ -71,25 +65,13 @@ watchEffect(() => {
         </div>
         <div class="flex mt-2" v-if="isEthBlockchain || isOneBlockchain">
           <FollowButton :space="space" :class="'mx-2'" />
-          <UiSidebarButton
-            class="inline px-2"
-            v-if="isFollowing"
-            @click="toggleSubscription()"
-          >
+          <UiSidebarButton class="inline px-2" v-if="isFollowing" @click="toggleSubscription()">
             <UiLoading v-if="loading" />
-            <Icon
-              v-else
-              size="20"
-              class="link-color"
-              :name="notificationIcon"
-            />
+            <Icon v-else size="20" class="link-color" :name="notificationIcon" />
           </UiSidebarButton>
         </div>
       </div>
-      <div
-        class="split-content integration-details border-l mb-2 space-details"
-        style="border-color: #c0c4d1"
-      >
+      <div class="split-content integration-details border-l mb-2 space-details" style="border-color: #c0c4d1">
         <div class="integration-title-wrapper" style="height: 128px">
           <h1>
             {{ space.name }}

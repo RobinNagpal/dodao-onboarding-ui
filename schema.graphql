@@ -325,7 +325,6 @@ type GuideInBundle {
 
 type GuideBundle {
   authors: [String!]!
-  bundleType: String!
   bundleGuides: [GuideInBundle!]!
   categories: [String!]!
   content: String!

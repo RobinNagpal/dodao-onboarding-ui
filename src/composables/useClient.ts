@@ -42,9 +42,7 @@ export function useClient() {
   });
 
   const isGnosisSafe = computed(
-    () =>
-      web3.value?.walletConnectType === 'Gnosis Safe Multisig' ||
-      connectorName.value === 'gnosis'
+    () => web3.value?.walletConnectType === 'Gnosis Safe Multisig' || connectorName.value === 'gnosis'
   );
 
   async function send(space, type, payload): Promise<MsgResponse | undefined> {
@@ -54,25 +52,14 @@ export function useClient() {
       const usePersonal = usePersonalSign.value && false;
       if (usePersonal) {
         if (payload.proposal) payload.proposal = payload.proposal.id;
-        const clientPersonalSign = isGnosisSafe.value
-          ? clientGnosisSafe
-          : client;
+        const clientPersonalSign = isGnosisSafe.value ? clientGnosisSafe : client;
         // @ts-ignore
-        return await clientPersonalSign.broadcast(
-          auth.web3,
-          web3.value.account,
-          space.id,
-          type,
-          payload
-        );
+        return await clientPersonalSign.broadcast(auth.web3, web3.value.account, space.id, type, payload);
       }
       return await sendEIP712(space, type, payload);
     } catch (e: any) {
       console.error(e);
-      const errorMessage =
-        e && e.error_description
-          ? `Oops, ${e.error_description}`
-          : t('notify.somethingWentWrong');
+      const errorMessage = e && e.error_description ? `Oops, ${e.error_description}` : t('notify.somethingWentWrong');
       notify(['red', errorMessage]);
       return e;
     } finally {
@@ -80,11 +67,7 @@ export function useClient() {
     }
   }
 
-  async function sendEIP712(
-    space,
-    type,
-    payload
-  ): Promise<MsgResponse | undefined> {
+  async function sendEIP712(space, type, payload): Promise<MsgResponse | undefined> {
     if (type === 'guide') {
       const guideMessage: GuideInput = {
         uuid: payload.uuid,
@@ -141,11 +124,7 @@ export function useClient() {
         })),
         thumbnail: payload.thumbnail || ''
       };
-      return (await clientEIP712.guide(
-        auth.web3,
-        web3.value.account,
-        guideMessage
-      )) as MsgResponse;
+      return (await clientEIP712.guide(auth.web3, web3.value.account, guideMessage)) as MsgResponse;
     } else if (type === 'guideBundle') {
       const bundlePayload = payload as TempGuideBundleInput;
       const bundleMessage: GuideBundleInput = {
@@ -154,23 +133,20 @@ export function useClient() {
           guideUuid: g.guide!.uuid,
           order: g.order
         })),
-        bundleType: bundlePayload.bundleType,
         categories: bundlePayload.categories || [],
         content: bundlePayload.content,
         discordWebhook: bundlePayload.discordWebhook || '',
+        duration: bundlePayload.duration || '',
         excerpt: bundlePayload.excerpt,
         from: web3.value.account,
+        highlights: bundlePayload.highlights || [],
         name: bundlePayload.name,
         publishStatus: payload.publishStatus,
         socialShareImage: payload.socialShareImage || '',
         space: space.id,
         thumbnail: bundlePayload.thumbnail || ''
       };
-      return (await clientEIP712.bundle(
-        auth.web3,
-        web3.value.account,
-        bundleMessage
-      )) as MsgResponse;
+      return (await clientEIP712.bundle(auth.web3, web3.value.account, bundleMessage)) as MsgResponse;
     } else if (type === 'vote') {
       return (await clientEIP712.vote(auth.web3, web3.value.account, {
         space: space.id,
@@ -212,11 +188,7 @@ export function useClient() {
         ...payload,
         timestamp: parseInt((Date.now() / 1e3).toFixed())
       };
-      return (await clientEIP712.createGuideResponse(
-        auth.web3,
-        web3.value.account,
-        guideResponseInput
-      )) as MsgResponse;
+      return (await clientEIP712.createGuideResponse(auth.web3, web3.value.account, guideResponseInput)) as MsgResponse;
     } else {
       throw new Error('Unknown type ' + type);
     }

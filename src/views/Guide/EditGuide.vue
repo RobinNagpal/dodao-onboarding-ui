@@ -60,12 +60,7 @@ const {
   handleSubmit,
   initialize,
   updateGuideFunctions
-} = useEditGuide(
-  uuid as string,
-  props.space,
-  notify,
-  props.editGuide ? JSON.parse(props.editGuide) : undefined
-);
+} = useEditGuide(uuid as string, props.space, notify, props.editGuide ? JSON.parse(props.editGuide) : undefined);
 
 const form = ref(guide);
 
@@ -105,7 +100,7 @@ onMounted(async () => {
 
 const guideExists = !!guide.value?.id;
 
-function selectGuideOrBundleType(guideType: GuideType) {
+function selectGuideType(guideType: GuideType) {
   guide.value.guideType = guideType;
 }
 </script>
@@ -141,15 +136,8 @@ function selectGuideOrBundleType(guideType: GuideType) {
           :aria-label="$t('toggleSkin')"
           @click="modalGuideImportOpen = true"
         >
-          <svg
-            style="width: 24px; height: 24px"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path
-              fill="currentColor"
-              d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"
-            />
+          <svg style="width: 24px; height: 24px" viewBox="0 0 24 24" fill="currentColor">
+            <path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
           </svg>
         </UiSidebarButton>
       </div>
@@ -172,9 +160,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
             :steps="form.steps"
             :update-guide-functions="updateGuideFunctions"
             :update-modal-category-open="updateModalCategoryOpen"
-            :update-modal-guide-or-bundle-type-open="
-              updateModalGuideOrBundleTypeOpen
-            "
+            :update-modal-guide-or-bundle-type-open="updateModalGuideOrBundleTypeOpen"
           />
         </div>
 
@@ -203,7 +189,7 @@ function selectGuideOrBundleType(guideType: GuideType) {
       :open="modalGuideOrBundleTypeOpen"
       :selected-type="guide.guideType"
       @close="modalGuideOrBundleTypeOpen = false"
-      @selectGuideOrBundleType="selectGuideOrBundleType"
+      @selectGuideType="selectGuideType"
     />
     <ModalGuideGuideImport
       :open="modalGuideImportOpen"

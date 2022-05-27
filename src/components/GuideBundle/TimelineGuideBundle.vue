@@ -17,35 +17,33 @@ const props = defineProps({
       params: { key: guideBundle.space.id, uuid: guideBundle.uuid }
     }"
   >
-    <div role="listitem" class="card feature-card">
-      <div class="image-wrapper blog-card-thumbnail">
-        <UiThumbnail
-          :src="guideBundle.thumbnail"
-          :entityId="guideBundle.uuid"
-          :title="guideBundle.name"
-          size="350"
-          class="mb-1"
-          big_tile
-        />
-      </div>
-      <div class="p-4 text-center">
-        <h2
-          class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis"
-          v-text="shorten(guideBundle.name, 32)"
-        />
-        <p
-          v-text="shorten(guideBundle.excerpt, 300)"
-          class="break-words mb-2 text-sm h-[95px] text-ellipsis overflow-hidden text-sm"
-        />
-      </div>
-      <div class="flex flex-wrap justify-end absolute top-4 right-4">
-        <div
-          class="badge post-category mb-1"
-          v-for="category in guideBundle.categories || []"
-          :key="category"
-        >
-          {{ $t('guide.category.' + category) }}
+    <div role="listitem" class="card pricing-card w-inline-block">
+      <div class="split-content package-card-top-content">
+        <div class="top-content top-pricing-content">
+          <div class="image-wrapper package-icon">
+            <UiThumbnail
+              :src="guideBundle.thumbnail"
+              :entityId="guideBundle.uuid"
+              :title="guideBundle.name"
+              size="100"
+              class="image package-icon"
+            />
+          </div>
+          <h3 class="mg-bottom-0" v-text="shorten(guideBundle.name, 32)" />
         </div>
+        <p class="paragraph package-about-excerpt" v-text="shorten(guideBundle.excerpt, 300)" />
+
+        <ul role="list" class="list package-features-list w-list-unstyled">
+          <template v-for="highlight in guideBundle.highlights" :key="highlight">
+            <li class="list-item dark-check-item">
+              <div class="package-feature">{{ highlight }}</div>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <div class="split-content package-card-bottom-content">
+        <div class="added-cost">Duration: {{ guideBundle.duration }}</div>
+        <div class="button-primary popular w-condition-invisible">Get started</div>
       </div>
     </div>
   </router-link>

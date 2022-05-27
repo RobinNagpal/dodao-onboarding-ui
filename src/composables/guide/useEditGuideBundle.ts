@@ -4,10 +4,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
-import {
-  GuideBundlePublishStatus,
-  GuideBundleType
-} from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
@@ -19,13 +16,9 @@ import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
 const bundleNameLimit = 32;
 const bundleContentLimit = 14400;
-const bundleExceptContentLimit = 64;
+const bundleExceptContentLimit = 512;
 
-export function useEditGuideBundle(
-  uuid: string | null,
-  space: SpaceModel,
-  notify: any
-) {
+export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notify: any) {
   const { send } = useClient();
   const router = useRouter();
   const route = useRoute();
@@ -35,11 +28,7 @@ export function useEditGuideBundle(
   const { store } = useStore();
   const { web3 } = useWeb3();
 
-  const emptyGuideBundleModel = emptyGuideBundle(
-    web3.value.account,
-    space,
-    (route.params.bundleType as GuideBundleType) || GuideBundleType.Onboarding
-  );
+  const emptyGuideBundleModel = emptyGuideBundle(web3.value.account, space);
   const guideBundleRef = ref<TempGuideBundleInput>(emptyGuideBundleModel);
   const guideBundleErrors = ref<GuideBundleError>({});
   const guideBundleLoaded = ref<boolean>(false);
@@ -55,7 +44,6 @@ export function useEditGuideBundle(
         space: space.id,
         thumbnail: guideBundle.thumbnail || undefined,
         discordWebhook: guideBundle.discordWebhook || undefined,
-        bundleType: guideBundle.bundleType as GuideBundleType,
         bundleGuides: guideBundle.bundleGuides.map(g => ({
           uuid: uuidv4(),
           guide: g,
@@ -79,53 +67,37 @@ export function useEditGuideBundle(
     ];
   }
   function selectGuide(uuid: string, guide: GuideModel) {
-    guideBundleRef.value.bundleGuides = guideBundleRef.value.bundleGuides.map(
-      g => {
-        if (g.uuid === uuid) {
-          return { ...g, guide };
-        } else {
-          return g;
-        }
+    guideBundleRef.value.bundleGuides = guideBundleRef.value.bundleGuides.map(g => {
+      if (g.uuid === uuid) {
+        return { ...g, guide };
+      } else {
+        return g;
       }
-    );
+    });
     if (guideBundleErrors.value.bundleGuides?.[uuid]) {
       delete guideBundleErrors.value.bundleGuides[uuid];
     }
   }
 
   function moveGuideUp(uuid: string) {
-    const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.uuid === uuid
-    );
+    const guideIndex = guideBundleRef.value.bundleGuides.findIndex(s => s.uuid === uuid);
     guideBundleRef.value.bundleGuides[guideIndex - 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex - 1;
 
-    guideBundleRef.value.bundleGuides = orderBy(
-      guideBundleRef.value.bundleGuides,
-      'order'
-    );
+    guideBundleRef.value.bundleGuides = orderBy(guideBundleRef.value.bundleGuides, 'order');
   }
 
   function removeGuideInput(uuid: string) {
-    const filteredGuides = guideBundleRef.value.bundleGuides.filter(
-      s => s.uuid !== uuid
-    );
-    guideBundleRef.value.bundleGuides = filteredGuides.map(
-      (guideInput, index) => ({ ...guideInput, order: index })
-    );
+    const filteredGuides = guideBundleRef.value.bundleGuides.filter(s => s.uuid !== uuid);
+    guideBundleRef.value.bundleGuides = filteredGuides.map((guideInput, index) => ({ ...guideInput, order: index }));
   }
 
   function moveGuideDown(uuid: string) {
-    const guideIndex = guideBundleRef.value.bundleGuides.findIndex(
-      s => s.uuid === uuid
-    );
+    const guideIndex = guideBundleRef.value.bundleGuides.findIndex(s => s.uuid === uuid);
     guideBundleRef.value.bundleGuides[guideIndex + 1].order = guideIndex;
     guideBundleRef.value.bundleGuides[guideIndex].order = guideIndex + 1;
 
-    guideBundleRef.value.bundleGuides = orderBy(
-      guideBundleRef.value.bundleGuides,
-      'order'
-    );
+    guideBundleRef.value.bundleGuides = orderBy(guideBundleRef.value.bundleGuides, 'order');
   }
 
   function validateBundle(bundle: TempGuideBundleInput) {

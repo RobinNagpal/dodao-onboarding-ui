@@ -2,6 +2,7 @@ import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
+import AllGuides from '@/views/Guide/AllGuides.vue';
 import CreateGuide from '@/views/Guide/CreateGuide.vue';
 import EditGuide from '@/views/Guide/EditGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
@@ -20,12 +21,7 @@ import SpaceProposal from '@/views/SpaceProposal.vue';
 import SpaceSettings from '@/views/SpaceSettings.vue';
 import Strategy from '@/views/Strategy.vue';
 import Timeline from '@/views/Timeline.vue';
-import {
-  createRouter,
-  createWebHistory,
-  RouteLocation,
-  RouteRecordRaw
-} from 'vue-router';
+import { createRouter, createWebHistory, RouteLocation, RouteRecordRaw } from 'vue-router';
 
 // The frontend shows all spaces or just a single one, when being accessed
 // through that space's custom domain.
@@ -59,7 +55,12 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: Guides
   },
   {
-    path: ':bundleType/guide-bundles',
+    path: 'all-guides',
+    name: 'allGuides',
+    component: AllGuides
+  },
+  {
+    path: 'courses',
     name: 'guideBundles',
     component: GuideBundles
   },
@@ -74,7 +75,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/Guide/ViewGuide.vue')
   },
   {
-    path: ':bundleType/guide-bundle/view/:uuid',
+    path: 'course/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
@@ -84,7 +85,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: CreateGuide
   },
   {
-    path: ':bundleType/guide-bundle/create',
+    path: 'course/create',
     name: 'guideBundleCreate',
     component: GuideBundleCreate
   },
@@ -95,7 +96,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     props: true
   },
   {
-    path: ':bundleType/guide-bundle/edit/:uuid',
+    path: 'course/edit/:uuid',
     name: 'guideBundleEdit',
     component: GuideBundleCreate
   },

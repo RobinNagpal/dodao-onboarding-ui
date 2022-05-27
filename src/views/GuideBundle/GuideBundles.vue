@@ -19,15 +19,11 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
   space: Object,
   spaceId: String,
-  spaceLoading: Boolean,
-  bundleType: String
+  spaceLoading: Boolean
 });
 
 const { store } = useStore();
 const { domain } = useDomain();
-const route = useRoute();
-
-const bundleType = props.bundleType || route.params.bundleType;
 
 const loading = ref(false);
 
@@ -46,7 +42,6 @@ async function loadGuideBundles(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
-        bundleType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
       }
@@ -87,26 +82,11 @@ const loadingData = computed(() => {
     </template>
     <template #content-bottom>
       <div>
-        <div class="section pricing wf-section">
-          <div class="container-default w-container">
-            <div class="w-full mb-6">
-              <h1 class="w-full text-center">Courses</h1>
-              <div class="w-full flex justify-center">
-                <p
-                  style="
-                    opacity: 1;
-                    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-                      skew(0deg, 0deg);
-                    transform-style: preserve-3d;
-                  "
-                  class="paragraph pricing text-center max-w-lg"
-                >
-                  Sometimes you want all the control because you know best how you like to learn. Explore courses and
-                  tools that will help you learn about Dxdao at your own pace.
-                </p>
-              </div>
-            </div>
-            <div class="pricing-wrapper w-dyn-list mt-6">
+        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
+        <GuideBundleNoGuideBundles v-else-if="!guideBundlesCount && !loadingData" class="mt-2" :space="space" />
+        <div v-else class="section pricing wf-section">
+          <div v-if="!loadingData" class="container-default w-container">
+            <div class="pricing-wrapper w-dyn-list pt-8">
               <div role="list" class="_3-column-grid pricing w-dyn-items">
                 <div
                   style="
@@ -156,27 +136,18 @@ const loadingData = computed(() => {
                     </div>
                   </a>
                 </div>
+
+                <GuideBundleTimelineGuideBundle
+                  v-for="(guide, i) in store.space.guideBundles"
+                  :key="i"
+                  :guide-bundle="guide"
+                  :profiles="profiles"
+                />
               </div>
             </div>
           </div>
         </div>
-        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
-        <GuideBundleNoGuideBundles
-          v-else-if="!guideBundlesCount && !loadingData"
-          class="mt-2"
-          :space="space"
-          :bundleType="bundleType"
-        />
-        <div v-else>
-          <div v-if="!loadingData" class="_3-column-grid features-grid">
-            <GuideBundleTimelineGuideBundle
-              v-for="(guide, i) in store.space.guideBundles"
-              :key="i"
-              :guide-bundle="guide"
-              :profiles="profiles"
-            />
-          </div>
-        </div>
+
         <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
         <Block v-if="loadingData" :slim="true">
           <RowLoading class="my-2" />

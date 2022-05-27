@@ -3,6 +3,8 @@ import dodaoLogo from '@/assets/icons/logo/rectangular_new.svg';
 import blockchains from '@/helpers/jsons/blockchains.json';
 import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import OnboardingNavigation from '@/components/Space/OnboardingNavigation.vue';
+import CoursesNavigation from '@/components/Space/CoursesNavigation.vue';
 import { WalletMultiButton } from '@/components/Wallet/Solana';
 import { useApp } from '@/composables/useApp';
 import { useDomain } from '@/composables/useDomain';
@@ -102,8 +104,12 @@ onMounted(() => setTitle());
             </UiButton>
           </div>
           <div v-else-if="domain && siteType !== 'courses' && space" class="top-nav-middle flex justify-center">
-            <SpaceNavigation :space="space" />
+            <OnboardingNavigation :space="space" />
           </div>
+          <div v-else-if="domain && siteType === 'courses' && space" class="top-nav-middle flex justify-center">
+            <CoursesNavigation :space="space" />
+          </div>
+
           <div :key="web3.account" class="flex top-nav-right justify-end pr-4">
             <template v-if="(isEthBlockchain || isNearBlockchain || isOneBlockchain) && $auth.isAuthenticated.value">
               <UiButton
