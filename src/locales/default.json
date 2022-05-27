@@ -326,12 +326,15 @@
   "guides": {
     "header": "Guides",
     "new": "New guide",
+    "noGuidesHere": "There aren't any guides here yet!",
     "noGuides": {
       "onboarding": "There aren't any Onboarding guides here yet!",
       "how-to": "There aren't any How To guides here yet!",
-      "level-up": "There aren't any Level Up guides here yet!"
+      "level-up": "There aren't any Level Up guides here yet!",
+      "course": "There aren't any guides here yet!"
     },
     "createGuide": "Create",
+    "createYourFirstGuide": "Let's create your first Guide",
     "createFirstGuide": {
       "onboarding": "Let's create your first Onboarding guide",
       "how-to": "Let's create your first How To guide",
@@ -346,21 +349,12 @@
       "closed": "Closed"
     }
   },
-  "guideBundles": {
+  "courses": {
     "header": "Guide Bundles",
     "new": "New bundle",
-    "noGuideBundles": {
-      "courses": "There aren't any Courses here yet!",
-      "onboarding": "There aren't any Onboarding guide bundles here yet!",
-      "how-to": "There aren't any How To guide bundles here yet!",
-      "level-up": "There aren't any Level Up guide bundles here yet!"
-    },
-    "createGuideBundle": "Create",
-    "createFirstGuideBundle": {
-      "onboarding": "Let's create your first Onboarding guide bundle",
-      "how-to": "Let's create your first How To guide bundle",
-      "level-up": "Let's create your first Level Up guide bundle"
-    },
+    "createCourse": "Create",
+    "noCoursesYet": "There aren't any Courses here yet!",
+    "createFirstCourse": "Let's create your first course",
     "states": {
       "all": "All",
       "core": "Core",

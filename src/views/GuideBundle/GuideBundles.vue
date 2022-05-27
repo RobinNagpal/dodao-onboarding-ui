@@ -19,15 +19,11 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
   space: Object,
   spaceId: String,
-  spaceLoading: Boolean,
-  bundleType: String
+  spaceLoading: Boolean
 });
 
 const { store } = useStore();
 const { domain } = useDomain();
-const route = useRoute();
-
-const bundleType = props.bundleType || route.params.bundleType;
 
 const loading = ref(false);
 
@@ -46,7 +42,6 @@ async function loadGuideBundles(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
-        bundleType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
       }
@@ -144,12 +139,7 @@ const loadingData = computed(() => {
           </div>
         </div>
         <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
-        <GuideBundleNoGuideBundles
-          v-else-if="!guideBundlesCount && !loadingData"
-          class="mt-2"
-          :space="space"
-          :bundleType="bundleType"
-        />
+        <GuideBundleNoGuideBundles v-else-if="!guideBundlesCount && !loadingData" class="mt-2" :space="space" />
         <div v-else>
           <div v-if="!loadingData" class="_3-column-grid features-grid">
             <GuideBundleTimelineGuideBundle
