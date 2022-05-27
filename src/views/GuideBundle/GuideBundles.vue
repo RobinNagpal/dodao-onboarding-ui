@@ -82,8 +82,10 @@ const loadingData = computed(() => {
     </template>
     <template #content-bottom>
       <div>
-        <div class="section pricing wf-section">
-          <div class="container-default w-container">
+        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
+        <GuideBundleNoGuideBundles v-else-if="!guideBundlesCount && !loadingData" class="mt-2" :space="space" />
+        <div v-else class="section pricing wf-section">
+          <div v-if="!loadingData" class="container-default w-container">
             <div class="pricing-wrapper w-dyn-list pt-8">
               <div role="list" class="_3-column-grid pricing w-dyn-items">
                 <div
@@ -134,22 +136,18 @@ const loadingData = computed(() => {
                     </div>
                   </a>
                 </div>
+
+                <GuideBundleTimelineGuideBundle
+                  v-for="(guide, i) in store.space.guideBundles"
+                  :key="i"
+                  :guide-bundle="guide"
+                  :profiles="profiles"
+                />
               </div>
             </div>
           </div>
         </div>
-        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
-        <GuideBundleNoGuideBundles v-else-if="!guideBundlesCount && !loadingData" class="mt-2" :space="space" />
-        <div v-else>
-          <div v-if="!loadingData" class="_3-column-grid features-grid">
-            <GuideBundleTimelineGuideBundle
-              v-for="(guide, i) in store.space.guideBundles"
-              :key="i"
-              :guide-bundle="guide"
-              :profiles="profiles"
-            />
-          </div>
-        </div>
+
         <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
         <Block v-if="loadingData" :slim="true">
           <RowLoading class="my-2" />
