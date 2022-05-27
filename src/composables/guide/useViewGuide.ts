@@ -201,6 +201,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     const result = guideSubmission.value?.result;
     if (result) {
       console.log('result', result);
+      guideSubmissionCache.deleteGuideSubmission(uuid);
       const lastStepContent = `
       The guide has been completed successfully!
       

@@ -1,6 +1,6 @@
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 
-const GUIDE_SUBMISSION = 'GUIDE_SUBMISSION';
+const GUIDE_SUBMISSION = 'GUIDESUBMISSION';
 const ANONYMOUS = 'ANONYMOUS';
 let account = ANONYMOUS;
 
@@ -31,4 +31,24 @@ const readGuideSubmissionsCache = (guideUuid: string) => {
   return result;
 };
 
-export default { setAccount, saveGuideSubmission, readGuideSubmissionsCache };
+const readAllInprogressGuides = () => {
+  const guideMap: any = {};
+  for (const key in localStorage) {
+    if (key.indexOf(`${GUIDE_SUBMISSION}_${account}`) > -1) {
+      guideMap[key.split('_')[2]] = true;
+    }
+  }
+  return guideMap;
+};
+
+const deleteGuideSubmission = (guideUuid: string) => {
+  localStorage.removeItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`);
+};
+
+export default {
+  setAccount,
+  saveGuideSubmission,
+  deleteGuideSubmission,
+  readGuideSubmissionsCache,
+  readAllInprogressGuides
+};

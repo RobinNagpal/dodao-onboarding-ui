@@ -293,6 +293,11 @@ function onClickBackButton() {
 </template>
 
 <style scoped lang="scss">
+.in-progress {
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
 .info-bar {
   box-shadow: var(--box-shadow);
   border-color: var(--border-color);

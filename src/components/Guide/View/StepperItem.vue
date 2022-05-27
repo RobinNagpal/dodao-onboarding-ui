@@ -15,7 +15,8 @@ import {
   isQuestion,
   isUserInput,
   UserInput,
-  UserDiscordConnect
+  UserDiscordConnect,
+  isUserDiscordConnect
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
@@ -108,8 +109,14 @@ function isEveryQuestionAnswered(): boolean {
   return allQuestionsAnswered && allRequiredFieldsAnswered;
 }
 
+function isDiscordConnected(): boolean {
+  const discordConnectItem = props.step.stepItems.find(isUserDiscordConnect);
+  if (!discordConnectItem) return true;
+  return !!props.stepSubmission[discordConnectItem.uuid];
+}
+
 const showQuestionsCompletionWarning = computed<boolean>(() => {
-  return nextButtonClicked.value && !isEveryQuestionAnswered();
+  return nextButtonClicked.value && (!isEveryQuestionAnswered() || !isDiscordConnected());
 });
 
 const isNotFirstStep = computed(() => props.step.order !== 0);
@@ -123,7 +130,7 @@ const isGuideCompletedStep = computed(() => props.guide.steps.length - 1 === pro
 async function navigateToNextStep() {
   nextButtonClicked.value = true;
 
-  if (isEveryQuestionAnswered()) {
+  if (isEveryQuestionAnswered() && isDiscordConnected()) {
     nextButtonClicked.value = false;
     if (isLastStep.value) {
       if (!web3Account.value) {
@@ -203,9 +210,13 @@ async function navigateToNextStep() {
       </template>
     </div>
     <div v-if="showQuestionsCompletionWarning">
-      <div class="float-left mb-2 !text-red">
+      <div v-if="!isEveryQuestionAnswered()" class="float-left mb-2 !text-red">
         <i class="iconfont iconwarning"></i>
         <span class="ml-1">Answer all questions to proceed</span>
+      </div>
+      <div v-if="!isDiscordConnected()" class="float-left mb-2 !text-red">
+        <i class="iconfont iconwarning"></i>
+        <span class="ml-1">Connect Discord to proceed</span>
       </div>
     </div>
     <div class="mt-2">

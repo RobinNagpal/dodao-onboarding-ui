@@ -4,7 +4,8 @@ import { shorten } from '@/helpers/utils';
 
 const props = defineProps({
   guide: Object,
-  profiles: Object
+  profiles: Object,
+  inProgress: Boolean
 });
 </script>
 
@@ -21,6 +22,7 @@ const props = defineProps({
       }"
       class="card blog-card w-inline-block h-full w-full"
     >
+      <h3 v-if="inProgress" class="ribbon">In progress</h3>
       <div class="image-wrapper blog-card-thumbnail w-full">
         <UiThumbnail
           :src="guide.thumbnail"
@@ -43,11 +45,7 @@ const props = defineProps({
         />
       </div>
       <div class="flex flex-wrap justify-end absolute top-2 right-2">
-        <div
-          class="badge post-category mb-1"
-          v-for="category in guide.categories || []"
-          :key="category"
-        >
+        <div class="badge post-category mb-1" v-for="category in guide.categories || []" :key="category">
           {{ $t('guide.category.' + category) }}
         </div>
       </div>
@@ -56,6 +54,35 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
+.ribbon {
+  margin: 0;
+  padding: 0;
+  color: white;
+  padding: 16px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0%) translateY(135%) rotate(-45deg);
+  transform-origin: top left;
+  @apply bg-primary;
+}
+.ribbon:before,
+.ribbon:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  margin: 0 -1px; /* tweak */
+  width: 100%;
+  height: 100%;
+  @apply bg-primary;
+}
+.ribbon:before {
+  right: 100%;
+}
+
+.ribbon:after {
+  left: 100%;
+}
 .timeline-guide {
   &:hover {
     border-color: var(--link-color) !important;
