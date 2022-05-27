@@ -2,6 +2,7 @@ import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
+import AllGuides from '@/views/Guide/AllGuides.vue';
 import CreateGuide from '@/views/Guide/CreateGuide.vue';
 import EditGuide from '@/views/Guide/EditGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
@@ -52,6 +53,11 @@ const spaceRoutes: RouteRecordRaw[] = [
     path: ':guideType/guides',
     name: 'guides',
     component: Guides
+  },
+  {
+    path: 'all-guides',
+    name: 'allGuides',
+    component: AllGuides
   },
   {
     path: 'guide-bundles',

@@ -2,6 +2,7 @@
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import { useDomain } from '@/composables/useDomain';
 import { useSpace } from '@/composables/useSpace';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -16,7 +17,11 @@ const { isAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 
-const routeName = computed(() => route.name);
+const routeName = computed(() => {
+  const routeName = route.name;
+  console.log('routeName', routeName);
+  return routeName;
+});
 
 function createNewBundle() {
   router.push({
@@ -34,35 +39,66 @@ function editSpaceSettings() {
   });
 }
 
+function createNewGuide() {
+  router.push({
+    name: 'guideCreate',
+    params: { guideType: GuideType.Course, key: props.space.id }
+  });
+}
+
 function selectFromThreedotDropdown(e) {
+  if (e === 'createNewGuide') createNewGuide();
   if (e === 'createNewBundle') createNewBundle();
   if (e === 'spaceSettings') editSpaceSettings();
 }
 
 const { t } = useI18n();
 
-const { domain } = useDomain();
-
 const threeDotItems = computed(() => {
   const items: Array<{ text: string; action: string }> = [];
 
   items.push({
-    text: t('guideBundles.new'),
+    text: t('courses.new'),
     action: 'createNewBundle'
   });
+  items.push({ text: t('guides.new'), action: 'createNewGuide' });
 
-  if (!domain) {
-    items.push({
-      text: t('settings.header'),
-      action: 'spaceSettings'
-    });
-  }
   return items;
 });
 </script>
 <template>
   <div class="flex topnav-domain-navigation">
-    <div>
+    <div v-if="isAdmin" class="pl-3 flex nav-links">
+      <router-link
+        :to="{
+          name: 'spaceHome',
+          params: { key: space.id }
+        }"
+      >
+        <UiButton
+          :variant="routeName === 'spaceHome' ? 'contained' : 'outlined'"
+          class="whitespace-nowrap"
+          :primary="true"
+        >
+          Courses
+        </UiButton>
+      </router-link>
+      <router-link
+        :to="{
+          name: 'allGuides',
+          params: { key: space.id }
+        }"
+      >
+        <UiButton
+          :variant="routeName === 'allGuides' ? 'contained' : 'outlined'"
+          class="whitespace-nowrap"
+          :primary="true"
+        >
+          Guides
+        </UiButton>
+      </router-link>
+    </div>
+    <div v-else>
       <h3>{{ $t('page.title.dao.bundle', { dao: props.space.name }) }}</h3>
     </div>
 

@@ -14,7 +14,6 @@ import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';
 import { useDomain } from '@/composables/useDomain';
-import { useRoute } from 'vue-router';
 import { GuidePublishStatus, GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { useSpace } from '@/composables/useSpace';
 
@@ -28,10 +27,7 @@ const { store } = useStore();
 
 const loading = ref(false);
 const { domain } = useDomain();
-const route = useRoute();
 const { isAdmin, isSuperAdmin } = useSpace(props.space);
-
-const guideType = route.params.guideType || GuideType.Onboarding;
 
 const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
 
@@ -95,7 +91,12 @@ const loadingData = computed(() => {
     <template #content-bottom>
       <div class="mt-6">
         <NoResults :block="true" v-if="!loadingData && guidesCount && store.space.guides.length < 1" />
-        <GuideNoGuides v-else-if="!guidesCount && !loadingData" class="mt-2" :space="space" :guideType="guideType" />
+        <GuideNoGuides
+          v-else-if="!guidesCount && !loadingData"
+          class="mt-2"
+          :space="space"
+          :guideType="GuideType.Course"
+        />
         <div v-else>
           <div v-if="!loadingData" class="_4-column-grid features-grid">
             <GuideTimelineGuide v-for="(guide, i) in store.space.guides" :key="i" :guide="guide" :profiles="profiles" />

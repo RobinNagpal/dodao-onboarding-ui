@@ -6,22 +6,19 @@ import { toRefs } from 'vue';
 
 const props = defineProps({
   selectedType: { type: String, required: true },
-  open: { type: Boolean, required: true },
-  forBundleType: Boolean
+  open: { type: Boolean, required: true }
 });
 
-const emit = defineEmits(['close', 'selectGuideOrBundleType']);
+const emit = defineEmits(['close', 'selectGuideType']);
 
 const { open } = toRefs(props);
 
-const selectGuideOrBundleType = (guideOrBundleType: string) => {
-  emit('selectGuideOrBundleType', guideOrBundleType);
+const selectGuideType = (guideType: string) => {
+  emit('selectGuideType', guideType);
   emit('close');
 };
 
-const modalHeading = `${
-  props.forBundleType ? 'guideBundle' : 'guide'
-}.modal.selectGuideOrBundleType`;
+const modalHeading = 'guide.modal.selectGuideOrBundleType';
 </script>
 
 <template>
@@ -34,15 +31,9 @@ const modalHeading = `${
 
     <div>
       <div class="m-4 space-y-2">
-        <template
-          v-for="guideOrBundleType in GuideTypesArray"
-          :key="guideOrBundleType"
-        >
-          <UiButton
-            class="button-outline w-full flex justify-center items-center"
-            @click="selectGuideOrBundleType(guideOrBundleType)"
-          >
-            {{ $tc('navigation.' + guideOrBundleType) }}
+        <template v-for="guideType in GuideTypesArray" :key="guideType">
+          <UiButton class="button-outline w-full flex justify-center items-center" @click="selectGuideType(guideType)">
+            {{ $tc('navigation.' + guideType) }}
           </UiButton>
         </template>
       </div>

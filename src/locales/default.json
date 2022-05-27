@@ -338,7 +338,8 @@
     "createFirstGuide": {
       "onboarding": "Let's create your first Onboarding guide",
       "how-to": "Let's create your first How To guide",
-      "level-up": "Let's create your first Level Up guide"
+      "level-up": "Let's create your first Level Up guide",
+      "course": "Let's create your first Course guide"
     },
     "states": {
       "all": "All",
@@ -351,7 +352,7 @@
   },
   "courses": {
     "header": "Guide Bundles",
-    "new": "New bundle",
+    "new": "New course",
     "createCourse": "Create",
     "noCoursesYet": "There aren't any Courses here yet!",
     "createFirstCourse": "Let's create your first course",
@@ -365,6 +366,7 @@
     }
   },
   "navigation": {
+    "course": "Course",
     "onboarding": "Onboarding",
     "how-to": "How To",
     "level-up": "Level Up"
