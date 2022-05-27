@@ -3,6 +3,7 @@ import SpaceNavigationLink from '@/components/Space/NavigationLink.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import { useDomain } from '@/composables/useDomain';
 import { useSpace } from '@/composables/useSpace';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -28,6 +29,15 @@ function createNewBundle() {
   });
 }
 
+function allGuideBundles() {
+  router.push({
+    name: 'guideBundles',
+    params: {
+      key: props.space.id
+    }
+  });
+}
+
 function editSpaceSettings() {
   router.push({
     name: 'spaceEdit',
@@ -35,17 +45,26 @@ function editSpaceSettings() {
   });
 }
 
-function selectFromThreedotDropdown(e) {
-  if (e === 'createNewGuide') createNewGuide();
-  if (e === 'createNewBundle') createNewBundle();
-  if (e === 'spaceSettings') editSpaceSettings();
-}
-
 function createNewGuide() {
   router.push({
     name: 'guideCreate',
     params: { guideType: guideType.value, key: props.space.id }
   });
+}
+
+function courseGuides() {
+  router.push({
+    name: 'guides',
+    params: { guideType: GuideType.Course, key: props.space.id }
+  });
+}
+
+function selectFromThreedotDropdown(e) {
+  if (e === 'allGuideBundles') allGuideBundles();
+  if (e === 'courseGuides') courseGuides();
+  if (e === 'createNewGuide') createNewGuide();
+  if (e === 'createNewBundle') createNewBundle();
+  if (e === 'spaceSettings') editSpaceSettings();
 }
 
 const { t } = useI18n();
@@ -59,8 +78,18 @@ const threeDotItems = computed(() => {
 
   if (!domain) {
     items.push({
-      text: t('guideBundles.new'),
+      text: t('courses.new'),
       action: 'createNewBundle'
+    });
+
+    items.push({
+      text: t('courses.all'),
+      action: 'allGuideBundles'
+    });
+
+    items.push({
+      text: t('courses.courseGuides'),
+      action: 'courseGuides'
     });
 
     items.push({

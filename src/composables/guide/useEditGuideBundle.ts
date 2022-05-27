@@ -16,7 +16,7 @@ import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
 const bundleNameLimit = 32;
 const bundleContentLimit = 14400;
-const bundleExceptContentLimit = 64;
+const bundleExceptContentLimit = 512;
 
 export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notify: any) {
   const { send } = useClient();

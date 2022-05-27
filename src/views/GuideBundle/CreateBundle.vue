@@ -3,10 +3,10 @@ import Block from '@/components/Block.vue';
 import GuideBundleGuideSelect from '@/components/GuideBundle/GuideSelect.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
-import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleType.vue';
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import TextareaArray from '@/components/TextareaArray.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
@@ -37,8 +37,6 @@ const { clientLoading } = useClient();
 const notify = inject('notify') as any;
 
 const route = useRoute();
-
-const bundleType = computed(() => route.params.bundleType);
 
 const uuid = route.params.uuid;
 
@@ -163,6 +161,17 @@ const guideBundleStatuses = [
     action: GuideBundlePublishStatus.Draft
   }
 ];
+
+function updateHighlights(value) {
+  form.value.highlights = value;
+}
+
+function splitArrayFunction(inputString: string) {
+  return inputString
+    .split(/\n/g)
+    .map(item => item.trim())
+    .filter(item => !!item);
+}
 </script>
 
 <template>
@@ -189,10 +198,10 @@ const guideBundleStatuses = [
         </UiSidebarButton>
       </div>
       <template v-if="guideBundleLoaded">
-        <Block :title="$t('guideBundle.create.basicInfo')" :class="`mt-4`">
+        <Block :title="$t('courses.create.basicInfo')" :class="`mt-4`">
           <div class="mb-2">
             <UiInput v-model="form.name" :error="inputError('name')" maxlength="32">
-              <template v-slot:label>{{ $t(`guideBundle.create.name`) }}*</template>
+              <template v-slot:label>{{ $t(`courses.create.name`) }}*</template>
             </UiInput>
             <UiInput
               v-model="form.thumbnail"
@@ -200,7 +209,7 @@ const guideBundleStatuses = [
               :error="inputError('avatar')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.thumbnail') }}
+                {{ $t('courses.thumbnail') }}
               </template>
               <template v-slot:info>
                 <Upload class="!ml-2" @input="setThumbnailUrl" @loading="setUploadLoading">
@@ -214,7 +223,7 @@ const guideBundleStatuses = [
               :error="inputError('socialShareImage')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.socialShareImage') }}
+                {{ $t('courses.socialShareImage') }}
               </template>
               <template v-slot:info>
                 <Upload class="!ml-2" @input="setSocialShareImageUrl" @loading="setUploadSocialShareImage">
@@ -228,7 +237,12 @@ const guideBundleStatuses = [
               :error="inputError('discordWebhook')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.discordWebhook') }}
+                {{ $t('courses.discordWebhook') }}
+              </template>
+            </UiInput>
+            <UiInput v-model="form.duration" placeholder="e.g. 30-45 mins" :error="inputError('duration')">
+              <template v-slot:label>
+                {{ $t('courses.duration') }}
               </template>
             </UiInput>
             <UiInput @click="modalCategoryOpen = true" :class="{ 'mt-6': !categoriesString }">
@@ -244,10 +258,10 @@ const guideBundleStatuses = [
             <UiInput
               v-model="form.excerpt"
               :error="guideBundleErrors.excerpt"
-              :placeholder="$t(`guideBundle.create.excerpt`)"
-              maxlength="64"
+              :placeholder="$t(`courses.create.excerpt`)"
+              maxlength="512"
             >
-              <template v-slot:label>{{ $t(`guideBundle.create.excerpt`) }}*</template>
+              <template v-slot:label>{{ $t(`courses.create.excerpt`) }}*</template>
             </UiInput>
             <div class="status-wrapper pt-3">
               <UiDropdown
@@ -270,7 +284,7 @@ const guideBundleStatuses = [
             >
               <TextareaAutosize
                 :value="guideBundle.content"
-                :placeholder="$t(`guideBundle.create.content`)"
+                :placeholder="$t(`courses.create.content`)"
                 :minHeight="200"
                 class="input w-full text-left"
                 style="font-size: 18px"
@@ -280,7 +294,19 @@ const guideBundleStatuses = [
             </UiButton>
           </div>
         </Block>
-        <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
+        <Block :title="'Highlights'">
+          <UiButton class="block w-full px-3 mb-2" style="height: auto">
+            <TextareaArray
+              v-model="form.highlights"
+              :placeholder="$t(`courses.highlightsPlaceholder`)"
+              class="input w-full text-left"
+              style="font-size: 18px"
+              :split-array-function="splitArrayFunction"
+              @update:modelValue="updateHighlights($event)"
+            />
+          </UiButton>
+        </Block>
+        <Block :title="$t('courses.create.guidesInBundle')" :class="`mt-4`">
           <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.uuid">
             <GuideBundleGuideSelect
               :bundle-input="guideBundle"
@@ -304,7 +330,7 @@ const guideBundleStatuses = [
           class="block w-full"
           primary
         >
-          {{ $t('guideBundle.create.addGuide') }}
+          {{ $t('courses.create.addGuide') }}
         </UiButton>
         <UiButton
           @click="clickSubmit"

@@ -268,15 +268,44 @@
     "hideQuestions": "Hide Questions",
     "socialShareImage": "Twitter Share Image"
   },
-  "guideBundle": {
+
+  "guides": {
+    "header": "Guides",
+    "new": "New guide",
+    "noGuidesHere": "There aren't any guides here yet!",
+    "noGuides": {
+      "onboarding": "There aren't any Onboarding guides here yet!",
+      "how-to": "There aren't any How To guides here yet!",
+      "level-up": "There aren't any Level Up guides here yet!",
+      "course": "There aren't any guides here yet!"
+    },
+    "createGuide": "Create",
+    "createYourFirstGuide": "Let's create your first Guide",
+    "createFirstGuide": {
+      "onboarding": "Let's create your first Onboarding guide",
+      "how-to": "Let's create your first How To guide",
+      "level-up": "Let's create your first Level Up guide",
+      "course": "Let's create your first Course guide"
+    },
+    "states": {
+      "all": "All",
+      "core": "Core",
+      "community": "Community",
+      "active": "Active",
+      "pending": "Pending",
+      "closed": "Closed"
+    }
+  },
+  "courses": {
     "create": {
       "name": "Name",
-      "excerpt": "Bundle excerpt...",
+      "excerpt": "Course excerpt...",
       "basicInfo": "Basic Information",
       "content": "Detailed Description of the Guide Bundle",
-      "guidesInBundle": "Guides in Bundle",
+      "guidesInBundle": "Guides in Course",
       "addGuide": "Add Guide"
     },
+    "courseGuides": "Course guides",
     "guideSelect": {
       "changeGuide": "Change Guide",
       "selectGuide": "Select Guide"
@@ -321,41 +350,16 @@
     "singleChoiceQuestion": "Single Choice",
     "publicInput": "Public Input",
     "privateInput": "Private Input",
-    "socialShareImage": "Twitter Share Image"
-  },
-  "guides": {
-    "header": "Guides",
-    "new": "New guide",
-    "noGuidesHere": "There aren't any guides here yet!",
-    "noGuides": {
-      "onboarding": "There aren't any Onboarding guides here yet!",
-      "how-to": "There aren't any How To guides here yet!",
-      "level-up": "There aren't any Level Up guides here yet!",
-      "course": "There aren't any guides here yet!"
-    },
-    "createGuide": "Create",
-    "createYourFirstGuide": "Let's create your first Guide",
-    "createFirstGuide": {
-      "onboarding": "Let's create your first Onboarding guide",
-      "how-to": "Let's create your first How To guide",
-      "level-up": "Let's create your first Level Up guide",
-      "course": "Let's create your first Course guide"
-    },
-    "states": {
-      "all": "All",
-      "core": "Core",
-      "community": "Community",
-      "active": "Active",
-      "pending": "Pending",
-      "closed": "Closed"
-    }
-  },
-  "courses": {
+    "socialShareImage": "Twitter Share Image",
+    "all": "All courses",
     "header": "Guide Bundles",
     "new": "New course",
     "createCourse": "Create",
     "noCoursesYet": "There aren't any Courses here yet!",
     "createFirstCourse": "Let's create your first course",
+    "duration": "Duration",
+    "highlightsPlaceholder": "Basics of Web3\nAll the products of xxxx\nxxx ecosystem\nBusiness use-cases",
+
     "states": {
       "all": "All",
       "core": "Core",

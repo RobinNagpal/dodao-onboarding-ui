@@ -60,7 +60,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: AllGuides
   },
   {
-    path: 'guide-bundles',
+    path: 'courses',
     name: 'guideBundles',
     component: GuideBundles
   },
@@ -75,7 +75,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/Guide/ViewGuide.vue')
   },
   {
-    path: 'guide-bundle/view/:uuid',
+    path: 'course/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
   },
@@ -85,7 +85,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: CreateGuide
   },
   {
-    path: 'guide-bundle/create',
+    path: 'course/create',
     name: 'guideBundleCreate',
     component: GuideBundleCreate
   },
@@ -96,7 +96,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     props: true
   },
   {
-    path: 'guide-bundle/edit/:uuid',
+    path: 'course/edit/:uuid',
     name: 'guideBundleEdit',
     component: GuideBundleCreate
   },
