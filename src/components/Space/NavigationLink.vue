@@ -5,16 +5,11 @@ import { computed, PropType } from 'vue';
 
 const props = defineProps({
   space: { type: Object as PropType<SpaceModel>, required: true },
-  guideOrBundleType: { type: String },
+  guideType: { type: String },
   categoryType: { type: String, required: true }
 });
 
-const computedVariant = computed(() =>
-  props.guideOrBundleType === props.categoryType
-    ? 'contained'
-    : 'outlined'
-);
-
+const computedVariant = computed(() => (props.guideType === props.categoryType ? 'contained' : 'outlined'));
 </script>
 
 <template>

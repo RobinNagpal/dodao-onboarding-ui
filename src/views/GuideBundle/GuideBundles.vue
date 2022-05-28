@@ -19,15 +19,11 @@ import { useRoute } from 'vue-router';
 const props = defineProps({
   space: Object,
   spaceId: String,
-  spaceLoading: Boolean,
-  bundleType: String
+  spaceLoading: Boolean
 });
 
 const { store } = useStore();
 const { domain } = useDomain();
-const route = useRoute();
-
-const bundleType = props.bundleType || route.params.bundleType;
 
 const loading = ref(false);
 
@@ -46,7 +42,6 @@ async function loadGuideBundles(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
-        bundleType,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : []
       }
@@ -86,34 +81,12 @@ const loadingData = computed(() => {
       <BlockSpaceNew :space="space" />
     </template>
     <template #content-bottom>
-      <div class="mt-6">
-        <div class="section pricing wf-section">
-          <div class="container-default w-container">
-            <div class="top-content pricing-top-content">
-              <h1
-                style="
-                  opacity: 1;
-                  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-                    skew(0deg, 0deg);
-                  transform-style: preserve-3d;
-                "
-                class="title pricing"
-              >
-                Pricing
-              </h1>
-              <p
-                style="
-                  opacity: 1;
-                  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-                    skew(0deg, 0deg);
-                  transform-style: preserve-3d;
-                "
-                class="paragraph pricing"
-              >
-                Lorem ipsum dolor sit amet consectetur adipiscing elit senectus rutrum, pretium nullam integer fames
-              </p>
-            </div>
-            <div class="pricing-wrapper w-dyn-list">
+      <div>
+        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
+        <GuideBundleNoGuideBundles v-else-if="!guideBundlesCount && !loadingData" class="mt-2" :space="space" />
+        <div v-else class="section pricing wf-section">
+          <div v-if="!loadingData" class="container-default w-container">
+            <div class="pricing-wrapper w-dyn-list pt-8">
               <div role="list" class="_3-column-grid pricing w-dyn-items">
                 <div
                   style="
@@ -136,53 +109,45 @@ const loadingData = computed(() => {
                             class="image package-icon"
                           />
                         </div>
-                        <h3 class="mg-bottom-0">Starter</h3>
+                        <h3 class="mg-bottom-0">Dxdao and Far from Coding</h3>
                       </div>
                       <p class="paragraph package-about-excerpt">
-                        Lorem ipsum dolor sit amet consect adipiscing elit et ac adipisci. Lorem ipsum dolor sit amet
-                        consect adipiscing elit et ac adipisci. Lorem ipsum dolor sit amet consect adipiscing elit et ac
-                        adipisci. Lorem ipsum dolor sit amet consect adipiscing elit et ac adipisci. Lorem ipsum dolor
-                        sit amet consect adipiscing elit et ac adipisci. Lorem ipsum dolor sit amet consect adipiscing
-                        elit et ac adipisci.
+                        Anyone with a computer and internet connection can take this course. If you are interested in
+                        making sense of Web3, but you don't know how to read or write code, then you are in the right
+                        place 😉. You might even be considering attending a Dxdao certification course, but already feel
+                        lost. Don't worry. This course is a great first step for you.
                       </p>
                       <ul role="list" class="list package-features-list w-list-unstyled">
                         <li class="list-item dark-check-item">
-                          <div class="package-feature">All basic CRM features</div>
+                          <div class="package-feature">Basics of Web3</div>
                         </li>
                         <li class="list-item dark-check-item">
-                          <div class="package-feature">Up to 10,000 contacts</div>
+                          <div class="package-feature">All the products of Dxdao</div>
                         </li>
-                        <li class="list-item dark-check-item"><div class="package-feature">Normal support</div></li>
-                        <li class="list-item last dark-check-item"><div class="package-feature">Mobile app</div></li>
+                        <li class="list-item dark-check-item">
+                          <div class="package-feature">Dxdao Ecosystem</div>
+                        </li>
+                        <li class="list-item dark-check-item"><div class="package-feature">Business use-cases</div></li>
                       </ul>
                     </div>
                     <div class="split-content package-card-bottom-content">
-                      <div class="added-cost">10 users included ($9 /extra user)</div>
+                      <div class="added-cost">Duration: 30-45 mins</div>
                       <div class="button-primary popular w-condition-invisible">Get started</div>
                     </div>
                   </a>
                 </div>
+
+                <GuideBundleTimelineGuideBundle
+                  v-for="(guide, i) in store.space.guideBundles"
+                  :key="i"
+                  :guide-bundle="guide"
+                  :profiles="profiles"
+                />
               </div>
             </div>
           </div>
         </div>
-        <NoResults :block="true" v-if="!loadingData && guideBundlesCount && store.space.guideBundles.length < 1" />
-        <GuideBundleNoGuideBundles
-          v-else-if="!guideBundlesCount && !loadingData"
-          class="mt-2"
-          :space="space"
-          :bundleType="bundleType"
-        />
-        <div v-else>
-          <div v-if="!loadingData" class="_3-column-grid features-grid">
-            <GuideBundleTimelineGuideBundle
-              v-for="(guide, i) in store.space.guideBundles"
-              :key="i"
-              :guide-bundle="guide"
-              :profiles="profiles"
-            />
-          </div>
-        </div>
+
         <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
         <Block v-if="loadingData" :slim="true">
           <RowLoading class="my-2" />

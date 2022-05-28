@@ -24,17 +24,13 @@ const props = defineProps({
           name: 'guideBundle',
           params: {
             key: guideBundle.space.id,
-            uuid: guideBundle.uuid,
-            bundleType: guideBundle.bundleType
+            uuid: guideBundle.uuid
           }
         })
       }
     }"
   >
-    <div
-      role="listitem"
-      class="card home-hero-tab guide-in-bundle-card w-full flex mb-4"
-    >
+    <div role="listitem" class="card home-hero-tab guide-in-bundle-card w-full flex mb-4">
       <div class="guide-image">
         <UiThumbnail
           :src="guide.thumbnail"
@@ -56,11 +52,7 @@ const props = defineProps({
         />
       </div>
       <div class="flex flex-wrap justify-end absolute top-4 right-4">
-        <div
-          class="badge post-category mb-1"
-          v-for="category in guide.categories || []"
-          :key="category"
-        >
+        <div class="badge post-category mb-1" v-for="category in guide.categories || []" :key="category">
           {{ $t('guide.category.' + category) }}
         </div>
       </div>

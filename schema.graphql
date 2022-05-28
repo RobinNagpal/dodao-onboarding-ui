@@ -202,21 +202,30 @@ type Space {
   about: String
   admins: [String!]!
   avatar: String
+  blogSite: String
   categories: [String]
   creator: String!
   domain: String
+  discordInvite: String
   discordGuildId: String
   filters: SpaceFilters
   github: String
+  guidesPageFooterContent: String
+  guidesPageHeaderContent: String
+  guidesBundlePageFooterContent: String
+  guidesBundlePageHeaderContent: String
   location: String
   members: [String!]!
   mission: String!
   name: String
   plugins: Any
   private: Boolean
+  publicForumWebsite: String
+  referenceDocsWebsite: String
   symbol: String
   skin: String!
   strategies: [Strategy]
+  telegramInvite: String
   terms: String
   twitter: String
   validation: Strategy
@@ -322,13 +331,14 @@ type GuideInBundle {
 
 type GuideBundle {
   authors: [String!]!
-  bundleType: String!
   bundleGuides: [GuideInBundle!]!
   categories: [String!]!
   content: String!
   created: Int!
   discordWebhook: String
+  duration: String!
   excerpt: String!
+  highlights: [String!]!
   id: String!
   ipfs: String!
   name: String!

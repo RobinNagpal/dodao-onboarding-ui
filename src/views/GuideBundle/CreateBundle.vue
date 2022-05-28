@@ -3,10 +3,10 @@ import Block from '@/components/Block.vue';
 import GuideBundleGuideSelect from '@/components/GuideBundle/GuideSelect.vue';
 import Icon from '@/components/Icon.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
-import ModalGuideGuideOrBundleType from '@/components/Modal/Guide/GuideOrBundleType.vue';
 import ModalGuideCategory from '@/components/Modal/GuideCategory.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
+import TextareaArray from '@/components/TextareaArray.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
@@ -19,10 +19,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
-import {
-  GuideBundlePublishStatus,
-  GuideBundleType
-} from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
@@ -41,15 +38,11 @@ const notify = inject('notify') as any;
 
 const route = useRoute();
 
-const bundleType = computed(() => route.params.bundleType);
-
 const uuid = route.params.uuid;
 
 const preview = ref(false);
 
 const modalCategoryOpen = ref(false);
-
-const modalGuideOrBundleTypeOpen = ref<boolean>(false);
 
 const {
   addEmptyBundleGuideInput,
@@ -97,9 +90,7 @@ const categoriesString = computed(() => {
 });
 
 const guidesMap = computed(() => {
-  return Object.fromEntries(
-    form.value.bundleGuides.map(guide => [guide.uuid, guide])
-  );
+  return Object.fromEntries(form.value.bundleGuides.map(guide => [guide.uuid, guide]));
 });
 
 const bundleHasErrors = computed(() => {
@@ -156,10 +147,6 @@ onMounted(async () => {
   await initialize();
 });
 
-function selectGuideOrBundleType(type: GuideBundleType) {
-  guideBundle.value.bundleType = type;
-}
-
 function selectPublishStatus(status) {
   form.value.publishStatus = status;
 }
@@ -174,6 +161,17 @@ const guideBundleStatuses = [
     action: GuideBundlePublishStatus.Draft
   }
 ];
+
+function updateHighlights(value) {
+  form.value.highlights = value;
+}
+
+function splitArrayFunction(inputString: string) {
+  return inputString
+    .split(/\n/g)
+    .map(item => item.trim())
+    .filter(item => !!item);
+}
 </script>
 
 <template>
@@ -185,9 +183,9 @@ const guideBundleStatuses = [
             guideBundle.id
               ? {
                   name: 'guideBundle',
-                  params: { bundleType, key: space.id, uuid: guideBundle.uuid }
+                  params: { key: space.id, uuid: guideBundle.uuid }
                 }
-              : { name: 'guideBundles', params: { bundleType } }
+              : { name: 'guideBundles' }
           "
           class="text-color"
         >
@@ -195,25 +193,15 @@ const guideBundleStatuses = [
           {{ guideBundle.id ? guideBundle.name : 'Back to Guide Bundles' }}
         </router-link>
 
-        <UiSidebarButton
-          v-if="preview"
-          @click="preview = false"
-          class="float-right"
-        >
+        <UiSidebarButton v-if="preview" @click="preview = false" class="float-right">
           <Icon name="back" size="18" />
         </UiSidebarButton>
       </div>
       <template v-if="guideBundleLoaded">
-        <Block :title="$t('guideBundle.create.basicInfo')" :class="`mt-4`">
+        <Block :title="$t('courses.create.basicInfo')" :class="`mt-4`">
           <div class="mb-2">
-            <UiInput
-              v-model="form.name"
-              :error="inputError('name')"
-              maxlength="32"
-            >
-              <template v-slot:label
-                >{{ $t(`guideBundle.create.name`) }}*</template
-              >
+            <UiInput v-model="form.name" :error="inputError('name')" maxlength="32">
+              <template v-slot:label>{{ $t(`courses.create.name`) }}*</template>
             </UiInput>
             <UiInput
               v-model="form.thumbnail"
@@ -221,14 +209,10 @@ const guideBundleStatuses = [
               :error="inputError('avatar')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.thumbnail') }}
+                {{ $t('courses.thumbnail') }}
               </template>
               <template v-slot:info>
-                <Upload
-                  class="!ml-2"
-                  @input="setThumbnailUrl"
-                  @loading="setUploadLoading"
-                >
+                <Upload class="!ml-2" @input="setThumbnailUrl" @loading="setUploadLoading">
                   {{ $t('upload') }}
                 </Upload>
               </template>
@@ -239,14 +223,10 @@ const guideBundleStatuses = [
               :error="inputError('socialShareImage')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.socialShareImage') }}
+                {{ $t('courses.socialShareImage') }}
               </template>
               <template v-slot:info>
-                <Upload
-                  class="!ml-2"
-                  @input="setSocialShareImageUrl"
-                  @loading="setUploadSocialShareImage"
-                >
+                <Upload class="!ml-2" @input="setSocialShareImageUrl" @loading="setUploadSocialShareImage">
                   {{ $t('upload') }}
                 </Upload>
               </template>
@@ -257,13 +237,15 @@ const guideBundleStatuses = [
               :error="inputError('discordWebhook')"
             >
               <template v-slot:label>
-                {{ $t('guideBundle.discordWebhook') }}
+                {{ $t('courses.discordWebhook') }}
               </template>
             </UiInput>
-            <UiInput
-              @click="modalCategoryOpen = true"
-              :class="{ 'mt-6': !categoriesString }"
-            >
+            <UiInput v-model="form.duration" placeholder="e.g. 30-45 mins" :error="inputError('duration')">
+              <template v-slot:label>
+                {{ $t('courses.duration') }}
+              </template>
+            </UiInput>
+            <UiInput @click="modalCategoryOpen = true" :class="{ 'mt-6': !categoriesString }">
               <template v-slot:label>
                 {{ $t(`settings.categories`) }}
               </template>
@@ -273,25 +255,13 @@ const guideBundleStatuses = [
                 </span>
               </template>
             </UiInput>
-            <UiInput @click="modalGuideOrBundleTypeOpen = true">
-              <template v-slot:label>
-                {{ $t(`guideBundle.bundleType`) }}
-              </template>
-              <template v-slot:selected>
-                <span class="capitalize">
-                  {{ $tc('navigation.' + form.bundleType) }}
-                </span>
-              </template>
-            </UiInput>
             <UiInput
               v-model="form.excerpt"
               :error="guideBundleErrors.excerpt"
-              :placeholder="$t(`guideBundle.create.excerpt`)"
-              maxlength="64"
+              :placeholder="$t(`courses.create.excerpt`)"
+              maxlength="512"
             >
-              <template v-slot:label
-                >{{ $t(`guideBundle.create.excerpt`) }}*</template
-              >
+              <template v-slot:label>{{ $t(`courses.create.excerpt`) }}*</template>
             </UiInput>
             <div class="status-wrapper pt-3">
               <UiDropdown
@@ -305,11 +275,7 @@ const guideBundleStatuses = [
                   {{ form.publishStatus === 'Live' ? 'Live' : 'Draft' }}
                 </div>
               </UiDropdown>
-              <div
-                class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat"
-              >
-                Publish Status*
-              </div>
+              <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Publish Status*</div>
             </div>
             <UiButton
               class="w-full h-96 mb-4 mt-6 px-[16px] flex items-center"
@@ -318,27 +284,33 @@ const guideBundleStatuses = [
             >
               <TextareaAutosize
                 :value="guideBundle.content"
-                :placeholder="$t(`guideBundle.create.content`)"
+                :placeholder="$t(`courses.create.content`)"
                 :minHeight="200"
                 class="input w-full text-left"
                 style="font-size: 18px"
                 @update:modelValue="form.content = $event"
               />
-              <i
-                class="iconfont iconwarning !text-red"
-                data-v-abc9f7ae=""
-                v-if="guideBundleErrors.content"
-              ></i>
+              <i class="iconfont iconwarning !text-red" data-v-abc9f7ae="" v-if="guideBundleErrors.content"></i>
             </UiButton>
           </div>
         </Block>
-        <Block :title="$t('guideBundle.create.guidesInBundle')" :class="`mt-4`">
+        <Block :title="'Highlights'">
+          <UiButton class="block w-full px-3 mb-2" style="height: auto">
+            <TextareaArray
+              v-model="form.highlights"
+              :placeholder="$t(`courses.highlightsPlaceholder`)"
+              class="input w-full text-left"
+              style="font-size: 18px"
+              :split-array-function="splitArrayFunction"
+              @update:modelValue="updateHighlights($event)"
+            />
+          </UiButton>
+        </Block>
+        <Block :title="$t('courses.create.guidesInBundle')" :class="`mt-4`">
           <template v-for="bundleGuide in bundleGuides" :key="bundleGuide.uuid">
             <GuideBundleGuideSelect
               :bundle-input="guideBundle"
-              :guide-errors="
-                guideBundleErrors?.bundleGuides?.[bundleGuide.uuid]
-              "
+              :guide-errors="guideBundleErrors?.bundleGuides?.[bundleGuide.uuid]"
               :guide-input="bundleGuide"
               :guides="guides"
               :move-guide-down="moveGuideDown"
@@ -348,25 +320,17 @@ const guideBundleStatuses = [
             />
           </template>
         </Block>
-        <div
-          v-if="bundleHasErrors"
-          class="!text-red flex text-center justify-center mb-2 align-baseline"
-        >
+        <div v-if="bundleHasErrors" class="!text-red flex text-center justify-center mb-2 align-baseline">
           <i class="iconfont iconwarning !text-red" data-v-abc9f7ae=""></i>
           <span class="ml-1">Fix errors to proceed</span>
         </div>
         <UiButton
           @click="addEmptyBundleGuideInput"
-          :disabled="
-            clientLoading ||
-            !guideBundleLoaded ||
-            guideBundleCreating ||
-            bundleGuides.length >= guides.length
-          "
+          :disabled="clientLoading || !guideBundleLoaded || guideBundleCreating || bundleGuides.length >= guides.length"
           class="block w-full"
           primary
         >
-          {{ $t('guideBundle.create.addGuide') }}
+          {{ $t('courses.create.addGuide') }}
         </UiButton>
         <UiButton
           @click="clickSubmit"
@@ -388,13 +352,6 @@ const guideBundleStatuses = [
       :categories="guideBundle.categories"
       @close="modalCategoryOpen = false"
       @add="handleSubmitAddCategories"
-    />
-    <ModalGuideGuideOrBundleType
-      :open="modalGuideOrBundleTypeOpen"
-      :selected-type="form.bundleType"
-      :for-bundle-type="true"
-      @close="modalGuideOrBundleTypeOpen = false"
-      @selectGuideOrBundleType="selectGuideOrBundleType"
     />
   </teleport>
 </template>

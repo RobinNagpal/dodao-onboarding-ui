@@ -15,15 +15,15 @@ query GuideBundlesQuery(
     }
   ) {
     id
-    bundleType
     ipfs
     authors
     name
     categories
     content
     created
+    duration
     excerpt
-    bundleType
+    highlights
     bundleGuides {
       categories
       content
@@ -51,12 +51,13 @@ query GuideBundlesQuery(
 query GuideBundleQuery($uuid: String!) {
   guideBundle(uuid: $uuid) {
     authors
-    bundleType
     categories
     content
     created
     discordWebhook
+    duration
     excerpt
+    highlights
     id
     ipfs
     link
