@@ -4,11 +4,11 @@ import { toRefs } from 'vue';
 import UiModal from '@/components/Ui/Modal.vue';
 import UiButton from '@/components/Ui/Button.vue';
 
-const props = defineProps(['open', 'hasDiscord']);
+const props = defineProps(['open', 'guideHasDiscordEnabled']);
 
 const emit = defineEmits(['close', 'addQuestion', 'addInput', 'addDiscord']);
 
-const { open, hasDiscord } = toRefs(props);
+const { open, guideHasDiscordEnabled } = toRefs(props);
 
 const addQuestion = (questionType: QuestionType) => {
   emit('addQuestion', questionType);
@@ -59,7 +59,7 @@ const addDiscord = () => {
           {{ $t('guide.singleChoiceQuestion') }}
         </UiButton>
         <UiButton
-          :disabled="hasDiscord"
+          :disabled="guideHasDiscordEnabled"
           class="button-outline w-full flex justify-center items-center"
           @click="addDiscord()"
         >

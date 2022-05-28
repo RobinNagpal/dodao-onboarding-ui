@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
-import { InputType, QuestionType, UserDiscordConnect } from '@dodao/onboarding-schemas/models/GuideModel';
-import { toRefs } from 'vue';
-import UiModal from '@/components/Ui/Modal.vue';
+import Icon from '@/components/Icon.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import UiModal from '@/components/Ui/Modal.vue';
+import { UserDiscordConnect } from '@dodao/onboarding-schemas/models/GuideModel';
+import { PropType, ref } from 'vue';
 
 defineProps({
   removeDiscord: { type: Function, required: true },

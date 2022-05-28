@@ -2,7 +2,7 @@
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import { shorten } from '@/helpers/utils';
 
-const props = defineProps({
+defineProps({
   guide: Object,
   profiles: Object,
   inProgress: Boolean

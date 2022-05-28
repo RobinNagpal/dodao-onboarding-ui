@@ -43,7 +43,7 @@ const styleObject = computed(() => {
   };
 });
 
-const hasDiscord = computed(() => {
+const guideHasDiscordEnabled = computed<boolean>(() => {
   for (let i = 0; i < props.steps.length; i++) {
     for (let j = 0; j < props.steps[i].stepItems.length; j++) {
       if (props.steps[i].stepItems[j].type === UserDiscordConnectType) {
@@ -84,13 +84,13 @@ const hasDiscord = computed(() => {
           data-step-label="+"
           @click="updateGuideFunctions.addStep"
         >
-          <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
+          <a class="step-link" role="menuitem">Add </a>
         </li>
       </ol>
     </div>
     <GuideCreateStepperItem
-      :hasDiscord="hasDiscord"
       :guide="guide"
+      :guide-has-discord-enabled="guideHasDiscordEnabled"
       :step="activeStep"
       :stepErrors="errors.steps?.[activeStep.order]"
       @update:step="updateGuideFunctions.updateStep"

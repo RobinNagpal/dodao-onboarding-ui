@@ -28,7 +28,7 @@ const props = defineProps({
     required: true
   },
   stepErrors: { type: Object as PropType<StepError> },
-  hasDiscord: Boolean,
+  guideHasDiscordEnabled: { type: Boolean, required: true },
 
   moveStepUp: Function,
   moveStepDown: Function,
@@ -263,8 +263,8 @@ function addDiscord() {
     order: props.step.stepItems.length,
     type: UserDiscordConnectType
   };
-  const steps = [...(props.step.stepItems || []), discord];
-  emit('update:step', { ...props.step, stepItems: steps });
+  const stepItems = [...(props.step.stepItems || []), discord];
+  emit('update:step', { ...props.step, stepItems });
 }
 </script>
 <template>
@@ -378,37 +378,37 @@ function addDiscord() {
     <template v-for="inputOrQuestion in inputsAndQuestions" :key="inputOrQuestion.uuid">
       <GuideCreateQuestion
         v-if="inputOrQuestion.isQuestion"
-        :addChoice="addChoice"
+        :add-choice="addChoice"
         :question="inputOrQuestion"
-        :removeChoice="removeChoice"
-        :removeQuestion="removeStepItem"
-        :setAnswer="setAnswer"
-        :updateChoiceContent="updateChoiceContent"
-        :updateQuestionDescription="updateQuestionDescription"
-        :updateAnswers="updateAnswers"
-        :questionErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :remove-choice="removeChoice"
+        :remove-question="removeStepItem"
+        :set-answer="setAnswer"
+        :update-choice-content="updateChoiceContent"
+        :update-question-description="updateQuestionDescription"
+        :update-answers="updateAnswers"
+        :question-errors="stepErrors?.stepItems?.[inputOrQuestion.order]"
       />
       <GuideCreateDiscord
-        :userDiscord="inputOrQuestion"
-        :removeDiscord="removeStepItem"
+        :user-discord="inputOrQuestion"
+        :remove-discord="removeStepItem"
         v-else-if="inputOrQuestion.isDiscord"
       />
       <GuideCreateUserInput
         v-else
-        :removeUserInput="removeStepItem"
-        :userInput="inputOrQuestion"
-        :userInputErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
-        :updateUserInputLabel="updateUserInputLabel"
-        :updateUserInputPrivate="updateUserInputPrivate"
-        :updateUserInputRequired="updateUserInputRequired"
+        :remove-user-input="removeStepItem"
+        :user-input="inputOrQuestion"
+        :user-input-errors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :update-user-input-label="updateUserInputLabel"
+        :update-user-input-private="updateUserInputPrivate"
+        :update-user-input-required="updateUserInputRequired"
       />
     </template>
   </div>
   <teleport to="#modal">
     <ModalGuideInputOrQuestion
-      :hasDiscord="hasDiscord"
       :open="modalGuideInputOrQuestionOpen"
       :categories="guide.categories"
+      :guide-has-discord-enabled="guideHasDiscordEnabled"
       @close="modalGuideInputOrQuestionOpen = false"
       @addQuestion="addQuestion"
       @addInput="addInput"
