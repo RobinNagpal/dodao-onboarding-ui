@@ -2,8 +2,7 @@
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { getUserInfo } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
-import { GuideBundleType } from '@dodao/onboarding-schemas/models/GuideBundleModel';
-import { access } from 'fs';
+import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -39,7 +38,7 @@ onMounted(async () => {
       name: 'guide',
       params: {
         key: params.get('spaceId'),
-        guideType: GuideBundleType.Onboarding,
+        guideType: GuideType.Onboarding,
         uuid: guideUuid,
         stepOrder: params.get('stepOrder'),
         stepUuid: params.get('stepUuid'),

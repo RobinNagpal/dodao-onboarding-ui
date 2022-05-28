@@ -22,7 +22,7 @@ const props = defineProps({
       }"
       class="card blog-card w-inline-block h-full w-full"
     >
-      <h3 v-if="inProgress" class="ribbon">In progress</h3>
+      <div v-if="inProgress" class="ribbon progress-label">In progress</div>
       <div class="image-wrapper blog-card-thumbnail w-full">
         <UiThumbnail
           :src="guide.thumbnail"
@@ -55,8 +55,7 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .ribbon {
-  margin: 0;
-  padding: 0;
+  margin: 28px 18px 18px 0;
   color: white;
   padding: 16px 0;
   position: absolute;
@@ -64,7 +63,14 @@ const props = defineProps({
   left: 0;
   transform: translateX(0%) translateY(135%) rotate(-45deg);
   transform-origin: top left;
+  background-color: var(--primary-color);
+  z-index: 2;
   @apply bg-primary;
+
+  &.progress-label {
+    line-height: 0;
+    font-weight: 650;
+  }
 }
 .ribbon:before,
 .ribbon:after {
