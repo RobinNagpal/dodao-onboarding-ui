@@ -38,7 +38,7 @@ onMounted(async () => {
       name: 'guide',
       params: {
         key: params.get('spaceId'),
-        guideType: GuideType.Onboarding,
+        guideType: params.get('guideType'),
         uuid: guideUuid,
         stepOrder: params.get('stepOrder'),
         stepUuid: params.get('stepUuid'),

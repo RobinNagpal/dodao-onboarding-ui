@@ -54,7 +54,7 @@ const props = defineProps({
   }
 });
 const route = useRoute();
-
+const guideType = computed(() => route.params.guideType);
 const renderIncorrectQuestions = ref<boolean>(false);
 
 const { web3Account } = useWeb3();
@@ -197,6 +197,7 @@ async function navigateToNextStep() {
             :stepOrder="step.order"
             :stepUuid="step.uuid"
             :userDiscord="stepItem"
+            :guideType="guideType"
             :discordResponse="stepSubmission[stepItem.uuid] ?? ''"
           />
           <GuideViewQuestion

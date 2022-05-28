@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import { UserDiscordConnect } from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuideType, UserDiscordConnect } from '@dodao/onboarding-schemas/models/GuideModel';
 
 const discordClientId = import.meta.env.VITE_DISCORD_CLIENT_ID?.toString() || '';
 
@@ -19,6 +19,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  guideType: {
+    type: String,
+    default: GuideType.Onboarding
+  },
   discordResponse: { type: String, required: true }
 });
 
@@ -27,9 +31,9 @@ const url = computed(() => {
     scope: 'identify email',
     client_id: discordClientId,
     response_type: 'token',
-    state: `spaceId=${props.spaceId}&guideUuid=${props.guideUuid}&stepUuid=${props.stepUuid}&stepOrder=${
-      props.stepOrder + 1
-    }&itemUuid=${props.userDiscord.uuid}&target=guideView`,
+    state: `spaceId=${props.spaceId}&guideType=${props.guideType}&guideUuid=${props.guideUuid}&stepUuid=${
+      props.stepUuid
+    }&stepOrder=${props.stepOrder + 1}&itemUuid=${props.userDiscord.uuid}&target=guideView`,
     redirect_uri: `${window.location.origin}/generic-discord-redirect`
   });
 
