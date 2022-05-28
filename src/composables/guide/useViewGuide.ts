@@ -1,24 +1,21 @@
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
-import {
-GuideQuery_guide,
-GuideQuery_guide_steps
-} from '@/graphql/generated/graphqlDocs';
+import { GuideQuery_guide, GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { InputType } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
-GuideStepItemSubmission,
-GuideStepSubmission,
-GuideSubmission,
-StepItemSubmissionType
+  GuideStepItemSubmission,
+  GuideStepSubmission,
+  GuideSubmission,
+  StepItemSubmissionType
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
-import { computed,ref,watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute,useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export type UserGuideQuestionSubmission = Record<string, string[] | string>;
 
@@ -29,15 +26,11 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const { web3 } = useWeb3();
   const { t } = useI18n();
 
-  const stepOrder = computed<number>(
-    () => parseInt(route.params.stepOrder?.toString()) || 1
-  );
+  const stepOrder = computed<number>(() => parseInt(route.params.stepOrder?.toString()) || 1);
 
   const guideRef = ref<GuideQuery_guide>();
   const guideStepsMap = ref<{ [uuid: string]: GuideQuery_guide_steps }>({});
-  const guideSubmissionRef = ref<Record<string, UserGuideQuestionSubmission>>(
-    {}
-  );
+  const guideSubmissionRef = ref<Record<string, UserGuideQuestionSubmission>>({});
   const guideLoaded = ref<boolean>(false);
   const guideSubmittingRef = ref<boolean>(false);
   const guideSubmission = ref<GuideSubmission | null>(null);
@@ -67,9 +60,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
       guideSubmissionCache.setAccount(web3.value.account);
     }
     readGuideSubmissions();
-    guideStepsMap.value = Object.fromEntries<GuideQuery_guide_steps>(
-      guide.steps.map(step => [step.uuid, step])
-    );
+    guideStepsMap.value = Object.fromEntries<GuideQuery_guide_steps>(guide.steps.map(step => [step.uuid, step]));
 
     guideLoaded.value = true;
   }
@@ -97,11 +88,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     });
   }
 
-  function selectAnswer(
-    stepUuid: string,
-    questionUuid: string,
-    selectedAnswers: string[]
-  ) {
+  function selectAnswer(stepUuid: string, questionUuid: string, selectedAnswers: string[]) {
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
       [stepUuid]: {
@@ -115,11 +102,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     });
   }
 
-  function setUserInput(
-    stepUuid: string,
-    userInputUuid: string,
-    userInput: string
-  ) {
+  function setUserInput(stepUuid: string, userInputUuid: string, userInput: string) {
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
       [stepUuid]: {
@@ -133,11 +116,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     });
   }
 
-  function setUserDiscord(
-    stepUuid: string,
-    userDiscordUuid: string,
-    userDiscordId: string
-  ) {
+  function setUserDiscord(stepUuid: string, userDiscordUuid: string, userDiscordId: string) {
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
       [stepUuid]: {
@@ -159,38 +138,29 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
       uuid: uuidv4(),
       guideUuid: uuid,
       from: web3.value.account,
-      steps: Object.keys(guideSubmissionRef.value).map(
-        (stepUuid): GuideStepSubmission => {
-          const stepResponse = guideSubmissionRef.value[stepUuid];
+      steps: Object.keys(guideSubmissionRef.value).map((stepUuid): GuideStepSubmission => {
+        const stepResponse = guideSubmissionRef.value[stepUuid];
 
-          return {
-            uuid: stepUuid,
-            itemResponses: Object.keys(stepResponse).map(
-              (itemUuid): GuideStepItemSubmission => {
-                const stepItem = guideStepsMap.value[stepUuid].stepItems.find(
-                  item => item.uuid === itemUuid
-                )!;
-                if (
-                  stepItem.type === InputType.PrivateShortInput ||
-                  stepItem.type === InputType.PublicShortInput
-                ) {
-                  return {
-                    uuid: itemUuid,
-                    userInput: stepResponse[itemUuid] as string,
-                    type: StepItemSubmissionType.Question
-                  };
-                } else {
-                  return {
-                    uuid: itemUuid,
-                    selectedAnswerKeys: stepResponse[itemUuid] as string[],
-                    type: StepItemSubmissionType.Question
-                  };
-                }
-              }
-            )
-          };
-        }
-      )
+        return {
+          uuid: stepUuid,
+          itemResponses: Object.keys(stepResponse).map((itemUuid): GuideStepItemSubmission => {
+            const stepItem = guideStepsMap.value[stepUuid].stepItems.find(item => item.uuid === itemUuid)!;
+            if (stepItem.type === InputType.PrivateShortInput || stepItem.type === InputType.PublicShortInput) {
+              return {
+                uuid: itemUuid,
+                userInput: stepResponse[itemUuid] as string,
+                type: StepItemSubmissionType.Question
+              };
+            } else {
+              return {
+                uuid: itemUuid,
+                selectedAnswerKeys: stepResponse[itemUuid] as string[],
+                type: StepItemSubmissionType.Question
+              };
+            }
+          })
+        };
+      })
     };
     const submissionResponse = await send(space, 'guideResponse', response);
     if (submissionResponse?.id) {

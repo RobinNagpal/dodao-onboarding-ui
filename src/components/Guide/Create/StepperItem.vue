@@ -87,7 +87,7 @@ function updateChoiceContent(questionId, choiceKey, content) {
   emit('update:step', { ...props.step, stepItems });
 }
 
-const inputsAndQuestions = computed(() => {
+const stepItemsForStepper = computed(() => {
   return [
     ...props.step.stepItems.map((q: GuideStepItem) => ({
       ...q,
@@ -375,29 +375,25 @@ function addDiscord() {
         @update:modelValue="updateStepContent"
       />
     </UiButton>
-    <template v-for="inputOrQuestion in inputsAndQuestions" :key="inputOrQuestion.uuid">
+    <template v-for="stepItem in stepItemsForStepper" :key="stepItem.uuid">
       <GuideCreateQuestion
-        v-if="inputOrQuestion.isQuestion"
+        v-if="stepItem.isQuestion"
         :add-choice="addChoice"
-        :question="inputOrQuestion"
+        :question="stepItem"
         :remove-choice="removeChoice"
         :remove-question="removeStepItem"
         :set-answer="setAnswer"
         :update-choice-content="updateChoiceContent"
         :update-question-description="updateQuestionDescription"
         :update-answers="updateAnswers"
-        :question-errors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :question-errors="stepErrors?.stepItems?.[stepItem.order]"
       />
-      <GuideCreateDiscord
-        :user-discord="inputOrQuestion"
-        :remove-discord="removeStepItem"
-        v-else-if="inputOrQuestion.isDiscord"
-      />
+      <GuideCreateDiscord :user-discord="stepItem" :remove-discord="removeStepItem" v-else-if="stepItem.isDiscord" />
       <GuideCreateUserInput
         v-else
         :remove-user-input="removeStepItem"
-        :user-input="inputOrQuestion"
-        :user-input-errors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        :user-input="stepItem"
+        :user-input-errors="stepErrors?.stepItems?.[stepItem.order]"
         :update-user-input-label="updateUserInputLabel"
         :update-user-input-private="updateUserInputPrivate"
         :update-user-input-required="updateUserInputRequired"

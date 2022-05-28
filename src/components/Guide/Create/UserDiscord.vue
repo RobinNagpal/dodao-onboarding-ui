@@ -47,7 +47,7 @@ const toggleModal = value => {
       </template>
       <div>
         <div class="m-4 space-y-2">
-          {{ $t('guide.discordPoupDesc') }}
+          {{ $t('guide.discordPopUpDesc') }}
         </div>
       </div>
       <template v-slot:footer>
