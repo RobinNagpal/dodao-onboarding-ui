@@ -50,7 +50,7 @@ const props = defineProps({
 });
 
 const activeStep = computed<GuideStep>(() => {
-  return props.guide.steps.find(step => step.order === props.activeStepOrder) || props.guide?.steps[0] || undefined;
+  return props.guide.steps.find(step => step.order === props.activeStepOrder) || props.guide?.steps[0];
 });
 
 const isReachingLastStep = computed(() => props.guide.steps.length - 1 === activeStep.value.order);
