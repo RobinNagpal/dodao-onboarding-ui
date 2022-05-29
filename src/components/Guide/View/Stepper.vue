@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
-import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
+import { GuideResponses } from '@/composables/guide/TempGuideSubmission';
 import { GuideModel, GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 
@@ -16,7 +16,7 @@ const props = defineProps({
     required: true
   },
   guideResponse: {
-    type: Object as PropType<Record<string, UserGuideQuestionSubmission>>,
+    type: Object as PropType<GuideResponses>,
     required: true
   },
   guideSubmission: {

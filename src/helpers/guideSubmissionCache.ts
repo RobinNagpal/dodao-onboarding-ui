@@ -1,4 +1,4 @@
-import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
+import { TempGuideSubmission } from '@/composables/guide/TempGuideSubmission';
 
 const GUIDE_SUBMISSION = 'GUIDESUBMISSION';
 const ANONYMOUS = 'ANONYMOUS';
@@ -8,17 +8,11 @@ const setAccount = (accountId: string) => {
   account = accountId;
 };
 
-interface GuideSubmissionSnapshot {
-  fetchedFromServer?: boolean;
-  data: Record<string, UserGuideQuestionSubmission>;
-  activeStepOrder: number;
-}
-
-const saveGuideSubmission = (guideUuid: string, data: GuideSubmissionSnapshot) => {
+const saveGuideSubmission = (guideUuid: string, data: TempGuideSubmission) => {
   localStorage.setItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`, JSON.stringify(data));
 };
 
-const readGuideSubmissionsCache = (guideUuid: string) => {
+const readGuideSubmissionsCache = (guideUuid: string): TempGuideSubmission => {
   return JSON.parse(localStorage.getItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`) || '{}');
 };
 
@@ -43,19 +37,18 @@ const setUserDiscordInSubmission = (
   userDiscordUuid: string,
   discrodInfo: string
 ) => {
-  let guideSubmissionRef = readGuideSubmissionsCache(guideUuid);
+  let guideSubmissionRef: TempGuideSubmission = readGuideSubmissionsCache(guideUuid);
   guideSubmissionRef = {
     ...guideSubmissionRef,
-    [stepUuid]: {
-      ...guideSubmissionRef[stepUuid],
-      [userDiscordUuid]: discrodInfo
+    responses: {
+      ...guideSubmissionRef.responses,
+      [stepUuid]: {
+        ...guideSubmissionRef[stepUuid],
+        [userDiscordUuid]: discrodInfo
+      }
     }
   };
-  saveGuideSubmission(guideUuid, {
-    // fetchedFromServer: false,
-    data: guideSubmissionRef,
-    activeStepOrder
-  });
+  saveGuideSubmission(guideUuid, guideSubmissionRef);
 };
 
 export default {

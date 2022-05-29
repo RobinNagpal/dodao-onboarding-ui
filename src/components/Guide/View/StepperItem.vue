@@ -3,7 +3,7 @@ import GuideViewQuestion from '@/components/Guide/View/Question.vue';
 import GuideViewUserDiscord from '@/components/Guide/View/UserDiscord.vue';
 import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
+import { UserGuideQuestionSubmission } from '@/composables/guide/TempGuideSubmission';
 import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
@@ -195,7 +195,7 @@ async function navigateToNextStep() {
             :stepUuid="step.uuid"
             :userDiscord="stepItem"
             :guideType="guideType"
-            :discordResponse="stepSubmission[stepItem.uuid] ?? ''"
+            :discordResponse="stepSubmission[stepItem.uuid]"
           />
           <GuideViewQuestion
             v-else
@@ -228,14 +228,14 @@ async function navigateToNextStep() {
         <span class="sm:block" v-text="$t('guide.previous')" />
       </UiButton>
       <UiButton
-        :aria-label="$t('next')"
+        v-if="!isGuideCompletedStep"
         class="float-right w-[150px]"
-        :primary="true"
         variant="contained"
-        @click="navigateToNextStep"
+        :aria-label="$t('next')"
+        :primary="true"
         :loading="guideSubmitting"
         :disabled="guideSubmitting"
-        v-if="!isGuideCompletedStep"
+        @click="navigateToNextStep"
       >
         <span class="sm:block" v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')" />
         <span class="ml-2 font-bold">&#8594;</span>

@@ -1,10 +1,11 @@
+import { TempGuideSubmission } from '@/composables/guide/TempGuideSubmission';
 import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuideQuery_guide, GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
-import { InputType } from '@dodao/onboarding-schemas/models/GuideModel';
+import { isUserInput } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
   GuideStepItemSubmission,
   GuideStepSubmission,
@@ -13,11 +14,9 @@ import {
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
-import { ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-
-export type UserGuideQuestionSubmission = Record<string, string[] | string>;
 
 export function useViewGuide(uuid: string, stepOrder: number, notify: any, space: SpaceModel) {
   const router = useRouter();
@@ -27,7 +26,12 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
 
   const guideRef = ref<GuideQuery_guide>();
   const guideStepsMap = ref<{ [uuid: string]: GuideQuery_guide_steps }>({});
-  const guideSubmissionRef = ref<Record<string, UserGuideQuestionSubmission>>({});
+
+  const guideSubmissionRef = ref<TempGuideSubmission>({
+    activeStepOrder: 0,
+    responses: {}
+  });
+
   const guideLoaded = ref<boolean>(false);
   const guideSubmittingRef = ref<boolean>(false);
   const guideSubmission = ref<GuideSubmission | null>(null);
@@ -53,9 +57,7 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
         }
       ]
     };
-    if (web3.value.account) {
-      guideSubmissionCache.setAccount(web3.value.account);
-    }
+
     readGuideSubmissions();
     guideStepsMap.value = Object.fromEntries<GuideQuery_guide_steps>(guide.steps.map(step => [step.uuid, step]));
 
@@ -63,11 +65,7 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
   }
 
   function saveGuideSubmissionToLocalStorage() {
-    guideSubmissionCache.saveGuideSubmission(uuid, {
-      // fetchedFromServer: false,
-      data: guideSubmissionRef.value,
-      activeStepOrder: activeStepOrder.value
-    });
+    guideSubmissionCache.saveGuideSubmission(uuid, guideSubmissionRef.value);
   }
 
   function setActiveStep(order) {
@@ -99,33 +97,26 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
   }
 
   function selectAnswer(stepUuid: string, questionUuid: string, selectedAnswers: string[]) {
-    guideSubmissionRef.value = {
-      ...guideSubmissionRef.value,
-      [stepUuid]: {
-        ...guideSubmissionRef.value[stepUuid],
-        [questionUuid]: selectedAnswers
-      }
-    };
-    saveGuideSubmissionToLocalStorage();
+    updateItemValue(stepUuid, questionUuid, selectedAnswers);
   }
 
   function setUserInput(stepUuid: string, userInputUuid: string, userInput: string) {
-    guideSubmissionRef.value = {
-      ...guideSubmissionRef.value,
-      [stepUuid]: {
-        ...guideSubmissionRef.value[stepUuid],
-        [userInputUuid]: userInput
-      }
-    };
-    saveGuideSubmissionToLocalStorage();
+    updateItemValue(stepUuid, userInputUuid, userInput);
   }
 
   function setUserDiscord(stepUuid: string, userDiscordUuid: string, userDiscordId: string) {
+    updateItemValue(stepUuid, userDiscordUuid, userDiscordId);
+  }
+
+  function updateItemValue(stepUuid: string, itemUuid: string, itemValue: string | string[]) {
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
-      [stepUuid]: {
-        ...guideSubmissionRef.value[stepUuid],
-        [userDiscordUuid]: userDiscordId
+      responses: {
+        ...guideSubmissionRef.value.responses,
+        [stepUuid]: {
+          ...guideSubmissionRef.value.responses?.[stepUuid],
+          [itemUuid]: itemValue
+        }
       }
     };
     saveGuideSubmissionToLocalStorage();
@@ -134,19 +125,20 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
   async function submitGuide() {
     guideSubmittingRef.value = true;
 
+    const responses = guideSubmissionRef.value.responses;
     const response: Omit<GuideSubmissionInput, 'timestamp'> = {
       space: space.id,
       uuid: uuidv4(),
       guideUuid: uuid,
       from: web3.value.account,
-      steps: Object.keys(guideSubmissionRef.value).map((stepUuid): GuideStepSubmission => {
-        const stepResponse = guideSubmissionRef.value[stepUuid];
+      steps: Object.keys(responses).map((stepUuid): GuideStepSubmission => {
+        const stepResponse = responses[stepUuid];
 
         return {
           uuid: stepUuid,
           itemResponses: Object.keys(stepResponse).map((itemUuid): GuideStepItemSubmission => {
             const stepItem = guideStepsMap.value[stepUuid].stepItems.find(item => item.uuid === itemUuid)!;
-            if (stepItem.type === InputType.PrivateShortInput || stepItem.type === InputType.PublicShortInput) {
+            if (isUserInput(stepItem)) {
               return {
                 uuid: itemUuid,
                 userInput: stepResponse[itemUuid] as string,
@@ -204,27 +196,17 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
     const answerCache = guideSubmissionCache.readGuideSubmissionsCache(uuid);
     guideSubmissionRef.value = {
       ...guideSubmissionRef.value,
-      ...(answerCache?.data || {})
+      ...(answerCache || {})
     };
   }
 
-  watch(
-    web3.value,
-    newVal => {
-      if (newVal.account) {
-        guideSubmissionCache.setAccount(newVal.account);
-      }
-    },
-    { immediate: true }
-  );
-
   return {
-    activeStepOrder,
+    activeStepOrder: guideSubmissionRef.value.activeStepOrder,
     goToNextStep,
     goToPreviousStep,
     guideLoaded,
     guideRef,
-    guideResponseRef: guideSubmissionRef,
+    guideResponseRef: computed(() => guideSubmissionRef.value.responses),
     guideSubmission,
     guideSubmittingRef,
     initialize,

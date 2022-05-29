@@ -153,7 +153,7 @@ onMounted(async () => {
   await initialize();
   setPageTitle('page.title.dao.guide', {
     guide: guide.value?.name,
-    space: props.space?.name
+    dao: props.space?.name
   });
 });
 
@@ -186,10 +186,10 @@ const activeStepOrder = computed(() => parseInt(props.stepOrder));
                 top="2.5rem"
                 right="1.5rem"
                 class="float-right mr-2"
-                @select="selectFromShareDropdown"
-                @clickedNoDropdown="startShare(space, guide)"
                 :items="sharingItems"
                 :hideDropdown="sharingIsSupported"
+                @select="selectFromShareDropdown"
+                @clickedNoDropdown="startShare(space, guide)"
               >
                 <div class="pr-1 select-none">
                   <Icon name="upload" size="25" class="!align-text-bottom" />
@@ -197,12 +197,12 @@ const activeStepOrder = computed(() => parseInt(props.stepOrder));
                 </div>
               </UiDropdown>
               <UiDropdown
+                v-if="isAdmin"
                 top="2.5rem"
                 right="1.3rem"
                 class="float-right mr-2"
-                @select="selectFromThreedotDropdown"
-                v-if="isAdmin"
                 :items="threeDotItems"
+                @select="selectFromThreedotDropdown"
               >
                 <div class="pr-3">
                   <UiLoading v-if="clientLoading" class="w-full" />

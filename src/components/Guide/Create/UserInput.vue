@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import Checkbox from '@/components/Checkbox.vue';
 import Icon from '@/components/Icon.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { QuestionError, UserInputError } from '@/types/error';
-import {
-  InputType,
-  UserInput
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { UserInputError } from '@/types/error';
+import { InputType, UserInput } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType } from 'vue';
-import Checkbox from '@/components/Checkbox.vue';
 
 defineProps({
   removeUserInput: { type: Function, required: true },
@@ -43,14 +40,11 @@ defineProps({
         :hideBorder="true"
         @update:modelValue="updateUserInputLabel(userInput.uuid, $event)"
       />
-      <UiInput class="ml-2 !bg-skin-header-bg" :disabled="true"/>
+      <UiInput class="ml-2 !bg-skin-header-bg" :disabled="true" />
     </div>
 
     <div class="flex mt-2">
-      <Checkbox
-        @update:modelValue="updateUserInputRequired(userInput.uuid, $event)"
-        :modelValue="userInput.required"
-      />
+      <Checkbox @update:modelValue="updateUserInputRequired(userInput.uuid, $event)" :modelValue="userInput.required" />
       <div>
         {{ $t('form.required') }}
       </div>

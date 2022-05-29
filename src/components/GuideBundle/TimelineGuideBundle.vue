@@ -4,7 +4,7 @@ import { shorten } from '@/helpers/utils';
 import { GuideBundleModel } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   guideBundle: { type: Object as PropType<GuideBundleModel> },
   profiles: Object
 });

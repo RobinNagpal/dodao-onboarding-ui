@@ -86,16 +86,9 @@ watch(isAdmin, () => {
   loadGuides();
 });
 
-watch(
-  web3.value,
-  newVal => {
-    if (newVal.account) {
-      guideSubmissionCache.setAccount(newVal.account);
-    }
-    inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
-  },
-  { immediate: true }
-);
+onMounted(() => {
+  inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
+});
 
 const guidesCount = computed(() => {
   const count = store.space.guides.length;
