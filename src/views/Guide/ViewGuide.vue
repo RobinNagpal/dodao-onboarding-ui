@@ -19,7 +19,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
+import { computed, inject, onMounted, onRenderTracked, PropType, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -27,6 +27,7 @@ const props = defineProps({
   spaceId: String,
   space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean,
+  stepOrder: { type: String, default: '0' },
   from: { type: String }
 });
 
@@ -50,7 +51,6 @@ const modalGuideExportOpen = ref(false);
 const backButtonText = props.from ? JSON.parse(props.from)?.displayName || props.space.name : props.space.name;
 
 const {
-  activeStepOrder,
   goToNextStep,
   goToPreviousStep,
   guideRef: guide,
@@ -63,7 +63,7 @@ const {
   submitGuide,
   setUserInput,
   setUserDiscord
-} = useViewGuide(uuid as string, notify, props.space);
+} = useViewGuide(uuid as string, parseInt(props.stepOrder) || 0, notify, props.space);
 
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
 
@@ -167,6 +167,8 @@ function onClickBackButton() {
     router.push({ name: 'guides', params: { key: props.space.id } });
   }
 }
+
+const activeStepOrder = computed(() => parseInt(props.stepOrder));
 </script>
 
 <template>

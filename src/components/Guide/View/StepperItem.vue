@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
-import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
 import GuideViewUserDiscord from '@/components/Guide/View/UserDiscord.vue';
+import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
 import UiButton from '@/components/Ui/Button.vue';
-import { useModal } from '@/composables/useModal';
 import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
+import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
   GuideQuestion,
   GuideStep,
   InputType,
-  UserDiscordConnectType,
   isQuestion,
+  isUserDiscordConnect,
   isUserInput,
-  UserInput,
-  UserDiscordConnect,
-  isUserDiscordConnect
+  UserDiscordConnectType,
+  UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
@@ -62,9 +61,7 @@ const { modalAccountOpen } = useModal();
 
 const emit = defineEmits(['update:questionResponse', 'update:userInputResponse', 'update:userDiscordResponse']);
 
-const stepItems = computed(() => {
-  return [...props.step.stepItems];
-});
+const stepItems = computed(() => props.step.stepItems);
 
 const wrongQuestions = computed(() => {
   if (props.guideSubmission) {
@@ -110,9 +107,9 @@ function isEveryQuestionAnswered(): boolean {
 }
 
 function isDiscordConnected(): boolean {
-  const discordConnectItem = props.step.stepItems.find(isUserDiscordConnect);
-  if (!discordConnectItem) return true;
-  return !!props.stepSubmission[discordConnectItem.uuid];
+  const hasDiscordConnect = props.step.stepItems.find(isUserDiscordConnect);
+  if (!hasDiscordConnect) return true;
+  return !!props.stepSubmission[hasDiscordConnect.uuid];
 }
 
 const showQuestionsCompletionWarning = computed<boolean>(() => {

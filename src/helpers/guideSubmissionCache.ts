@@ -11,27 +11,18 @@ const setAccount = (accountId: string) => {
 interface GuideSubmissionSnapshot {
   fetchedFromServer?: boolean;
   data: Record<string, UserGuideQuestionSubmission>;
+  activeStepOrder: number;
 }
 
-const saveGuideSubmission = (
-  guideUuid: string,
-  data: GuideSubmissionSnapshot
-) => {
-  localStorage.setItem(
-    `${GUIDE_SUBMISSION}_${account}_${guideUuid}`,
-    JSON.stringify(data)
-  );
+const saveGuideSubmission = (guideUuid: string, data: GuideSubmissionSnapshot) => {
+  localStorage.setItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`, JSON.stringify(data));
 };
 
 const readGuideSubmissionsCache = (guideUuid: string) => {
-  const result = JSON.parse(
-    localStorage.getItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`) || '{}'
-  );
-
-  return result;
+  return JSON.parse(localStorage.getItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`) || '{}');
 };
 
-const readAllInprogressGuides = () => {
+const readAllInProgressGuides = () => {
   const guideMap: any = {};
   for (const key in localStorage) {
     if (key.indexOf(`${GUIDE_SUBMISSION}_${account}`) > -1) {
@@ -45,10 +36,33 @@ const deleteGuideSubmission = (guideUuid: string) => {
   localStorage.removeItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`);
 };
 
+const setUserDiscordInSubmission = (
+  guideUuid: string,
+  activeStepOrder: number,
+  stepUuid: string,
+  userDiscordUuid: string,
+  discrodInfo: string
+) => {
+  let guideSubmissionRef = readGuideSubmissionsCache(guideUuid);
+  guideSubmissionRef = {
+    ...guideSubmissionRef,
+    [stepUuid]: {
+      ...guideSubmissionRef[stepUuid],
+      [userDiscordUuid]: discrodInfo
+    }
+  };
+  saveGuideSubmission(guideUuid, {
+    // fetchedFromServer: false,
+    data: guideSubmissionRef,
+    activeStepOrder
+  });
+};
+
 export default {
   setAccount,
   saveGuideSubmission,
   deleteGuideSubmission,
   readGuideSubmissionsCache,
-  readAllInprogressGuides
+  readAllInProgressGuides,
+  setUserDiscordInSubmission
 };

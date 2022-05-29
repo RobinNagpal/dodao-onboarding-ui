@@ -72,7 +72,8 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: ':guideType/guide/view/:uuid/:stepOrder?',
     name: 'guide',
-    component: () => import('@/views/Guide/ViewGuide.vue')
+    component: () => import('@/views/Guide/ViewGuide.vue'),
+    props: true
   },
   {
     path: 'course/view/:uuid',

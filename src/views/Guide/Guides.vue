@@ -92,7 +92,7 @@ watch(
     if (newVal.account) {
       guideSubmissionCache.setAccount(newVal.account);
     }
-    inprogressGuideMap.value = guideSubmissionCache.readAllInprogressGuides();
+    inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
   },
   { immediate: true }
 );

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { getUserInfo } from '@/helpers/discord/discordApi';
+import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { setPageTitle } from '@/helpers/utils';
-import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -25,25 +25,35 @@ onMounted(async () => {
 
   const params = new URLSearchParams(decodeURIComponent(state!));
   const target = params.get('target');
+  const spaceId = params.get('spaceId');
   if (target === 'space') {
     const code = route.query?.code?.toString();
-    router.push({
+    await router.push({
       name: 'spaceDiscord',
-      params: { key: params.get('spaceId'), discordCode: code }
+      params: { key: spaceId, discordCode: code }
     });
   } else if (target === 'guideView') {
-    const guideUuid = params.get('guideUuid');
+    const guideUuid = params.get('guideUuid')!;
     const discordUser: any = await getUserInfo(accessToken);
-    router.push({
+    const stepOrder: string = params.get('stepOrder')!;
+    const stepUuid: string = params.get('stepUuid')!;
+    const itemUuid: string = params.get('itemUuid')!;
+
+    const discrodInfo = {
+      ...discordUser,
+      accessToken
+    };
+    guideSubmissionCache.setUserDiscordInSubmission(guideUuid, parseInt(stepOrder), stepUuid, itemUuid, discrodInfo);
+
+    const guideType = params.get('guideType');
+    await router.push({
       name: 'guide',
       params: {
-        key: params.get('spaceId'),
-        guideType: params.get('guideType'),
+        key: spaceId,
+        guideType: guideType,
         uuid: guideUuid,
-        stepOrder: params.get('stepOrder'),
-        stepUuid: params.get('stepUuid'),
-        discordId: discordUser.id,
-        itemUuid: params.get('itemUuid')
+        stepOrder: stepOrder,
+        stepUuid: stepUuid
       }
     });
   }

@@ -13,20 +13,17 @@ import {
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 export type UserGuideQuestionSubmission = Record<string, string[] | string>;
 
-export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
-  const route = useRoute();
+export function useViewGuide(uuid: string, stepOrder: number, notify: any, space: SpaceModel) {
   const router = useRouter();
   const { send } = useClient();
   const { web3 } = useWeb3();
   const { t } = useI18n();
-
-  const stepOrder = computed<number>(() => parseInt(route.params.stepOrder?.toString()) || 1);
 
   const guideRef = ref<GuideQuery_guide>();
   const guideStepsMap = ref<{ [uuid: string]: GuideQuery_guide_steps }>({});
@@ -37,7 +34,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
   const activeStepOrder = ref<number>(0);
 
   async function initialize() {
-    activeStepOrder.value = stepOrder.value - 1;
+    activeStepOrder.value = stepOrder - 1;
     const guide = await getGuide(uuid);
     guideRef.value = {
       ...guide,
@@ -65,25 +62,38 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     guideLoaded.value = true;
   }
 
+  function saveGuideSubmissionToLocalStorage() {
+    guideSubmissionCache.saveGuideSubmission(uuid, {
+      // fetchedFromServer: false,
+      data: guideSubmissionRef.value,
+      activeStepOrder: activeStepOrder.value
+    });
+  }
+
   function setActiveStep(order) {
     activeStepOrder.value = order;
   }
 
   function goToNextStep(currentStep: GuideQuery_guide_steps) {
+    activeStepOrder.value = currentStep.order + 1;
+    saveGuideSubmissionToLocalStorage();
+    console.log('goToNextStep');
     router.push({
       name: 'guide',
       params: {
-        stepOrder: currentStep.order + 2
+        stepOrder: activeStepOrder.value
       }
     });
   }
 
   function goToPreviousStep(currentStep: GuideQuery_guide_steps) {
+    activeStepOrder.value = currentStep.order - 1;
+    saveGuideSubmissionToLocalStorage();
     router.push({
       name: 'guide',
       params: {
         uuid,
-        stepOrder: currentStep.order
+        stepOrder: activeStepOrder.value
       }
     });
   }
@@ -96,10 +106,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
         [questionUuid]: selectedAnswers
       }
     };
-    guideSubmissionCache.saveGuideSubmission(uuid, {
-      // fetchedFromServer: false,
-      data: guideSubmissionRef.value
-    });
+    saveGuideSubmissionToLocalStorage();
   }
 
   function setUserInput(stepUuid: string, userInputUuid: string, userInput: string) {
@@ -110,10 +117,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
         [userInputUuid]: userInput
       }
     };
-    guideSubmissionCache.saveGuideSubmission(uuid, {
-      // fetchedFromServer: false,
-      data: guideSubmissionRef.value
-    });
+    saveGuideSubmissionToLocalStorage();
   }
 
   function setUserDiscord(stepUuid: string, userDiscordUuid: string, userDiscordId: string) {
@@ -124,10 +128,7 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
         [userDiscordUuid]: userDiscordId
       }
     };
-    guideSubmissionCache.saveGuideSubmission(uuid, {
-      // fetchedFromServer: false,
-      data: guideSubmissionRef.value
-    });
+    saveGuideSubmissionToLocalStorage();
   }
 
   async function submitGuide() {
@@ -207,23 +208,12 @@ export function useViewGuide(uuid: string, notify: any, space: SpaceModel) {
     };
   }
 
-  watch(stepOrder, newVal => {
-    activeStepOrder.value = newVal - 1;
-  });
   watch(
     web3.value,
     newVal => {
       if (newVal.account) {
         guideSubmissionCache.setAccount(newVal.account);
       }
-      if (route.params.discordId && route.params.itemUuid) {
-        setUserDiscord(
-          route.params.stepUuid?.toString(),
-          route.params.itemUuid?.toString(),
-          route.params.discordId?.toString()
-        );
-      }
-      readGuideSubmissions();
     },
     { immediate: true }
   );
