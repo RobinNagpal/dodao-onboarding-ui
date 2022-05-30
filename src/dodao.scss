@@ -234,8 +234,56 @@
       margin-bottom: 16px;
     }
   }
+
+  &.careers-card-left {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 24px;
+    width: 100%;
+    max-width: 20%;
+  }
+
+  &.careers-card-right {
+    width: 100%;
+    max-width: 75%;
+  }
+
+  &.career-content {
+    width: 100%;
+    max-width: 60%;
+  }
+
+  &.career-right {
+    width: 100%;
+    max-width: 32%;
+    -webkit-align-self: stretch;
+    -ms-flex-item-align: stretch;
+    -ms-grid-row-align: stretch;
+    align-self: stretch;
+  }
 }
 
+.top-content {
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  &.job-details {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 24px;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+}
 .image.blog-card-image {
   width: 100%;
 }
@@ -388,6 +436,14 @@
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
+
+  &.career-details {
+    width: 100%;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
 }
 
 .list {
@@ -609,6 +665,20 @@
     text-align: start;
     word-break: normal;
   }
+
+  &.career-feature {
+    margin-bottom: 0px;
+  }
+
+  &.career-about-excerpt {
+    width: 100%;
+    max-width: 70%;
+    margin-bottom: 24px;
+
+    &.large {
+      max-width: 88%;
+    }
+  }
 }
 
 .home-tabs {
@@ -712,6 +782,16 @@
   }
 }
 
+.card-without-background {
+  transition: transform 300ms ease;
+  transition: transform 300ms ease, -webkit-transform 300ms ease;
+
+  &:hover {
+    -webkit-transform: scale3d(0.95, 0.95, 1.01);
+    transform: scale3d(0.95, 0.95, 1.01);
+  }
+}
+
 .card {
   border-radius: 20px;
   background-color: var(--bg-color);
@@ -721,6 +801,42 @@
   transition: transform 300ms ease;
   transition: transform 300ms ease, -webkit-transform 300ms ease;
 
+
+  &.carrer-card-careers-page {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: visible;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    border-radius: 0px;
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: -webkit-transform 300ms ease;
+    transition: transform 300ms ease;
+    transition: transform 300ms ease, -webkit-transform 300ms ease;
+    color: #66666e;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    &:hover {
+      -webkit-transform: scale3d(0.95, 0.95, 1.01);
+      transform: scale3d(0.95, 0.95, 1.01);
+    }
+  }
 
   &.feature-card {
     overflow: hidden;
@@ -804,6 +920,14 @@
     border-color: var(--border-color);
   }
 
+  &.open-positions-main-card {
+    overflow: visible;
+    margin-bottom: 48px;
+    padding: 80px;
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 32px 0 rgba(8, 15, 52, 0.04);
+  }
+
   &.pricing-card {
     display: flex;
     padding: 50px 32px 60px;
@@ -857,6 +981,25 @@
   }
 }
 
+.careers-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  &.last {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    border-bottom-style: none;
+  }
+}
+
+.open-positions-content-main-wrapper {
+  position: relative;
+}
+
 .guide-view {
   max-width: 1248px;
 }
@@ -865,6 +1008,79 @@
   font-weight: 700;
   font-size: 0.8em;
 }
+
+.careers-card-item {
+
+  transition: transform 300ms ease;
+  transition: transform 300ms ease, -webkit-transform 300ms ease;
+
+  &:hover {
+    -webkit-transform: scale3d(0.95, 0.95, 1.01);
+    transform: scale3d(0.95, 0.95, 1.01);
+  }
+  padding-top: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #c0c4d1;
+
+  &:first-child {
+    padding-top: 0px;
+  }
+
+  &:last-child {
+    border-bottom-width: 0px;
+  }
+
+}
+
+.job-details {
+  &.preview {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    max-width: 48%;
+    min-width: 250px;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+}
+
+.job-single-detail {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: #1a1b1e;
+  white-space: nowrap;
+
+  &.first {
+    margin-right: 20px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
 
 @media screen and (max-width: 991px) {
   .container-default {
@@ -1004,6 +1220,16 @@
         border-left-width: 0;
       }
     }
+
+    &.open-positions-main-card {
+      padding: 60px 40px;
+    }
+  }
+
+  .job-details {
+    &.preview {
+      max-width: 56%;
+    }
   }
 
 }
@@ -1025,6 +1251,33 @@
     font-size: 20px;
     line-height: 32px;
   }
+
+  .paragraph {
+    &.package-about-excerpt {
+      margin-bottom: 15px;
+    }
+
+    &.get-package-testimonials {
+      margin-bottom: 25px;
+    }
+
+    &.integration-about-excerpt {
+      margin-bottom: 16px;
+    }
+
+    &.career-about-excerpt {
+      max-width: 336px;
+    }
+
+    &.apply-today-paragraph {
+      margin-bottom: 20px;
+    }
+
+    &.integrations-paragraph {
+      margin-bottom: 0px;
+    }
+  }
+
   .header {
     max-width: none;
     margin-left: 50px;
@@ -1059,6 +1312,12 @@
     &.home-stats-card {
       padding: 40px 24px;
     }
+
+    &.open-positions-main-card {
+      padding: 0px;
+      background-color: transparent;
+      box-shadow: none;
+    }
   }
   .image-wrapper {
     &.featured-blog-card-image-wrapper {
@@ -1074,8 +1333,29 @@
       border-radius: 12px;
     }
   }
-  .split-content.blog-card-content {
-    padding: 24px 24px 40px;
+  .split-content {
+    &.blog-card-content {
+      padding: 24px 24px 40px;
+    }
+
+    &.careers-card-left {
+      position: static;
+      max-width: none;
+      margin-bottom: 32px;
+    }
+
+    &.careers-card-right {
+      max-width: 100%;
+    }
+
+    &.career-content {
+      max-width: 100%;
+    }
+
+    &.career-right {
+      max-width: 100%;
+      margin-top: 40px;
+    }
   }
 
   ._3-column-grid {
@@ -1173,9 +1453,82 @@
   .route-view {
     margin-left: 50px;
   }
+
+  .split {
+    &.career-details {
+      margin-bottom: -12px;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+    }
+
+    &.career-single-wrapper {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+  }
+  .open-positions-content-main-wrapper {
+    position: static;
+  }
+
+  .careers-container {
+    margin-bottom: 64px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    border-bottom-style: none;
+  }
+
+  .job-details {
+    &.preview {
+      width: auto;
+      max-width: none;
+      min-width: 290px;
+      margin-bottom: -12px;
+      -webkit-box-pack: start;
+      -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+    }
+  }
 }
 
 @media screen and (max-width: 479px) {
+
+  .paragraph {
+    &.footer-paragraph {
+      margin-bottom: 16px;
+    }
+
+    &.feature-single-hero {
+      margin-bottom: 24px;
+    }
+
+    &.career-about-excerpt {
+      max-width: none;
+    }
+
+    &.about-paragraph {
+      margin-bottom: 24px;
+    }
+  }
   .container-default {
     padding-right: 16px;
     padding-left: 16px;
@@ -1214,7 +1567,19 @@
     padding-right: 16px;
     padding-left: 16px;
   }
-
+  .split {
+    &.career-details {
+      margin-bottom: 0px;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+  }
   ._2-button-wrapper {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -1306,9 +1671,15 @@
       padding: 8px;
     }
 
+    &.carrer-card-careers-page {
+      padding-top: 40px;
+      padding-bottom: 48px;
+    }
+
     &.feature-card{
       margin: 0 24px 0 24px;
     }
+
     &.integration-main-card {
       max-width: 400px;
       padding: 0;
@@ -1329,5 +1700,30 @@
     .integration-top-content {
       justify-content: center;
     }
+  }
+
+  .careers-container {
+    margin-bottom: 36px;
+  }
+
+  .job-details {
+    &.preview {
+      max-width: 100%;
+      min-width: 290px;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+
+      &.page {
+        margin-bottom: 18px;
+      }
+    }
+  }
+
+  .job-single-detail {
+    margin-right: 12px;
+    margin-bottom: 10px;
   }
 }

@@ -40,14 +40,8 @@ const { t } = useI18n();
 
 const { isAdmin } = useSpace(props.space);
 
-const {
-  shareToTwitter,
-  shareToFacebook,
-  shareToClipboard,
-  startShare,
-  sharingIsSupported,
-  sharingItems
-} = useSharing();
+const { shareToTwitter, shareToFacebook, shareToClipboard, startShare, sharingIsSupported, sharingItems } =
+  useSharing();
 
 const router = useRouter();
 
@@ -74,9 +68,7 @@ onMounted(() => {
 });
 
 const bundleContents = computed(() => {
-  return guideBundle.value
-    ? marked.parse(guideBundle.value.content, { renderer })
-    : null;
+  return guideBundle.value ? marked.parse(guideBundle.value.content, { renderer }) : null;
 });
 
 const threeDotItems = computed(() => {
@@ -99,123 +91,98 @@ function selectFromThreedotDropdown(e) {
 
 function selectFromShareDropdown(e) {
   if (e === 'shareToTwitter')
-    shareToTwitter(
-      props.space,
-      guideBundle.value?.name ?? '',
-      'guide/view',
-      guideBundle.value?.uuid ?? '',
-      window
-    );
+    shareToTwitter(props.space, guideBundle.value?.name ?? '', 'guide/view', guideBundle.value?.uuid ?? '', window);
   else if (e === 'shareToFacebook')
-    shareToFacebook(
-      props.space,
-      guideBundle.value?.name ?? '',
-      'guide/view',
-      guideBundle.value?.uuid ?? '',
-      window
-    );
-  else if (e === 'shareToClipboard')
-    shareToClipboard(props.space, 'guide/view', guideBundle.value?.uuid ?? '');
+    shareToFacebook(props.space, guideBundle.value?.name ?? '', 'guide/view', guideBundle.value?.uuid ?? '', window);
+  else if (e === 'shareToClipboard') shareToClipboard(props.space, 'guide/view', guideBundle.value?.uuid ?? '');
 }
 
 const { profiles, loadProfiles } = useProfiles();
 </script>
 
 <template>
-  <div class="container-default w-container" v-if="guideBundle">
-    <div class="home-tabs-wrapper mt-6">
-      <div
-        data-duration-in="300"
-        data-duration-out="100"
-        data-easing="ease"
-        class="home-tabs w-tabs"
-      >
-        <div class="card home-tabs-content w-tab-content">
-          <div class="home-tab-pane w-tab-pane p-6">
-            <div class="flex justify-between">
-              <div class="px-4 md:px-0 mb-3">
-                <a
-                  class="text-color"
-                  @click="
-                    $router.push({
-                      name: 'guideBundles',
-                      params: { key: space.id }
-                    })
-                  "
-                >
-                  <Icon name="back" size="22" class="!align-middle" />
-                  {{ space.name }}
-                </a>
+  <div class="page-main flex mx-auto justify-between mt-4">
+    <LayoutSingle v-bind="$attrs">
+      <template #content>
+        <div class="container-default w-container" v-if="guideBundle">
+          <div class="open-positions-main-card">
+            <div class="open-positions-content-main-wrapper">
+              <div class="mb-4">
+                <div class="flex justify-between">
+                  <div class="px-4 md:px-0 mb-3">
+                    <a
+                      class="text-color"
+                      @click="
+                        $router.push({
+                          name: 'guideBundles',
+                          params: { key: space.id }
+                        })
+                      "
+                    >
+                      <Icon name="back" size="22" class="!align-middle" />
+                      {{ space.name }}
+                    </a>
+                  </div>
+                  <div>
+                    <UiDropdown
+                      top="2.5rem"
+                      right="1.5rem"
+                      class="float-right mr-2"
+                      @select="selectFromShareDropdown"
+                      @clickedNoDropdown="startShare(space, guide)"
+                      :items="sharingItems"
+                      :hideDropdown="sharingIsSupported"
+                    >
+                      <div class="pr-1 select-none">
+                        <Icon name="upload" size="25" class="!align-text-bottom" />
+                        Share
+                      </div>
+                    </UiDropdown>
+                    <UiDropdown
+                      top="2.5rem"
+                      right="1.3rem"
+                      class="float-right mr-2"
+                      @select="selectFromThreedotDropdown"
+                      v-if="isAdmin"
+                      :items="threeDotItems"
+                    >
+                      <div class="pr-3">
+                        <UiLoading v-if="loading" class="w-full" />
+                        <Icon v-else name="threedots" size="25" />
+                      </div>
+                    </UiDropdown>
+                  </div>
+                </div>
               </div>
-              <div>
-                <UiDropdown
-                  top="2.5rem"
-                  right="1.5rem"
-                  class="float-right mr-2"
-                  @select="selectFromShareDropdown"
-                  @clickedNoDropdown="startShare(space, guide)"
-                  :items="sharingItems"
-                  :hideDropdown="sharingIsSupported"
-                >
-                  <div class="pr-1 select-none">
-                    <Icon name="upload" size="25" class="!align-text-bottom" />
-                    Share
+              <div class="careers-container">
+                <div class="split-content careers-card-left">
+                  <h3>{{ guideBundle.name }}</h3>
+                  <div class="pt-2">
+                    {{ guideBundle.excerpt }}
                   </div>
-                </UiDropdown>
-                <UiDropdown
-                  top="2.5rem"
-                  right="1.3rem"
-                  class="float-right mr-2"
-                  @select="selectFromThreedotDropdown"
-                  v-if="isAdmin"
-                  :items="threeDotItems"
-                >
-                  <div class="pr-3">
-                    <UiLoading v-if="loading" class="w-full" />
-                    <Icon v-else name="threedots" size="25" />
+                  <div v-html="bundleContents" class="markdown-body pt-2" />
+                </div>
+                <div class="split-content careers-card-right">
+                  <div class="careers-collection-list-wrapper first w-dyn-list">
+                    <div role="list" class="w-dyn-items">
+                      <GuideGuideinBundle
+                        v-for="(guide, i) in guideBundle.bundleGuides"
+                        :key="i"
+                        :guide="{ ...guide, space }"
+                        :guide-bundle="guideBundle"
+                        :profiles="profiles"
+                      />
+                    </div>
                   </div>
-                </UiDropdown>
+                </div>
               </div>
             </div>
-            <div>
-              <div class="pt-4">
-                <UiThumbnail
-                  :src="guideBundle.thumbnail"
-                  :entityId="guideBundle.id"
-                  :title="guideBundle.name"
-                  symbolIndex="guideBundle"
-                  :big_tile="true"
-                  :size="'400'"
-                  class="mt-3 mb-2"
-                />
-              </div>
-              <h2>{{ guideBundle.name }}</h2>
-              <div class="pt-2">
-                {{ guideBundle.excerpt }}
-              </div>
-              <div v-html="bundleContents" class="markdown-body pt-2" />
-            </div>
           </div>
+          <Block v-if="loading" :slim="true">
+            <RowLoading class="my-2" />
+          </Block>
         </div>
-        <div class="home-tabs-menu wf-grid w-tab-menu" role="tablist">
-          <div v-if="!loading && guideBundle">
-            <GuideGuideinBundle
-              v-for="(guide, i) in guideBundle.bundleGuides"
-              :key="i"
-              :guide="{ ...guide, space }"
-              :guide-bundle="guideBundle"
-              :profiles="profiles"
-            />
-          </div>
-          <div
-            style="height: 10px; width: 10px; position: absolute"
-            ref="endElement"
-          />
-        </div>
-      </div>
-    </div>
-    <Block v-if="loading" :slim="true">
-      <RowLoading class="my-2" />
-    </Block>
+      </template>
+    </LayoutSingle>
   </div>
 </template>
