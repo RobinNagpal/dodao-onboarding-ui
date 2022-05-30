@@ -31,7 +31,6 @@ const { store } = useStore();
 const loading = ref(false);
 const { domain } = useDomain();
 const route = useRoute();
-const { web3 } = useWeb3();
 const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const guideType = route.params.guideType || GuideType.Onboarding;
@@ -55,7 +54,7 @@ async function loadGuides(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
-        guideType,
+        guideType: route.params.guideType || GuideType.Onboarding,
         state: store.space.filterBy === 'core' ? 'all' : store.space.filterBy,
         author_in: store.space.filterBy === 'core' ? spaceMembers.value : [],
         publish_status_in: isAdminOrSuperAdmin
@@ -70,7 +69,15 @@ async function loadGuides(skip = 0) {
   loading.value = false;
 }
 
+watch(
+  () => route.params.guideType,
+  () => {
+    loadGuides();
+  }
+);
+
 onMounted(() => {
+  inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
   store.space.guides = [];
   setPageTitle('page.title.dao.guides', { dao: props.space.name });
   loadGuides();
@@ -84,10 +91,6 @@ watch(store.space.guides, () => {
 
 watch(isAdmin, () => {
   loadGuides();
-});
-
-onMounted(() => {
-  inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
 });
 
 const guidesCount = computed(() => {
