@@ -46,7 +46,7 @@ const setUserDiscordInSubmission = (
     responses: {
       ...guideSubmissionRef.responses,
       [stepUuid]: {
-        ...guideSubmissionRef[stepUuid],
+        ...guideSubmissionRef.responses?.[stepUuid],
         [userDiscordUuid]: discordInfo
       }
     }
