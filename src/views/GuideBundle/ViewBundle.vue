@@ -154,26 +154,22 @@ const { profiles, loadProfiles } = useProfiles();
                   </div>
                 </div>
               </div>
-              <div class="careers-container">
-                <div class="split-content careers-card-left">
+              <div>
+                <div>
                   <h3>{{ guideBundle.name }}</h3>
                   <div class="pt-2">
                     {{ guideBundle.excerpt }}
                   </div>
                   <div v-html="bundleContents" class="markdown-body pt-2" />
                 </div>
-                <div class="split-content careers-card-right">
-                  <div class="careers-collection-list-wrapper first w-dyn-list">
-                    <div role="list" class="w-dyn-items">
-                      <GuideGuideinBundle
-                        v-for="(guide, i) in guideBundle.bundleGuides"
-                        :key="i"
-                        :guide="{ ...guide, space }"
-                        :guide-bundle="guideBundle"
-                        :profiles="profiles"
-                      />
-                    </div>
-                  </div>
+                <div role="list" class="mt-6">
+                  <GuideGuideinBundle
+                    v-for="(guide, i) in guideBundle.bundleGuides"
+                    :key="i"
+                    :guide="{ ...guide, space }"
+                    :guide-bundle="guideBundle"
+                    :profiles="profiles"
+                  />
                 </div>
               </div>
             </div>
@@ -186,3 +182,4 @@ const { profiles, loadProfiles } = useProfiles();
     </LayoutSingle>
   </div>
 </template>
+<style scoped lang="scss"></style>

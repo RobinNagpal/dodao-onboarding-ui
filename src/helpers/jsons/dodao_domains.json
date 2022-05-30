@@ -39,6 +39,10 @@
     "spaceId": "dxdao-eth-1",
     "siteType": "onboarding"
   },
+  "dxdao-academy.dodao.io": {
+    "spaceId": "dxdao-eth-1",
+    "siteType": "courses"
+  },
   "dxdao-localhost": {
     "spaceId": "dxdao-eth-1",
     "siteType": "courses"
@@ -62,6 +66,14 @@
   "oceanprotocol.dodao.io": {
     "spaceId": "ocean-protocol-eth-1",
     "siteType": "onboarding"
+  },
+  "makerdao.dodao.io": {
+    "spaceId": "makerdao-eth-1",
+    "siteType": "onboarding"
+  },
+  "makerdao-academy.dodao.io": {
+    "spaceId": "makerdao-eth-1",
+    "siteType": "courses"
   },
   "meandao.dodao.io": {
     "spaceId": "meandao-sol-mainnet",

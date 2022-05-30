@@ -7,7 +7,7 @@ import { PropType } from 'vue';
 
 const props = defineProps({
   space: { type: Object as PropType<SpaceModel>, required: true },
-  guideType: { type: String, default: 'course' }
+  guideType: { type: String, required: true }
 });
 const { isAdmin } = useSpace(props.space);
 </script>
@@ -16,7 +16,7 @@ const { isAdmin } = useSpace(props.space);
     <Block class="pt-1" v-if="isAdmin">
       <p v-if="guideType" v-text="$t(`guides.createFirstGuide.${guideType}`)" class="mb-2" />
       <p v-else v-text="$t(`guides.createYourFirstGuide`)" class="mb-2" />
-      <router-link :to="{ name: 'guideCreate', params: { key: space.id } }">
+      <router-link :to="{ name: 'guideCreate', params: { key: space.id, guideType } }">
         <UiButton>
           {{ $t('guides.createGuide') }}
         </UiButton>

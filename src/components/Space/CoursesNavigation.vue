@@ -76,7 +76,7 @@ const threeDotItems = computed(() => {
         }"
       >
         <UiButton
-          :variant="routeName === 'spaceHome' ? 'contained' : 'outlined'"
+          :variant="routeName === 'spaceHome' || routeName === 'guideBundles' ? 'contained' : 'outlined'"
           class="whitespace-nowrap"
           :primary="true"
         >

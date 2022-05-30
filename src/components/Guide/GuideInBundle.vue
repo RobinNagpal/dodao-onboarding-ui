@@ -1,69 +1,69 @@
 <script setup lang="ts">
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
-import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
-import { shorten } from '@/helpers/utils';
+import {
+  GuideBundleQuery_guideBundle,
+  GuideBundleQuery_guideBundle_bundleGuides
+} from '@/graphql/generated/graphqlDocs';
 import { PropType } from 'vue';
 
 defineProps({
   guideBundle: { type: Object as PropType<GuideBundleQuery_guideBundle> },
-  guide: Object,
+  guide: { type: Object as PropType<GuideBundleQuery_guideBundle_bundleGuides>, required: true },
   profiles: Object
 });
 </script>
 
 <template>
-  <div class="careers-card-item">
-    <router-link
-      :to="{
-        name: 'guide',
-        params: {
-          key: guide.space.id,
-          uuid: guide.uuid,
-          guideType: guide.guideType,
-          from: JSON.stringify({
-            displayName: guideBundle.name,
-            name: 'guideBundle',
-            params: {
-              key: guideBundle.space.id,
-              uuid: guideBundle.uuid
-            }
-          })
-        }
-      }"
-      class="carrer-card-careers-page"
-    >
-      <div role="listitem" class="carrer-card-careers-page guide-in-bundle-card w-full flex mb-4">
-        <div class="guide-image">
-          <UiThumbnail
-            :src="guide.thumbnail"
-            :entityId="guide.uuid"
-            :title="guide.name"
-            :size="'150'"
-            :big_tile="false"
-          />
-        </div>
-
-        <div class="p-2">
-          <h1
-            class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis"
-            v-text="shorten(guide.name, 32)"
-          />
-          <p
-            v-text="shorten(guide.content, 300)"
-            class="break-words mb-2 text-sm h-[95px] text-ellipsis overflow-hidden text-sm"
-          />
-        </div>
-        <div class="flex flex-wrap justify-end absolute top-4 right-4">
-          <div class="badge post-category mb-1" v-for="category in guide.categories || []" :key="category">
-            {{ $t('guide.category.' + category) }}
-          </div>
-        </div>
+  <router-link
+    :to="{
+      name: 'guide',
+      params: {
+        key: guide.space.id,
+        uuid: guide.uuid,
+        guideType: guide.guideType,
+        from: JSON.stringify({
+          displayName: guideBundle.name,
+          name: 'guideBundle',
+          params: {
+            key: guideBundle.space.id,
+            uuid: guideBundle.uuid
+          }
+        })
+      }
+    }"
+    class="guide-bundle-guides-list-item w-full flex"
+  >
+    <div class="guide-number flex flex-col justify-center align-center">
+      <div class="circle">
+        {{ guide.order + 1 }}
       </div>
-    </router-link>
-  </div>
+    </div>
+    <div class="guide-image">
+      <UiThumbnail :src="guide.thumbnail" :entityId="guide.uuid" :title="guide.name" :size="'100'" :big_tile="false" />
+    </div>
+
+    <div class="p-2">
+      <h1 class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis" v-text="guide.name" />
+      <p v-text="guide.content" class="break-words mb-2 text-sm" />
+    </div>
+  </router-link>
 </template>
 
 <style scoped lang="scss">
+.guide-number {
+  font-size: 48px;
+  text-align: center;
+  color: var(--border-color);
+
+  .circle {
+    width: 80px;
+    height: 80px;
+    line-height: 65px;
+    border-radius: 50%;
+    border: 8px solid var(--border-color);
+  }
+}
+
 .timeline-guide {
   &:hover {
     border-color: var(--link-color) !important;
@@ -71,6 +71,21 @@ defineProps({
 }
 
 .guide-image {
-  width: 270px;
+  width: 200px;
+}
+
+.guide-bundle-guides-list-item {
+  padding: 24px 0;
+  border-top: 1px solid var(--border-color);
+
+  transition: transform 300ms ease;
+
+  &:hover {
+    transform: scale3d(0.95, 0.95, 1.01);
+  }
+
+  &:last-of-type {
+    border-bottom: 1px solid var(--border-color);
+  }
 }
 </style>

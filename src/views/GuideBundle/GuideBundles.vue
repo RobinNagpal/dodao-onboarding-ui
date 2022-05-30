@@ -88,55 +88,6 @@ const loadingData = computed(() => {
           <div v-if="!loadingData" class="container-default w-container">
             <div class="pricing-wrapper w-dyn-list pt-8">
               <div role="list" class="_3-column-grid pricing w-dyn-items">
-                <div
-                  style="
-                    opacity: 1;
-                    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-                      skew(0deg, 0deg);
-                    transform-style: preserve-3d;
-                  "
-                  role="listitem"
-                  class="plan-item w-dyn-item"
-                >
-                  <a href="/product/starter" class="card pricing-card w-inline-block"
-                    ><div class="split-content package-card-top-content">
-                      <div class="top-content top-pricing-content">
-                        <div class="image-wrapper package-icon">
-                          <img
-                            src="https://uploads-ssl.webflow.com/619693a5cb7cf8d01bc973c1/619693a5cb7cf8bf32c974f6_package-starter-techplus-x-template.png"
-                            data-wf-sku-bindings="%5B%7B%22from%22%3A%22f_main_image_4dr%22%2C%22to%22%3A%22src%22%7D%5D"
-                            alt=""
-                            class="image package-icon"
-                          />
-                        </div>
-                        <h3 class="mg-bottom-0">Dxdao and Far from Coding</h3>
-                      </div>
-                      <p class="paragraph package-about-excerpt">
-                        Anyone with a computer and internet connection can take this course. If you are interested in
-                        making sense of Web3, but you don't know how to read or write code, then you are in the right
-                        place 😉. You might even be considering attending a Dxdao certification course, but already feel
-                        lost. Don't worry. This course is a great first step for you.
-                      </p>
-                      <ul role="list" class="list package-features-list w-list-unstyled">
-                        <li class="list-item dark-check-item">
-                          <div class="package-feature">Basics of Web3</div>
-                        </li>
-                        <li class="list-item dark-check-item">
-                          <div class="package-feature">All the products of Dxdao</div>
-                        </li>
-                        <li class="list-item dark-check-item">
-                          <div class="package-feature">Dxdao Ecosystem</div>
-                        </li>
-                        <li class="list-item dark-check-item"><div class="package-feature">Business use-cases</div></li>
-                      </ul>
-                    </div>
-                    <div class="split-content package-card-bottom-content">
-                      <div class="added-cost">Duration: 30-45 mins</div>
-                      <div class="button-primary popular w-condition-invisible">Get started</div>
-                    </div>
-                  </a>
-                </div>
-
                 <GuideBundleTimelineGuideBundle
                   v-for="(guide, i) in store.space.guideBundles"
                   :key="i"
