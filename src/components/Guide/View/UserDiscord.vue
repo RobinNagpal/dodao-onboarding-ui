@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UserDiscordInfo } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { computed, PropType } from 'vue';
 import { GuideType, UserDiscordConnect } from '@dodao/onboarding-schemas/models/GuideModel';
 import { shorten } from '@/helpers/utils';
@@ -23,7 +24,7 @@ const props = defineProps({
     type: String,
     default: GuideType.Onboarding
   },
-  discordResponse: { type: Object }
+  discordResponse: { type: Object as PropType<UserDiscordInfo> }
 });
 
 const url = computed(() => {

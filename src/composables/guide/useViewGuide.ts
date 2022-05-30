@@ -5,12 +5,13 @@ import { GuideQuery_guide, GuideQuery_guide_steps } from '@/graphql/generated/gr
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
-import { isUserInput } from '@dodao/onboarding-schemas/models/GuideModel';
+import { isUserDiscordConnect, isUserInput } from '@dodao/onboarding-schemas/models/GuideModel';
 import {
   GuideStepItemSubmission,
   GuideStepSubmission,
   GuideSubmission,
-  StepItemSubmissionType
+  StepItemSubmissionType,
+  UserDiscordInfo
 } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
@@ -74,8 +75,12 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
 
   function goToNextStep(currentStep: GuideQuery_guide_steps) {
     activeStepOrder.value = currentStep.order + 1;
-    saveGuideSubmissionToLocalStorage();
-    console.log('goToNextStep');
+    const navigateToLastStep = activeStepOrder.value === (guideRef.value?.steps || []).length - 1;
+
+    if (!navigateToLastStep) {
+      saveGuideSubmissionToLocalStorage();
+    }
+
     router.push({
       name: 'guide',
       params: {
@@ -142,7 +147,13 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
               return {
                 uuid: itemUuid,
                 userInput: stepResponse[itemUuid] as string,
-                type: StepItemSubmissionType.Question
+                type: StepItemSubmissionType.UserInput
+              };
+            } else if (isUserDiscordConnect(stepItem)) {
+              return {
+                uuid: itemUuid,
+                userDiscordInfo: stepResponse[itemUuid] as UserDiscordInfo,
+                type: StepItemSubmissionType.UserDiscordConnect
               };
             } else {
               return {

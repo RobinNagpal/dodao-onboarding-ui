@@ -1,4 +1,5 @@
 import { TempGuideSubmission } from '@/composables/guide/TempGuideSubmission';
+import { UserDiscordInfo } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 
 const GUIDE_SUBMISSION = 'GUIDESUBMISSION';
 const ANONYMOUS = 'ANONYMOUS';
@@ -9,7 +10,8 @@ const setAccount = (accountId: string) => {
 };
 
 const saveGuideSubmission = (guideUuid: string, data: TempGuideSubmission) => {
-  localStorage.setItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`, JSON.stringify(data));
+  const key = `${GUIDE_SUBMISSION}_${account}_${guideUuid}`;
+  localStorage.setItem(key, JSON.stringify(data));
 };
 
 const readGuideSubmissionsCache = (guideUuid: string): TempGuideSubmission => {
@@ -27,7 +29,8 @@ const readAllInProgressGuides = () => {
 };
 
 const deleteGuideSubmission = (guideUuid: string) => {
-  localStorage.removeItem(`${GUIDE_SUBMISSION}_${account}_${guideUuid}`);
+  const key = `${GUIDE_SUBMISSION}_${account}_${guideUuid}`;
+  localStorage.removeItem(key);
 };
 
 const setUserDiscordInSubmission = (
@@ -35,7 +38,7 @@ const setUserDiscordInSubmission = (
   activeStepOrder: number,
   stepUuid: string,
   userDiscordUuid: string,
-  discrodInfo: string
+  discordInfo: UserDiscordInfo
 ) => {
   let guideSubmissionRef: TempGuideSubmission = readGuideSubmissionsCache(guideUuid);
   guideSubmissionRef = {
@@ -44,7 +47,7 @@ const setUserDiscordInSubmission = (
       ...guideSubmissionRef.responses,
       [stepUuid]: {
         ...guideSubmissionRef[stepUuid],
-        [userDiscordUuid]: discrodInfo
+        [userDiscordUuid]: discordInfo
       }
     }
   };

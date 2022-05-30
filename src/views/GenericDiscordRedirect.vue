@@ -3,6 +3,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { getUserInfo } from '@/helpers/discord/discordApi';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 import { setPageTitle } from '@/helpers/utils';
+import { UserDiscordInfo } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -39,11 +40,18 @@ onMounted(async () => {
     const stepUuid: string = params.get('stepUuid')!;
     const itemUuid: string = params.get('itemUuid')!;
 
-    const discrodInfo = {
+    const discordUserInfo: UserDiscordInfo = {
       ...discordUser,
       accessToken
     };
-    guideSubmissionCache.setUserDiscordInSubmission(guideUuid, parseInt(stepOrder), stepUuid, itemUuid, discrodInfo);
+
+    guideSubmissionCache.setUserDiscordInSubmission(
+      guideUuid,
+      parseInt(stepOrder),
+      stepUuid,
+      itemUuid,
+      discordUserInfo
+    );
 
     const guideType = params.get('guideType');
     await router.push({
