@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import GuideViewStepperItem from '@/components/Guide/View/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
-import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
+import { GuideResponses } from '@/composables/guide/TempGuideSubmission';
 import { GuideModel, GuideStep } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
-  activeStepId: String,
-
+  activeStepOrder: Number,
   goToNextStep: Function,
   goToPreviousStep: Function,
   guide: {
@@ -17,7 +16,7 @@ const props = defineProps({
     required: true
   },
   guideResponse: {
-    type: Object as PropType<Record<string, UserGuideQuestionSubmission>>,
+    type: Object as PropType<GuideResponses>,
     required: true
   },
   guideSubmission: {
@@ -29,6 +28,10 @@ const props = defineProps({
     required: true
   },
   setUserInput: {
+    type: Function,
+    required: true
+  },
+  setUserDiscord: {
     type: Function,
     required: true
   },
@@ -46,9 +49,9 @@ const props = defineProps({
   }
 });
 
-const activeStep = computed<GuideStep>(
-  () => props.guide.steps.find(step => step.uuid === props.activeStepId) || props.guide.steps[0]!
-);
+const activeStep = computed<GuideStep>(() => {
+  return props.guide.steps.find(step => step.order === props.activeStepOrder) || props.guide?.steps[0];
+});
 
 const isReachingLastStep = computed(() => props.guide.steps.length - 1 === activeStep.value.order);
 
@@ -90,10 +93,12 @@ const styleObject = computed(() => {
       :guideSubmission="guideSubmission"
       :guideSubmitting="guideSubmitting"
       :step="activeStep"
+      :activeStepOrder="activeStepOrder"
       :stepSubmission="guideResponse[activeStep.uuid] ?? {}"
       :submitGuide="submitGuide"
       @update:questionResponse="selectAnswer"
       @update:userInputResponse="setUserInput"
+      @update:userDiscordResponse="setUserDiscord"
     />
   </div>
 </template>

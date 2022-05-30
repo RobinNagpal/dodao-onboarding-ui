@@ -196,6 +196,7 @@
   },
   "guide": {
     "addInputOrQuestion": "Add Input or Question",
+    "discordPopUpDesc": "This button will be used by the members to connect their Discord",
     "castVote": "Cast your vote",
     "create": {
       "name": "Name",
@@ -259,6 +260,7 @@
       "name": "Step Name",
       "contents": "Contents"
     },
+    "addDiscord": "Discord Connect",
 
     "submissions": "Submissions",
     "thumbnail": "Thumbnail Image",
@@ -629,7 +631,7 @@
         "proposals": "{dao} Proposals",
         "guides": "{dao} Guides",
         "proposal": "{dao} proposal: {proposal}",
-        "guide": "{dao} guide: {guide}",
+        "guide": "Guide: {guide}",
         "bundle": "{dao} Courses",
         "settings": "{dao} Settings"
       },

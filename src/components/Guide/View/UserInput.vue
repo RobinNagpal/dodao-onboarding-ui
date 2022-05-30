@@ -21,8 +21,6 @@ defineProps({
     class="mt-4"
     @update:modelValue="setUserInput(userInput.uuid, $event)"
   >
-    <template v-slot:label
-      >{{ userInput.label }} {{ userInput.required ? '*' : '' }}</template
-    >
+    <template v-slot:label>{{ userInput.label }} {{ userInput.required ? '*' : '' }}</template>
   </UiInput>
 </template>

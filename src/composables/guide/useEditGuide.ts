@@ -270,6 +270,7 @@ export function useEditGuide(
       return;
     }
     guideCreating.value = true;
+    console.log('guideRef.value', guideRef.value);
     const result = await send(space, 'guide', guideRef.value);
     if (result?.id) {
       await getExplore();

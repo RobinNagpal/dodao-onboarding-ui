@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import GuideViewQuestion from '@/components/Guide/View/Question.vue';
+import GuideViewUserDiscord from '@/components/Guide/View/UserDiscord.vue';
 import GuideViewUserInput from '@/components/Guide/View/UserInput.vue';
 import UiButton from '@/components/Ui/Button.vue';
+import { UserGuideQuestionSubmission } from '@/composables/guide/TempGuideSubmission';
 import { useModal } from '@/composables/useModal';
-import { UserGuideQuestionSubmission } from '@/composables/guide/useViewGuide';
 import { useWeb3 } from '@/composables/useWeb3';
 import {
   GuideModel,
@@ -11,12 +12,15 @@ import {
   GuideStep,
   InputType,
   isQuestion,
+  isUserDiscordConnect,
   isUserInput,
+  UserDiscordConnectType,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissionModel';
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const renderer = new marked.Renderer();
 
@@ -48,17 +52,16 @@ const props = defineProps({
     required: true
   }
 });
-
+const route = useRoute();
+const guideType = computed(() => route.params.guideType);
 const renderIncorrectQuestions = ref<boolean>(false);
 
 const { web3Account } = useWeb3();
 const { modalAccountOpen } = useModal();
 
-const emit = defineEmits(['update:questionResponse', 'update:userInputResponse']);
+const emit = defineEmits(['update:questionResponse', 'update:userInputResponse', 'update:userDiscordResponse']);
 
-const stepItems = computed(() => {
-  return props.step.stepItems;
-});
+const stepItems = computed(() => props.step.stepItems);
 
 const wrongQuestions = computed(() => {
   if (props.guideSubmission) {
@@ -103,8 +106,14 @@ function isEveryQuestionAnswered(): boolean {
   return allQuestionsAnswered && allRequiredFieldsAnswered;
 }
 
+function isDiscordConnected(): boolean {
+  const hasDiscordConnect = props.step.stepItems.find(isUserDiscordConnect);
+  if (!hasDiscordConnect) return true;
+  return !!props.stepSubmission[hasDiscordConnect.uuid];
+}
+
 const showQuestionsCompletionWarning = computed<boolean>(() => {
-  return nextButtonClicked.value && !isEveryQuestionAnswered();
+  return nextButtonClicked.value && (!isEveryQuestionAnswered() || !isDiscordConnected());
 });
 
 const isNotFirstStep = computed(() => props.step.order !== 0);
@@ -118,7 +127,7 @@ const isGuideCompletedStep = computed(() => props.guide.steps.length - 1 === pro
 async function navigateToNextStep() {
   nextButtonClicked.value = true;
 
-  if (isEveryQuestionAnswered()) {
+  if (isEveryQuestionAnswered() && isDiscordConnected()) {
     nextButtonClicked.value = false;
     if (isLastStep.value) {
       if (!web3Account.value) {
@@ -178,6 +187,16 @@ async function navigateToNextStep() {
             :setUserInput="setUserInput"
             :userInputResponse="stepSubmission[stepItem.uuid] ?? ''"
           />
+          <GuideViewUserDiscord
+            v-else-if="stepItem.type === UserDiscordConnectType"
+            :spaceId="route.params.key"
+            :guideUuid="guide.uuid"
+            :stepOrder="step.order"
+            :stepUuid="step.uuid"
+            :userDiscord="stepItem"
+            :guideType="guideType"
+            :discordResponse="stepSubmission[stepItem.uuid]"
+          />
           <GuideViewQuestion
             v-else
             :question="stepItem"
@@ -189,9 +208,13 @@ async function navigateToNextStep() {
       </template>
     </div>
     <div v-if="showQuestionsCompletionWarning">
-      <div class="float-left mb-2 !text-red">
+      <div v-if="!isEveryQuestionAnswered()" class="float-left mb-2 !text-red">
         <i class="iconfont iconwarning"></i>
         <span class="ml-1">Answer all questions to proceed</span>
+      </div>
+      <div v-if="!isDiscordConnected()" class="float-left mb-2 !text-red">
+        <i class="iconfont iconwarning"></i>
+        <span class="ml-1">Connect Discord to proceed</span>
       </div>
     </div>
     <div class="mt-2">
@@ -205,14 +228,14 @@ async function navigateToNextStep() {
         <span class="sm:block" v-text="$t('guide.previous')" />
       </UiButton>
       <UiButton
-        :aria-label="$t('next')"
+        v-if="!isGuideCompletedStep"
         class="float-right w-[150px]"
-        :primary="true"
         variant="contained"
-        @click="navigateToNextStep"
+        :aria-label="$t('next')"
+        :primary="true"
         :loading="guideSubmitting"
         :disabled="guideSubmitting"
-        v-if="!isGuideCompletedStep"
+        @click="navigateToNextStep"
       >
         <span class="sm:block" v-text="$t(isLastStep ? 'guide.complete' : 'guide.next')" />
         <span class="ml-2 font-bold">&#8594;</span>

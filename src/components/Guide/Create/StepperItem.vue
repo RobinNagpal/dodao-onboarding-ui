@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import GuideCreateQuestion from '@/components/Guide/Create/Question.vue';
 import GuideCreateUserInput from '@/components/Guide/Create/UserInput.vue';
+import GuideCreateDiscord from '@/components/Guide/Create/UserDiscord.vue';
 import ModalGuideInputOrQuestion from '@/components/Modal/Guide/InputOrQuestion.vue';
 import TextareaAutosize from '@/components/TextareaAutosize.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiButtonInput from '@/components/Ui/ButtonInput.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { StepError } from '@/types/error';
+import { GuideInput, GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
-  GuideInput,
-  GuideStepInput
-} from '@dodao/onboarding-schemas/inputs/GuideInput';
-import {
+  UserDiscordConnectType,
   GuideQuestion,
   GuideStepItem,
   InputType,
@@ -29,6 +28,8 @@ const props = defineProps({
     required: true
   },
   stepErrors: { type: Object as PropType<StepError> },
+  guideHasDiscordEnabled: { type: Boolean, required: true },
+
   moveStepUp: Function,
   moveStepDown: Function,
   removeStep: Function
@@ -86,13 +87,12 @@ function updateChoiceContent(questionId, choiceKey, content) {
   emit('update:step', { ...props.step, stepItems });
 }
 
-const inputsAndQuestions = computed(() => {
+const stepItemsForStepper = computed(() => {
   return [
     ...props.step.stepItems.map((q: GuideStepItem) => ({
       ...q,
-      isQuestion:
-        q.type === QuestionType.MultipleChoice ||
-        q.type === QuestionType.SingleChoice
+      isQuestion: q.type === QuestionType.MultipleChoice || q.type === QuestionType.SingleChoice,
+      isDiscord: q.type === UserDiscordConnectType
     }))
   ];
 });
@@ -134,16 +134,12 @@ function removeChoice(questionId, choiceKey) {
 }
 
 function removeStepItem(itemUuid) {
-  const filteredQuestions = props.step.stepItems.filter(
-    stepItem => stepItem.uuid !== itemUuid
-  );
+  const filteredQuestions = props.step.stepItems.filter(stepItem => stepItem.uuid !== itemUuid);
 
-  const itemsWithIndex: GuideQuestion[] = filteredQuestions.map(
-    (question, index) => ({
-      ...question,
-      order: index
-    })
-  );
+  const itemsWithIndex: GuideQuestion[] = filteredQuestions.map((question, index) => ({
+    ...question,
+    order: index
+  }));
 
   emit('update:step', { ...props.step, stepItems: itemsWithIndex });
 }
@@ -168,9 +164,7 @@ function updateUserInputPrivate(itemUuid: string, isPrivate: boolean) {
     if (stepItem.uuid === itemUuid) {
       return {
         ...stepItem,
-        type: isPrivate
-          ? InputType.PrivateShortInput
-          : InputType.PublicShortInput
+        type: isPrivate ? InputType.PrivateShortInput : InputType.PublicShortInput
       };
     } else {
       return stepItem;
@@ -215,9 +209,7 @@ function updateAnswers(questionId, choiceKey, selected) {
 function setAnswer(questionId, choiceKey) {
   const stepItems = props.step.stepItems.map(question => {
     if (question.uuid === questionId) {
-      const answerKeys = isEqual(question.answerKeys, [choiceKey])
-        ? []
-        : [choiceKey];
+      const answerKeys = isEqual(question.answerKeys, [choiceKey]) ? [] : [choiceKey];
       return {
         ...question,
         answerKeys
@@ -263,6 +255,16 @@ function addInput(type: InputType) {
   };
   const inputs = [...(props.step.stepItems || []), input];
   emit('update:step', { ...props.step, stepItems: inputs });
+}
+
+function addDiscord() {
+  const discord = {
+    uuid: uuidv4(),
+    order: props.step.stepItems.length,
+    type: UserDiscordConnectType
+  };
+  const stepItems = [...(props.step.stepItems || []), discord];
+  emit('update:step', { ...props.step, stepItems });
 }
 </script>
 <template>
@@ -360,11 +362,7 @@ function addInput(type: InputType) {
         </svg>
       </UiSidebarButton>
     </div>
-    <UiButtonInput
-      :modelValue="step.name"
-      :error="inputError('name')"
-      @update:modelValue="updateStepName"
-    >
+    <UiButtonInput :modelValue="step.name" :error="inputError('name')" @update:modelValue="updateStepName">
       <template v-slot:label>{{ $t(`guide.step.name`) }}*</template>
     </UiButtonInput>
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
@@ -377,30 +375,28 @@ function addInput(type: InputType) {
         @update:modelValue="updateStepContent"
       />
     </UiButton>
-    <template
-      v-for="inputOrQuestion in inputsAndQuestions"
-      :key="inputOrQuestion.uuid"
-    >
+    <template v-for="stepItem in stepItemsForStepper" :key="stepItem.uuid">
       <GuideCreateQuestion
-        v-if="inputOrQuestion.isQuestion"
-        :addChoice="addChoice"
-        :question="inputOrQuestion"
-        :removeChoice="removeChoice"
-        :removeQuestion="removeStepItem"
-        :setAnswer="setAnswer"
-        :updateChoiceContent="updateChoiceContent"
-        :updateQuestionDescription="updateQuestionDescription"
-        :updateAnswers="updateAnswers"
-        :questionErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
+        v-if="stepItem.isQuestion"
+        :add-choice="addChoice"
+        :question="stepItem"
+        :remove-choice="removeChoice"
+        :remove-question="removeStepItem"
+        :set-answer="setAnswer"
+        :update-choice-content="updateChoiceContent"
+        :update-question-description="updateQuestionDescription"
+        :update-answers="updateAnswers"
+        :question-errors="stepErrors?.stepItems?.[stepItem.order]"
       />
+      <GuideCreateDiscord :user-discord="stepItem" :remove-discord="removeStepItem" v-else-if="stepItem.isDiscord" />
       <GuideCreateUserInput
         v-else
-        :removeUserInput="removeStepItem"
-        :userInput="inputOrQuestion"
-        :userInputErrors="stepErrors?.stepItems?.[inputOrQuestion.order]"
-        :updateUserInputLabel="updateUserInputLabel"
-        :updateUserInputPrivate="updateUserInputPrivate"
-        :updateUserInputRequired="updateUserInputRequired"
+        :remove-user-input="removeStepItem"
+        :user-input="stepItem"
+        :user-input-errors="stepErrors?.stepItems?.[stepItem.order]"
+        :update-user-input-label="updateUserInputLabel"
+        :update-user-input-private="updateUserInputPrivate"
+        :update-user-input-required="updateUserInputRequired"
       />
     </template>
   </div>
@@ -408,9 +404,11 @@ function addInput(type: InputType) {
     <ModalGuideInputOrQuestion
       :open="modalGuideInputOrQuestionOpen"
       :categories="guide.categories"
+      :guide-has-discord-enabled="guideHasDiscordEnabled"
       @close="modalGuideInputOrQuestionOpen = false"
       @addQuestion="addQuestion"
       @addInput="addInput"
+      @addDiscord="addDiscord"
     />
   </teleport>
 </template>

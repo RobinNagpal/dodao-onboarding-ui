@@ -4,7 +4,7 @@ import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
 import { shorten } from '@/helpers/utils';
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
   guideBundle: { type: Object as PropType<GuideBundleQuery_guideBundle> },
   guide: Object,
   profiles: Object

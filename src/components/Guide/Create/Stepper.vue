@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import GuideCreateStepperItem from '@/components/Guide/Create/StepperItem.vue';
 import GuideStepperIcon from '@/components/Guide/StepperIcon.vue';
-import {
-  EditGuideType,
-  UpdateGuideFunctions
-} from '@/composables/guide/useEditGuide';
+import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
 import { GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
+import { UserDiscordConnectType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { computed, PropType, unref } from 'vue';
 
 const props = defineProps({
@@ -36,9 +34,7 @@ const props = defineProps({
 
 const errors = unref(props.guideErrors);
 
-const activeStep = computed(() =>
-  props.steps.find(step => step.uuid === props.activeStepId)
-);
+const activeStep = computed(() => props.steps.find(step => step.uuid === props.activeStepId));
 
 const styleObject = computed(() => {
   return {
@@ -46,15 +42,22 @@ const styleObject = computed(() => {
     '--success-color': props.successColor
   };
 });
+
+const guideHasDiscordEnabled = computed<boolean>(() => {
+  for (let i = 0; i < props.steps.length; i++) {
+    for (let j = 0; j < props.steps[i].stepItems.length; j++) {
+      if (props.steps[i].stepItems[j].type === UserDiscordConnectType) {
+        return true;
+      }
+    }
+  }
+  return false;
+});
 </script>
 <template>
   <div class="w-full flex flex-row">
     <div class="p-4 bg-skin-header-bg rounded-3xl">
-      <ol
-        class="ob-nav-stepper ob-nav-stepper-lg"
-        role="menu"
-        :style="styleObject"
-      >
+      <ol class="ob-nav-stepper ob-nav-stepper-lg" role="menu" :style="styleObject">
         <li
           @click="updateGuideFunctions.setActiveStep(step.uuid)"
           class="ob-nav-step"
@@ -67,20 +70,11 @@ const styleObject = computed(() => {
             success: !errors.steps?.[step.order] && !guide.isPristine
           }"
         >
-          <div
-            v-if="!errors.steps?.[step.order] & !guide.isPristine"
-            class="checkmark"
-          ></div>
-          <GuideStepperIcon
-            v-else-if="!errors.steps?.[step.order]"
-            class="stepper-icon"
-            :step="step"
-          />
+          <div v-if="!errors.steps?.[step.order] & !guide.isPristine" class="checkmark"></div>
+          <GuideStepperIcon v-else-if="!errors.steps?.[step.order]" class="stepper-icon" :step="step" />
           <div class="step-link ml-2 -mt-1">
             <span class="text-xs font-medium">Step {{ step.order + 1 }}</span>
-            <a class="step-link text-sm" role="menuitem">{{
-              step.name || '&nbsp;'
-            }}</a>
+            <a class="step-link text-sm" role="menuitem">{{ step.name || '&nbsp;' }}</a>
           </div>
         </li>
 
@@ -90,12 +84,13 @@ const styleObject = computed(() => {
           data-step-label="+"
           @click="updateGuideFunctions.addStep"
         >
-          <a href="#nav-stepper-4" class="step-link" role="menuitem">Add </a>
+          <a class="step-link" role="menuitem">Add </a>
         </li>
       </ol>
     </div>
     <GuideCreateStepperItem
       :guide="guide"
+      :guide-has-discord-enabled="guideHasDiscordEnabled"
       :step="activeStep"
       :stepErrors="errors.steps?.[activeStep.order]"
       @update:step="updateGuideFunctions.updateStep"

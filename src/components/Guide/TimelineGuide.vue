@@ -2,9 +2,10 @@
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import { shorten } from '@/helpers/utils';
 
-const props = defineProps({
+defineProps({
   guide: Object,
-  profiles: Object
+  profiles: Object,
+  inProgress: Boolean
 });
 </script>
 
@@ -21,6 +22,7 @@ const props = defineProps({
       }"
       class="card blog-card w-inline-block h-full w-full"
     >
+      <div v-if="inProgress" class="ribbon progress-label">In progress</div>
       <div class="image-wrapper blog-card-thumbnail w-full">
         <UiThumbnail
           :src="guide.thumbnail"
@@ -43,11 +45,7 @@ const props = defineProps({
         />
       </div>
       <div class="flex flex-wrap justify-end absolute top-2 right-2">
-        <div
-          class="badge post-category mb-1"
-          v-for="category in guide.categories || []"
-          :key="category"
-        >
+        <div class="badge post-category mb-1" v-for="category in guide.categories || []" :key="category">
           {{ $t('guide.category.' + category) }}
         </div>
       </div>
@@ -56,6 +54,41 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
+.ribbon {
+  margin: 28px 18px 18px 0;
+  color: white;
+  padding: 16px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0%) translateY(135%) rotate(-45deg);
+  transform-origin: top left;
+  background-color: var(--primary-color);
+  z-index: 2;
+  @apply bg-primary;
+
+  &.progress-label {
+    line-height: 0;
+    font-weight: 650;
+  }
+}
+.ribbon:before,
+.ribbon:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  margin: 0 -1px; /* tweak */
+  width: 100%;
+  height: 100%;
+  @apply bg-primary;
+}
+.ribbon:before {
+  right: 100%;
+}
+
+.ribbon:after {
+  left: 100%;
+}
 .timeline-guide {
   &:hover {
     border-color: var(--link-color) !important;

@@ -33,7 +33,7 @@ Introduction Comments
         stepItems: [
           {
             label: 'Full Name',
-            order: 1,
+            order: 0,
             type: InputType.PublicShortInput,
             uuid: uuidv4()
           }

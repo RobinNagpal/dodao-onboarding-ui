@@ -19,7 +19,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { computed, inject, onMounted, PropType, ref, watch } from 'vue';
+import { computed, inject, onMounted, onRenderTracked, PropType, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -27,6 +27,7 @@ const props = defineProps({
   spaceId: String,
   space: { type: Object as PropType<SpaceModel>, required: true },
   spaceLoading: Boolean,
+  stepOrder: { type: String, default: '0' },
   from: { type: String }
 });
 
@@ -50,7 +51,6 @@ const modalGuideExportOpen = ref(false);
 const backButtonText = props.from ? JSON.parse(props.from)?.displayName || props.space.name : props.space.name;
 
 const {
-  activeStepId,
   goToNextStep,
   goToPreviousStep,
   guideRef: guide,
@@ -61,8 +61,9 @@ const {
   initialize,
   selectAnswer,
   submitGuide,
-  setUserInput
-} = useViewGuide(uuid as string, notify, props.space);
+  setUserInput,
+  setUserDiscord
+} = useViewGuide(uuid as string, parseInt(props.stepOrder) || 0, notify, props.space);
 
 const loaded = computed(() => !props.spaceLoading && guideLoaded.value);
 
@@ -152,7 +153,7 @@ onMounted(async () => {
   await initialize();
   setPageTitle('page.title.dao.guide', {
     guide: guide.value?.name,
-    space: props.space?.name
+    dao: props.space?.name
   });
 });
 
@@ -166,6 +167,8 @@ function onClickBackButton() {
     router.push({ name: 'guides', params: { key: props.space.id } });
   }
 }
+
+const activeStepOrder = computed(() => parseInt(props.stepOrder));
 </script>
 
 <template>
@@ -183,10 +186,10 @@ function onClickBackButton() {
                 top="2.5rem"
                 right="1.5rem"
                 class="float-right mr-2"
-                @select="selectFromShareDropdown"
-                @clickedNoDropdown="startShare(space, guide)"
                 :items="sharingItems"
                 :hideDropdown="sharingIsSupported"
+                @select="selectFromShareDropdown"
+                @clickedNoDropdown="startShare(space, guide)"
               >
                 <div class="pr-1 select-none">
                   <Icon name="upload" size="25" class="!align-text-bottom" />
@@ -194,12 +197,12 @@ function onClickBackButton() {
                 </div>
               </UiDropdown>
               <UiDropdown
+                v-if="isAdmin"
                 top="2.5rem"
                 right="1.3rem"
                 class="float-right mr-2"
-                @select="selectFromThreedotDropdown"
-                v-if="isAdmin"
                 :items="threeDotItems"
+                @select="selectFromThreedotDropdown"
               >
                 <div class="pr-3">
                   <UiLoading v-if="clientLoading" class="w-full" />
@@ -252,7 +255,7 @@ function onClickBackButton() {
               <Block :title="$t('guide.guideSteps')" :class="`mt-4`" slim v-if="guideLoaded && guide">
                 <div class="mt-4">
                   <GuideViewStepper
-                    :activeStepId="activeStepId"
+                    :activeStepOrder="activeStepOrder"
                     :goToNextStep="goToNextStep"
                     :goToPreviousStep="goToPreviousStep"
                     :guide="guide"
@@ -261,6 +264,7 @@ function onClickBackButton() {
                     :guideSubmitting="guideSubmittingRef"
                     :selectAnswer="selectAnswer"
                     :setUserInput="setUserInput"
+                    :setUserDiscord="setUserDiscord"
                     :submitGuide="submitGuide"
                   />
                 </div>
@@ -291,6 +295,11 @@ function onClickBackButton() {
 </template>
 
 <style scoped lang="scss">
+.in-progress {
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
 .info-bar {
   box-shadow: var(--box-shadow);
   border-color: var(--border-color);

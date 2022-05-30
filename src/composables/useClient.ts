@@ -14,7 +14,9 @@ import {
   GuideQuestion,
   GuideStep,
   isQuestion,
+  isUserDiscordConnect,
   isUserInput,
+  UserDiscordConnect,
   UserInput
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
@@ -117,6 +119,13 @@ export function useClient() {
                   order: userInput.order,
                   answerKeys: [],
                   choices: []
+                };
+              } else if (isUserDiscordConnect(item)) {
+                const userInput = item as UserDiscordConnect;
+                return {
+                  uuid: userInput.uuid,
+                  type: userInput.type,
+                  order: userInput.order
                 };
               }
             })

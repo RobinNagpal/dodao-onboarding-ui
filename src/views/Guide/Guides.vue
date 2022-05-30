@@ -17,6 +17,8 @@ import { useDomain } from '@/composables/useDomain';
 import { useRoute } from 'vue-router';
 import { GuidePublishStatus, GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { useSpace } from '@/composables/useSpace';
+import { useWeb3 } from '@/composables/useWeb3';
+import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 
 const props = defineProps({
   space: Object,
@@ -29,6 +31,7 @@ const { store } = useStore();
 const loading = ref(false);
 const { domain } = useDomain();
 const route = useRoute();
+const { web3 } = useWeb3();
 const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const guideType = route.params.guideType || GuideType.Onboarding;
@@ -36,6 +39,7 @@ const guideType = route.params.guideType || GuideType.Onboarding;
 const spaceMembers = computed(() => (props.space.members.length < 1 ? ['none'] : props.space.members));
 
 const { loadBy, loadingMore, stopLoadingMore } = useInfiniteLoader();
+const inprogressGuideMap = ref({});
 
 const { apolloQuery } = useApolloQuery();
 
@@ -82,6 +86,10 @@ watch(isAdmin, () => {
   loadGuides();
 });
 
+onMounted(() => {
+  inprogressGuideMap.value = guideSubmissionCache.readAllInProgressGuides();
+});
+
 const guidesCount = computed(() => {
   const count = store.space.guides.length;
   return count ? count : 0;
@@ -103,7 +111,13 @@ const loadingData = computed(() => {
         <GuideNoGuides v-else-if="!guidesCount && !loadingData" class="mt-2" :space="space" :guideType="guideType" />
         <div v-else>
           <div v-if="!loadingData" class="_4-column-grid features-grid">
-            <GuideTimelineGuide v-for="(guide, i) in store.space.guides" :key="i" :guide="guide" :profiles="profiles" />
+            <GuideTimelineGuide
+              :inProgress="inprogressGuideMap[guide.uuid]"
+              v-for="(guide, i) in store.space.guides"
+              :key="i"
+              :guide="guide"
+              :profiles="profiles"
+            />
           </div>
         </div>
         <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
