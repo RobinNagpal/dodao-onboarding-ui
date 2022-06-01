@@ -4,7 +4,7 @@ export const guideSubmissionTypes = {
     { name: 'type', type: 'string' }
   ],
   GuideStepResponse: [
-    { name: 'questionResponses', type: 'GuideQuestionResponse[]' },
+    { name: 'itemResponses', type: 'GuideQuestionResponse[]' },
     { name: 'uuid', type: 'string' }
   ],
   Guide: [
