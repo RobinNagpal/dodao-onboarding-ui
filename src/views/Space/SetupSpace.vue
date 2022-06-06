@@ -266,30 +266,10 @@ onMounted(async () => {
     <template #content>
       <div class="px-16">
         <div v-if="spaceId" class="px-4 md:px-0 mb-3">
-          <router-link
-            :to="{
-              name: 'spaceHome',
-              params: { guideType: 'onboarding', key: spaceId }
-            }"
-            class="text-color"
-          >
-            <Icon name="back" size="22" class="!align-middle" />
-            {{ $t('backToHome') }}
-          </router-link>
         </div>
         <div class="px-4 md:px-0 flex mb-4" v-if="spaceId">
           <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="flex-1" />
           <PageLoading v-else />
-          <router-link
-            :to="{
-              name: 'spaceDiscord',
-              params: { key: spaceId, spaceId: spaceId }
-            }"
-          >
-            <UiButton class="whitespace-nowrap" :primary="true">
-              Discord
-            </UiButton>
-          </router-link>
         </div>
         <template v-if="loaded">
           <div v-if="space || isOwner">

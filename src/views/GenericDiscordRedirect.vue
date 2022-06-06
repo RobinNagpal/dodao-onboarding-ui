@@ -30,7 +30,7 @@ onMounted(async () => {
   if (target === 'space') {
     const code = route.query?.code?.toString();
     await router.push({
-      name: 'spaceDiscord',
+      name: 'discordSpaceSetting',
       params: { key: spaceId, discordCode: code }
     });
   } else if (target === 'guideView') {

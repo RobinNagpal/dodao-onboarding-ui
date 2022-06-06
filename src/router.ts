@@ -15,6 +15,7 @@ import Setup from '@/views/Setup.vue';
 import Space from '@/views/Space.vue';
 import SpaceDiscord from '@/views/Space/Discord.vue';
 import SetupSpace from '@/views/Space/SetupSpace.vue';
+import SpaceSettingIndex from '@/views/Space/Settings/Index.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
@@ -46,6 +47,24 @@ const spaceHomeRoute: RouteRecordRaw =
         name: 'spaceHome',
         component: Guides
       };
+
+const spaceSettingRoutes: RouteRecordRaw[] = [
+  {
+    path: 'general',
+    name: 'generalSpaceSetting',
+    component: () => import('@/views/Space/SetupSpace.vue')
+  },
+  {
+    path: 'discord',
+    name: 'discordSpaceSetting',
+    component: () => import('@/views/Space/Discord.vue')
+  },
+  {
+    path: 'wallet',
+    name: 'walletSpaceSetting',
+    component: () => import('@/views/Space/Settings/Wallet.vue')
+  }
+];
 
 const spaceRoutes: RouteRecordRaw[] = [
   spaceHomeRoute,
@@ -130,9 +149,13 @@ const spaceRoutes: RouteRecordRaw[] = [
   },
   {
     path: 'dao-settings',
-    name: 'spaceEdit',
+    name: 'spaceSettingIndex',
     props: true,
-    component: SetupSpace
+    component: SpaceSettingIndex,
+    redirect: {
+      name: 'generalSpaceSetting'
+    },
+    children: spaceSettingRoutes
   }
 ];
 

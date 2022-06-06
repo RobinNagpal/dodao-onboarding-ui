@@ -34,7 +34,7 @@ function createNewBundle() {
 
 function editSpaceSettings() {
   router.push({
-    name: 'spaceEdit',
+    name: 'spaceSettingIndex',
     params: { spaceId: props.space.id, key: props.space.id }
   });
 }

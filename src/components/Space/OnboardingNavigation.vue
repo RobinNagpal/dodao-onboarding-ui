@@ -40,7 +40,7 @@ function allGuideBundles() {
 
 function editSpaceSettings() {
   router.push({
-    name: 'spaceEdit',
+    name: 'spaceSettingIndex',
     params: { spaceId: props.space.id, key: props.space.id }
   });
 }
@@ -64,7 +64,7 @@ function selectFromThreedotDropdown(e) {
   if (e === 'courseGuides') courseGuides();
   if (e === 'createNewGuide') createNewGuide();
   if (e === 'createNewBundle') createNewBundle();
-  if (e === 'spaceSettings') editSpaceSettings();
+  if (e === 'spaceSettingIndex') editSpaceSettings();
 }
 
 const { t } = useI18n();
@@ -94,7 +94,7 @@ const threeDotItems = computed(() => {
 
     items.push({
       text: t('settings.header'),
-      action: 'spaceSettings'
+      action: 'spaceSettingIndex'
     });
   }
   return items;
