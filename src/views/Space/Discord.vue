@@ -66,15 +66,6 @@ onMounted(async () => {
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
-      <router-link
-        :to="{
-          name: 'spaceEdit'
-        }"
-        class="text-color mb-4"
-      >
-        <Icon name="back" size="22" class="!align-middle" />
-        Basic Settings
-      </router-link>
       <h1 v-text="'Setup Discord'" class="flex-1 mt-3" />
       <div class="wrapper py-24 flex justify-center align-center flex-col items-center">
         <template v-if="isLoaded">
