@@ -17,7 +17,6 @@ import { useDomain } from '@/composables/useDomain';
 import { useRoute } from 'vue-router';
 import { GuidePublishStatus, GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { useSpace } from '@/composables/useSpace';
-import { useWeb3 } from '@/composables/useWeb3';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
 
 const props = defineProps({
@@ -33,7 +32,7 @@ const { domain } = useDomain();
 const route = useRoute();
 const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
-const guideType = route.params.guideType || GuideType.Onboarding;
+const guideType = computed(() => route.params.guideType || GuideType.Onboarding);
 
 const spaceMembers = computed(() => (props.space.members.length < 1 ? ['none'] : props.space.members));
 
