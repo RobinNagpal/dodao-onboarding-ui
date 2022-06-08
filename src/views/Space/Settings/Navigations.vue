@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import UiButton from '@/components/Ui/Button.vue';
-import { EditGuideType } from '@/composables/guide/useEditGuide';
-import { computed, onMounted, PropType } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useWeb3 } from '@/composables/useWeb3';
+import { useRoute } from 'vue-router';
 import SpaceSettingIcon from './SpaceSettingIcon.vue';
 
 const route = useRoute();
-const router = useRouter();
-;
+const { isEthBlockchain, isOneBlockchain, isSolBlockchain } = useWeb3();
 
 const navigations = [
   {
@@ -26,6 +23,14 @@ const navigations = [
     icon: 'wallet'
   }
 ];
+
+if (isEthBlockchain || isOneBlockchain || isSolBlockchain) {
+  navigations.push({
+    name: 'projectGalaxy',
+    text: 'Project Galaxy',
+    icon: 'projectGalaxy'
+  });
+}
 </script>
 <template>
   <div class="p-4 min-h-auto md:min-h-full bg-skin-header-bg rounded-3xl">
@@ -60,7 +65,7 @@ const navigations = [
   }
 
   &.active {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     @apply font-bold text-primary;
     .icon {
       svg {

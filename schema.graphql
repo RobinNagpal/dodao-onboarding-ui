@@ -75,6 +75,8 @@ type Mutation {
     code: String!
     redirectUri: String!
   ): Space!
+
+  upsertProjectGalaxyAccessToken(spaceId: String!, accessToken: String!): Space!
 }
 
 input SpaceWhere {
