@@ -57,6 +57,7 @@ const spaceSettingRoutes: RouteRecordRaw[] = [
   {
     path: 'discord',
     name: 'discordSpaceSetting',
+    props: true,
     component: () => import('@/views/Space/Discord.vue')
   },
   {

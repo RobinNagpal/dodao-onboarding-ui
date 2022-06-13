@@ -1,0 +1,18 @@
+mutation AddSpaceWallet(
+  $spaceId: String!
+  $name: String!
+  $address: String!
+  $chainId: String!
+) {
+  payload: addSpaceWallet(
+    spaceId: $spaceId
+    name: $name
+    address: $address
+    chainId: $chainId
+  ) {
+    id
+    name
+    address,
+    chainId
+  }
+}

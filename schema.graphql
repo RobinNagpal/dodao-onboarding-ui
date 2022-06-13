@@ -25,6 +25,8 @@ type Query {
     orderDirection: OrderDirection
   ): [Guide!]
 
+  spaceWallets(spaceId: String): [SpaceWallets]
+
   guideBundle(uuid: String): GuideBundle!
 
   guideBundles(
@@ -75,6 +77,13 @@ type Mutation {
     code: String!
     redirectUri: String!
   ): Space!
+  
+  addSpaceWallet(
+    spaceId: String!
+    name: String!
+    address: String!
+    chainId: String!
+  ): SpaceWallets!
 }
 
 input SpaceWhere {
@@ -408,4 +417,17 @@ type Subscription {
   address: String!
   space: Space!
   created: Int!
+}
+
+type SpaceWallets {
+  id: String
+  name: String
+  address: String
+  chainId: String
+}
+
+type Chain {
+  id: String!
+  name: String!
+  type: String!
 }

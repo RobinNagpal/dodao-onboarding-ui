@@ -1,0 +1,8 @@
+query spaceWalletQuery($spaceId: String!) {
+  spaceWallets(spaceId: $spaceId) {
+    id
+    name
+    address
+    chainId
+  }
+}
