@@ -18,7 +18,7 @@ const { isAdmin } = useSpace(props.space);
 const route = useRoute();
 const router = useRouter();
 
-const guideType = computed(() => route.params.guideType);
+const guideType = computed(() => route.params.guideType || GuideType.Onboarding);
 
 function createNewBundle() {
   router.push({

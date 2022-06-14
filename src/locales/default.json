@@ -270,7 +270,6 @@
     "hideQuestions": "Hide Questions",
     "socialShareImage": "Twitter Share Image"
   },
-
   "guides": {
     "header": "Guides",
     "new": "New guide",
@@ -379,6 +378,7 @@
   },
   "settings": {
     "about": "About",
+    "accessToken": "Access Token",
     "admins": "Admins",
     "avatar": "Avatar",
     "customDomain": "Custom domain",
@@ -389,6 +389,7 @@
     "name": "Name",
     "network": "Network",
     "profile": "Profile",
+    "projectGalaxy": "Project Galaxy",
     "seeENS": "See on ENS",
     "skin": "Skin",
     "setENS": "Set record on ENS",

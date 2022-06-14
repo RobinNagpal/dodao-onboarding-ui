@@ -77,7 +77,9 @@ type Mutation {
     code: String!
     redirectUri: String!
   ): Space!
-  
+
+  upsertProjectGalaxyAccessToken(spaceId: String!, accessToken: String!): Space!
+
   addSpaceWallet(
     spaceId: String!
     name: String!
@@ -216,7 +218,6 @@ type Space {
   creator: String!
   domain: String
   discordInvite: String
-  discordGuildId: String
   filters: SpaceFilters
   github: String
   guidesPageFooterContent: String
@@ -231,9 +232,10 @@ type Space {
   private: Boolean
   publicForumWebsite: String
   referenceDocsWebsite: String
-  symbol: String
   skin: String!
+  spaceIntegrations: SpaceIntegrations
   strategies: [Strategy]
+  symbol: String
   telegramInvite: String
   terms: String
   twitter: String
@@ -242,6 +244,11 @@ type Space {
   website: String
   email: String
   network: String
+}
+
+type SpaceIntegrations {
+  discordGuildId: String
+  projectGalaxyTokenLastFour: String
 }
 
 type SpaceFilters {

@@ -1,8 +1,4 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache
-} from '@apollo/client/core';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 
 // HTTP connection to the API
@@ -13,7 +9,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token') || localStorage.getItem('dodao_token');
   // return the headers to the context so httpLink can read them
   return {
     headers: {

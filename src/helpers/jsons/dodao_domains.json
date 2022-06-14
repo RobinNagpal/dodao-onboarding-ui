@@ -3,6 +3,10 @@
     "spaceId": "aave-eth-1",
     "siteType": "onboarding"
   },
+  "aragon.dodao.io": {
+    "spaceId": "aragon-eth-1",
+    "siteType": "onboarding"
+  },
   "arbitrum.dodao.io": {
     "spaceId": "arbitrum-eth-1",
     "siteType": "onboarding"
@@ -46,6 +50,10 @@
   "dxdao-localhost": {
     "spaceId": "dxdao-eth-1",
     "siteType": "courses"
+  },
+  "dydx-localhost": {
+    "spaceId": "dydx-eth-1",
+    "siteType": "onboarding"
   },
   "juicebox.dodao.io": {
     "spaceId": "juicebox-eth-1",

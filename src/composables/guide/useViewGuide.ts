@@ -167,37 +167,38 @@ export function useViewGuide(uuid: string, stepOrder: number, notify: any, space
       })
     };
     const submissionResponse = await send(space, 'guideResponse', response);
+
     if (submissionResponse?.id) {
       notify(['green', t('notify.guideResponseSubmitted')]);
-    }
 
-    guideSubmission.value = submissionResponse?.result;
-    const result = guideSubmission.value?.result;
-    if (result) {
-      console.log('result', result);
-      guideSubmissionCache.deleteGuideSubmission(uuid);
-      const lastStepContent = `
+      guideSubmission.value = submissionResponse?.result;
+      const result = guideSubmission.value?.result;
+      if (result) {
+        console.log('result', result);
+        guideSubmissionCache.deleteGuideSubmission(uuid);
+        const lastStepContent = `
       The guide has been completed successfully!
       
       You got ${result.correctQuestions.length} correct out of ${result.allQuestions.length} questions
       `;
 
-      guideRef.value = {
-        ...guideRef.value!,
-        steps: [
-          ...guideRef.value?.steps?.slice(0, -1)!,
-          {
-            __typename: 'GuideStep',
-            content: lastStepContent,
-            name: 'Completed',
-            order: guideRef.value!.steps.length - 1,
-            uuid: 'UUID',
-            stepItems: [],
-            id: 'some_id',
-            created: new Date().getTime()
-          }
-        ]
-      };
+        guideRef.value = {
+          ...guideRef.value!,
+          steps: [
+            ...guideRef.value?.steps?.slice(0, -1)!,
+            {
+              __typename: 'GuideStep',
+              content: lastStepContent,
+              name: 'Completed',
+              order: guideRef.value!.steps.length - 1,
+              uuid: 'UUID',
+              stepItems: [],
+              id: 'some_id',
+              created: new Date().getTime()
+            }
+          ]
+        };
+      }
     }
 
     guideSubmittingRef.value = false;
