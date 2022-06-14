@@ -3,21 +3,24 @@ import LayoutSingle from '@/components/Layout/Single.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
+import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useNotifications } from '@/composables/useNotifications';
 import {
+  ExtendedSpace_space,
   UpsertProjectGalaxyAccessToken_payload,
   UpsertProjectGalaxyAccessTokenVariables
 } from '@/graphql/generated/graphqlDocs';
 import { UpsertProjectGalaxyAccessToken } from '@/graphql/space/projectGalaxy.mutation.graphql';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceForm } from '@/views/Space/SetupSpace.vue';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
 import { onMounted, PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+const { loadExtendedSpace } = useExtendedSpaces();
+
 const props = defineProps({
-  space: { type: Object as PropType<SpaceModel>, required: true },
+  space: { type: Object as PropType<ExtendedSpace_space>, required: true },
   spaceId: String,
   spaceLoading: Boolean,
   discordCode: String
@@ -28,19 +31,32 @@ const { t } = useI18n();
 const savingAccessToken = ref(false);
 const form = ref<{ projectGalaxyToken?: string }>({});
 
+const projectGalaxyToken = ref(
+  form.value.projectGalaxyToken ||
+    props.space.spaceIntegrations?.projectGalaxyTokenLastFour?.replace(/^/, '************')
+);
+
 const { mutate: upsertProjectGalaxyAccessToken } = useMutation<
   UpsertProjectGalaxyAccessToken_payload,
   UpsertProjectGalaxyAccessTokenVariables
 >(UpsertProjectGalaxyAccessToken);
 
 async function clickSubmit() {
-  if (form.value.projectGalaxyToken) {
+  if (projectGalaxyToken.value) {
     savingAccessToken.value = true;
     try {
       const payload = await upsertProjectGalaxyAccessToken({
         spaceId: props.space.id,
-        accessToken: form.value.projectGalaxyToken
+        accessToken: projectGalaxyToken.value
       });
+
+      const spaceModel = await loadExtendedSpace(props.space.id);
+      if (spaceModel.spaceIntegrations?.discordGuildId) {
+        projectGalaxyToken.value = spaceModel.spaceIntegrations.projectGalaxyTokenLastFour?.replace(
+          /^/,
+          '*'.repeat(projectGalaxyToken.value.length - 4)
+        );
+      }
 
       if (payload?.data?.id) {
         notify(['green', t('notify.saved')]);
@@ -65,11 +81,11 @@ onMounted(async () => {
       <h1 v-text="$t('settings.projectGalaxy')" class="flex-1 mt-3" />
       <div class="wrapper py-24 flex justify-center align-center flex-col items-center">
         <template v-if="!spaceLoading">
-          <UiInput v-model="form.projectGalaxyToken" maxlength="128">
+          <UiInput v-model="projectGalaxyToken" maxlength="128">
             <template v-slot:label>{{ $t(`settings.accessToken`) }}*</template>
           </UiInput>
           <UiButton
-            :disabled="!form.projectGalaxyToken || savingAccessToken"
+            :disabled="!projectGalaxyToken || savingAccessToken"
             @click="clickSubmit"
             :loading="savingAccessToken"
             class="block w-full"

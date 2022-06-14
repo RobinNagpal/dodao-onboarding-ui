@@ -52,22 +52,26 @@ const spaceSettingRoutes: RouteRecordRaw[] = [
   {
     path: 'general',
     name: 'generalSpaceSetting',
-    component: () => import('@/views/Space/SetupSpace.vue')
+    component: () => import('@/views/Space/SetupSpace.vue'),
+    props: true
   },
   {
     path: 'discord',
     name: 'discordSpaceSetting',
-    component: () => import('@/views/Space/Discord.vue')
+    component: () => import('@/views/Space/Discord.vue'),
+    props: true
   },
   {
     path: 'wallet',
     name: 'walletSpaceSetting',
-    component: () => import('@/views/Space/Settings/Wallet.vue')
+    component: () => import('@/views/Space/Settings/Wallet.vue'),
+    props: true
   },
   {
     path: 'project-galaxy',
     name: 'projectGalaxy',
-    component: () => import('@/views/Space/ProjectGalaxy.vue')
+    component: () => import('@/views/Space/ProjectGalaxy.vue'),
+    props: true
   }
 ];
 

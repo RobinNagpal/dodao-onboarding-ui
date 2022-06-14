@@ -13,7 +13,7 @@ const router = useRouter();
 onMounted(async () => {
   setPageTitle('page.title.home');
   const hash = window.location.hash.slice(1);
-  let state = '';
+  let state;
   let accessToken = '';
 
   if (hash) {
