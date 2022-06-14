@@ -1,4 +1,5 @@
 import { useApolloQuery } from '@/composables/useApolloQuery';
+import { ExtendedSpace_space } from '@/graphql/generated/graphqlDocs';
 import { ExtendedSpace } from '@/graphql/space/extendedSpace.graphql';
 import { SPACES_QUERY } from '@/helpers/queries';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
@@ -36,7 +37,7 @@ export function useExtendedSpaces() {
     }
   }
 
-  async function loadExtendedSpace(spaceId: string): Promise<SpaceModel> {
+  async function loadExtendedSpace(spaceId: string): Promise<ExtendedSpace_space> {
     loading.value = true;
     try {
       const response = await apolloQuery(
@@ -52,9 +53,7 @@ export function useExtendedSpaces() {
       console.log('loadExtendedSpace', response);
       const spaceInfo = { ...response, extendedSpace: true };
       if (extentedSpaces.value.some(space => space.id === spaceId)) {
-        extentedSpaces.value = extentedSpaces.value.map(space =>
-          space.id === spaceId ? spaceInfo : space
-        );
+        extentedSpaces.value = extentedSpaces.value.map(space => (space.id === spaceId ? spaceInfo : space));
       } else {
         extentedSpaces.value = [...extentedSpaces.value, spaceInfo];
       }

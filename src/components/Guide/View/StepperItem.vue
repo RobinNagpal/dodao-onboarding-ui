@@ -96,7 +96,7 @@ const nextButtonClicked = ref<boolean>(false);
 function isEveryQuestionAnswered(): boolean {
   const allQuestionsAnswered = props.step.stepItems
     .filter(isQuestion)
-    .every(question => props.stepSubmission[question.uuid]?.length > 0);
+    .every(question => ((props.stepSubmission[question.uuid] as string[]) || []).length > 0);
 
   const allRequiredFieldsAnswered = props.step.stepItems
     .filter(isUserInput)
@@ -148,7 +148,15 @@ async function navigateToNextStep() {
       <div v-html="stepContents" class="step-content markdown-body" />
       <div v-if="isPostSubmissionStep" v-html="postSubmissionContent" class="step-content markdown-body pt-6" />
 
-      <div v-if="isPostSubmissionStep && guide.showIncorrectOnCompletion" class="flex align-center justify-center mt-4">
+      <div
+        v-if="
+          isPostSubmissionStep &&
+          guide.showIncorrectOnCompletion &&
+          guideSubmission?.result?.allQuestions.length > 0 &&
+          guideSubmission?.result?.correctQuestions.length < guideSubmission?.result?.allQuestions.length
+        "
+        class="flex align-center justify-center mt-4"
+      >
         <UiButton
           :aria-label="$t('next')"
           class="w-[300px]"

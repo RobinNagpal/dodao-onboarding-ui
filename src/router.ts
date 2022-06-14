@@ -14,8 +14,8 @@ import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
 import Space from '@/views/Space.vue';
 import SpaceDiscord from '@/views/Space/Discord.vue';
-import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceSettingIndex from '@/views/Space/Settings/Index.vue';
+import SetupSpace from '@/views/Space/SetupSpace.vue';
 import SpaceAbout from '@/views/SpaceAbout.vue';
 import SpaceCreate from '@/views/SpaceCreate.vue';
 import SpaceProposal from '@/views/SpaceProposal.vue';
@@ -52,17 +52,26 @@ const spaceSettingRoutes: RouteRecordRaw[] = [
   {
     path: 'general',
     name: 'generalSpaceSetting',
-    component: () => import('@/views/Space/SetupSpace.vue')
+    component: () => import('@/views/Space/SetupSpace.vue'),
+    props: true
   },
   {
     path: 'discord',
     name: 'discordSpaceSetting',
-    component: () => import('@/views/Space/Discord.vue')
+    component: () => import('@/views/Space/Discord.vue'),
+    props: true
   },
   {
     path: 'wallet',
     name: 'walletSpaceSetting',
-    component: () => import('@/views/Space/Settings/Wallet.vue')
+    component: () => import('@/views/Space/Settings/Wallet.vue'),
+    props: true
+  },
+  {
+    path: 'project-galaxy',
+    name: 'projectGalaxy',
+    component: () => import('@/views/Space/ProjectGalaxy.vue'),
+    props: true
   }
 ];
 

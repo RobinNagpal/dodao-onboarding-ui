@@ -1,56 +1,59 @@
 query ExtendedSpace($spaceId: String!) {
-    space(id: $spaceId) {
-        id
-        about
-        blogSite
-        creator
-        discordInvite
-        mission
-        name
-        network
-        symbol
-        network
-        terms
-        skin
-        avatar
-        twitter
-        github
-        guidesPageFooterContent
-        guidesPageHeaderContent
-        guidesBundlePageFooterContent
-        guidesBundlePageHeaderContent
-        private
-        publicForumWebsite
-        referenceDocsWebsite
-        domain
-        members
-        admins
-        categories
-        plugins
-        telegramInvite
-        voting {
-            delay
-            period
-            type
-            quorum
-            hideAbstain
-        }
-        strategies {
-            name
-            params
-        }
-        validation {
-            name
-            params
-        }
-        filters {
-            minScore
-            onlyMembers
-        }
-        discordGuildId
+  space(id: $spaceId) {
+    id
+    about
+    blogSite
+    creator
+    discordInvite
+    mission
+    name
+    network
+    symbol
+    network
+    terms
+    skin
+    avatar
+    twitter
+    github
+    guidesPageFooterContent
+    guidesPageHeaderContent
+    guidesBundlePageFooterContent
+    guidesBundlePageHeaderContent
+    private
+    publicForumWebsite
+    referenceDocsWebsite
+    domain
+    members
+    admins
+    categories
+    plugins
+    telegramInvite
+    voting {
+      delay
+      period
+      type
+      quorum
+      hideAbstain
     }
+    strategies {
+      name
+      params
+    }
+    validation {
+      name
+      params
+    }
+    filters {
+      minScore
+      onlyMembers
+    }
+    spaceIntegrations {
+      discordGuildId
+      projectGalaxyTokenLastFour
+    }
+  }
 }
 
 query SpaceDiscordGuild($spaceId: String!) {
-    payload: spaceDiscordGuild(spaceId: $spaceId)
+  payload: spaceDiscordGuild(spaceId: $spaceId)
 }

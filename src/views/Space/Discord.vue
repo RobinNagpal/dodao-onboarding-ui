@@ -9,7 +9,6 @@ import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useMutation } from '@vue/apollo-composable';
 import { computed, onMounted, PropType, ref } from 'vue';
-import { useRoute } from 'vue-router';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const discordClientId = import.meta.env.VITE_DISCORD_CLIENT_ID?.toString() || '';
@@ -21,7 +20,6 @@ const props = defineProps({
   discordCode: String
 });
 
-const route = useRoute();
 const isLoaded = ref(false);
 
 const url = computed(() => {
@@ -55,7 +53,7 @@ onMounted(async () => {
   }
 
   const spaceModel = await loadExtendedSpace(props.space.id);
-  if (spaceModel.discordGuildId) {
+  if (spaceModel.spaceIntegrations?.discordGuildId) {
     selectedServerInfo.value = await getSelectedGuild(props.space.id);
   }
 
