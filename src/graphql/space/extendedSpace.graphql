@@ -49,6 +49,13 @@ query ExtendedSpace($spaceId: String!) {
     }
     spaceIntegrations {
       discordGuildId
+      gnosisSafeWallets {
+        id
+        address
+        chainId
+        name
+        order
+      }
       projectGalaxyTokenLastFour
     }
   }

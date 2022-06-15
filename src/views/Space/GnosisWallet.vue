@@ -1,26 +1,39 @@
 <script setup lang="ts">
+import LayoutSingle from '@/components/Layout/Single.vue';
+import ConfirmDialog from '@/components/Modal/ConfirmDialog.vue';
+import UiButton from '@/components/Ui/Button.vue';
+import UiDropdown from '@/components/Ui/Dropdown.vue';
+import UiInput from '@/components/Ui/Input.vue';
+import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
+import { useNotifications } from '@/composables/useNotifications';
+import {
+  ExtendedSpace_space,
+  GnosisSafeWalletInput,
+  UpsertGnosisSafeWallets_payload,
+  UpsertGnosisSafeWalletsVariables
+} from '@/graphql/generated/graphqlDocs';
+import { UpsertGnosisSafeWallets } from '@/graphql/gnosisWallets.mutation.graphql';
+import { useMutation } from '@vue/apollo-composable';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import 'ag-grid-community/dist/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { AgGridVue } from 'ag-grid-vue3';
-import LayoutSingle from '@/components/Layout/Single.vue';
-import { spaceWalletQuery as SpaceWalletsResult, spaceWalletQueryVariables } from '@/graphql/generated/graphqlDocs';
-import { AddSpaceWallet } from '@/graphql/spaceWallets.mutation.graphql';
-
-import { spaceWalletQuery } from '@/graphql/spaceWallets.graphql';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { useQuery, useMutation } from '@vue/apollo-composable';
+import { v4 as uuidv4 } from 'uuid';
 import { PropType, reactive, ref } from 'vue';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { useI18n } from 'vue-i18n';
 
-import { AddSpaceWallet_payload, AddSpaceWalletVariables } from '@/graphql/generated/graphqlDocs';
-import ConfirmDialog from '@/components/Modal/ConfirmDialog.vue';
+const { loadExtendedSpace } = useExtendedSpaces();
+const { notify } = useNotifications();
+const { t } = useI18n();
 
 const props = defineProps({
-  space: { type: Object as PropType<SpaceModel>, required: true },
+  space: { type: Object as PropType<ExtendedSpace_space>, required: true },
   spaceId: String,
   spaceLoading: Boolean,
   discordCode: String
 });
+
+const savingGnosisWallets = ref(false);
 
 const networkArr = [
   {
@@ -59,12 +72,6 @@ const rowData = [];
 
 const confirmRef = ref();
 const gridApi = ref<GridApi>();
-const { result, loading, error, refetch, onResult, onError } = useQuery<SpaceWalletsResult, spaceWalletQueryVariables>(
-  spaceWalletQuery,
-  {
-    spaceId: props.spaceId || ''
-  }
-);
 
 const formAddWallet = reactive({
   name: '',
@@ -72,19 +79,15 @@ const formAddWallet = reactive({
   network: networkArr[0]
 });
 
-const { mutate: addSpaceWalletMutation } = useMutation<AddSpaceWallet_payload, AddSpaceWalletVariables>(AddSpaceWallet);
+const { mutate: upsertGnosisSafeWallets } = useMutation<
+  UpsertGnosisSafeWallets_payload,
+  UpsertGnosisSafeWalletsVariables
+>(UpsertGnosisSafeWallets);
 
 function onGridReady(params: GridReadyEvent) {
   gridApi.value = params.api;
+  gridApi.value?.setRowData(props.space.spaceIntegrations?.gnosisSafeWallets || []);
 }
-
-onResult(queryResult => {
-  gridApi.value?.setRowData(queryResult.data?.spaceWallets || []);
-});
-
-onError(() => {
-  gridApi.value?.setRowData([]);
-});
 
 const validateForm = () => {
   return formAddWallet.address && formAddWallet.name && formAddWallet.network;
@@ -99,22 +102,27 @@ const handleAddWallet = async () => {
     msg: 'Are you sure you want to add this wallet?'
   });
   if (answer) {
-    const payload = {
-      spaceId: props.spaceId || '',
+    savingGnosisWallets.value = true;
+
+    const newWallet: GnosisSafeWalletInput = {
+      id: uuidv4(),
       name: formAddWallet.name,
       address: formAddWallet.address,
-      chainId: formAddWallet.network.id
+      chainId: formAddWallet.network.id,
+      order: Math.max(...(props.space.spaceIntegrations?.gnosisSafeWallets?.map(wallet => wallet.order) || [0]))
     };
     try {
-      await addSpaceWalletMutation({
-        spaceId: props.spaceId || '',
-        name: formAddWallet.name,
-        address: formAddWallet.address,
-        chainId: formAddWallet.network.id
+      await upsertGnosisSafeWallets({
+        spaceId: props.space.id,
+        wallets: [...(props.space.spaceIntegrations?.gnosisSafeWallets || []), newWallet]
       });
-      gridApi.value?.setRowData([...(result.value?.spaceWallets || []), payload]);
+
+      const spaceModel = await loadExtendedSpace(props.space.id);
+
+      gridApi.value?.setRowData(spaceModel.spaceIntegrations?.gnosisSafeWallets || []);
     } catch (e) {
-      console.log(e);
+      savingGnosisWallets.value = false;
+      notify(['red', t('notify.somethingWentWrong')]);
     }
   }
 };

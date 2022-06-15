@@ -25,8 +25,6 @@ type Query {
     orderDirection: OrderDirection
   ): [Guide!]
 
-  spaceWallets(spaceId: String): [SpaceWallets]
-
   guideBundle(uuid: String): GuideBundle!
 
   guideBundles(
@@ -80,12 +78,10 @@ type Mutation {
 
   upsertProjectGalaxyAccessToken(spaceId: String!, accessToken: String!): Space!
 
-  addSpaceWallet(
+  upsertGnosisSafeWallets(
     spaceId: String!
-    name: String!
-    address: String!
-    chainId: String!
-  ): SpaceWallets!
+    wallets: [GnosisSafeWalletInput!]!
+  ): Space!
 }
 
 input SpaceWhere {
@@ -203,6 +199,14 @@ input SubscriptionWhere {
   created_lte: Int
 }
 
+input GnosisSafeWalletInput {
+  id: String!
+  address: String!
+  chainId: String!
+  name: String!
+  order: Int!
+}
+
 enum OrderDirection {
   asc
   desc
@@ -249,6 +253,7 @@ type Space {
 type SpaceIntegrations {
   discordGuildId: String
   projectGalaxyTokenLastFour: String
+  gnosisSafeWallets: [GnosisSafeWallet!]
 }
 
 type SpaceFilters {
@@ -426,15 +431,10 @@ type Subscription {
   created: Int!
 }
 
-type SpaceWallets {
-  id: String
-  name: String
-  address: String
-  chainId: String
-}
-
-type Chain {
+type GnosisSafeWallet {
   id: String!
+  address: String!
+  chainId: String!
   name: String!
-  type: String!
+  order: Int!
 }

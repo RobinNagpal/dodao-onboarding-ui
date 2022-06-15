@@ -58,14 +58,13 @@ const spaceSettingRoutes: RouteRecordRaw[] = [
   {
     path: 'discord',
     name: 'discordSpaceSetting',
-    props: true,
     component: () => import('@/views/Space/Discord.vue'),
     props: true
   },
   {
-    path: 'wallet',
-    name: 'walletSpaceSetting',
-    component: () => import('@/views/Space/Settings/Wallet.vue'),
+    path: 'gnosis-safe',
+    name: 'gnosisSafeSetting',
+    component: () => import('@/views/Space/GnosisWallet.vue'),
     props: true
   },
   {

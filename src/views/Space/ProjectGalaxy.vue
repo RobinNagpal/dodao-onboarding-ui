@@ -12,7 +12,6 @@ import {
 } from '@/graphql/generated/graphqlDocs';
 import { UpsertProjectGalaxyAccessToken } from '@/graphql/space/projectGalaxy.mutation.graphql';
 import { setPageTitle } from '@/helpers/utils';
-import { SpaceForm } from '@/views/Space/SetupSpace.vue';
 import { useMutation } from '@vue/apollo-composable';
 import { onMounted, PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
