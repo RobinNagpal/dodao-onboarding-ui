@@ -207,9 +207,13 @@
       "connectDiscord": "Connect Discord",
       "changeDiscordServer": "Change Server",
       "connectToDiscordForFeatures": "Connect to discord from project settings to access smart features like granting roles on guide completion",
+      "setProjectGalaxyCredentials": "Set Project Galaxy Credentials to grant Galaxy OAT upon completion of guides",
       "discordRoles": "Discord Roles",
       "chooseDiscordRoles": "Choose Discord roles",
       "discordRolesPassingCount": "Passing Answers count",
+      "projectGalaxyCampaign": "Project Galaxy Campaign",
+      "projectGalaxyCampaignId": "Campaign Id",
+      "projectGalaxyOatMintUrl": "Galaxy OAT Mint Url",
       "totalQuestionCount": "Total Question Count"
     },
     "category": {

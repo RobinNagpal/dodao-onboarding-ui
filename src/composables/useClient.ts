@@ -83,6 +83,8 @@ export function useClient() {
         guideType: payload.guideType,
         name: payload.name,
         publishStatus: payload.publishStatus,
+        projectGalaxyCampaignId: payload.projectGalaxyCampaignId || '',
+        projectGalaxyOatMintUrl: payload.projectGalaxyOatMintUrl || '',
         showIncorrectOnCompletion: payload.showIncorrectOnCompletion,
         socialShareImage: payload.socialShareImage || '',
         space: space.id,

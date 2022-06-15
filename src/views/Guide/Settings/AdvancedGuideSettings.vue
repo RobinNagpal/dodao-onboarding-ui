@@ -6,10 +6,10 @@ import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
+import { ExtendedSpace_space } from '@/graphql/generated/graphqlDocs';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
 import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, onMounted, onRenderTriggered, PropType, ref } from 'vue';
 
 const props = defineProps({
@@ -18,7 +18,7 @@ const props = defineProps({
     required: true
   },
   guideErrors: Object,
-  space: { type: Object as PropType<SpaceModel>, required: true },
+  space: { type: Object as PropType<ExtendedSpace_space>, required: true },
   updateGuideFunctions: {
     type: Object as PropType<UpdateGuideFunctions>,
     required: true
@@ -197,6 +197,29 @@ const showIncorrectChoices = [
       </div>
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
+  </Block>
+  <Block :title="$t('guide.create.projectGalaxyCampaign')" :class="`mt-4 wrapper`">
+    <div v-if="space.spaceIntegrations?.projectGalaxyTokenLastFour">
+      <UiInput
+        :model-value="guide.projectGalaxyCampaignId"
+        :error="inputError('projectGalaxyCampaignId')"
+        @update:modelValue="updateGuideFunctions.updateGuideField('projectGalaxyCampaignId', $event)"
+      >
+        <template v-slot:label>
+          {{ $t(`guide.create.projectGalaxyCampaignId`) }}
+        </template>
+      </UiInput>
+      <UiInput
+        :model-value="guide.projectGalaxyCampaignId"
+        :error="inputError('projectGalaxyOatMintUrl')"
+        @update:modelValue="updateGuideFunctions.updateGuideField('projectGalaxyOatMintUrl', $event)"
+      >
+        <template v-slot:label>
+          {{ $t(`guide.create.projectGalaxyOatMintUrl`) }}
+        </template>
+      </UiInput>
+    </div>
+    <div v-else>{{ $tc('guide.create.setProjectGalaxyCredentials') }}</div>
   </Block>
 </template>
 
