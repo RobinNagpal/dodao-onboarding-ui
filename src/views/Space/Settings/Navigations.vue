@@ -18,8 +18,8 @@ const navigations = [
     icon: 'discord'
   },
   {
-    name: 'walletSpaceSetting',
-    text: 'Configure Wallet',
+    name: 'gnosisSafeSetting',
+    text: 'Gnosis Safe',
     icon: 'wallet'
   }
 ];

@@ -77,6 +77,11 @@ type Mutation {
   ): Space!
 
   upsertProjectGalaxyAccessToken(spaceId: String!, accessToken: String!): Space!
+
+  upsertGnosisSafeWallets(
+    spaceId: String!
+    wallets: [GnosisSafeWalletInput!]!
+  ): Space!
 }
 
 input SpaceWhere {
@@ -194,6 +199,14 @@ input SubscriptionWhere {
   created_lte: Int
 }
 
+input GnosisSafeWalletInput {
+  id: String!
+  address: String!
+  chainId: String!
+  name: String!
+  order: Int!
+}
+
 enum OrderDirection {
   asc
   desc
@@ -240,6 +253,7 @@ type Space {
 type SpaceIntegrations {
   discordGuildId: String
   projectGalaxyTokenLastFour: String
+  gnosisSafeWallets: [GnosisSafeWallet!]
 }
 
 type SpaceFilters {
@@ -415,4 +429,12 @@ type Subscription {
   address: String!
   space: Space!
   created: Int!
+}
+
+type GnosisSafeWallet {
+  id: String!
+  address: String!
+  chainId: String!
+  name: String!
+  order: Int!
 }

@@ -404,3 +404,23 @@ ul {
 #topnav {
   border-radius: 14px;
 }
+
+.ag-theme-alpine.theme-table {
+  --ag-header-background-color: transparent;
+  --ag-odd-row-background-color: transparent;
+  --ag-secondary-border-color: var(--text-color);
+  --ag-background-color: transparent;
+  --ag-border-color: var(--text-color);
+  --ag-header-foreground-color: var(--link-color);
+  --ag-data-color: var(--text-color);
+  .ag-cell-value {
+    cursor: auto;
+  }
+  .ag-row {
+    border-width: 0;
+    border-bottom-width: 1px;
+  }
+  .ag-layout-auto-height .ag-center-cols-clipper {
+    min-height: 80px;
+  }
+}
