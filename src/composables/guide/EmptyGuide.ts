@@ -1,9 +1,5 @@
 import { GuideInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
-import {
-  GuidePublishStatus,
-  InputType,
-  QuestionType
-} from '@dodao/onboarding-schemas/models/GuideModel';
+import { GuidePublishStatus, InputType, QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,8 +15,8 @@ export const emptyGuide = (
     name: 'Guide Name',
     categories: [],
     content: 'New Guide',
+    guideIntegrations: {},
     guideType: guideType,
-    discordRoleIds: [],
     publishStatus: GuidePublishStatus.Live,
     showIncorrectOnCompletion: true,
     steps: [

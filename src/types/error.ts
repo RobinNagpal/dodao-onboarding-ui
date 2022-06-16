@@ -1,3 +1,5 @@
+import { GuideIntegrations } from '@dodao/onboarding-schemas/models/GuideModel';
+
 export interface ChoiceError {
   content?: boolean;
 }
@@ -18,10 +20,13 @@ export interface StepError {
   stepItems?: Record<string, QuestionError | UserInputError>;
 }
 
+export type KeyOfGuideIntegration = keyof GuideIntegrations;
+
 export interface GuideError {
   name?: boolean;
   content?: boolean;
   steps?: Record<string, StepError>;
+  guideIntegrations?: Partial<Record<KeyOfGuideIntegration, boolean | undefined>>;
 }
 
 export interface GuideBundleError {

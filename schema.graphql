@@ -311,16 +311,22 @@ type GuideStep {
   uuid: String!
 }
 
+type GuideIntegrations {
+  discordRoleIds: [String!]
+  # number of answers that should be correct in order to get discord score
+  discordRolePassingCount: Int
+  discordWebhook: String
+  projectGalaxyCampaignId: String
+  projectGalaxyOatMintUrl: String
+}
+
 type Guide {
   authors: [String!]!
   categories: [String!]!
   postSubmissionStepContent: String
   content: String!
   created: Int!
-  discordRoleIds: [String!]!
-  # number of answers that should be correct in order to get discord score
-  discordRolePassingCount: Int
-  discordWebhook: String
+  guideIntegrations: GuideIntegrations!
   guideType: String!
   id: String!
   ipfs: String!

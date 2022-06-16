@@ -6,14 +6,12 @@ import { getGuide } from '@/helpers/snapshot';
 import {
   ChoiceError,
   GuideError,
+  KeyOfGuideIntegration,
   QuestionError,
   StepError,
   UserInputError
 } from '@/types/error';
-import {
-  GuideInput,
-  GuideStepInput
-} from '@dodao/onboarding-schemas/inputs/GuideInput';
+import { GuideInput, GuideStepInput } from '@dodao/onboarding-schemas/inputs/GuideInput';
 import {
   GuideQuestion,
   GuideType,
@@ -46,20 +44,17 @@ type KeyOfGuideInput = keyof EditGuideType;
 export type UpdateGuideFunctions = {
   moveStepDown: (stepUuid) => void;
   addStep: () => void;
-  updateGuideField: (field: KeyOfGuideInput, value: any) => void;
   updateGuideErrorField: (field: KeyOfGuideInput, value: any) => void;
+  updateGuideField: (field: KeyOfGuideInput, value: any) => void;
+  updateGuideIntegrationErrorField: (field: KeyOfGuideIntegration, value: any) => void;
+  updateGuideIntegrationField: (field: KeyOfGuideIntegration, value: any) => void;
   updateStep: (step) => void;
   removeStep: (stepUuid) => void;
   moveStepUp: (stepUuid) => void;
   setActiveStep: (uuid) => void;
 };
 
-export function useEditGuide(
-  uuid: string | null,
-  space: SpaceModel,
-  notify: any,
-  editGuide?: EditGuideType
-) {
+export function useEditGuide(uuid: string | null, space: SpaceModel, notify: any, editGuide?: EditGuideType) {
   const { send } = useClient();
   const router = useRouter();
   const route = useRoute();
@@ -96,18 +91,15 @@ export function useEditGuide(
       guideRef.value = {
         ...guide,
         isPristine: true,
-        discordRolePassingCount: guide.discordRolePassingCount || undefined,
-        discordWebhook: guide.discordWebhook || undefined,
         from: web3.value.account,
         postSubmissionStepContent: guide.postSubmissionStepContent || undefined,
         socialShareImage: guide.socialShareImage || undefined,
         space: space.id,
-        thumbnail: guide.thumbnail || undefined
+        thumbnail: guide.thumbnail || undefined,
+        guideIntegrations: guide.guideIntegrations
       };
       const minOrder = Math.min(...steps.value.map(step => step.order));
-      activeStepId.value = steps.value.find(
-        step => step.order === minOrder
-      )?.uuid;
+      activeStepId.value = steps.value.find(step => step.order === minOrder)?.uuid;
 
       guideLoaded.value = true;
     } else {
@@ -154,9 +146,7 @@ export function useEditGuide(
         activeStepId.value = steps.value[stepIndex + 1].uuid;
       }
     }
-    guideRef.value.steps = guideRef.value.steps.filter(
-      s => s.uuid !== stepUuid
-    );
+    guideRef.value.steps = guideRef.value.steps.filter(s => s.uuid !== stepUuid);
 
     guideRef.value.steps = guideRef.value.steps.map((step, index) => ({
       ...step,
@@ -239,8 +229,7 @@ export function useEditGuide(
       }
       stepError.stepItems[question.order] = questionError;
     } else {
-      stepError.stepItems?.[question.order] &&
-        delete stepError.stepItems[question.order];
+      stepError.stepItems?.[question.order] && delete stepError.stepItems[question.order];
     }
   }
 
@@ -294,10 +283,36 @@ export function useEditGuide(
     };
   }
 
+  function updateGuideIntegrationField(field: KeyOfGuideIntegration, value: any) {
+    guideRef.value = {
+      ...guideRef.value,
+      guideIntegrations: {
+        ...guideRef.value.guideIntegrations,
+        [field]: value
+      }
+    };
+  }
+
   function updateGuideErrorField(field: KeyOfGuideInput, value: any) {
     guideErrors.value = {
       ...guideErrors.value,
       [field]: value
+    };
+  }
+
+  function updateGuideIntegrationErrorField(field: KeyOfGuideIntegration, value: boolean | undefined) {
+    let guideIntegrations: Partial<Record<KeyOfGuideIntegration, boolean | undefined>> | undefined = {
+      ...guideErrors.value.guideIntegrations,
+      [field]: value
+    };
+
+    if (Object.values(guideIntegrations).every(value => !value)) {
+      guideIntegrations = undefined;
+    }
+
+    guideErrors.value = {
+      ...guideErrors.value,
+      guideIntegrations
     };
   }
 
@@ -309,6 +324,8 @@ export function useEditGuide(
     setActiveStep,
     updateGuideErrorField,
     updateGuideField,
+    updateGuideIntegrationErrorField,
+    updateGuideIntegrationField,
     updateStep
   };
 

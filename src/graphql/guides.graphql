@@ -43,10 +43,14 @@ query GuideQuery($uuid: String!) {
     postSubmissionStepContent
     content
     created
-    discordRoleIds
-    discordRolePassingCount
-    discordWebhook
     id
+    guideIntegrations {
+      discordRoleIds
+      discordRolePassingCount
+      discordWebhook
+      projectGalaxyCampaignId
+      projectGalaxyOatMintUrl
+    }
     guideType
     ipfs
     link

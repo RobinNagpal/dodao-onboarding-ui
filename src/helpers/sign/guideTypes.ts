@@ -1,4 +1,11 @@
 export const guideTypes = {
+  GuideIntegrations: [
+    { name: 'discordRoleIds', type: 'string[]' },
+    { name: 'discordRolePassingCount', type: 'number' },
+    { name: 'discordWebhook', type: 'string' },
+    { name: 'projectGalaxyCampaignId', type: 'string' },
+    { name: 'projectGalaxyOatMintUrl', type: 'string' }
+  ],
   QuestionChoice: [
     { name: 'content', type: 'string' },
     { name: 'key', type: 'string' },
@@ -21,14 +28,12 @@ export const guideTypes = {
   ],
   Guide: [
     { name: 'categories', type: 'string[]' },
-    { name: 'postSubmissionStepContent', type: 'string' },
     { name: 'content', type: 'string' },
-    { name: 'discordRoleIds', type: 'string[]' },
-    { name: 'discordRolePassingCount', type: 'number' },
-    { name: 'discordWebhook', type: 'string' },
     { name: 'from', type: 'address' },
     { name: 'guideType', type: 'string' },
+    { name: 'guideIntegrations', type: 'GuideIntegrations' },
     { name: 'name', type: 'string' },
+    { name: 'postSubmissionStepContent', type: 'string' },
     { name: 'publishStatus', type: 'string' },
     { name: 'showIncorrectOnCompletion', type: 'boolean' },
     { name: 'socialShareImage', type: 'string' },

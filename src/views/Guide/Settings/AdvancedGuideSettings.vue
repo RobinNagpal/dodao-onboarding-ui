@@ -6,10 +6,11 @@ import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import { EditGuideType, UpdateGuideFunctions } from '@/composables/guide/useEditGuide';
+import { ExtendedSpace_space } from '@/graphql/generated/graphqlDocs';
 import { getSelectedGuild } from '@/helpers/discord/discordApi';
 import { setPageTitle } from '@/helpers/utils';
+import { KeyOfGuideIntegration } from '@/types/error';
 import { QuestionType } from '@dodao/onboarding-schemas/models/GuideModel';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, onMounted, onRenderTriggered, PropType, ref } from 'vue';
 
 const props = defineProps({
@@ -18,7 +19,7 @@ const props = defineProps({
     required: true
   },
   guideErrors: Object,
-  space: { type: Object as PropType<SpaceModel>, required: true },
+  space: { type: Object as PropType<ExtendedSpace_space>, required: true },
   updateGuideFunctions: {
     type: Object as PropType<UpdateGuideFunctions>,
     required: true
@@ -28,7 +29,7 @@ const props = defineProps({
 const selectedServerInfo = ref<any>(null);
 const isLoading = ref<any>(true);
 
-const currentSelectedRoles = ref<string[]>(props.guide.discordRoleIds);
+const currentSelectedRoles = ref<string[]>(props.guide.guideIntegrations.discordRoleIds || []);
 
 onMounted(async () => {
   setPageTitle('guide.create.advancedInfo');
@@ -47,10 +48,14 @@ function selectMultipleRoles(roleId: string, selected: boolean) {
     ? [...currentSelectedRoles.value, roleId]
     : currentSelectedRoles.value.filter(role => role !== roleId);
 
-  props.updateGuideFunctions.updateGuideField('discordRoleIds', currentSelectedRoles);
+  props.updateGuideFunctions.updateGuideIntegrationField('discordRoleIds', currentSelectedRoles);
 }
 
 function inputError(field: string) {
+  return props.guideErrors?.[field];
+}
+
+function inputIntegrationError(field: KeyOfGuideIntegration) {
   return props.guideErrors?.[field];
 }
 
@@ -79,11 +84,12 @@ const totalQuestion = computed(() => {
 });
 
 const handlePassingCountInput = (value: string) => {
-  props.updateGuideFunctions.updateGuideField('discordRolePassingCount', value);
-  if (parseInt(value) > totalQuestion.value) {
-    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', true);
+  const count = parseInt(value);
+  props.updateGuideFunctions.updateGuideIntegrationField('discordRolePassingCount', value);
+  if (count > totalQuestion.value) {
+    props.updateGuideFunctions.updateGuideIntegrationErrorField('discordRolePassingCount', true);
   } else {
-    props.updateGuideFunctions.updateGuideErrorField('discordRolePassingCount', false);
+    props.updateGuideFunctions.updateGuideIntegrationErrorField('discordRolePassingCount', false);
   }
 };
 
@@ -116,16 +122,7 @@ const showIncorrectChoices = [
         </Upload>
       </template>
     </UiInput>
-    <UiInput
-      :model-value="guide.discordWebhook"
-      placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
-      :error="inputError('discordWebhook')"
-      @update:modelValue="updateGuideFunctions.updateGuideField('discordWebhook', $event)"
-    >
-      <template v-slot:label>
-        {{ $t('guide.discordWebhook') }}
-      </template>
-    </UiInput>
+
     <div class="show-incorrect-wrapper pt-3">
       <UiDropdown
         top="2.5rem"
@@ -140,6 +137,17 @@ const showIncorrectChoices = [
       </UiDropdown>
       <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Show Incorrect Questions*</div>
     </div>
+
+    <UiInput
+      :model-value="guide.guideIntegrations.discordWebhook"
+      placeholder="e.g. https://discord.com/api/webhooks/xxxxxxxxxx"
+      :error="inputIntegrationError('discordWebhook')"
+      @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('discordWebhook', $event)"
+    >
+      <template v-slot:label>
+        {{ $t('guide.discordWebhook') }}
+      </template>
+    </UiInput>
   </Block>
   <Block :title="$t('guide.postSubmissionStepContent')" :class="`mt-4 wrapper`">
     <UiButton class="w-full h-96 mb-4" style="height: max-content">
@@ -182,8 +190,8 @@ const showIncorrectChoices = [
       </div>
       <div class="w-full flex">
         <UiInput
-          :model-value="guide.discordRolePassingCount"
-          :error="inputError('discordRolePassingCount')"
+          :model-value="guide.guideIntegrations.discordRolePassingCount"
+          :error="inputIntegrationError('discordRolePassingCount')"
           :number="true"
           :max="totalQuestion"
           @update:modelValue="handlePassingCountInput($event)"
@@ -197,6 +205,29 @@ const showIncorrectChoices = [
       </div>
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
+  </Block>
+  <Block :title="$t('guide.create.projectGalaxyCampaign')" :class="`mt-4 wrapper`">
+    <div v-if="space.spaceIntegrations?.projectGalaxyTokenLastFour">
+      <UiInput
+        :model-value="guide.guideIntegrations.projectGalaxyCampaignId"
+        :error="inputIntegrationError('projectGalaxyCampaignId')"
+        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyCampaignId', $event)"
+      >
+        <template v-slot:label>
+          {{ $t(`guide.create.projectGalaxyCampaignId`) }}
+        </template>
+      </UiInput>
+      <UiInput
+        :model-value="guide.guideIntegrations.projectGalaxyOatMintUrl"
+        :error="inputIntegrationError('projectGalaxyOatMintUrl')"
+        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyOatMintUrl', $event)"
+      >
+        <template v-slot:label>
+          {{ $t(`guide.create.projectGalaxyOatMintUrl`) }}
+        </template>
+      </UiInput>
+    </div>
+    <div v-else>{{ $tc('guide.create.setProjectGalaxyCredentials') }}</div>
   </Block>
 </template>
 
