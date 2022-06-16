@@ -1,7 +1,6 @@
 scalar Any
 
 # Queries
-
 type Query {
   space(id: String): Space
 
