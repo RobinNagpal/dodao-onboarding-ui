@@ -82,7 +82,8 @@ export function useClient() {
           discordRolePassingCount: payload.guideIntegrations.discordRolePassingCount || 0,
           discordWebhook: payload.guideIntegrations.discordWebhook || '',
           projectGalaxyCredentialId: payload.guideIntegrations.projectGalaxyCredentialId || '',
-          projectGalaxyOatMintUrl: payload.guideIntegrations.projectGalaxyOatMintUrl || ''
+          projectGalaxyOatMintUrl: payload.guideIntegrations.projectGalaxyOatMintUrl || '',
+          projectGalaxyOatPassingCount: payload.guideIntegrations.projectGalaxyOatPassingCount || 0
         },
         guideType: payload.guideType,
         name: payload.name,

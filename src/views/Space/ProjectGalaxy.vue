@@ -13,7 +13,7 @@ import {
 import { UpsertProjectGalaxyAccessToken } from '@/graphql/space/projectGalaxy.mutation.graphql';
 import { setPageTitle } from '@/helpers/utils';
 import { useMutation } from '@vue/apollo-composable';
-import { onMounted, PropType, ref } from 'vue';
+import { computed, onMounted, PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { loadExtendedSpace } = useExtendedSpaces();
@@ -28,10 +28,11 @@ const props = defineProps({
 const { notify } = useNotifications();
 const { t } = useI18n();
 const savingAccessToken = ref(false);
-const form = ref<{ projectGalaxyToken?: string }>({});
+const projectGalaxyTokenInput = ref<string | undefined>();
 
-const projectGalaxyToken = ref(
-  form.value.projectGalaxyToken ||
+const projectGalaxyToken = computed(
+  () =>
+    projectGalaxyTokenInput.value ||
     props.space.spaceIntegrations?.projectGalaxyTokenLastFour?.replace(/^/, '************')
 );
 
@@ -46,16 +47,11 @@ async function clickSubmit() {
     try {
       const payload = await upsertProjectGalaxyAccessToken({
         spaceId: props.space.id,
-        accessToken: projectGalaxyToken.value
+        accessToken: projectGalaxyTokenInput.value!
       });
 
-      const spaceModel = await loadExtendedSpace(props.space.id);
-      if (spaceModel.spaceIntegrations?.discordGuildId) {
-        projectGalaxyToken.value = spaceModel.spaceIntegrations.projectGalaxyTokenLastFour?.replace(
-          /^/,
-          '*'.repeat(projectGalaxyToken.value.length - 4)
-        );
-      }
+      await loadExtendedSpace(props.space.id);
+      projectGalaxyTokenInput.value = undefined;
 
       if (payload?.data?.id) {
         notify(['green', t('notify.saved')]);
@@ -80,7 +76,11 @@ onMounted(async () => {
       <h1 v-text="$t('settings.projectGalaxy')" class="flex-1 mt-3" />
       <div class="wrapper py-24 flex justify-center align-center flex-col items-center">
         <template v-if="!spaceLoading">
-          <UiInput v-model="projectGalaxyToken" maxlength="128">
+          <UiInput
+            :model-value="projectGalaxyToken"
+            @update:modelValue="projectGalaxyTokenInput = $event"
+            maxlength="128"
+          >
             <template v-slot:label>{{ $t(`settings.accessToken`) }}*</template>
           </UiInput>
           <UiButton

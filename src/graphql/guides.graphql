@@ -50,6 +50,7 @@ query GuideQuery($uuid: String!) {
       discordWebhook
       projectGalaxyCredentialId
       projectGalaxyOatMintUrl
+      projectGalaxyOatPassingCount
     }
     guideType
     ipfs
