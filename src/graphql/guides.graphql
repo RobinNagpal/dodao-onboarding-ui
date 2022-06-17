@@ -48,7 +48,7 @@ query GuideQuery($uuid: String!) {
       discordRoleIds
       discordRolePassingCount
       discordWebhook
-      projectGalaxyCampaignId
+      projectGalaxyCredentialId
       projectGalaxyOatMintUrl
     }
     guideType

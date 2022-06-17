@@ -206,15 +206,15 @@ const showIncorrectChoices = [
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
   </Block>
-  <Block :title="$t('guide.create.projectGalaxyCampaign')" :class="`mt-4 wrapper`">
+  <Block :title="$t('guide.create.projectGalaxyCredential')" :class="`mt-4 wrapper`">
     <div v-if="space.spaceIntegrations?.projectGalaxyTokenLastFour">
       <UiInput
-        :model-value="guide.guideIntegrations.projectGalaxyCampaignId"
-        :error="inputIntegrationError('projectGalaxyCampaignId')"
-        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyCampaignId', $event)"
+        :model-value="guide.guideIntegrations.projectGalaxyCredentialId"
+        :error="inputIntegrationError('projectGalaxyCredentialId')"
+        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyCredentialId', $event)"
       >
         <template v-slot:label>
-          {{ $t(`guide.create.projectGalaxyCampaignId`) }}
+          {{ $t(`guide.create.projectGalaxyCredentialId`) }}
         </template>
       </UiInput>
       <UiInput

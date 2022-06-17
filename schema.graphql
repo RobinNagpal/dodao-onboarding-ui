@@ -315,7 +315,7 @@ type GuideIntegrations {
   # number of answers that should be correct in order to get discord score
   discordRolePassingCount: Int
   discordWebhook: String
-  projectGalaxyCampaignId: String
+  projectGalaxyCredentialId: String
   projectGalaxyOatMintUrl: String
 }
 
