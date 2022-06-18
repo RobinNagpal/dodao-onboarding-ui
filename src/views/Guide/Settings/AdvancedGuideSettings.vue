@@ -56,7 +56,7 @@ function inputError(field: string) {
 }
 
 function inputIntegrationError(field: KeyOfGuideIntegration) {
-  return props.guideErrors?.[field];
+  return props.guideErrors?.guideIntegrations?.[field];
 }
 
 const uploadSocialShareImageLoading = ref(false);
@@ -83,13 +83,23 @@ const totalQuestion = computed(() => {
   return questionsNumber;
 });
 
-const handlePassingCountInput = (value: string) => {
+const handleDiscordPassingCountInput = (value: string) => {
   const count = parseInt(value);
   props.updateGuideFunctions.updateGuideIntegrationField('discordRolePassingCount', value);
   if (count > totalQuestion.value) {
     props.updateGuideFunctions.updateGuideIntegrationErrorField('discordRolePassingCount', true);
   } else {
     props.updateGuideFunctions.updateGuideIntegrationErrorField('discordRolePassingCount', false);
+  }
+};
+
+const handleProjectGalaxyPassingCountInput = (value: string) => {
+  const count = parseInt(value);
+  props.updateGuideFunctions.updateGuideIntegrationField('projectGalaxyOatPassingCount', value);
+  if (count > totalQuestion.value) {
+    props.updateGuideFunctions.updateGuideIntegrationErrorField('projectGalaxyOatPassingCount', true);
+  } else {
+    props.updateGuideFunctions.updateGuideIntegrationErrorField('projectGalaxyOatPassingCount', false);
   }
 };
 
@@ -194,7 +204,7 @@ const showIncorrectChoices = [
           :error="inputIntegrationError('discordRolePassingCount')"
           :number="true"
           :max="totalQuestion"
-          @update:modelValue="handlePassingCountInput($event)"
+          @update:modelValue="handleDiscordPassingCountInput($event)"
         >
           <template v-slot:label>
             {{ $t(`guide.create.discordRolesPassingCount`) }}
@@ -206,15 +216,15 @@ const showIncorrectChoices = [
     </div>
     <div v-else>{{ $tc('guide.create.connectToDiscordForFeatures') }}</div>
   </Block>
-  <Block :title="$t('guide.create.projectGalaxyCampaign')" :class="`mt-4 wrapper`">
+  <Block :title="$t('guide.create.projectGalaxyCredential')" :class="`mt-4 wrapper`">
     <div v-if="space.spaceIntegrations?.projectGalaxyTokenLastFour">
       <UiInput
-        :model-value="guide.guideIntegrations.projectGalaxyCampaignId"
-        :error="inputIntegrationError('projectGalaxyCampaignId')"
-        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyCampaignId', $event)"
+        :model-value="guide.guideIntegrations.projectGalaxyCredentialId"
+        :error="inputIntegrationError('projectGalaxyCredentialId')"
+        @update:modelValue="updateGuideFunctions.updateGuideIntegrationField('projectGalaxyCredentialId', $event)"
       >
         <template v-slot:label>
-          {{ $t(`guide.create.projectGalaxyCampaignId`) }}
+          {{ $t('guide.create.projectGalaxyCredentialId') }}
         </template>
       </UiInput>
       <UiInput
@@ -226,6 +236,21 @@ const showIncorrectChoices = [
           {{ $t(`guide.create.projectGalaxyOatMintUrl`) }}
         </template>
       </UiInput>
+      <div class="w-full flex">
+        <UiInput
+          :model-value="guide.guideIntegrations.projectGalaxyOatPassingCount"
+          :error="inputIntegrationError('projectGalaxyOatPassingCount')"
+          :number="true"
+          :max="totalQuestion"
+          @update:modelValue="handleProjectGalaxyPassingCountInput($event)"
+        >
+          <template v-slot:label>
+            {{ $t(`guide.create.projectGalaxyOatPassingCount`) }}
+          </template>
+        </UiInput>
+        <span class="text-2xl ml-2 -mt-1">/</span>
+        <div class="w-[280px] pt-3">{{ totalQuestion }} ({{ $tc('guide.create.totalQuestionCount') }})</div>
+      </div>
     </div>
     <div v-else>{{ $tc('guide.create.setProjectGalaxyCredentials') }}</div>
   </Block>

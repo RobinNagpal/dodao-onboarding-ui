@@ -3,8 +3,9 @@ export const guideTypes = {
     { name: 'discordRoleIds', type: 'string[]' },
     { name: 'discordRolePassingCount', type: 'number' },
     { name: 'discordWebhook', type: 'string' },
-    { name: 'projectGalaxyCampaignId', type: 'string' },
-    { name: 'projectGalaxyOatMintUrl', type: 'string' }
+    { name: 'projectGalaxyCredentialId', type: 'string' },
+    { name: 'projectGalaxyOatMintUrl', type: 'string' },
+    { name: 'projectGalaxyOatPassingCount', type: 'number' }
   ],
   QuestionChoice: [
     { name: 'content', type: 'string' },

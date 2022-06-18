@@ -211,9 +211,10 @@
       "discordRoles": "Discord Roles",
       "chooseDiscordRoles": "Choose Discord roles",
       "discordRolesPassingCount": "Passing Answers count",
-      "projectGalaxyCampaign": "Project Galaxy Campaign",
-      "projectGalaxyCampaignId": "Campaign Id",
+      "projectGalaxyCredential": "Project Galaxy Credential",
+      "projectGalaxyCredentialId": "Credential Id",
       "projectGalaxyOatMintUrl": "Galaxy OAT Mint Url",
+      "projectGalaxyOatPassingCount": "Passing Answers count",
       "totalQuestionCount": "Total Question Count"
     },
     "category": {
