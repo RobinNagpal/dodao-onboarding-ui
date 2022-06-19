@@ -1,13 +1,8 @@
 <script setup>
 import { ref, computed, watch, onMounted, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import {
-  getProposal,
-  getResults,
-  getPower,
-  getProposalVotes
-} from '@/helpers/snapshot';
+import i18n from '@/helpers/i18n';
+import { getProposal, getResults, getPower, getProposalVotes } from '@/helpers/snapshot';
 import { setPageTitle, explorerUrl, ms, n, getIpfsUrl } from '@/helpers/utils';
 import { useModal } from '@/composables/useModal';
 import { useTerms } from '@/composables/useTerms';
@@ -29,7 +24,7 @@ const props = defineProps({
 const route = useRoute();
 const router = useRouter();
 const { domain } = useDomain();
-const { t } = useI18n();
+const { t } = i18n.global;
 const { web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
@@ -57,16 +52,11 @@ const isAdmin = computed(() => {
   const admins = (props.space.admins || []).map(admin => admin.toLowerCase());
   return admins.includes(web3Account.value?.toLowerCase());
 });
-const strategies = computed(
-  () => proposal.value.strategies ?? props.space.strategies
-);
-const symbols = computed(() =>
-  strategies.value.map(strategy => strategy.params.symbol)
-);
+const strategies = computed(() => proposal.value.strategies ?? props.space.strategies);
+const symbols = computed(() => strategies.value.map(strategy => strategy.params.symbol));
 const threeDotItems = computed(() => {
   const items = [{ text: t('duplicateProposal'), action: 'duplicate' }];
-  if (isAdmin.value || isCreator.value)
-    items.push({ text: t('deleteProposal'), action: 'delete' });
+  if (isAdmin.value || isCreator.value) items.push({ text: t('deleteProposal'), action: 'delete' });
   return items;
 });
 
@@ -91,10 +81,7 @@ function clickVote() {
 async function loadProposal() {
   proposal.value = await getProposal(id);
   // Redirect to proposal spaceId if it doesn't match route key
-  if (
-    route.name === 'spaceProposal' &&
-    props.spaceId !== proposal.value.space.id
-  ) {
+  if (route.name === 'spaceProposal' && props.spaceId !== proposal.value.space.id) {
     router.push({ name: 'error-404' });
   }
 
@@ -151,17 +138,8 @@ async function loadMoreVotes() {
 }
 
 async function loadPower() {
-  if (
-    !web3Account.value ||
-    !proposal.value.author ||
-    proposal.value.state === 'closed'
-  )
-    return;
-  const response = await getPower(
-    props.space,
-    web3Account.value,
-    proposal.value
-  );
+  if (!web3Account.value || !proposal.value.author || proposal.value.state === 'closed') return;
+  const response = await getPower(props.space, web3Account.value, proposal.value);
   totalScore.value = response.totalScore;
   scores.value = response.scores;
 }
@@ -179,14 +157,8 @@ async function deleteProposal() {
   }
 }
 
-const {
-  shareToTwitter,
-  shareToFacebook,
-  shareToClipboard,
-  startShare,
-  sharingIsSupported,
-  sharingItems
-} = useSharing();
+const { shareToTwitter, shareToFacebook, shareToClipboard, startShare, sharingIsSupported, sharingItems } =
+  useSharing();
 
 function selectFromThreedotDropdown(e) {
   if (e === 'delete') deleteProposal();
@@ -201,12 +173,9 @@ function selectFromThreedotDropdown(e) {
 }
 
 function selectFromShareDropdown(e) {
-  if (e === 'shareToTwitter')
-    shareToTwitter(props.space, proposal.value, window);
-  else if (e === 'shareToFacebook')
-    shareToFacebook(props.space, proposal.value, window);
-  else if (e === 'shareToClipboard')
-    shareToClipboard(props.space, proposal.value);
+  if (e === 'shareToTwitter') shareToTwitter(props.space, proposal.value, window);
+  else if (e === 'shareToFacebook') shareToFacebook(props.space, proposal.value, window);
+  else if (e === 'shareToClipboard') shareToClipboard(props.space, proposal.value);
 }
 
 const { profiles, loadProfiles } = useProfiles();
@@ -253,11 +222,7 @@ onMounted(async () => {
         <a
           class="text-color"
           @click="
-            browserHasHistory
-              ? $router.go(-1)
-              : $router.push(
-                  domain ? { path: '/' } : { name: 'spaceProposals' }
-                )
+            browserHasHistory ? $router.go(-1) : $router.push(domain ? { path: '/' } : { name: 'spaceProposals' })
           "
         >
           <Icon name="back" size="22" class="!align-middle" />
@@ -332,10 +297,7 @@ onMounted(async () => {
         <div class="space-y-1">
           <div>
             <b>{{ $t('strategies') }}</b>
-            <span
-              @click="modalStrategiesOpen = true"
-              class="float-right link-color a"
-            >
+            <span @click="modalStrategiesOpen = true" class="float-right link-color a">
               <span v-for="(symbol, symbolIndex) of symbols" :key="symbol">
                 <span
                   v-tippy="{
@@ -344,10 +306,7 @@ onMounted(async () => {
                 >
                   <Token :space="space" :symbolIndex="symbolIndex" />
                 </span>
-                <span
-                  v-show="symbolIndex !== symbols.length - 1"
-                  class="ml-1"
-                />
+                <span v-show="symbolIndex !== symbols.length - 1" class="ml-1" />
               </span>
             </span>
           </div>
@@ -363,11 +322,7 @@ onMounted(async () => {
           </div>
           <div>
             <b>IPFS</b>
-            <a
-              :href="getIpfsUrl(proposal.ipfs)"
-              target="_blank"
-              class="float-right"
-            >
+            <a :href="getIpfsUrl(proposal.ipfs)" target="_blank" class="float-right">
               #{{ proposal.ipfs.slice(0, 7) }}
               <Icon name="external-link" class="ml-1" />
             </a>
@@ -400,11 +355,7 @@ onMounted(async () => {
           </div>
           <div>
             <b>{{ $t('dodao') }}</b>
-            <a
-              :href="explorerUrl(proposal.network, proposal.snapshot, 'block')"
-              target="_blank"
-              class="float-right"
-            >
+            <a :href="explorerUrl(proposal.network, proposal.snapshot, 'block')" target="_blank" class="float-right">
               {{ n(proposal.snapshot, '0,0') }}
               <Icon name="external-link" class="ml-1" />
             </a>

@@ -1,12 +1,12 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useRoute } from 'vue-router';
 import { useSearchFilters } from '@/composables/useSearchFilters';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { setPageTitle, n } from '@/helpers/utils';
 
-const { t } = useI18n();
+const { t } = i18n.global;
 const route = useRoute();
 
 const buttonStr = computed(() => {
@@ -23,8 +23,7 @@ const resultsStr = computed(() => {
   return t('explore.results');
 });
 
-const { filteredStrategies, filteredNetworks, filteredPlugins } =
-  useSearchFilters();
+const { filteredStrategies, filteredNetworks, filteredPlugins } = useSearchFilters();
 
 const items = computed(() => {
   const q = route.query.q || '';
@@ -50,16 +49,9 @@ onMounted(() => {
       <UiButton class="mr-auto pl-3 pr-0 w-full max-w-[420px]">
         <SearchWithFilters />
       </UiButton>
-      <div
-        class="ml-3 hidden sm:flex text-right items-center whitespace-nowrap"
-      >
+      <div class="ml-3 hidden sm:flex text-right items-center whitespace-nowrap">
         <div class="flex flex-col">{{ n(items.length) }} {{ resultsStr }}</div>
-        <a
-          v-if="buttonStr"
-          href="https://discord.gg/snapshot"
-          target="_blank"
-          class="hidden md:block ml-3"
-        >
+        <a v-if="buttonStr" href="https://discord.gg/snapshot" target="_blank" class="hidden md:block ml-3">
           <UiButton>{{ buttonStr }}</UiButton>
         </a>
       </div>
@@ -81,12 +73,7 @@ onMounted(() => {
           </template>
         </template>
         <template v-if="route.name === 'plugins'">
-          <BlockPlugin
-            v-for="item in items.slice(0, limit)"
-            :key="item.key"
-            :plugin="item"
-            class="mb-3"
-          />
+          <BlockPlugin v-for="item in items.slice(0, limit)" :key="item.key" :plugin="item" class="mb-3" />
         </template>
         <NoResults :block="true" v-if="Object.keys(items).length < 1" />
       </div>

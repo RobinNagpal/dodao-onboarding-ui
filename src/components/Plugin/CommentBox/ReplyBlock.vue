@@ -6,8 +6,8 @@ import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import { signMessage } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getInstance } from '@/utils/auth/auth';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import i18n from '@/helpers/i18n';
+const { t } = i18n.global;
 const auth = getInstance();
 const { modalOpen, modalAccountOpen } = useModal();
 const { web3Account } = useWeb3();
@@ -18,12 +18,7 @@ const props = defineProps({
   mainThread: String,
   proposal: Object
 });
-const emit = defineEmits([
-  'deleteItem',
-  'updateItem',
-  'replyComment',
-  'scrollTo'
-]);
+const emit = defineEmits(['deleteItem', 'updateItem', 'replyComment', 'scrollTo']);
 const toggleComment = ref(true);
 const toggleEditComment = ref(true);
 const loading = ref(false);
@@ -66,12 +61,7 @@ async function deleteItem() {
     const token = localStorage.getItem('_commentBox.token');
     let sig;
     const msg = { key: props.item.key };
-    if (!token)
-      sig = await signMessage(
-        auth.web3,
-        JSON.stringify(msg),
-        web3Account.value
-      );
+    if (!token) sig = await signMessage(auth.web3, JSON.stringify(msg), web3Account.value);
     const res = await deleteData(
       `https://uia5m1.deta.dev/delete/`,
       {
@@ -110,11 +100,7 @@ watch([modalOpen, closeModal], () => {
 });
 const isAdmin = computed(() => {
   const admins = props.space.admins.map(address => address.toLowerCase());
-  return (
-    auth.isAuthenticated.value &&
-    web3Account.value &&
-    admins.includes(web3Account.value.toLowerCase())
-  );
+  return auth.isAuthenticated.value && web3Account.value && admins.includes(web3Account.value.toLowerCase());
 });
 const isOwner = computed(() => {
   return web3Account.value === props.item.author;
@@ -129,18 +115,11 @@ const isCreator = computed(() => props.proposal.author === web3Account.value);
     <div class="text-center mt-4">
       <p>{{ $t('comment_box.delete_modal') }}</p>
     </div>
-    <div
-      class="mb-2 mt-3 text-center flex items-center content-center justify-center"
-    >
-      <UiButton
-        @click="deleteItem"
-        :loading="loading"
-        class="!bg-primary !text-white"
-        >{{ $t('comment_box.yes') }}</UiButton
-      >
-      <UiButton :disabled="loading" @click="closeModal = false" class="ml-2">{{
-        $t('comment_box.no')
+    <div class="mb-2 mt-3 text-center flex items-center content-center justify-center">
+      <UiButton @click="deleteItem" :loading="loading" class="!bg-primary !text-white">{{
+        $t('comment_box.yes')
       }}</UiButton>
+      <UiButton :disabled="loading" @click="closeModal = false" class="ml-2">{{ $t('comment_box.no') }}</UiButton>
     </div>
   </UiModal>
   <div v-if="!toggleEditComment">
@@ -157,12 +136,7 @@ const isCreator = computed(() => props.proposal.author === web3Account.value);
   <div v-if="toggleEditComment">
     <Block :slim="true" class="p-4 text-color mt-2 mb-0">
       <div>
-        <User
-          :address="item.author"
-          :profile="profiles[item.author]"
-          :space="space"
-          class="inline-block"
-        />
+        <User :address="item.author" :profile="profiles[item.author]" :space="space" class="inline-block" />
         <span
           v-text="$d(item.timestamp, 'short', 'en-US')"
           v-tippy="{
@@ -185,11 +159,7 @@ const isCreator = computed(() => props.proposal.author === web3Account.value);
       </div>
       <div class="mt-2">{{ item.markdown }}</div>
     </Block>
-    <UiButton
-      @click="toggleComment = !toggleComment"
-      class="p-1 rounded-0 mt-2"
-      style="line-height: 0px; height: auto"
-    >
+    <UiButton @click="toggleComment = !toggleComment" class="p-1 rounded-0 mt-2" style="line-height: 0px; height: auto">
       <Icon :name="'receipt-outlined'" class="v-align-middle" size="15" />
       <span class="ml-1">{{ $t('comment_box.reply') }}</span>
     </UiButton>

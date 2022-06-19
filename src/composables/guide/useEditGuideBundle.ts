@@ -10,7 +10,6 @@ import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
@@ -23,7 +22,7 @@ export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notif
   const router = useRouter();
   const route = useRoute();
 
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const { getExplore } = useApp();
   const { store } = useStore();
   const { web3 } = useWeb3();

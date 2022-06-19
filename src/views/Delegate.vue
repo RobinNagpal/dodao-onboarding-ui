@@ -1,23 +1,15 @@
 <script setup>
 import { ref, computed, watch, onMounted, watchEffect, inject } from 'vue';
 import { useRoute } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useProfiles } from '@/composables/useProfiles';
 import { isAddress } from '@ethersproject/address';
 import { formatBytes32String } from '@ethersproject/strings';
 import { getInstance } from '@/utils/auth/auth';
-import {
-  sendTransaction,
-  getScores
-} from '@snapshot-labs/snapshot.js/src/utils';
+import { sendTransaction, getScores } from '@snapshot-labs/snapshot.js/src/utils';
 import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import { sleep } from '@snapshot-labs/snapshot.js/src/utils';
-import {
-  getDelegates,
-  getDelegators,
-  getDelegatesBySpace,
-  contractAddress
-} from '@/helpers/delegation';
+import { getDelegates, getDelegators, getDelegatesBySpace, contractAddress } from '@/helpers/delegation';
 import { useApp } from '@/composables/useApp';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useTxStatus } from '@/composables/useTxStatus';
@@ -27,14 +19,13 @@ import { shorten, setPageTitle, n } from '@/helpers/utils';
 const abi = ['function setDelegate(bytes32 id, address delegate)'];
 
 const route = useRoute();
-const { t } = useI18n();
+const { t } = i18n.global;
 const auth = getInstance();
 const notify = inject('notify');
 const { explore } = useApp();
 const { web3, web3Account } = useWeb3();
 const { pendingCount } = useTxStatus();
-const { loadExtentedSpaces, extentedSpaces, spaceLoading } =
-  useExtendedSpaces();
+const { loadExtentedSpaces, extentedSpaces, spaceLoading } = useExtendedSpaces();
 
 const modalOpen = ref(false);
 const currentId = ref('');
@@ -81,15 +72,11 @@ async function handleSubmit() {
   loading.value = true;
   try {
     let address = form.value.address;
-    if (address.includes('.eth'))
-      address = await getProvider('1').resolveName(address);
-    const tx = await sendTransaction(
-      auth.web3,
-      contractAddress,
-      abi,
-      'setDelegate',
-      [formatBytes32String(form.value.id), address]
-    );
+    if (address.includes('.eth')) address = await getProvider('1').resolveName(address);
+    const tx = await sendTransaction(auth.web3, contractAddress, abi, 'setDelegate', [
+      formatBytes32String(form.value.id),
+      address
+    ]);
     pendingCount.value++;
     loading.value = false;
     const receipt = await tx.wait();
@@ -124,14 +111,9 @@ async function getDelegatesWithScore() {
       getDelegatesBySpace(space.value.network, space.value.id)
     ]);
 
-    const delegations = [
-      ...delegationsRes[0].delegations,
-      ...delegationsRes[1].delegations
-    ];
+    const delegations = [...delegationsRes[0].delegations, ...delegationsRes[1].delegations];
 
-    const uniqueDelegators = Array.from(
-      new Set(delegations.map(d => d.delegate))
-    ).map(delegate => {
+    const uniqueDelegators = Array.from(new Set(delegations.map(d => d.delegate))).map(delegate => {
       return delegations.find(a => a.delegate === delegate);
     });
 
@@ -155,9 +137,7 @@ async function getDelegatesWithScore() {
       });
     });
 
-    const sortedDelegates = uniqueDelegators
-      .filter(delegate => delegate.score > 0)
-      .sort((a, b) => b.score - a.score);
+    const sortedDelegates = uniqueDelegators.filter(delegate => delegate.score > 0).sort((a, b) => b.score - a.score);
 
     delegatesWithScore.value = sortedDelegates;
     delegatesLoading.value = false;
@@ -188,8 +168,7 @@ watch(networkKey, (val, prev) => {
 watchEffect(async () => {
   if (explore.value.spaces[form.value.id]) {
     await loadExtentedSpaces([form.value.id]);
-    if (extentedSpaces.value.some(s => s.id === form.value.id))
-      getDelegatesWithScore();
+    if (extentedSpaces.value.some(s => s.id === form.value.id)) getDelegatesWithScore();
   } else delegatesWithScore.value = [];
 });
 
@@ -212,25 +191,14 @@ onMounted(async () => {
       </div>
       <template v-if="loaded">
         <Block :title="$t('delegate.selectDelegate')">
-          <UiInput
-            v-model.trim="form.address"
-            :placeholder="$t('delegate.addressPlaceholder')"
-            class="mt-2"
-          >
+          <UiInput v-model.trim="form.address" :placeholder="$t('delegate.addressPlaceholder')" class="mt-2">
             <template v-slot:label>{{ $t('delegate.to') }}</template>
           </UiInput>
-          <UiInput
-            v-model.trim="form.id"
-            :placeholder="$t('delegate.spacePlaceholder')"
-          >
+          <UiInput v-model.trim="form.id" :placeholder="$t('delegate.spacePlaceholder')">
             <template v-slot:label>{{ $t('dao') }}</template>
           </UiInput>
         </Block>
-        <Block
-          v-if="delegates.length > 0"
-          :slim="true"
-          :title="$t('delegate.delegations')"
-        >
+        <Block v-if="delegates.length > 0" :slim="true" :title="$t('delegate.delegations')">
           <div
             v-for="(delegate, i) in delegates"
             :key="i"
@@ -242,23 +210,13 @@ onMounted(async () => {
               :space="{ network: web3.network.key }"
               :profile="profiles[delegate.delegate]"
             />
-            <div
-              v-text="shorten(delegate.space || $t('allDAO'), 'choice')"
-              class="flex-auto text-right link-color"
-            />
-            <a
-              @click="clearDelegate(delegate.space, delegate.delegate)"
-              class="px-2 -mr-2 ml-2"
-            >
+            <div v-text="shorten(delegate.space || $t('allDAO'), 'choice')" class="flex-auto text-right link-color" />
+            <a @click="clearDelegate(delegate.space, delegate.delegate)" class="px-2 -mr-2 ml-2">
               <Icon name="close" size="12" class="mb-1" />
             </a>
           </div>
         </Block>
-        <Block
-          v-if="delegators.length > 0"
-          :slim="true"
-          :title="$t('delegate.delegated')"
-        >
+        <Block v-if="delegators.length > 0" :slim="true" :title="$t('delegate.delegated')">
           <div
             v-for="(delegator, i) in delegators"
             :key="i"
@@ -270,16 +228,11 @@ onMounted(async () => {
               :space="{ network: web3.network.key }"
               :profile="profiles[delegator.delegator]"
             />
-            <div
-              v-text="shorten(delegator.space || '-', 'choice')"
-              class="flex-auto text-right link-color"
-            />
+            <div v-text="shorten(delegator.space || '-', 'choice')" class="flex-auto text-right link-color" />
           </div>
         </Block>
         <Block
-          v-if="
-            delegatesLoading || spaceLoading || delegatesWithScore.length > 0
-          "
+          v-if="delegatesLoading || spaceLoading || delegatesWithScore.length > 0"
           :title="$t('delegate.topDelegates')"
           :slim="true"
           :loading="delegatesLoading || spaceLoading"

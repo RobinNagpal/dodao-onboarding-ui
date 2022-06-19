@@ -6,8 +6,9 @@ import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import { signMessage } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getInstance } from '@/utils/auth/auth';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import i18n from '@/helpers/i18n';
+
+const { t } = i18n.global;
 const auth = getInstance();
 const { modalOpen, modalAccountOpen } = useModal();
 const props = defineProps({
@@ -20,11 +21,7 @@ const props = defineProps({
 });
 const { web3Account } = useWeb3();
 const item2 = toRef(props, 'item');
-const comment = ref(
-  props.method === 'edit' && item2.value?.markdown
-    ? clone(item2.value?.markdown)
-    : ''
-);
+const comment = ref(props.method === 'edit' && item2.value?.markdown ? clone(item2.value?.markdown) : '');
 const loading = ref(false);
 const togglePreview = ref(true);
 const closeModal = ref(false);
@@ -49,12 +46,7 @@ async function updateItems() {
     const token = localStorage.getItem('_commentBox.token');
     let sig;
     const msg = { markdown: comment.value };
-    if (!token)
-      sig = await signMessage(
-        auth.web3,
-        JSON.stringify(msg),
-        web3Account.value
-      );
+    if (!token) sig = await signMessage(auth.web3, JSON.stringify(msg), web3Account.value);
     const res = await postData(
       `https://uia5m1.deta.dev/update/${props.item.key}`,
       {
@@ -105,12 +97,7 @@ const chooseMethod = {
         reply_thread_id: props.item.key,
         reply: props.item.markdown
       };
-      if (!token)
-        sig = await signMessage(
-          auth.web3,
-          JSON.stringify(msg),
-          web3Account.value
-        );
+      if (!token) sig = await signMessage(auth.web3, JSON.stringify(msg), web3Account.value);
       const res = await postData(
         `https://uia5m1.deta.dev/add_reply`,
         {
@@ -159,25 +146,15 @@ watch([modalOpen, closeModal], () => {
     <div class="text-center mt-3">
       <p>{{ $t('comment_box.edit_modal') }}</p>
     </div>
-    <div
-      class="mb-2 mt-3 text-center flex items-center content-center justify-center"
-    >
-      <UiButton
-        class="!bg-primary !text-white"
-        :loading="loading"
-        @click="updateItems"
-        >{{ $t('comment_box.yes') }}</UiButton
-      >
-      <UiButton @click="closeEvent" :disabled="loading" class="ml-2">{{
-        $t('comment_box.no')
+    <div class="mb-2 mt-3 text-center flex items-center content-center justify-center">
+      <UiButton class="!bg-primary !text-white" :loading="loading" @click="updateItems">{{
+        $t('comment_box.yes')
       }}</UiButton>
+      <UiButton @click="closeEvent" :disabled="loading" class="ml-2">{{ $t('comment_box.no') }}</UiButton>
     </div>
   </UiModal>
   <div class="mt-2">
-    <UiButton
-      v-if="togglePreview"
-      class="flex w-full px-3 !h-auto cursor-default"
-    >
+    <UiButton v-if="togglePreview" class="flex w-full px-3 !h-auto cursor-default">
       <TextareaAutosize
         v-model="comment"
         :placeholder="placeholder"
@@ -186,40 +163,16 @@ watch([modalOpen, closeModal], () => {
         style="font-size: 18px"
       />
     </UiButton>
-    <Block
-      v-if="!togglePreview"
-      slim="true"
-      class="p-4 h6 text-color mt-2 mb-0"
-    >
+    <Block v-if="!togglePreview" slim="true" class="p-4 h6 text-color mt-2 mb-0">
       <div>{{ comment }}</div>
     </Block>
-    <UiButton
-      :disabled="comment.length === 0"
-      :loading="loading"
-      class="mt-2"
-      @click="chooseMethod[method]"
-      primary
-    >
+    <UiButton :disabled="comment.length === 0" :loading="loading" class="mt-2" @click="chooseMethod[method]" primary>
       {{ buttonName }}
     </UiButton>
-    <UiButton
-      @click="togglePreview = !togglePreview"
-      :disabled="comment.length === 0"
-      class="ml-2 mt-2"
-      primary
-    >
-      {{
-        togglePreview
-          ? $t('comment_box.preview')
-          : $t('comment_box.continue_editing')
-      }}
+    <UiButton @click="togglePreview = !togglePreview" :disabled="comment.length === 0" class="ml-2 mt-2" primary>
+      {{ togglePreview ? $t('comment_box.preview') : $t('comment_box.continue_editing') }}
     </UiButton>
-    <UiButton
-      :disabled="loading"
-      @click="$emit('dismissComment')"
-      type="text"
-      class="border-0 ml-2 mt-2 button--text"
-    >
+    <UiButton :disabled="loading" @click="$emit('dismissComment')" type="text" class="border-0 ml-2 mt-2 button--text">
       {{ $t('comment_box.dismiss') }}
     </UiButton>
   </div>

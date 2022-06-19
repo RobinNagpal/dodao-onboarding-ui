@@ -1,13 +1,13 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 
 defineEmits(['update:modelValue']);
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { t } = i18n.global;
 
 const searchOptions = computed(() => [
   {
@@ -17,9 +17,7 @@ const searchOptions = computed(() => [
 ]);
 
 const searchSelectedOption = computed(
-  () =>
-    searchOptions.value.find(option => option.action === route.name)?.text ||
-    'home'
+  () => searchOptions.value.find(option => option.action === route.name)?.text || 'home'
 );
 
 const routeQuery = computed(() => route.query.q);

@@ -6,7 +6,7 @@ import { useSpace } from '@/composables/useSpace';
 import { GuideType } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, PropType } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -67,7 +67,7 @@ function selectFromThreedotDropdown(e) {
   if (e === 'spaceSettingIndex') editSpaceSettings();
 }
 
-const { t } = useI18n();
+const { t } = i18n.global;
 
 const { domain } = useDomain();
 

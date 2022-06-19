@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watchEffect, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useUsername } from '@/composables/useUsername';
 import { getInstance } from '@/utils/auth/auth';
 import { sendTransaction, sleep } from '@snapshot-labs/snapshot.js/src/utils';
@@ -20,7 +20,7 @@ const abi = ['function clearDelegate(bytes32 id)'];
 const emit = defineEmits(['close', 'reload']);
 
 const auth = getInstance();
-const { t } = useI18n();
+const { t } = i18n.global;
 const { address, profile, username } = useUsername();
 const notify = inject('notify');
 
@@ -35,13 +35,7 @@ watchEffect(() => {
 async function handleSubmit() {
   loading.value = true;
   try {
-    const tx = await sendTransaction(
-      auth.web3,
-      contractAddress,
-      abi,
-      'clearDelegate',
-      [formatBytes32String(props.id)]
-    );
+    const tx = await sendTransaction(auth.web3, contractAddress, abi, 'clearDelegate', [formatBytes32String(props.id)]);
     pendingCount.value++;
     emit('close');
     loading.value = false;
@@ -78,13 +72,7 @@ async function handleSubmit() {
           </UiButton>
         </div>
         <div class="w-2/4 float-left pl-2">
-          <UiButton
-            :disabled="loading"
-            :loading="loading"
-            type="submit"
-            class="w-full"
-            primary
-          >
+          <UiButton :disabled="loading" :loading="loading" type="submit" class="w-full" primary>
             {{ $t('confirm') }}
           </UiButton>
         </div>

@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import i18n from '@/helpers/i18n';
+const { t } = i18n.global;
 defineProps(['block']);
 const text = computed(() => t('noResultsFound'));
 </script>
