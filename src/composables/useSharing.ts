@@ -1,10 +1,10 @@
 import { useCopy } from '@/composables/useCopy';
+import i18n from '@/helpers/i18n';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useShare } from '@vueuse/core';
-import { useI18n } from 'vue-i18n';
 
 export function useSharing() {
-  const { t } = useI18n();
+  const { t } = i18n.global;
 
   const sharingItems = [
     {
@@ -33,12 +33,7 @@ export function useSharing() {
 
   const { share, isSupported } = useShare();
 
-  function startShare(
-    space: SpaceModel,
-    entityName: string,
-    entityUrl: string,
-    uuid: string
-  ) {
+  function startShare(space: SpaceModel, entityName: string, entityUrl: string, uuid: string) {
     share({
       title: '',
       text: `${space.name} - ${entityName}`,
@@ -46,30 +41,16 @@ export function useSharing() {
     });
   }
 
-  function shareToTwitter(
-    space: SpaceModel,
-    entityName: string,
-    entityUrl: string,
-    uuid: string,
-    window
-  ) {
+  function shareToTwitter(space: SpaceModel, entityName: string, entityUrl: string, uuid: string, window) {
     const twitterShareUrl = `/social-share/twitter/${space.id}/guide/${uuid}?hostName=${window.location.host}`;
 
     const guideUrl = window.location.origin + twitterShareUrl;
 
-    const url = `https://twitter.com/intent/tweet?text=@${
-      space.twitter || space.name
-    }%20${entityName}&url=${guideUrl}`;
+    const url = `https://twitter.com/intent/tweet?text=@${space.twitter || space.name}%20${entityName}&url=${guideUrl}`;
     window.open(url, '_blank').focus();
   }
 
-  function shareToFacebook(
-    space: SpaceModel,
-    entityName: string,
-    entityUrl: string,
-    uuid: string,
-    window
-  ) {
+  function shareToFacebook(space: SpaceModel, entityName: string, entityUrl: string, uuid: string, window) {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodedProposalUrl(
       space.id,
       entityUrl,
@@ -80,11 +61,7 @@ export function useSharing() {
 
   const { copyToClipboard } = useCopy();
 
-  function shareToClipboard(
-    space: SpaceModel,
-    entityUrl: string,
-    uuid: string
-  ) {
+  function shareToClipboard(space: SpaceModel, entityUrl: string, uuid: string) {
     copyToClipboard(entitylUrl(space.id, entityUrl, uuid));
   }
 

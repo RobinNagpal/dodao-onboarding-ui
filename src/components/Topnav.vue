@@ -16,7 +16,9 @@ import { getIpfsUrl, shorten } from '@/helpers/utils';
 import { getCDNImageUrl } from '@dodao/onboarding-schemas/helpers/getCDNImageUrl';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-
+import i18n from '@/helpers/i18n';
+const { t } = i18n.global;
+const $t = t;
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
 

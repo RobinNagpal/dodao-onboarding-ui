@@ -13,6 +13,10 @@
     "run:app": "vite"
   },
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "~27.3.0",
+    "@ag-grid-community/core": "~27.3.0",
+    "@ag-grid-community/csv-export": "~27.3.0",
+    "@ag-grid-community/vue3": "~27.3.0",
     "@apollo/client": "^3.5.8",
     "@blocto/sdk": "file:./node_patches/portto/blocto-sdk",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
@@ -33,8 +37,6 @@
     "@solana/wallet-adapter-wallets": "^0.15.5",
     "@vue/apollo-composable": "4.0.0-alpha.16",
     "@vueuse/core": "^7.5.1",
-    "ag-grid-community": "^27.3.0",
-    "ag-grid-vue3": "^27.3.0",
     "ajv": "^8.9.0",
     "autolinker": "^3.14.3",
     "bs58": "^5.0.0",
@@ -91,7 +93,7 @@
     "sass-loader": "^8.0.2",
     "tailwindcss": "^2.2.9",
     "unplugin-vue-components": "^0.17.11",
-    "vite": "^2.7.10"
+    "vite": "^2.9.12"
   },
   "resolutions": {
     "@blocto/sdk": "file:./node_patches/portto/blocto-sdk",

@@ -4,6 +4,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
 import clientEIP712 from '@/helpers/clientEIP712';
 import clientGnosisSafe from '@/helpers/clientGnosisSafe';
+import i18n from '@/helpers/i18n';
 import { getInstance } from '@/utils/auth/auth';
 import { AuthConnector } from '@/utils/auth/authConnector';
 import { GuideBundleInput } from '@dodao/onboarding-schemas/inputs/GuideBundleInput';
@@ -21,10 +22,9 @@ import {
 } from '@dodao/onboarding-schemas/models/GuideModel';
 import { MsgResponse } from '@dodao/onboarding-schemas/response/MsgResponse';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 export function useClient() {
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const { web3 } = useWeb3();
   const auth = getInstance();
   const { notify } = useNotifications();

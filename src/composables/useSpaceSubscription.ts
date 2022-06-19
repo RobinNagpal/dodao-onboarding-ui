@@ -2,9 +2,9 @@ import { useAliasAction } from '@/composables/useAliasAction';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/clientEIP712';
+import i18n from '@/helpers/i18n';
 import { SUBSCRIPTIONS_QUERY } from '@/helpers/queries';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { beams } from '../helpers/beams';
 import { useNotifications } from './useNotifications';
 
@@ -15,15 +15,12 @@ export function useSpaceSubscription(spaceId: any) {
   const { apolloQuery } = useApolloQuery();
   const { setAlias, aliasWallet, isValidAlias, checkAlias } = useAliasAction();
   const { notify } = useNotifications();
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const loading = ref(false);
   const isSubscribed = computed(() => {
     return (
       subscriptions.value?.some((subscription: any) => {
-        return (
-          subscription.space.id === spaceId &&
-          subscription.address === web3Account.value
-        );
+        return subscription.space.id === spaceId && subscription.address === web3Account.value;
       }) ?? false
     );
   });
@@ -70,8 +67,7 @@ export function useSpaceSubscription(spaceId: any) {
       });
     } catch (error: any) {
       // thrown by beams when the user denies the notification permission or browser doesn't support it
-      if (error.name === 'NotAllowedError')
-        notify(['red', t('notificationsBlocked')]);
+      if (error.name === 'NotAllowedError') notify(['red', t('notificationsBlocked')]);
       console.error(error);
     }
   };

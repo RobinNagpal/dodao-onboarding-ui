@@ -5,7 +5,7 @@ import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getScores } from '@snapshot-labs/snapshot.js/src/utils';
 import { useApp } from '@/composables/useApp';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useCopy } from '@/composables/useCopy';
 import { setPageTitle, n } from '@/helpers/utils';
 import { getNetworks } from '@/helpers/network';
@@ -23,7 +23,7 @@ const route = useRoute();
 const { query: queryParams } = useRoute();
 const { strategies } = useApp();
 const { copyToClipboard } = useCopy();
-const { t } = useI18n();
+const { t } = i18n.global;
 
 let provider;
 
@@ -31,9 +31,7 @@ const strategy = computed(() => strategies.value[route.params.name]);
 const strategyExample = computed(() => {
   if (queryParams.query) {
     try {
-      const { params, network, snapshot, addresses } = JSON.parse(
-        decodeURIComponent(queryParams.query)
-      );
+      const { params, network, snapshot, addresses } = JSON.parse(decodeURIComponent(queryParams.query));
       return {
         ...strategy.value.examples?.[0],
         addresses,
@@ -56,11 +54,7 @@ const strategyError = ref(null);
 const networkError = ref(null);
 const scores = ref(null);
 const form = ref({
-  params: JSON.stringify(
-    strategyExample.value?.strategy.params ?? defaultParams,
-    null,
-    2
-  ),
+  params: JSON.stringify(strategyExample.value?.strategy.params ?? defaultParams, null, 2),
   network: strategyExample.value?.network ?? 1,
   snapshot: '',
   addresses: strategyExample.value?.addresses ?? []
@@ -121,11 +115,7 @@ async function handleURLUpdate(_, paramName) {
 }
 
 function copyURL() {
-  copyToClipboard(
-    `${window.location.origin}/#${route.path}?query=${encodeURIComponent(
-      JSON.stringify(form.value)
-    )}`
-  );
+  copyToClipboard(`${window.location.origin}/#${route.path}?query=${encodeURIComponent(JSON.stringify(form.value))}`);
 }
 
 onMounted(async () => {
@@ -160,9 +150,7 @@ onMounted(async () => {
         <Block :title="$t('settings.header')">
           <UiInput @click="modalNetworksOpen = true">
             <template v-slot:selected>
-              {{
-                form.network ? networks[form.network].name : $t('selectNetwork')
-              }}
+              {{ form.network ? networks[form.network].name : $t('selectNetwork') }}
             </template>
             <template v-slot:label> {{ $t(`settings.network`) }} </template>
           </UiInput>
@@ -171,20 +159,13 @@ onMounted(async () => {
               {{ $t('dodao') }}
             </template>
           </UiInput>
-          <Block
-            v-if="networkError"
-            class="mt-4"
-            style="border-color: red !important"
-          >
+          <Block v-if="networkError" class="mt-4" style="border-color: red !important">
             <Icon name="warning" class="mr-2 !text-red" />
             <span class="!text-red">{{ $t('networkErrorPlayground') }}</span>
           </Block>
         </Block>
         <Block :title="$t('strategyParams')">
-          <UiButton
-            class="block w-full mb-3 overflow-x-auto"
-            style="height: auto"
-          >
+          <UiButton class="block w-full mb-3 overflow-x-auto" style="height: auto">
             <TextareaAutosize
               v-model="form.params"
               @update:modelValue="handleURLUpdate"
@@ -229,11 +210,7 @@ onMounted(async () => {
         </UiButton>
       </Block>
       <Block v-if="scores" :title="$t('results')">
-        <div
-          class="flex justify-between"
-          v-for="score in Object.keys(scores[0])"
-          :key="score"
-        >
+        <div class="flex justify-between" v-for="score in Object.keys(scores[0])" :key="score">
           <User :address="score" :space="form" />
           <span>
             {{ n(scores[0][score]) }}

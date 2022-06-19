@@ -15,7 +15,7 @@ import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { marked } from 'marked';
 import { computed, onMounted, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { PropType } from 'vue';
 
@@ -36,7 +36,7 @@ const { apolloQuery } = useApolloQuery();
 
 const route = useRoute();
 
-const { t } = useI18n();
+const { t } = i18n.global;
 
 const { isAdmin } = useSpace(props.space);
 

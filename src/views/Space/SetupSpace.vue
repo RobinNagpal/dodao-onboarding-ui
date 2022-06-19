@@ -24,7 +24,7 @@ import spaceSchema from '@dodao/onboarding-schemas/schemas/space.json';
 import { clone, validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import { ErrorObject } from 'ajv';
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useRouter } from 'vue-router';
 
 const { loadExtentedSpaces, extentedSpaces } = useExtendedSpaces();
@@ -56,7 +56,7 @@ const props = defineProps({
 
 const basicValidation = { name: 'basic', params: {} };
 
-const { t } = useI18n();
+const { t } = i18n.global;
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();
 const router = useRouter();
@@ -99,9 +99,7 @@ const validate = computed(() => {
 });
 
 const isValid = computed(() => {
-  return (
-    !clientLoading.value && validate.value === true && !uploadLoading.value
-  );
+  return !clientLoading.value && validate.value === true && !uploadLoading.value;
 });
 
 const isOwner = true;
@@ -126,12 +124,7 @@ const { modalAccountOpen } = useModal();
 
 async function handleSubmit() {
   if (isValid.value) {
-    const computedSpaceId =
-      slugify(form.value.name) +
-      '-' +
-      getBlockchain().toLowerCase() +
-      '-' +
-      form.value.network;
+    const computedSpaceId = slugify(form.value.name) + '-' + getBlockchain().toLowerCase() + '-' + form.value.network;
     const id = props.spaceId || computedSpaceId;
 
     const result = await send(
@@ -165,13 +158,11 @@ function inputError(field) {
     const errors = Object.keys(defaults.errors);
     const errorFound = (validate.value as ErrorObject[]).find(
       error =>
-        (errors.includes(error.keyword) &&
-          error.params.missingProperty === field) ||
+        (errors.includes(error.keyword) && error.params.missingProperty === field) ||
         (errors.includes(error.keyword) && error.instancePath.includes(field))
     );
 
-    if (errorFound)
-      return t(`errors.${errorFound.keyword}`, [errorFound?.params.limit]);
+    if (errorFound) return t(`errors.${errorFound.keyword}`, [errorFound?.params.limit]);
   }
 }
 
@@ -225,14 +216,10 @@ onMounted(async () => {
   try {
     if (props.spaceId) {
       spaceLoading.value = true;
-      if (
-        !extentedSpaces.value?.find(s => s.id === props.spaceId?.toString())
-      ) {
+      if (!extentedSpaces.value?.find(s => s.id === props.spaceId?.toString())) {
         await loadExtentedSpaces([props.spaceId]);
       }
-      const space = extentedSpaces.value.find(
-        s => s.id === props.spaceId?.toString()
-      );
+      const space = extentedSpaces.value.find(s => s.id === props.spaceId?.toString());
 
       if (space) {
         form.value.about = space?.about || undefined;
@@ -249,9 +236,7 @@ onMounted(async () => {
         form.value.terms = space?.terms || undefined;
         form.value.twitter = space?.twitter || undefined;
 
-        space
-          ? setPageTitle('page.title.dao.settings', { space: space.name })
-          : setPageTitle('page.title.setup');
+        space ? setPageTitle('page.title.dao.settings', { space: space.name }) : setPageTitle('page.title.setup');
       }
       spaceLoading.value = false;
     }
@@ -265,8 +250,7 @@ onMounted(async () => {
   <LayoutSingle v-bind="$attrs">
     <template #content>
       <div class="px-16">
-        <div v-if="spaceId" class="px-4 md:px-0 mb-3">
-        </div>
+        <div v-if="spaceId" class="px-4 md:px-0 mb-3"></div>
         <div class="px-4 md:px-0 flex mb-4" v-if="spaceId">
           <h1 v-if="loaded" v-text="$t('setupDAO.header')" class="flex-1" />
           <PageLoading v-else />
@@ -275,24 +259,16 @@ onMounted(async () => {
           <div v-if="space || isOwner">
             <Block :title="$t('setupDAO.profile')">
               <div class="mb-2">
-                <UiInput
-                  v-model="form.name"
-                  :error="inputError('name')"
-                  maxlength="32"
-                >
+                <UiInput v-model="form.name" :error="inputError('name')" maxlength="32">
                   <template v-slot:label>{{ $t(`settings.name`) }}*</template>
                 </UiInput>
                 <UiInput
                   v-model="form.mission"
                   :error="inputError('mission')"
-                  :placeholder="
-                    $t(`settings.missionStatementPlaceholder`) + ' *'
-                  "
+                  :placeholder="$t(`settings.missionStatementPlaceholder`) + ' *'"
                   maxlength="64"
                 >
-                  <template v-slot:label
-                    >{{ $t(`settings.missionStatement`) }}*</template
-                  >
+                  <template v-slot:label>{{ $t(`settings.missionStatement`) }}*</template>
                 </UiInput>
                 <UiInput
                   v-model="form.avatar"
@@ -303,34 +279,18 @@ onMounted(async () => {
                     {{ $t(`settings.avatar`) }}
                   </template>
                   <template v-slot:info>
-                    <Upload
-                      class="!ml-2"
-                      @input="setAvatarUrl"
-                      @loading="setUploadLoading"
-                    >
+                    <Upload class="!ml-2" @input="setAvatarUrl" @loading="setUploadLoading">
                       {{ $t('upload') }}
                     </Upload>
                   </template>
                 </UiInput>
-                <UiInput
-                  @click="modalNetworksOpen = true"
-                  :error="inputError('network')"
-                >
+                <UiInput @click="modalNetworksOpen = true" :error="inputError('network')">
                   <template v-slot:selected>
-                    {{
-                      form.network
-                        ? networks[form.network].name
-                        : $t('selectNetwork')
-                    }}
+                    {{ form.network ? networks[form.network].name : $t('selectNetwork') }}
                   </template>
-                  <template v-slot:label>
-                    {{ $t(`settings.network`) }}*
-                  </template>
+                  <template v-slot:label> {{ $t(`settings.network`) }}* </template>
                 </UiInput>
-                <UiInput
-                  @click="modalCategoryOpen = true"
-                  :class="{ 'mt-6': !categoriesString }"
-                >
+                <UiInput @click="modalCategoryOpen = true" :class="{ 'mt-6': !categoriesString }">
                   <template v-slot:label>
                     {{ $t(`settings.categories`) }}
                   </template>
@@ -340,10 +300,7 @@ onMounted(async () => {
                     </span>
                   </template>
                 </UiInput>
-                <UiInput
-                  @click="modalSkinsOpen = true"
-                  :error="inputError('skin')"
-                >
+                <UiInput @click="modalSkinsOpen = true" :error="inputError('skin')">
                   <template v-slot:selected>
                     {{ form.skin }}
                   </template>
@@ -351,31 +308,19 @@ onMounted(async () => {
                     {{ $t(`settings.skin`) }}
                   </template>
                 </UiInput>
-                <UiInput
-                  v-model="form.twitter"
-                  placeholder="e.g. elonmusk"
-                  :error="inputError('twitter')"
-                >
+                <UiInput v-model="form.twitter" placeholder="e.g. elonmusk" :error="inputError('twitter')">
                   <template v-slot:label>
                     <Icon name="twitter" />
                     {{ $t(`settings.twitter`) }}
                   </template>
                 </UiInput>
-                <UiInput
-                  v-model="form.github"
-                  placeholder="e.g. vbuterin"
-                  :error="inputError('github')"
-                >
+                <UiInput v-model="form.github" placeholder="e.g. vbuterin" :error="inputError('github')">
                   <template v-slot:label>
                     <Icon name="github" />
                     {{ $t(`settings.github`) }}
                   </template>
                 </UiInput>
-                <UiInput
-                  v-model="form.terms"
-                  placeholder="e.g. https://example.com/terms"
-                  :error="inputError('terms')"
-                >
+                <UiInput v-model="form.terms" placeholder="e.g. https://example.com/terms" :error="inputError('terms')">
                   <template v-slot:label> {{ $t(`settings.terms`) }} </template>
                 </UiInput>
               </div>
@@ -391,10 +336,7 @@ onMounted(async () => {
               </UiButton>
             </Block>
             <Block :title="$t('setupDAO.admins')" v-if="isOwner">
-              <Block
-                :style="`border-color: red !important`"
-                v-if="inputError('admins')"
-              >
+              <Block :style="`border-color: red !important`" v-if="inputError('admins')">
                 <Icon name="warning" class="mr-2 !text-red" />
                 <span class="!text-red"> {{ inputError('admins') }}&nbsp;</span>
               </Block>
@@ -423,16 +365,8 @@ onMounted(async () => {
     </template>
   </LayoutSingle>
   <teleport to="#modal">
-    <ModalNetworks
-      v-model="form.network"
-      :open="modalNetworksOpen"
-      @close="modalNetworksOpen = false"
-    />
-    <ModalSkins
-      v-model="form.skin"
-      :open="modalSkinsOpen"
-      @close="modalSkinsOpen = false"
-    />
+    <ModalNetworks v-model="form.network" :open="modalNetworksOpen" @close="modalNetworksOpen = false" />
+    <ModalSkins v-model="form.skin" :open="modalSkinsOpen" @close="modalSkinsOpen = false" />
     <ModalSpaceCategory
       :open="modalCategoryOpen"
       :categories="form.categories"

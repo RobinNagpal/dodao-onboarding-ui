@@ -26,10 +26,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@dodao/onboarding-schemas': path.resolve(
-        __dirname,
-        './dodao-onboarding-schemas/src'
-      )
+      '@ag-grid-community/core$': path.resolve(__dirname, 'node_modules/@ag-grid-community/core'),
+      vue$: path.resolve(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js'),
+      '@dodao/onboarding-schemas': path.resolve(__dirname, './dodao-onboarding-schemas/src')
     },
     dedupe: ['@popperjs/core']
   },

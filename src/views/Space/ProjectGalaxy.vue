@@ -14,7 +14,7 @@ import { UpsertProjectGalaxyAccessToken } from '@/graphql/space/projectGalaxy.mu
 import { setPageTitle } from '@/helpers/utils';
 import { useMutation } from '@vue/apollo-composable';
 import { computed, onMounted, PropType, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 
@@ -26,7 +26,7 @@ const props = defineProps({
 });
 
 const { notify } = useNotifications();
-const { t } = useI18n();
+const { t } = i18n.global;
 const savingAccessToken = ref(false);
 const projectGalaxyTokenInput = ref<string | undefined>();
 

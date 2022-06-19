@@ -1,9 +1,9 @@
 import { useNotifications } from '@/composables/useNotifications';
+import i18n from '@/helpers/i18n';
 import { useClipboard } from '@vueuse/core';
-import { useI18n } from 'vue-i18n';
 
 export function useCopy() {
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const { copy, copied } = useClipboard();
   const { notify } = useNotifications();
 

@@ -2,6 +2,7 @@ import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
+import i18n from '@/helpers/i18n';
 import { getGuide } from '@/helpers/snapshot';
 import {
   ChoiceError,
@@ -24,7 +25,6 @@ import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { emptyGuide } from './EmptyGuide';
 
@@ -59,7 +59,7 @@ export function useEditGuide(uuid: string | null, space: SpaceModel, notify: any
   const router = useRouter();
   const route = useRoute();
 
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const { getExplore } = useApp();
   const { store } = useStore();
   const { web3 } = useWeb3();

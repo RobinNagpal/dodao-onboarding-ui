@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ConfirmDialog from '@/components/Modal/ConfirmDialog.vue';
+import SpaceGnosisWalletDeleteWalletCell from '@/components/Space/GnosisWallet/DeleteWalletCell.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
@@ -9,22 +10,24 @@ import { useNotifications } from '@/composables/useNotifications';
 import {
   ExtendedSpace_space,
   GnosisSafeWalletInput,
-  UpsertGnosisSafeWallets_payload,
-  UpsertGnosisSafeWalletsVariables
+  UpsertGnosisSafeWalletsVariables,
+  UpsertGnosisSafeWallets_payload
 } from '@/graphql/generated/graphqlDocs';
 import { UpsertGnosisSafeWallets } from '@/graphql/gnosisWallets.mutation.graphql';
+import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
+import '@ag-grid-community/core/dist/styles/ag-grid.css';
+import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
+import { AgGridVue } from '@ag-grid-community/vue3';
+import { onError } from '@apollo/client/link/error';
 import { useMutation } from '@vue/apollo-composable';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import 'ag-grid-community/dist/styles/ag-grid.css'; // Core grid CSS, always needed
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { AgGridVue } from 'ag-grid-vue3';
 import { v4 as uuidv4 } from 'uuid';
 import { PropType, reactive, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
+import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const { notify } = useNotifications();
-const { t } = useI18n();
+const { t } = i18n.global;
 
 const props = defineProps({
   space: { type: Object as PropType<ExtendedSpace_space>, required: true },
@@ -59,7 +62,13 @@ const columnDefs: ColDef[] = [
     autoHeight: true,
     flex: 2
   },
-  { headerName: 'Chain', field: 'chain', wrapText: true, autoHeight: true }
+  { headerName: 'Chain', field: 'chain', wrapText: true, autoHeight: true },
+  {
+    headerName: 'Actions',
+    cellRenderer: SpaceGnosisWalletDeleteWalletCell,
+    colId: 'params',
+    autoHeight: true
+  }
 ];
 
 const defaultColDef: ColDef = {
@@ -144,6 +153,7 @@ const handleAddWallet = async () => {
           :defaultColDef="defaultColDef"
           @grid-ready="onGridReady"
           :gridOptions="{ suppressCellSelection: true, enableCellTextSelection: true }"
+          :modules="[ClientSideRowModelModule]"
         >
         </ag-grid-vue>
       </div>
@@ -175,9 +185,9 @@ const handleAddWallet = async () => {
         </UiDropdown>
       </div>
       <div>
-        <UiButton @click="handleAddWallet()" variant="contained" :primary="true"
-          ><span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span></UiButton
-        >
+        <UiButton @click="handleAddWallet()" variant="contained" :primary="true">
+          <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span>
+        </UiButton>
       </div>
     </template>
   </LayoutSingle>

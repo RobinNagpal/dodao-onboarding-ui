@@ -1,6 +1,6 @@
 <script setup>
 import { computed, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { shorten, getChoiceString, explorerUrl, n } from '@/helpers/utils';
 import { useClient } from '@/composables/useClient';
 
@@ -17,14 +17,12 @@ const props = defineProps({
 
 const emit = defineEmits(['reload', 'close']);
 
-const { t } = useI18n();
+const { t } = i18n.global;
 const notify = inject('notify');
 const { send, clientLoading } = useClient();
 const format = getChoiceString;
 
-const symbols = computed(() =>
-  props.strategies.map(strategy => strategy.params.symbol)
-);
+const symbols = computed(() => props.strategies.map(strategy => strategy.params.symbol));
 
 async function handleSubmit() {
   const result = await send(props.space, 'vote', {
@@ -48,11 +46,7 @@ async function handleSubmit() {
     </template>
     <div class="flex flex-col flex-auto">
       <h4 class="m-4 mb-0 text-center">
-        {{
-          $tc('sureToVote', [
-            shorten(format(proposal, selectedChoices), 'choice')
-          ])
-        }}
+        {{ $tc('sureToVote', [shorten(format(proposal, selectedChoices), 'choice')]) }}
         <br />
         {{ $t('cannotBeUndone') }}
       </h4>
@@ -65,11 +59,7 @@ async function handleSubmit() {
         </div>
         <div class="flex">
           <span v-text="$t('dodao')" class="flex-auto text-color mr-1" />
-          <a
-            :href="explorerUrl(proposal.network, proposal.snapshot, 'block')"
-            target="_blank"
-            class="float-right"
-          >
+          <a :href="explorerUrl(proposal.network, proposal.snapshot, 'block')" target="_blank" class="float-right">
             {{ n(proposal.snapshot, '0,0') }}
             <Icon name="external-link" class="ml-1" />
           </a>
@@ -78,9 +68,7 @@ async function handleSubmit() {
           <span v-text="$t('votingPower')" class="flex-auto text-color mr-1" />
           <span
             v-tippy="{
-              content: scores
-                .map((score, index) => `${n(score)} ${symbols[index]}`)
-                .join(' + ')
+              content: scores.map((score, index) => `${n(score)} ${symbols[index]}`).join(' + ')
             }"
           >
             {{ n(totalScore) }}

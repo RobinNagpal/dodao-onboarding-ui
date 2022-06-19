@@ -6,8 +6,9 @@ import { useModal } from '@/composables/useModal';
 import { useWeb3 } from '@/composables/useWeb3';
 import { signMessage } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getInstance } from '@/utils/auth/auth';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import i18n from '@/helpers/i18n';
+
+const { t } = i18n.global;
 const auth = getInstance();
 const { modalOpen, modalAccountOpen } = useModal();
 const { web3Account } = useWeb3();
@@ -27,11 +28,7 @@ const threeDotItems = computed(() => {
 });
 const isAdmin = computed(() => {
   const admins = props.space.admins.map(address => address.toLowerCase());
-  return (
-    auth.isAuthenticated.value &&
-    web3Account.value &&
-    admins.includes(web3Account.value.toLowerCase())
-  );
+  return auth.isAuthenticated.value && web3Account.value && admins.includes(web3Account.value.toLowerCase());
 });
 const isOwner = computed(() => {
   return web3Account.value === props.item.author;
@@ -77,12 +74,7 @@ async function deleteItem() {
     const token = localStorage.getItem('_commentBox.token');
     let sig;
     const msg = { key: props.item.key };
-    if (!token)
-      sig = await signMessage(
-        auth.web3,
-        JSON.stringify(msg),
-        web3Account.value
-      );
+    if (!token) sig = await signMessage(auth.web3, JSON.stringify(msg), web3Account.value);
     const res = await deleteData(
       `https://uia5m1.deta.dev/delete`,
       {
@@ -144,9 +136,7 @@ async function getData(url = '') {
 const lastPage = ref(false);
 async function getDataAfterDelete(key) {
   try {
-    const res = await getData(
-      `https://uia5m1.deta.dev/all_reply/${props.item.proposal_id}/${key}`
-    );
+    const res = await getData(`https://uia5m1.deta.dev/all_reply/${props.item.proposal_id}/${key}`);
     if (res.status) {
       const resData = res.data.items;
       allReply.value = resData;
@@ -165,17 +155,13 @@ async function getReplyData() {
       `https://uia5m1.deta.dev/all_reply/${props.item.proposal_id}/${props.item.key}${lastPageCondition}`
     );
     if (res.status && !lastPage.value) {
-      const resData = res.data.items.filter(
-        a => allReply.value.findIndex(b => b.key === a.key) < 0
-      );
+      const resData = res.data.items.filter(a => allReply.value.findIndex(b => b.key === a.key) < 0);
       allReply.value = allReply.value.concat(resData).sort((a, b) => {
         return Number(a.timestamp) - Number(b.timestamp);
       });
       lastPage.value = res.data.last;
     } else {
-      const resData = res.data.items.filter(
-        a => allReply.value.findIndex(b => b.key === a.key) < 0
-      );
+      const resData = res.data.items.filter(a => allReply.value.findIndex(b => b.key === a.key) < 0);
       allReply.value = allReply.value.concat(resData).sort((a, b) => {
         return Number(a.timestamp) - Number(b.timestamp);
       });
@@ -207,18 +193,11 @@ function deleteItemReply(key) {
     <div class="text-center mt-3">
       <p>{{ $t('comment_box.delete_modal') }}</p>
     </div>
-    <div
-      class="mb-2 mt-3 text-center flex items-center content-center justify-center"
-    >
-      <UiButton
-        class="!bg-primary !text-white"
-        :loading="loading"
-        @click="deleteItem"
-        >{{ $t('comment_box.yes') }}</UiButton
-      >
-      <UiButton @click="closeEvent" :disabled="loading" class="ml-2">{{
-        $t('comment_box.no')
+    <div class="mb-2 mt-3 text-center flex items-center content-center justify-center">
+      <UiButton class="!bg-primary !text-white" :loading="loading" @click="deleteItem">{{
+        $t('comment_box.yes')
       }}</UiButton>
+      <UiButton @click="closeEvent" :disabled="loading" class="ml-2">{{ $t('comment_box.no') }}</UiButton>
     </div>
   </UiModal>
   <div v-if="!toggleEditComment">
@@ -235,12 +214,7 @@ function deleteItemReply(key) {
   <div v-if="toggleEditComment">
     <Block :slim="true" class="p-4 text-color mt-2 mb-0">
       <div>
-        <User
-          :address="item.author"
-          :profile="profiles[item.author]"
-          :space="space"
-          class="inline-block"
-        /><span
+        <User :address="item.author" :profile="profiles[item.author]" :space="space" class="inline-block" /><span
           v-text="$d(item.timestamp, 'short', 'en-US')"
           v-tippy="{
             content: ms(item.timestamp / 1e3)
@@ -264,11 +238,7 @@ function deleteItemReply(key) {
       <div class="mt-2">{{ item.markdown }}</div>
     </Block>
 
-    <UiButton
-      @click="toggleComment = !toggleComment"
-      class="p-1 rounded-0 mt-2"
-      style="line-height: 0px; height: auto"
-    >
+    <UiButton @click="toggleComment = !toggleComment" class="p-1 rounded-0 mt-2" style="line-height: 0px; height: auto">
       <Icon :name="'receipt-outlined'" class="v-align-middle" size="15" />
       <span class="ml-1">{{ $t('comment_box.reply') }}</span>
     </UiButton>

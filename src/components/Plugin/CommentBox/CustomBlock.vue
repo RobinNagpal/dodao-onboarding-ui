@@ -7,8 +7,8 @@ import { useProfiles } from '@/composables/useProfiles';
 import { useNotifications } from '@/composables/useNotifications';
 import { useScrollMonitor } from '@/composables/useScrollMonitor';
 import { signMessage } from '@snapshot-labs/snapshot.js/src/utils/web3';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import i18n from '@/helpers/i18n';
+const { t } = i18n.global;
 const props = defineProps({
   proposalId: String,
   space: Object,
@@ -42,13 +42,9 @@ async function getCommentData() {
       return;
     }
     const lastPageCondition = isLast.value ? `?last=${lastPage.value}` : '';
-    const res = await getData(
-      `https://uia5m1.deta.dev/all/${props.proposalId}${lastPageCondition}`
-    );
+    const res = await getData(`https://uia5m1.deta.dev/all/${props.proposalId}${lastPageCondition}`);
     if (res.status) {
-      const resData = res.data.items.filter(
-        a => allData.value.findIndex(b => b.key === a.key) < 0
-      );
+      const resData = res.data.items.filter(a => allData.value.findIndex(b => b.key === a.key) < 0);
       allData.value = allData.value.concat(resData).sort((a, b) => {
         return Number(a.timestamp) - Number(b.timestamp);
       });
@@ -98,12 +94,7 @@ async function handleSubmit() {
       markdown: comment.value,
       proposal_id: props.proposalId
     };
-    if (!token)
-      sig = await signMessage(
-        auth.web3,
-        JSON.stringify(msg),
-        web3Account.value
-      );
+    if (!token) sig = await signMessage(auth.web3, JSON.stringify(msg), web3Account.value);
     const res = await postData(
       `https://uia5m1.deta.dev/add`,
       {
@@ -143,10 +134,7 @@ function deleteItem(key) {
 </script>
 <template>
   <Block :title="$t('comment_box.title')">
-    <UiButton
-      v-if="togglePreview"
-      class="flex w-full px-3 !h-auto cursor-default"
-    >
+    <UiButton v-if="togglePreview" class="flex w-full px-3 !h-auto cursor-default">
       <TextareaAutosize
         v-model="comment"
         :placeholder="$t('comment_box.add')"
@@ -155,34 +143,15 @@ function deleteItem(key) {
         :minHeight="100"
       />
     </UiButton>
-    <Block
-      v-if="!togglePreview"
-      slim="true"
-      class="p-4 h6 text-color mt-2 mb-0"
-    >
+    <Block v-if="!togglePreview" slim="true" class="p-4 h6 text-color mt-2 mb-0">
       <div>{{ comment }}</div>
     </Block>
 
-    <UiButton
-      @click="clickSubmit"
-      :disabled="comment.length === 0"
-      :loading="loading"
-      class="mt-2"
-      primary
-    >
+    <UiButton @click="clickSubmit" :disabled="comment.length === 0" :loading="loading" class="mt-2" primary>
       {{ $t(`comment_box.submit`) }}
     </UiButton>
-    <UiButton
-      @click="togglePreview = !togglePreview"
-      class="ml-2 mt-2"
-      :disabled="comment.length === 0"
-      primary
-    >
-      {{
-        togglePreview
-          ? $t(`comment_box.preview`)
-          : $t(`comment_box.continue_editing`)
-      }}
+    <UiButton @click="togglePreview = !togglePreview" class="ml-2 mt-2" :disabled="comment.length === 0" primary>
+      {{ togglePreview ? $t(`comment_box.preview`) : $t(`comment_box.continue_editing`) }}
     </UiButton>
     <div :key="index" v-for="(item, index) in allData">
       <PluginCommentBoxCommentBlock
@@ -194,10 +163,7 @@ function deleteItem(key) {
         @deleteItem="deleteItem($event)"
       />
     </div>
-    <div
-      style="height: 10px; width: 10px; position: absolute"
-      ref="endElement"
-    />
+    <div style="height: 10px; width: 10px; position: absolute" ref="endElement" />
 
     <RowLoading v-if="loadingMore" class="my-2" />
   </Block>

@@ -20,7 +20,7 @@ import { useWeb3 } from '@/composables/useWeb3';
 import { getIpfsUrl, setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, onRenderTracked, PropType, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
+import i18n from '@/helpers/i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -35,7 +35,7 @@ const { isAdmin, isSuperAdmin } = useSpace(props.space);
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { t } = i18n.global;
 const { isEthBlockchain, isOneBlockchain, web3, web3Account } = useWeb3();
 const { send, clientLoading } = useClient();
 const { getExplore } = useApp();

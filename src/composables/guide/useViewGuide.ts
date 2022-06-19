@@ -3,6 +3,7 @@ import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuideQuery_guide, GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
+import i18n from '@/helpers/i18n';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { isUserDiscordConnect, isUserInput } from '@dodao/onboarding-schemas/models/GuideModel';
@@ -16,14 +17,13 @@ import {
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 export function useViewGuide(uuid: string, stepOrder: number, notify: any, space: SpaceModel) {
   const router = useRouter();
   const { send } = useClient();
   const { web3 } = useWeb3();
-  const { t } = useI18n();
+  const { t } = i18n.global;
 
   const guideRef = ref<GuideQuery_guide>();
   const guideStepsMap = ref<{ [uuid: string]: GuideQuery_guide_steps }>({});
