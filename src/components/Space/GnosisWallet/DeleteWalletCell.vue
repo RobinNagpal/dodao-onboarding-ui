@@ -1,13 +1,16 @@
-<template>
-  <span class="cell">Delete</span>
-</template>
+<script setup lang="ts">
+import IconButton from '@/components/Ui/Buttons/IconButton.vue';
+import { IconTypes } from '@/components/Ui/Icons/IconTypes';
 
-<script>
-export default {};
+const props = defineProps({
+  params: { type: Object, required: true }
+});
+
+console.log('data', props.params.data);
 </script>
 
-<style scoped>
-.cell {
-  color: blue;
-}
-</style>
+<template>
+  <IconButton :icon-name="IconTypes.Trash"></IconButton>
+</template>
+
+<style scoped lang="scss"></style>
