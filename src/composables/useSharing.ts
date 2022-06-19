@@ -1,4 +1,5 @@
 import { useCopy } from '@/composables/useCopy';
+import i18n from '@/helpers/i18n';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { useShare } from '@vueuse/core';
 

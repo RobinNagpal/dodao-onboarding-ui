@@ -3,6 +3,7 @@ import { useClient } from '@/composables/useClient';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuideQuery_guide, GuideQuery_guide_steps } from '@/graphql/generated/graphqlDocs';
 import guideSubmissionCache from '@/helpers/guideSubmissionCache';
+import i18n from '@/helpers/i18n';
 import { getGuide } from '@/helpers/snapshot';
 import { GuideSubmissionInput } from '@dodao/onboarding-schemas/inputs/GuideSubmissionInput';
 import { isUserDiscordConnect, isUserInput } from '@dodao/onboarding-schemas/models/GuideModel';

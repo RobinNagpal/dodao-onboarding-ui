@@ -1,4 +1,5 @@
 import { useNotifications } from '@/composables/useNotifications';
+import i18n from '@/helpers/i18n';
 import { useClipboard } from '@vueuse/core';
 
 export function useCopy() {
