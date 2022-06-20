@@ -59,6 +59,10 @@
     "spaceId": "juicebox-eth-1",
     "siteType": "onboarding"
   },
+  "indexcoop.dodao.io": {
+    "spaceId": "index-coop-eth-1",
+    "siteType": "onboarding"
+  },
   "kleros.dodao.io": {
     "spaceId": "kleros-eth-1",
     "siteType": "onboarding"

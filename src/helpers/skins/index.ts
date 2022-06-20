@@ -118,6 +118,7 @@ import hurricane from './hurricane.scss';
 import ilv from './ilv.scss';
 import imsuperleague from './imsuperleague.scss';
 import index from './index.scss';
+import indexcoop from './indexcoop.scss';
 import indexed from './indexed.scss';
 import ironbank from './ironbank.scss';
 import itam from './itam.scss';
@@ -392,6 +393,7 @@ export default {
   ilv,
   imsuperleague,
   index,
+  indexcoop,
   indexed,
   ironbank,
   itam,
