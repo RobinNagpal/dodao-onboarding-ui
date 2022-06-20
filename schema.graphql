@@ -81,6 +81,11 @@ type Mutation {
     spaceId: String!
     wallets: [GnosisSafeWalletInput!]!
   ): Space!
+
+  deleteGnosisSafeWallet(
+    spaceId: String!
+    walletId: String!
+  ): Space!
 }
 
 input SpaceWhere {

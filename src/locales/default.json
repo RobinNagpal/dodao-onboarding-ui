@@ -463,6 +463,9 @@
     "quorum": "Quorum",
     "type": "Type",
     "anyType": "Any",
+    "addWalletConfirmMsg": "Are you sure you want to add this wallet?",
+    "deleteWalletConfirmMsg": "<div class=\"msg-delete\">Are you sure you want to delete this wallet <span>{walletAddress}</span>?</div>",
+    "addWalletBtn": "Add Wallet?",
     "hideAbstain": "Ignore abstain votes in basic voting results"
   },
   "setup": {

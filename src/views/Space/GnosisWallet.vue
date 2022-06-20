@@ -11,9 +11,11 @@ import {
   ExtendedSpace_space,
   GnosisSafeWalletInput,
   UpsertGnosisSafeWalletsVariables,
-  UpsertGnosisSafeWallets_payload
+  UpsertGnosisSafeWallets_payload,
+  DeleteGnosisSafeWalletVariables,
+  DeleteGnosisSafeWallet_payload
 } from '@/graphql/generated/graphqlDocs';
-import { UpsertGnosisSafeWallets } from '@/graphql/gnosisWallets.mutation.graphql';
+import { UpsertGnosisSafeWallets, DeleteGnosisSafeWallet } from '@/graphql/gnosisWallets.mutation.graphql';
 import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
@@ -24,6 +26,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { PropType, reactive, ref } from 'vue';
 import i18n from '@/helpers/i18n';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+
+import { GnosisNetWorksList } from '@/constants/gnosisWallet';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const { notify } = useNotifications();
@@ -38,16 +42,6 @@ const props = defineProps({
 
 const savingGnosisWallets = ref(false);
 
-const networkArr = [
-  {
-    id: '1',
-    name: 'Ethereum mainet'
-  },
-  {
-    id: '2',
-    name: 'Binance Smart Chain(BSC)'
-  }
-];
 const columnDefs: ColDef[] = [
   {
     headerName: 'Name',
@@ -62,14 +56,21 @@ const columnDefs: ColDef[] = [
     autoHeight: true,
     flex: 2
   },
-  { headerName: 'Chain', field: 'chain', wrapText: true, autoHeight: true },
+  { headerName: 'Chain', field: 'chainId', wrapText: true, autoHeight: true, cellRenderer: renderChain },
   {
     headerName: 'Actions',
     cellRenderer: SpaceGnosisWalletDeleteWalletCell,
     colId: 'params',
-    autoHeight: true
+    autoHeight: true,
+    cellRendererParams: {
+      handleDeleteWallet
+    }
   }
 ];
+
+function renderChain(params) {
+  return GnosisNetWorksList.find(chain => chain.id === params.value)?.name || '';
+}
 
 const defaultColDef: ColDef = {
   flex: 1,
@@ -85,7 +86,7 @@ const gridApi = ref<GridApi>();
 const formAddWallet = reactive({
   name: '',
   address: '',
-  network: networkArr[0]
+  network: GnosisNetWorksList[0]
 });
 
 const { mutate: upsertGnosisSafeWallets } = useMutation<
@@ -93,8 +94,33 @@ const { mutate: upsertGnosisSafeWallets } = useMutation<
   UpsertGnosisSafeWalletsVariables
 >(UpsertGnosisSafeWallets);
 
+const { mutate: deleteGnosisSafeWallet } = useMutation<DeleteGnosisSafeWallet_payload, DeleteGnosisSafeWalletVariables>(
+  DeleteGnosisSafeWallet
+);
+
+async function handleDeleteWallet(rowData) {
+  const answer = await confirmRef.value.show({
+    title: t('confirm'),
+    msg: t('setupDAO.deleteWalletConfirmMsg', { walletAddress: `${rowData.name}: ${rowData.address}` })
+  });
+  if (answer) {
+    try {
+      await deleteGnosisSafeWallet({
+        spaceId: props.space.id,
+        walletId: rowData.id
+      });
+      const spaceModel = await loadExtendedSpace(props.space.id);
+
+      gridApi.value?.setRowData(spaceModel.spaceIntegrations?.gnosisSafeWallets || []);
+    } catch {
+      notify(['red', t('notify.somethingWentWrong')]);
+    }
+  }
+}
+
 function onGridReady(params: GridReadyEvent) {
   gridApi.value = params.api;
+  console.log(props.space.spaceIntegrations?.gnosisSafeWallets);
   gridApi.value?.setRowData(props.space.spaceIntegrations?.gnosisSafeWallets || []);
 }
 
@@ -102,13 +128,19 @@ const validateForm = () => {
   return formAddWallet.address && formAddWallet.name && formAddWallet.network;
 };
 
+const clearForm = () => {
+  formAddWallet.name = '';
+  formAddWallet.address = '';
+  formAddWallet.network = GnosisNetWorksList[0];
+};
+
 const handleAddWallet = async () => {
   if (!validateForm()) {
     return;
   }
   const answer = await confirmRef.value.show({
-    title: 'Confirm',
-    msg: 'Are you sure you want to add this wallet?'
+    title: t('confirm'),
+    msg: t('setupDAO.addWalletConfirmMsg')
   });
   if (answer) {
     savingGnosisWallets.value = true;
@@ -129,6 +161,8 @@ const handleAddWallet = async () => {
       const spaceModel = await loadExtendedSpace(props.space.id);
 
       gridApi.value?.setRowData(spaceModel.spaceIntegrations?.gnosisSafeWallets || []);
+      clearForm();
+      savingGnosisWallets.value = false;
     } catch (e) {
       savingGnosisWallets.value = false;
       notify(['red', t('notify.somethingWentWrong')]);
@@ -169,7 +203,7 @@ const handleAddWallet = async () => {
           right="1.5rem"
           class="flex-1 ml-1 cursor-pointer dropdown-input"
           @select="formAddWallet.network = $event"
-          :items="networkArr"
+          :items="GnosisNetWorksList"
         >
           <UiInput
             :modelValue="formAddWallet.network.name"
@@ -185,7 +219,7 @@ const handleAddWallet = async () => {
         </UiDropdown>
       </div>
       <div>
-        <UiButton @click="handleAddWallet()" variant="contained" :primary="true">
+        <UiButton :disabled="savingGnosisWallets" @click="handleAddWallet()" variant="contained" :primary="true">
           <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span>
         </UiButton>
       </div>
@@ -220,6 +254,10 @@ const handleAddWallet = async () => {
     outline: none;
   }
 }
-</style>
 
-<style lang="scss"></style>
+:deep(.msg-delete) {
+  span {
+    @apply text-xs italic;
+  }
+}
+</style>

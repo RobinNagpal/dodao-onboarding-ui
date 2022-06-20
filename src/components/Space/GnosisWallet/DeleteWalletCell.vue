@@ -10,7 +10,7 @@ console.log('data', props.params.data);
 </script>
 
 <template>
-  <IconButton :icon-name="IconTypes.Trash"></IconButton>
+  <IconButton @click="params.handleDeleteWallet(props.params.data)" :icon-name="IconTypes.Trash"></IconButton>
 </template>
 
 <style scoped lang="scss"></style>
