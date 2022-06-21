@@ -81,11 +81,6 @@ type Mutation {
     spaceId: String!
     wallets: [GnosisSafeWalletInput!]!
   ): Space!
-
-  deleteGnosisSafeWallet(
-    spaceId: String!
-    walletId: String!
-  ): Space!
 }
 
 input SpaceWhere {
@@ -205,10 +200,11 @@ input SubscriptionWhere {
 
 input GnosisSafeWalletInput {
   id: String!
-  address: String!
-  chainId: String!
-  name: String!
+  chainId: Int!
   order: Int!
+  tokenContractAddress: String!
+  walletAddress: String!
+  walletName: String!
 }
 
 enum OrderDirection {
@@ -444,8 +440,9 @@ type Subscription {
 
 type GnosisSafeWallet {
   id: String!
-  address: String!
-  chainId: String!
-  name: String!
+  chainId: Int!
   order: Int!
+  tokenContractAddress: String!
+  walletAddress: String!
+  walletName: String!
 }

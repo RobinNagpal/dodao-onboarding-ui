@@ -1,38 +1,41 @@
 <script setup lang="ts">
+import Block from '@/components/Block.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import ConfirmDialog from '@/components/Modal/ConfirmDialog.vue';
 import SpaceGnosisWalletDeleteWalletCell from '@/components/Space/GnosisWallet/DeleteWalletCell.vue';
+import SpaceGnosisWalletGnosisWallet from '@/components/Space/GnosisWallet/GnosisWallet.vue';
+import SpaceGnosisWalletGnosisWalletInfo from '@/components/Space/GnosisWallet/GnosisWalletInfo.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import { useExtendedSpaces } from '@/composables/useExtendedSpaces';
 import { useNotifications } from '@/composables/useNotifications';
+import { GnosisNetWorkList } from '@/constants/gnosisNetworkList';
 import {
   ExtendedSpace_space,
+  ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets,
   GnosisSafeWalletInput,
-  UpsertGnosisSafeWalletsVariables,
   UpsertGnosisSafeWallets_payload,
-  DeleteGnosisSafeWalletVariables,
-  DeleteGnosisSafeWallet_payload
+  UpsertGnosisSafeWalletsVariables
 } from '@/graphql/generated/graphqlDocs';
-import { UpsertGnosisSafeWallets, DeleteGnosisSafeWallet } from '@/graphql/gnosisWallets.mutation.graphql';
+import { UpsertGnosisSafeWallets } from '@/graphql/gnosisWallets.mutation.graphql';
+import i18n from '@/helpers/i18n';
+import { FormattedGnosisWallet } from '@/types/space/formattedGnosisWallet';
+import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import { AgGridVue } from '@ag-grid-community/vue3';
-import { onError } from '@apollo/client/link/error';
 import { useMutation } from '@vue/apollo-composable';
+import { ethers } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { PropType, reactive, ref } from 'vue';
-import i18n from '@/helpers/i18n';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-
-import { GnosisNetWorksList } from '@/constants/gnosisWallet';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const { notify } = useNotifications();
 const { t } = i18n.global;
 
+const savingGnosisWallets = ref(false);
 const props = defineProps({
   space: { type: Object as PropType<ExtendedSpace_space>, required: true },
   spaceId: String,
@@ -40,37 +43,35 @@ const props = defineProps({
   discordCode: String
 });
 
-const savingGnosisWallets = ref(false);
-
 const columnDefs: ColDef[] = [
   {
-    headerName: 'Name',
-    field: 'name',
-    wrapText: true,
-    autoHeight: true
+    headerName: 'Wallet',
+    colId: 'wallet',
+    cellRenderer: SpaceGnosisWalletGnosisWallet,
+    autoHeight: true,
+    flex: 5,
+    width: 540
   },
   {
-    headerName: 'Address',
-    field: 'address',
-    wrapText: true,
+    headerName: 'Info',
+    colId: 'walletInfo',
+    cellRenderer: SpaceGnosisWalletGnosisWalletInfo,
     autoHeight: true,
-    flex: 2
+    flex: 3,
+    width: 240
   },
-  { headerName: 'Chain', field: 'chainId', wrapText: true, autoHeight: true, cellRenderer: renderChain },
   {
     headerName: 'Actions',
     cellRenderer: SpaceGnosisWalletDeleteWalletCell,
-    colId: 'params',
+    colId: 'actions',
     autoHeight: true,
+    flex: 1,
+    width: 50,
     cellRendererParams: {
       handleDeleteWallet
     }
   }
 ];
-
-function renderChain(params) {
-  return GnosisNetWorksList.find(chain => chain.id === params.value)?.name || '';
-}
 
 const defaultColDef: ColDef = {
   flex: 1,
@@ -86,7 +87,8 @@ const gridApi = ref<GridApi>();
 const formAddWallet = reactive({
   name: '',
   address: '',
-  network: GnosisNetWorksList[0]
+  network: GnosisNetWorkList[0],
+  tokenContractAddress: ''
 });
 
 const { mutate: upsertGnosisSafeWallets } = useMutation<
@@ -94,34 +96,105 @@ const { mutate: upsertGnosisSafeWallets } = useMutation<
   UpsertGnosisSafeWalletsVariables
 >(UpsertGnosisSafeWallets);
 
-const { mutate: deleteGnosisSafeWallet } = useMutation<DeleteGnosisSafeWallet_payload, DeleteGnosisSafeWalletVariables>(
-  DeleteGnosisSafeWallet
-);
-
-async function handleDeleteWallet(rowData) {
+async function handleDeleteWallet(rowData: ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets) {
   const answer = await confirmRef.value.show({
     title: t('confirm'),
-    msg: t('setupDAO.deleteWalletConfirmMsg', { walletAddress: `${rowData.name}: ${rowData.address}` })
+    msg: t('setupDAO.deleteWalletConfirmMsg', { walletAddress: `${rowData.walletName}: ${rowData.walletAddress}` })
   });
   if (answer) {
+    savingGnosisWallets.value = true;
+    gridApi.value?.showLoadingOverlay();
+    const wallets = (props.space.spaceIntegrations?.gnosisSafeWallets || []).filter(wallet => wallet.id !== rowData.id);
     try {
-      await deleteGnosisSafeWallet({
+      await upsertGnosisSafeWallets({
         spaceId: props.space.id,
-        walletId: rowData.id
+        wallets
       });
       const spaceModel = await loadExtendedSpace(props.space.id);
 
-      gridApi.value?.setRowData(spaceModel.spaceIntegrations?.gnosisSafeWallets || []);
+      await setRowData(spaceModel);
     } catch {
       notify(['red', t('notify.somethingWentWrong')]);
     }
+    gridApi.value?.hideOverlay();
+    savingGnosisWallets.value = false;
   }
 }
 
-function onGridReady(params: GridReadyEvent) {
+const formatWallet = async wallet => {
+  let tokenName = null;
+  let tokenSymbol = null;
+  let formattedBalance: string | null = null;
+  const provider = ethers.getDefaultProvider(ethers.providers.getNetwork(wallet.chainId));
+
+  // The ERC-20 Contract ABI, which is a common contract interface
+  // for tokens (this is the Human-Readable ABI format)
+  const daiAbi = [
+    // Some details about the token
+    'function name() view returns (string)',
+    'function symbol() view returns (string)',
+
+    // Get the account balance
+    'function balanceOf(address) view returns (uint)',
+
+    // Send some of your tokens to someone else
+    'function transfer(address to, uint amount)',
+
+    // An event triggered whenever anyone transfers to someone else
+    'event Transfer(address indexed from, address indexed to, uint amount)'
+  ];
+
+  // The Contract object
+  const tokenContract = new ethers.Contract(wallet.tokenContractAddress, daiAbi, provider);
+
+  console.log('tokenContract', tokenContract);
+  try {
+    // Get the ERC-20 token name
+    tokenName = await tokenContract?.name();
+  } catch (e) {
+    console.error(e);
+  }
+  try {
+    // Get the ERC-20 token symbol (for tickers and UIs)
+    tokenSymbol = await tokenContract?.symbol();
+  } catch (e) {
+    console.error(e);
+  }
+
+  try {
+    // Get the balance of an address
+    const balance = await tokenContract?.balanceOf(wallet.walletAddress);
+    // { BigNumber: "3118000455884268201631" }
+
+    // Format the Token for displaying to the user
+    formattedBalance = ethers.utils.formatUnits(balance, 18);
+  } catch (e) {
+    console.error(e);
+  }
+  return {
+    ...wallet,
+    tokenName,
+    tokenSymbol,
+    balance: formattedBalance
+  };
+};
+
+async function setRowData(spaceModel: ExtendedSpace_space) {
+  const gnosisSafeWallets = spaceModel.spaceIntegrations?.gnosisSafeWallets || [];
+  const wallets =
+    gnosisSafeWallets.map<Promise<ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet>>(
+      formatWallet
+    );
+  const formattedWallets = await Promise.all(wallets);
+  gridApi.value?.setRowData(formattedWallets);
+  gridApi.value?.refreshCells();
+}
+
+async function onGridReady(params: GridReadyEvent) {
   gridApi.value = params.api;
-  console.log(props.space.spaceIntegrations?.gnosisSafeWallets);
-  gridApi.value?.setRowData(props.space.spaceIntegrations?.gnosisSafeWallets || []);
+  gridApi.value?.showLoadingOverlay();
+  await setRowData(props.space);
+  gridApi.value?.hideOverlay();
 }
 
 const validateForm = () => {
@@ -131,7 +204,8 @@ const validateForm = () => {
 const clearForm = () => {
   formAddWallet.name = '';
   formAddWallet.address = '';
-  formAddWallet.network = GnosisNetWorksList[0];
+  formAddWallet.network = GnosisNetWorkList[0];
+  formAddWallet.tokenContractAddress = '';
 };
 
 const handleAddWallet = async () => {
@@ -144,13 +218,15 @@ const handleAddWallet = async () => {
   });
   if (answer) {
     savingGnosisWallets.value = true;
+    gridApi.value?.showLoadingOverlay();
 
     const newWallet: GnosisSafeWalletInput = {
       id: uuidv4(),
-      name: formAddWallet.name,
-      address: formAddWallet.address,
-      chainId: formAddWallet.network.id,
-      order: Math.max(...(props.space.spaceIntegrations?.gnosisSafeWallets?.map(wallet => wallet.order) || [0]))
+      walletName: formAddWallet.name,
+      walletAddress: formAddWallet.address,
+      chainId: formAddWallet.network.chainId,
+      order: Math.max(...(props.space.spaceIntegrations?.gnosisSafeWallets?.map(wallet => wallet.order) || [0])),
+      tokenContractAddress: formAddWallet.tokenContractAddress
     };
     try {
       await upsertGnosisSafeWallets({
@@ -160,13 +236,13 @@ const handleAddWallet = async () => {
 
       const spaceModel = await loadExtendedSpace(props.space.id);
 
-      gridApi.value?.setRowData(spaceModel.spaceIntegrations?.gnosisSafeWallets || []);
+      await setRowData(spaceModel);
       clearForm();
-      savingGnosisWallets.value = false;
     } catch (e) {
-      savingGnosisWallets.value = false;
       notify(['red', t('notify.somethingWentWrong')]);
     }
+    gridApi.value?.hideOverlay();
+    savingGnosisWallets.value = false;
   }
 };
 </script>
@@ -174,55 +250,63 @@ const handleAddWallet = async () => {
 <template>
   <LayoutSingle v-bind="$attrs">
     <template #content>
-      <h1 class="flex-1 mt-3">Configure Wallet</h1>
-      <div class="wrapper mt-4 py-24 flex justify-center align-center flex-col items-center">
-        <ag-grid-vue
-          rowClass="custom-row"
-          style="width: 100%"
-          class="ag-theme-alpine theme-table"
-          :columnDefs="columnDefs"
-          :rowData="rowData"
-          :rowHeight="80"
-          domLayout="autoHeight"
-          :defaultColDef="defaultColDef"
-          @grid-ready="onGridReady"
-          :gridOptions="{ suppressCellSelection: true, enableCellTextSelection: true }"
-          :modules="[ClientSideRowModelModule]"
-        >
-        </ag-grid-vue>
-      </div>
-      <div class="flex mt-4">
-        <UiInput v-model="formAddWallet.name" class="flex-1 mr-1" placeholder="My wallet">
-          <template v-slot:label>Name*</template>
-        </UiInput>
-        <UiInput v-model="formAddWallet.address" class="flex-1 mx-1" placeholder="0x00...">
-          <template v-slot:label>Address*</template>
-        </UiInput>
-        <UiDropdown
-          top="2.5rem"
-          right="1.5rem"
-          class="flex-1 ml-1 cursor-pointer dropdown-input"
-          @select="formAddWallet.network = $event"
-          :items="GnosisNetWorksList"
-        >
-          <UiInput
-            :modelValue="formAddWallet.network.name"
-            class="flex-1 !cursor-pointer"
-            placeholder="0x00..."
-            :disabled="true"
+      <Block :title="$t('settings.gnosisWallets')" :class="`mt-4 wrapper`">
+        <div class="wrapper mt-4 py-24 flex justify-center align-center flex-col items-center">
+          <ag-grid-vue
+            rowClass="custom-row"
+            style="width: 100%"
+            class="ag-theme-alpine theme-table"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :rowHeight="80"
+            domLayout="autoHeight"
+            :defaultColDef="defaultColDef"
+            @grid-ready="onGridReady"
+            :gridOptions="{ suppressCellFocus: true, enableCellTextSelection: true }"
+            :modules="[ClientSideRowModelModule]"
           >
-            <template v-slot:label>Network*</template>
+          </ag-grid-vue>
+        </div>
+      </Block>
+      <Block :title="$t('settings.addGnosisWallet')" :class="`mt-4 wrapper`">
+        <div class="flex mt-4">
+          <UiInput v-model="formAddWallet.name" class="flex-1 mr-1" placeholder="My wallet">
+            <template v-slot:label>Name*</template>
           </UiInput>
-          <template v-slot:item="{ item }">
-            {{ item.name }}
-          </template>
-        </UiDropdown>
-      </div>
-      <div>
-        <UiButton :disabled="savingGnosisWallets" @click="handleAddWallet()" variant="contained" :primary="true">
-          <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span>
-        </UiButton>
-      </div>
+          <UiInput v-model="formAddWallet.address" class="flex-1 mx-1" placeholder="0x00...">
+            <template v-slot:label>Address*</template>
+          </UiInput>
+        </div>
+        <div class="flex mt-4">
+          <UiDropdown
+            top="2.5rem"
+            right="1.5rem"
+            class="flex-1 ml-1 cursor-pointer dropdown-input"
+            @select="formAddWallet.network = $event"
+            :items="GnosisNetWorkList"
+          >
+            <UiInput
+              :modelValue="formAddWallet.network.name"
+              class="flex-1 !cursor-pointer"
+              placeholder="0x00..."
+              :disabled="true"
+            >
+              <template v-slot:label>Network*</template>
+            </UiInput>
+            <template v-slot:item="{ item }">
+              {{ item.name }}
+            </template>
+          </UiDropdown>
+          <UiInput v-model="formAddWallet.tokenContractAddress" class="flex-1 mx-1" placeholder="0x00...">
+            <template v-slot:label>Token Contract Address*</template>
+          </UiInput>
+        </div>
+        <div>
+          <UiButton :disabled="savingGnosisWallets" @click="handleAddWallet()" variant="contained" :primary="true">
+            <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span>
+          </UiButton>
+        </div>
+      </Block>
     </template>
   </LayoutSingle>
   <ConfirmDialog ref="confirmRef" />

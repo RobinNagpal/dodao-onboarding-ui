@@ -382,12 +382,15 @@
     "level-up": "Level Up"
   },
   "settings": {
+    "addGnosisWallet": "Add Gnosis Wallet",
     "about": "About",
     "accessToken": "Access Token",
     "admins": "Admins",
     "avatar": "Avatar",
+    "categories": "Categorie(s)",
     "customDomain": "Custom domain",
     "github": "Github",
+    "gnosisWallets": "Gnosis Wallets",
     "header": "Settings",
     "missionStatement": "Mission Statement",
     "missionStatementPlaceholder": "e.g. DoDAO wants to onboard a million users to DAOs by 2025",
@@ -403,7 +406,6 @@
     "twitter": "Twitter",
     "domain": "Domain name",
     "strategies": "Strategie(s)",
-    "categories": "Categorie(s)",
     "selectCategories": "Select categories",
     "addStrategy": "Add strategy",
     "authors": "Authors",

@@ -6,14 +6,3 @@ mutation UpsertGnosisSafeWallets(
     id
   }
 }
-
-mutation DeleteGnosisSafeWallet(
-  $spaceId: String!
-  $walletId: String!
-) {
-  payload: deleteGnosisSafeWallet(
-    spaceId: $spaceId, walletId: $walletId
-  ) {
-    id
-  }
-}
