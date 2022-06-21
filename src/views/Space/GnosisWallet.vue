@@ -195,6 +195,10 @@ async function onGridReady(params: GridReadyEvent) {
   gridApi.value?.showLoadingOverlay();
   await setRowData(props.space);
   gridApi.value?.hideOverlay();
+
+  if (!props.space.spaceIntegrations?.gnosisSafeWallets?.length) {
+    gridApi.value?.showNoRowsOverlay();
+  }
 }
 
 const validateForm = () => {
