@@ -6,7 +6,6 @@ import UiPopover from '@/components/Ui/Popover.vue';
 import { useUsername } from '@/composables/useUsername';
 import { useWeb3 } from '@/composables/useWeb3';
 import { explorerUrl, getIpfsUrl, shorten } from '@/helpers/utils';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { PropType, watchEffect } from 'vue';
 
 const props = defineProps({
@@ -37,35 +36,21 @@ watchEffect(() => {
     <UiPopover :options="{ offset: [0, 12], placement: 'bottom-start' }">
       <template v-slot:item>
         <a class="flex flex-nowrap">
-          <UiAvatar
-            :imgsrc="getIpfsUrl(profile?.image)"
-            :address="address"
-            size="18"
-            class="mr-2"
-          />
-          <span class="truncate">{{
-            shorten && username.length > 10 ? shorten(username) : username
-          }}</span>
+          <UiAvatar :imgsrc="getIpfsUrl(profile?.image)" :address="address" size="18" class="mr-2" />
+          <span class="truncate">{{ shorten && username.length > 10 ? shorten(username) : username }}</span>
           <Badges :address="address" :members="space?.members" />
         </a>
       </template>
       <template v-slot:content>
         <div class="m-4 mb-0 text-center">
-          <UiAvatar
-            :imgsrc="getIpfsUrl(profile?.image)"
-            :address="address"
-            size="64"
-            class="mb-4"
-          />
+          <UiAvatar :imgsrc="getIpfsUrl(profile?.image)" :address="address" size="64" class="mb-4" />
           <h3 v-if="profile?.name" class="mt-3" v-text="profile.name" />
           <h3 v-else-if="profile?.ens" v-text="profile.ens" class="mt-3" />
           <h3 v-else v-text="shorten(address)" class="mt-3" />
         </div>
         <div class="m-4" v-if="isEthBlockchain">
           <a
-            :href="
-              explorerUrl(proposal?.network || space?.network || '1', address)
-            "
+            :href="explorerUrl(proposal?.network || space?.network || '1', address)"
             target="_blank"
             class="mb-2 block"
           >
