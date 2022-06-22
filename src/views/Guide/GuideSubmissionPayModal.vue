@@ -1,59 +1,137 @@
 <script setup lang="ts">
-import { ExtendedSpace_space, GuideSubmissionsQuery_guideSubmissions } from '@/graphql/generated/graphqlDocs';
+import {
+  ExtendedSpace_space,
+  ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets,
+  GuideSubmissionsQuery_guideSubmissions
+} from '@/graphql/generated/graphqlDocs';
+import { FormattedGnosisWallet } from '@/types/space/formattedGnosisWallet';
+import { formatWallet } from '@/helpers/gnosisWallet';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { ref, defineExpose, PropType } from 'vue';
+import { ref, defineExpose, PropType, computed, onMounted } from 'vue';
 const props = defineProps({
   open: Boolean,
   space: { type: Object as PropType<SpaceModel>, required: true },
-  submissionSelectiona: {
-    type: Object as PropType<GuideSubmissionsQuery_guideSubmissions[]>,
-  } 
-})
-
+  selectedSubmissions: {
+    type: Object as PropType<GuideSubmissionsQuery_guideSubmissions[]>
+  }
+});
 const emit = defineEmits(['close']);
 
+const formatedWallets = ref<(ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet)[]>([]);
+
 const selectWallet = ref();
+
+onMounted(async () => {
+  const gnosisSafeWallets = props.space.spaceIntegrations?.gnosisSafeWallets || [];
+  const wallets = gnosisSafeWallets.map(formatWallet);
+  formatedWallets.value = await Promise.all(wallets);
+});
+
+function shortenAddr(addr = '') {
+  if (!addr) return '';
+  return addr.substring(0, 4) + '...' + addr.substring(addr.length - 4);
+}
 </script>
 
 <template>
   <UiModal :open="open" @close="$emit('close')" class="flex">
     <template v-slot:header>
       <h3>Batch Pay</h3>
-      <div>Pay the following submissions</div>
+      <div>Pay the following submissions:</div>
     </template>
     <div class="flex flex-col flex-auto my-2 mx-2">
-        <UiDropdown
-          top="2.5rem"
-          right="1.5rem"
-          class="flex-1 ml-1 cursor-pointer dropdown-wallet"
-          @select="selectWallet = $event"
-          :items="space.spaceIntegrations?.gnosisSafeWallets"
-        >
+      <div class="px-2">
+        <div>Selected Submission:</div>
+        <div class="flex items-center my-2" :key="item.id" v-for="item in selectedSubmissions">
+          <div class="mr-4 rounded-2xl bg-skin-header-bg px-3 py-1">{{shortenAddr(item.createdBy)}}</div>
+          <div class="rounded-2xl bg-skin-header-bg px-3 py-1">{{item.result.correctQuestions.length}}/{{item.result.allQuestions.length}}</div>
+
+        </div>
+      </div>
+      <div class="flex flex-wrap">
+        <div class="w-full md:w-1/2 px-2">
+          <UiDropdown
+            top="2.5rem"
+            right="1.5rem"
+            class="flex-1 ml-1 cursor-pointer dropdown-wallet"
+            @select="selectWallet = $event"
+            :items="formatedWallets"
+          >
+            <UiInput :modelValue="selectWallet?.walletName" class="flex-1" placeholder="0x00..." :disabled="true">
+              <template v-slot:label>Select Your Wallet</template>
+            </UiInput>
+            <template v-slot:item="{ item }">
+              {{ item.walletName }}
+            </template>
+          </UiDropdown>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
           <UiInput
-            :modelValue="selectWallet ? selectWallet?.name + selectWallet?.address : ''"
-            class="flex-1 !cursor-pointer"
-            placeholder="0x00..."
+            :modelValue="shortenAddr(selectWallet?.walletAddress)"
+            class="flex-1 opacity-50"
+            placeholder="Contract"
             :disabled="true"
           >
-            <template v-slot:label>Select Your Wallet</template>
+            <template v-slot:label>Address</template>
           </UiInput>
-          <template v-slot:item="{ item }">
-            {{ item.name + ': ' + item.address }}
-          </template>
-        </UiDropdown>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
+          <UiInput
+            :modelValue="selectWallet?.tokenContractAddress"
+            class="flex-1 opacity-50"
+            placeholder="Contract"
+            :disabled="true"
+          >
+            <template v-slot:label>Contract</template>
+          </UiInput>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
+          <UiInput
+            :modelValue="selectWallet?.tokenName"
+            class="flex-1 opacity-50"
+            placeholder="Token Name"
+            :disabled="true"
+          >
+            <template v-slot:label>Token Name</template>
+          </UiInput>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
+          <UiInput
+            :modelValue="selectWallet?.balance"
+            class="flex-1 opacity-50"
+            placeholder="tokenContractAddress"
+            :disabled="true"
+          >
+            <template v-slot:label>Balance</template>
+          </UiInput>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
+          <UiInput type="number" :modelValue="''" class="flex-1" placeholder="tokenContractAddress">
+            <template v-slot:label>Amount</template>
+          </UiInput>
+        </div>
+      </div>
     </div>
     <template v-slot:footer>
       <div class="flex justify-around">
         <UiButton variant="contained" primary>Ok</UiButton>
-        <UiButton >Cancel</UiButton>
+        <UiButton>Cancel</UiButton>
       </div>
     </template>
   </UiModal>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .dropdown-wallet {
   .sub-menu-wrapper {
     width: 100%;
   }
+  :deep(input) {
+    cursor: pointer;
+  }
+
+}
+
+.bg-input {
+
 }
 </style>
