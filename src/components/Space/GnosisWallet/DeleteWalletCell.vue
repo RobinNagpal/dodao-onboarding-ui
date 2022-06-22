@@ -1,13 +1,12 @@
-<template>
-  <span class="cell">Delete</span>
-</template>
+<script setup lang="ts">
+import IconButton from '@/components/Ui/Buttons/IconButton.vue';
+import { IconTypes } from '@/components/Ui/Icons/IconTypes';
 
-<script>
-export default {};
+const props = defineProps({
+  params: { type: Object, required: true }
+});
 </script>
 
-<style scoped>
-.cell {
-  color: blue;
-}
-</style>
+<template>
+  <IconButton @click="params.handleDeleteWallet(props.params.data)" :icon-name="IconTypes.Trash"></IconButton>
+</template>

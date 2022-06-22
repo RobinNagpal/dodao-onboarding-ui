@@ -51,10 +51,11 @@ query ExtendedSpace($spaceId: String!) {
       discordGuildId
       gnosisSafeWallets {
         id
-        address
         chainId
-        name
         order
+        tokenContractAddress
+        walletAddress
+        walletName
       }
       projectGalaxyTokenLastFour
     }

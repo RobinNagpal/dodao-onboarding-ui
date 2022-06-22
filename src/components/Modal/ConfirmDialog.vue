@@ -33,9 +33,7 @@ defineExpose({
     <template v-slot:header>
       <h3>{{ titleRef }}</h3>
     </template>
-    <div class="flex flex-col flex-auto my-2 mx-2">
-      {{ msgRef }}
-    </div>
+    <div class="flex my-2 mx-2" v-html="msgRef"></div>
     <template v-slot:footer>
       <div class="flex justify-around">
         <UiButton variant="contained" primary @click="handleBtnClick(true)">{{ okTxtRef }}</UiButton>

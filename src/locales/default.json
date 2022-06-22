@@ -382,12 +382,15 @@
     "level-up": "Level Up"
   },
   "settings": {
+    "addGnosisWallet": "Add Gnosis Wallet",
     "about": "About",
     "accessToken": "Access Token",
     "admins": "Admins",
     "avatar": "Avatar",
+    "categories": "Categorie(s)",
     "customDomain": "Custom domain",
     "github": "Github",
+    "gnosisWallets": "Gnosis Wallets",
     "header": "Settings",
     "missionStatement": "Mission Statement",
     "missionStatementPlaceholder": "e.g. DoDAO wants to onboard a million users to DAOs by 2025",
@@ -403,7 +406,6 @@
     "twitter": "Twitter",
     "domain": "Domain name",
     "strategies": "Strategie(s)",
-    "categories": "Categorie(s)",
     "selectCategories": "Select categories",
     "addStrategy": "Add strategy",
     "authors": "Authors",
@@ -463,6 +465,9 @@
     "quorum": "Quorum",
     "type": "Type",
     "anyType": "Any",
+    "addWalletConfirmMsg": "Are you sure you want to add this wallet?",
+    "deleteWalletConfirmMsg": "<div class=\"msg-delete\">Are you sure you want to delete this wallet <span>{walletAddress}</span>?</div>",
+    "addWalletBtn": "Add Wallet?",
     "hideAbstain": "Ignore abstain votes in basic voting results"
   },
   "setup": {
