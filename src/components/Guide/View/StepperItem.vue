@@ -149,6 +149,14 @@ async function navigateToNextStep() {
       <div v-if="isPostSubmissionStep" v-html="postSubmissionContent" class="step-content markdown-body pt-6" />
 
       <div
+        v-if="guide.guideIntegrations?.projectGalaxyOatMintUrl && guideSubmission?.galaxyCredentialsUpdated"
+        class="my-3 bold"
+      >
+        <h3>You have WON a Badge</h3>
+        Claim you guide completion badge <a :href="guide.guideIntegrations?.projectGalaxyOatMintUrl">here.</a>
+      </div>
+
+      <div
         v-if="
           isPostSubmissionStep &&
           guide.showIncorrectOnCompletion &&
