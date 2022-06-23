@@ -400,6 +400,7 @@ type GuideSubmission {
   ipfs: String!
   created: Int!
   createdBy: String!
+  galaxyCredentialsUpdated: Boolean
   guideId: String!
   guideIpfs: String!
   guideUuid: String!
