@@ -43,9 +43,10 @@ function shortenAddr(addr = '') {
       <div class="px-2">
         <div>Selected Submission:</div>
         <div class="flex items-center my-2" :key="item.id" v-for="item in selectedSubmissions">
-          <div class="mr-4 rounded-2xl bg-skin-header-bg px-3 py-1">{{shortenAddr(item.createdBy)}}</div>
-          <div class="rounded-2xl bg-skin-header-bg px-3 py-1">{{item.result.correctQuestions.length}}/{{item.result.allQuestions.length}}</div>
-
+          <div class="mr-4 rounded-2xl bg-skin-header-bg px-3 py-1">{{ shortenAddr(item.createdBy) }}</div>
+          <div class="rounded-2xl bg-skin-header-bg px-3 py-1">
+            {{ item.result.correctQuestions.length }}/{{ item.result.allQuestions.length }}
+          </div>
         </div>
       </div>
       <div class="flex flex-wrap">
@@ -106,7 +107,7 @@ function shortenAddr(addr = '') {
           </UiInput>
         </div>
         <div class="w-full md:w-1/2 px-2">
-          <UiInput type="number" :modelValue="''" class="flex-1" placeholder="tokenContractAddress">
+          <UiInput type="number" :modelValue="''" class="flex-1" placeholder="Amount to Pay">
             <template v-slot:label>Amount</template>
           </UiInput>
         </div>
@@ -128,10 +129,8 @@ function shortenAddr(addr = '') {
   :deep(input) {
     cursor: pointer;
   }
-
 }
 
 .bg-input {
-
 }
 </style>

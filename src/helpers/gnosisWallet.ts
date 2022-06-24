@@ -1,3 +1,4 @@
+import { shorten } from '@/helpers/utils';
 import { ethers } from 'ethers';
 
 export const formatWallet = async wallet => {
@@ -52,8 +53,8 @@ export const formatWallet = async wallet => {
   }
   return {
     ...wallet,
-    tokenName,
-    tokenSymbol,
-    balance: formattedBalance
+    tokenName: tokenName || shorten(wallet.tokenContractAddress),
+    tokenSymbol: tokenSymbol || 'Not Found',
+    balance: formattedBalance || 'Not Found'
   };
-}
+};
