@@ -31,7 +31,7 @@ const notify = inject('notify') as Function;
 
 const uuid = route.params.uuid;
 
-const { guideRef: guide, initialize: initializeGuide } = useViewGuide(uuid as string, notify, props.space);
+const { guideRef: guide, initialize: initializeGuide } = useViewGuide(uuid as string, 0, notify, props.space);
 
 const {
   onResult,
@@ -60,7 +60,10 @@ const columnDefs: ColDef[] = [
   {
     headerName: 'Result',
     field: 'correctQuestions',
-    valueGetter: params => params.data.result.correctQuestions.length + '/' + params.data.result.allQuestions.length,
+    valueGetter: params =>
+      params?.data?.result
+        ? params.data.result.correctQuestions.length + '/' + params.data.result.allQuestions.length
+        : '-',
     wrapText: true,
     autoHeight: true,
     flex: 2
@@ -70,7 +73,7 @@ const columnDefs: ColDef[] = [
     field: 'created',
     wrapText: true,
     autoHeight: true,
-    valueFormatter: params => formatDate(new Date(params.value))
+    valueFormatter: params => (params.value ? formatDate(new Date(params.value)) : '-')
   }
 ];
 
@@ -93,12 +96,11 @@ async function onGridReady(params: GridReadyEvent) {
 }
 
 function onSelectionChanged() {
-  selectedRows.value = gridApi.value?.getSelectedRows() as GuideSubmissionsQuery_guideSubmissions[];
+  selectedRows.value = (gridApi.value?.getSelectedRows() as GuideSubmissionsQuery_guideSubmissions[]) || [];
 }
 
 function handlePay() {
   openModal.value = true;
-  console.log(selectedRows.value);
 }
 
 function handleFilterChange(value) {
@@ -132,6 +134,16 @@ function filterSubmission() {
   }
   gridApi?.value?.setRowData(filteredSubmission.value);
 }
+
+const defaultColumnDef = {
+  flex: 1,
+  cellClass: '!flex flex-col justify-center',
+  cellStyle: { lineHeight: '24px' }
+};
+
+const gridOptions = { suppressCellSelection: true, enableCellTextSelection: true };
+
+const gridModules = [ClientSideRowModelModule];
 </script>
 
 <template>
@@ -141,7 +153,7 @@ function filterSubmission() {
         <Block slim title="Guide Sumission">
           <div>
             <div class="mt-6" v-if="submissionsLoadedRef">
-              <NoResults :block="true" v-if="guideSubmissionsRef.length === 0" />
+              <NoResults :block="true" v-if="!guideSubmissionsRef || guideSubmissionsRef.length === 0" />
               <div v-else>
                 <div class="flex justify-between">
                   <UiButton :disabled="selectedRows.length === 0" @click="handlePay()">Pay</UiButton>
@@ -171,13 +183,9 @@ function filterSubmission() {
                   :rowData="filteredSubmission"
                   :rowHeight="80"
                   domLayout="autoHeight"
-                  :defaultColDef="{
-                    flex: 1,
-                    cellClass: '!flex flex-col justify-center',
-                    cellStyle: { lineHeight: '24px' }
-                  }"
-                  :gridOptions="{ suppressCellSelection: true, enableCellTextSelection: true }"
-                  :modules="[ClientSideRowModelModule]"
+                  :defaultColDef="defaultColumnDef"
+                  :gridOptions="gridOptions"
+                  :modules="gridModules"
                   rowSelection="multiple"
                   @selection-changed="onSelectionChanged"
                   @model-updated="onSelectionChanged"
@@ -193,7 +201,12 @@ function filterSubmission() {
       </template>
     </LayoutSingle>
   </div>
-  <GuideSubmissionPayModal @close="openModal=false" :selectedSubmissions="selectedRows" :open="openModal" :space="space"></GuideSubmissionPayModal>
+  <GuideSubmissionPayModal
+    @close="openModal = false"
+    :selectedSubmissions="selectedRows"
+    :open="openModal"
+    :space="space"
+  ></GuideSubmissionPayModal>
 </template>
 
 <style lang="scss">
