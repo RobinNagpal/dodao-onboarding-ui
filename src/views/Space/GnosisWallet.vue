@@ -28,9 +28,8 @@ import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import { AgGridVue } from '@ag-grid-community/vue3';
 import { useMutation } from '@vue/apollo-composable';
-import { ethers } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
-import { PropType, reactive, ref } from 'vue';
+import { computed, PropType, reactive, ref } from 'vue';
 
 const { loadExtendedSpace } = useExtendedSpaces();
 const { notify } = useNotifications();
@@ -44,6 +43,7 @@ const props = defineProps({
   discordCode: String
 });
 
+const gnosisWallets = computed(() => props.space.spaceIntegrations?.gnosisSafeWallets);
 const columnDefs: ColDef[] = [
   {
     headerName: 'Wallet',
@@ -105,7 +105,7 @@ async function handleDeleteWallet(rowData: ExtendedSpace_space_spaceIntegrations
   if (answer) {
     savingGnosisWallets.value = true;
     gridApi.value?.showLoadingOverlay();
-    const wallets = (props.space.spaceIntegrations?.gnosisSafeWallets || []).filter(wallet => wallet.id !== rowData.id);
+    const wallets = (gnosisWallets.value || []).filter(wallet => wallet.id !== rowData.id);
     try {
       await upsertGnosisSafeWallets({
         spaceId: props.space.id,
@@ -139,7 +139,7 @@ async function onGridReady(params: GridReadyEvent) {
   await setRowData(props.space);
   gridApi.value?.hideOverlay();
 
-  if (!props.space.spaceIntegrations?.gnosisSafeWallets?.length) {
+  if (!gnosisWallets.value?.length) {
     gridApi.value?.showNoRowsOverlay();
   }
 }
@@ -172,13 +172,17 @@ const handleAddWallet = async () => {
       walletName: formAddWallet.name,
       walletAddress: formAddWallet.address,
       chainId: formAddWallet.network.chainId,
-      order: Math.max(...(props.space.spaceIntegrations?.gnosisSafeWallets?.map(wallet => wallet.order) || [0])),
+      order: Math.max(
+        ...(gnosisWallets.value && gnosisWallets.value.length > 0
+          ? gnosisWallets.value.map(wallet => wallet.order)
+          : [0])
+      ),
       tokenContractAddress: formAddWallet.tokenContractAddress
     };
     try {
       await upsertGnosisSafeWallets({
         spaceId: props.space.id,
-        wallets: [...(props.space.spaceIntegrations?.gnosisSafeWallets || []), newWallet]
+        wallets: [...(gnosisWallets.value || []), newWallet]
       });
 
       const spaceModel = await loadExtendedSpace(props.space.id);
