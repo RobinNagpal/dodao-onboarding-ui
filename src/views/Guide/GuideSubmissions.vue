@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
-import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
+import Checkbox from '@/components/Checkbox.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import NoResults from '@/components/NoResults.vue';
 import RowLoading from '@/components/RowLoading.vue';
 import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useViewGuideSubmissions } from '@/composables/guide/useViewSubmissions';
+import { GuideSubmissionsQuery_guideSubmissions } from '@/graphql/generated/graphqlDocs';
 import { setPageTitle } from '@/helpers/utils';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { inject, onMounted, PropType, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { AgGridVue } from '@ag-grid-community/vue3';
-import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import { formatDate } from '@/utils/date/dateFormatUtils';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
+import { AgGridVue } from '@ag-grid-community/vue3';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { inject, onMounted, PropType, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import GuideSubmissionPayModal from './GuideSubmissionPayModal.vue';
-import { GuideSubmissionsQuery_guideSubmissions } from '@/graphql/generated/graphqlDocs';
-import Checkbox from '@/components/Checkbox.vue';
 
 const props = defineProps({
   spaceId: String,
@@ -104,7 +103,6 @@ function handlePay() {
 }
 
 function handleFilterChange(value) {
-  console.log(value);
   filterScore.value = value;
   filterSubmission();
 }
