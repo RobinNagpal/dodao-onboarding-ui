@@ -3,28 +3,38 @@ import UiButton from '@/components/Ui/Button.vue';
 import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiModal from '@/components/Ui/Modal.vue';
+import { useWeb3 } from '@/composables/useWeb3';
+import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { GnosisNetWorkList } from '@/constants/gnosisNetworkList';
 import {
   ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets,
   GuideSubmissionsQuery_guideSubmissions
 } from '@/graphql/generated/graphqlDocs';
+import { Signer } from '@ethersproject/abstract-signer';
 import { formatWallet } from '@/helpers/gnosisWallet';
 import { FormattedGnosisWallet } from '@/types/space/formattedGnosisWallet';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { Network } from '@ethersproject/networks/src.ts/types';
+import { Web3Provider } from '@ethersproject/providers';
 import Safe from '@gnosis.pm/safe-core-sdk';
+import { MetaTransactionData } from '@gnosis.pm/safe-core-sdk-types';
 import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
+import SafeServiceClient from '@gnosis.pm/safe-service-client';
 import { ethers } from 'ethers';
 import { onMounted, PropType, ref } from 'vue';
+import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk';
 
 const props = defineProps({
   open: Boolean,
   space: { type: Object as PropType<SpaceModel>, required: true },
   selectedSubmissions: {
-    type: Object as PropType<GuideSubmissionsQuery_guideSubmissions[]>
+    type: Array as PropType<GuideSubmissionsQuery_guideSubmissions[]>,
+    required: true
   }
 });
 const emit = defineEmits(['close']);
+
+const selectedAmount = ref<string | undefined>();
 
 const formattedWallets = ref<(ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet)[]>([]);
 
@@ -44,21 +54,16 @@ function shortenAddr(addr = '') {
 }
 
 async function payForSubmissions() {
-  if (selectedWallet.value) {
+  const { web3 } = useWeb3();
+  const web3Provider = web3.value.web3Provider;
+  const txServiceUrl = 'https://safe-transaction.rinkeby.gnosis.io';
+  if (selectedWallet.value && web3Provider) {
     try {
       const gnosisWallet: ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet =
         selectedWallet.value;
 
-      const networkName = GnosisNetWorkList.find(network => network.chainId === network.chainId)!.network;
-      const network: Network = {
-        name: networkName,
-        chainId: gnosisWallet.chainId
-      };
-      const etherscanProvider = new ethers.providers.EtherscanProvider(networkName);
-      const jsonRpcProvider = new ethers.providers.JsonRpcProvider(etherscanProvider.getBaseUrl(), network);
-      const safeOwner = jsonRpcProvider.getSigner(0);
+      const safeOwner = await (web3Provider as Web3Provider).getSigner(0);
 
-      etherscanProvider.getBaseUrl();
       const ethAdapter = new EthersAdapter({
         ethers,
         signer: safeOwner
@@ -67,9 +72,78 @@ async function payForSubmissions() {
       const safeSdk: Safe = await Safe.create({ ethAdapter: ethAdapter, safeAddress: gnosisWallet.walletAddress });
 
       const connectedSafe = await safeSdk.connect({ ethAdapter: ethAdapter, safeAddress: gnosisWallet.walletAddress });
-
+      console.log('connectedSafe', connectedSafe);
       const safeBalance = await connectedSafe.getBalance();
-      console.log('safeBalance', safeBalance);
+      console.log('safeBalance', ethers.utils.formatUnits(safeBalance, 18));
+      const three_ethers = ethers.utils.parseUnits(selectedAmount.value!, 'ether').toHexString();
+
+      // https://piyopiyo.medium.com/how-to-send-erc20-token-with-web3-js-99ed040693ce
+      const minABI = [
+        // transfer
+        {
+          constant: false,
+          inputs: [
+            {
+              name: '_to',
+              type: 'address'
+            },
+            {
+              name: '_value',
+              type: 'uint256'
+            }
+          ],
+          name: 'transfer',
+          outputs: [
+            {
+              name: '',
+              type: 'bool'
+            }
+          ],
+          type: 'function'
+        }
+      ];
+
+      // We connect to the Contract using a Provider, so we will only
+      // have read-only access to the Contract
+      const contract = new ethers.Contract(gnosisWallet.tokenContractAddress, minABI, web3Provider as Web3Provider);
+
+      // https://mirror.xyz/0xa1AC2cC82249A44892802a99CA84c4ed1072B29C/lL8AYV_b4VzTbojuZEprrxD7-RTTap2IMIS8qIObfl8
+      const transactions: MetaTransactionData[] = await Promise.all(
+        props.selectedSubmissions.map(async receiver => {
+          const unsignedTransaction = await contract.populateTransaction.transfer(receiver.createdBy, '2');
+          return {
+            to: receiver.createdBy,
+            value: '2',
+            data: unsignedTransaction.data!
+          };
+        })
+      );
+
+      const txs = await safeSdk.createTransaction(transactions);
+
+      // const paymentTsx: MetaTransactionData[] = props.selectedSubmissions.map(
+      //   (sub: GuideSubmissionsQuery_guideSubmissions): MetaTransactionData => ({
+      //     to: sub.createdBy,
+      //     value: '3',
+      //     data: '0x'
+      //   })
+      // );
+      // const txs = await safeSdk.createTransaction(paymentTsx);
+      const hash = await safeSdk.getTransactionHash(txs);
+
+      const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
+      await safeService.proposeTransaction({
+        safeAddress: gnosisWallet.walletAddress,
+        safeTransaction: txs,
+        safeTxHash: hash,
+        senderAddress: web3.value.account,
+        origin
+      });
+
+      const txResponse = await safeSdk.approveTransactionHash(hash);
+      await txResponse.transactionResponse?.wait();
+
+      console.log('txs', txs);
     } catch (e) {
       console.error(e);
     }
@@ -155,7 +229,7 @@ async function payForSubmissions() {
       </div>
       <div v-if="selectedWallet">
         <div class="w-full md:w-1/2 px-2">
-          <UiInput type="number" :modelValue="''" class="flex-1" placeholder="Amount to Pay">
+          <UiInput type="number" v-model="selectedAmount" class="flex-1" placeholder="Amount to Pay">
             <template v-slot:label>Amount</template>
           </UiInput>
         </div>
@@ -163,7 +237,13 @@ async function payForSubmissions() {
     </div>
     <template v-slot:footer>
       <div class="flex justify-around">
-        <UiButton :disabled="!selectedWallet" variant="contained" @click="payForSubmissions()" primary>Ok</UiButton>
+        <UiButton
+          :disabled="!selectedWallet || !selectedAmount"
+          variant="contained"
+          @click="payForSubmissions()"
+          primary
+          >Ok</UiButton
+        >
         <UiButton @click="$emit('close')">Cancel</UiButton>
       </div>
     </template>

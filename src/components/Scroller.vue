@@ -38,7 +38,7 @@ watch(web3Account, () => {
 });
 
 watch(followingSpaces, () => {
-  draggableSpaces.value = followingSpaces.value;
+  draggableSpaces.value = followingSpaces.value || [];
   const sidebarSpaceOrder = lsGet(`sidebarSpaceOrder.${web3Account.value.slice(0, 8).toLowerCase()}`, []);
   // Order side bar and add new spaces to the end of the sidebar
   draggableSpaces.value.sort((a, b) => {

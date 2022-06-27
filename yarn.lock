@@ -641,7 +641,7 @@
     "@ethersproject/logger" "^5.5.0"
     "@ethersproject/properties" "^5.5.0"
 
-"@ethersproject/abstract-signer@5.6.2", "@ethersproject/abstract-signer@^5.6.2":
+"@ethersproject/abstract-signer@5.6.2", "@ethersproject/abstract-signer@^5.6.0", "@ethersproject/abstract-signer@^5.6.2":
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/@ethersproject/abstract-signer/-/abstract-signer-5.6.2.tgz#491f07fc2cbd5da258f46ec539664713950b0b33"
   integrity sha512-n1r6lttFBG0t2vNiI3HoWaS/KdOt8xyDjzlP2cuevlWLG6EX0OwcKLyG/Kp/cuwNxdy/ous+R/DEMdTUwWQIjQ==
@@ -1314,6 +1314,14 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
+"@gnosis.pm/safe-apps-provider@^0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-provider/-/safe-apps-provider-0.11.1.tgz#febbaa8878f69bdc74ac33a21006eb70e036f7da"
+  integrity sha512-gVhNtiF09GIUjQgjKdtnSXc1hDFF3DPCiDN2+6u/wI/nnLg8+3tjQZWqOLnJ3qnee/GbIb3AV1fWVN7DDJH4QA==
+  dependencies:
+    "@gnosis.pm/safe-apps-sdk" "7.4.0"
+    events "^3.3.0"
+
 "@gnosis.pm/safe-apps-provider@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-provider/-/safe-apps-provider-0.8.1.tgz#2f8fb98ae84c8b57855d7f8d6dfbff1be08689c6"
@@ -1330,6 +1338,14 @@
     "@changesets/cli" "^2.16.0"
     ethers "^5.4.7"
 
+"@gnosis.pm/safe-apps-sdk@7.4.0", "@gnosis.pm/safe-apps-sdk@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-sdk/-/safe-apps-sdk-7.4.0.tgz#05d9ba4fa21961161c2869e22e81534990294901"
+  integrity sha512-7YYtEnOioRWo7Lre2XBRxNlCFBseqizWBmkYcjPFBMP8K9blBrntyRo/jr+FdK+wss+85n80RatAP0v8KjmDSg==
+  dependencies:
+    "@gnosis.pm/safe-react-gateway-sdk" "^3.1.1"
+    ethers "^5.6.8"
+
 "@gnosis.pm/safe-apps-sdk@^6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-sdk/-/safe-apps-sdk-6.1.1.tgz#6a4e19c475967a0d04a8c04559e05703484e2ca8"
@@ -1337,14 +1353,6 @@
   dependencies:
     "@gnosis.pm/safe-react-gateway-sdk" "^2.5.6"
     ethers "^5.4.7"
-
-"@gnosis.pm/safe-apps-sdk@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-sdk/-/safe-apps-sdk-7.4.0.tgz#05d9ba4fa21961161c2869e22e81534990294901"
-  integrity sha512-7YYtEnOioRWo7Lre2XBRxNlCFBseqizWBmkYcjPFBMP8K9blBrntyRo/jr+FdK+wss+85n80RatAP0v8KjmDSg==
-  dependencies:
-    "@gnosis.pm/safe-react-gateway-sdk" "^3.1.1"
-    ethers "^5.6.8"
 
 "@gnosis.pm/safe-core-sdk-types@^1.1.0":
   version "1.1.0"
@@ -1404,6 +1412,15 @@
   integrity sha512-/7TPxXqFyoK8PjbBm6YygTwx+VUUTNxFp8F3ceY3jmJhWdtek+Wrr4o20HzPN1nidO9qiKjgoyQLg1fgjSVopw==
   dependencies:
     cross-fetch "^3.1.5"
+
+"@gnosis.pm/safe-service-client@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-service-client/-/safe-service-client-1.1.2.tgz#699aaca293dfe19bdfd60b29b726ce7b6a34b735"
+  integrity sha512-B8INt8jJVfvSGGboXV+0rm/hL2OSElhz19X7VdrZ7MSox3w7JEYE1nd6WWvsX0z2c4aZJQPVcN/PZC4i8BZgpQ==
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.6.0"
+    "@gnosis.pm/safe-core-sdk-types" "^1.1.0"
+    node-fetch "^2.6.6"
 
 "@graphql-typed-document-node/core@^3.0.0":
   version "3.1.0"
@@ -7605,7 +7622,7 @@ node-fetch@2.6.1:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
-node-fetch@2.6.7:
+node-fetch@2.6.7, node-fetch@^2.6.6:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
