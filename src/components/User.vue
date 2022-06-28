@@ -20,7 +20,7 @@ const { isEthBlockchain } = useWeb3();
 
 const { address, profile, username } = useUsername();
 
-if (isEthBlockchain && props.profile) {
+if (isEthBlockchain.value && props.profile) {
   watchEffect(() => {
     profile.value = props.profile;
   });
