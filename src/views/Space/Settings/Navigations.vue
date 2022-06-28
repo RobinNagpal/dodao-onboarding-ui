@@ -16,21 +16,26 @@ const navigations = [
     name: 'discordSpaceSetting',
     text: 'Discord',
     icon: 'discord'
-  },
-  {
-    name: 'gnosisSafeSetting',
-    text: 'Gnosis Safe',
-    icon: 'wallet'
   }
 ];
 
-if (isEthBlockchain || isOneBlockchain || isSolBlockchain) {
+if (isEthBlockchain.value || isOneBlockchain.value) {
+  navigations.push({
+    name: 'gnosisSafeSetting',
+    text: 'Gnosis Safe',
+    icon: 'wallet'
+  });
+}
+
+if (isEthBlockchain.value || isOneBlockchain.value || isSolBlockchain.value) {
   navigations.push({
     name: 'projectGalaxy',
     text: 'Project Galaxy',
     icon: 'projectGalaxy'
   });
 }
+
+console.log('navigations', navigations);
 </script>
 <template>
   <div class="p-4 min-h-auto md:min-h-full bg-skin-header-bg rounded-3xl">

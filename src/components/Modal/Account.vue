@@ -28,11 +28,8 @@ const connectors = Object.fromEntries(
 );
 
 const showProfileOnEtherscan = () => {
-  if (isEthBlockchain || isOneBlockchain) {
-    window.open(
-      explorerUrl(web3.value.network.key, web3.value.account),
-      '_blank'
-    );
+  if (isEthBlockchain.value || isOneBlockchain.value) {
+    window.open(explorerUrl(web3.value.network.key, web3.value.account), '_blank');
   }
 };
 async function handleLogout() {
@@ -61,10 +58,7 @@ watch(open, () => (step.value = null));
           target="_blank"
           class="block"
         >
-          <UiButton
-            v-if="id === 'injected' && injected"
-            class="button-outline w-full flex justify-center items-center"
-          >
+          <UiButton v-if="id === 'injected' && injected" class="button-outline w-full flex justify-center items-center">
             <img
               :src="`/static/icons/connectors/${injected.id}.png`"
               height="28"
@@ -74,16 +68,8 @@ watch(open, () => (step.value = null));
             />
             {{ injected.name }}
           </UiButton>
-          <UiButton
-            v-else-if="id !== 'gnosis'"
-            class="button-outline w-full flex justify-center items-center gap-2"
-          >
-            <img
-              :src="`/static/icons/connectors/${connector.id}.png`"
-              height="25"
-              width="25"
-              :alt="connector.name"
-            />
+          <UiButton v-else-if="id !== 'gnosis'" class="button-outline w-full flex justify-center items-center gap-2">
+            <img :src="`/static/icons/connectors/${connector.id}.png`" height="25" width="25" :alt="connector.name" />
             <span class="mt-1">{{ connector.name }}</span>
           </UiButton>
         </a>
@@ -91,24 +77,12 @@ watch(open, () => (step.value = null));
     </div>
     <div v-else>
       <div v-if="$auth.isAuthenticated.value" class="m-4 space-y-2">
-        <UiButton
-          class="button-outline w-full"
-          @click="showProfileOnEtherscan()"
-        >
-          <UiAvatar
-            :imgsrc="getIpfsUrl(web3.profile?.image)"
-            :address="web3.account"
-            size="18"
-            class="mr-2 -ml-1"
-          />
+        <UiButton class="button-outline w-full" @click="showProfileOnEtherscan()">
+          <UiAvatar :imgsrc="getIpfsUrl(web3.profile?.image)" :address="web3.account" size="18" class="mr-2 -ml-1" />
           <span v-if="web3.profile.name" v-text="web3.profile.name" />
           <span v-else-if="web3.profile.ens" v-text="web3.profile.ens" />
           <span v-else v-text="shorten(web3.account)" />
-          <Icon
-            v-if="isEthBlockchain || isOneBlockchain"
-            name="external-link"
-            class="ml-1"
-          />
+          <Icon v-if="isEthBlockchain || isOneBlockchain" name="external-link" class="ml-1" />
         </UiButton>
         <UiButton
           v-if="isEthBlockchain || isOneBlockchain"
