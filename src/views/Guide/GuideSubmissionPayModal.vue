@@ -56,6 +56,7 @@ function shortenAddr(addr = '') {
 async function payForSubmissions() {
   const { web3 } = useWeb3();
   const web3Provider = web3.value.web3Provider;
+  // https://safe-docs.dev.gnosisdev.com/safe/docs/tutorial_tx_service_initiate_sign/
   const txServiceUrl = 'https://safe-transaction.rinkeby.gnosis.io';
   if (selectedWallet.value && web3Provider) {
     try {
