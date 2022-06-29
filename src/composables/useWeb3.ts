@@ -2,10 +2,13 @@ import { getDefaultNetworkConfig, getNetworks } from '@/helpers/network';
 import { getProfiles } from '@/helpers/profile';
 import { DoDAOAuth, getInstance } from '@/utils/auth/auth';
 import { AuthConnector, isSolanaConnector } from '@/utils/auth/authConnector';
+import { CustomProvider } from '@/utils/auth/customProvider';
 import useNearWallet from '@/utils/near/useNearWallet';
 import { useSolanaWallet } from '@/utils/solana';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
+import { Wallet } from '@ethersproject/wallet';
+import { SafeAppProvider } from '@gnosis.pm/safe-apps-provider';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { computed, reactive } from 'vue';
 
@@ -29,6 +32,7 @@ export interface Web3Account {
   walletConnectType: string | null;
   isTrezor: boolean;
   blockchain: Blockchain;
+  web3Provider: Web3Provider | Wallet | CustomProvider | SafeAppProvider | null;
 }
 
 const state = reactive<Web3Account>({
@@ -38,7 +42,8 @@ const state = reactive<Web3Account>({
   profile: null,
   walletConnectType: null,
   isTrezor: false,
-  blockchain: (import.meta.env.VITE_BLOCKCHAIN as Blockchain) ?? 'ETH'
+  blockchain: (import.meta.env.VITE_BLOCKCHAIN as Blockchain) ?? 'ETH',
+  web3Provider: null
 });
 const nearWallet = useNearWallet();
 
@@ -56,7 +61,9 @@ export function useWeb3() {
       if (connector === AuthConnector.near || isSolanaConnector(connector)) {
         auth.web3 = auth.provider.value;
       } else {
-        auth.web3 = new Web3Provider(auth.provider.value, 'any');
+        const web3Provider = new Web3Provider(auth.provider.value, 'any');
+        auth.web3 = web3Provider;
+        state.web3Provider = web3Provider;
       }
 
       await loadProvider();
@@ -74,10 +81,7 @@ export function useWeb3() {
 
   async function loadProvider() {
     try {
-      if (
-        auth.provider.value?.removeAllListeners &&
-        !auth.provider.value?.isTorus
-      ) {
+      if (auth.provider.value?.removeAllListeners && !auth.provider.value?.isTorus) {
         auth.provider.value.removeAllListeners();
       }
 
@@ -117,25 +121,20 @@ export function useWeb3() {
         } else {
           console.log('connector', connector);
           if (connector === 'gnosis') {
-            const { chainId: safeChainId, safeAddress } = (auth.web3 as any)
-              ?.provider?.safe;
+            const { chainId: safeChainId, safeAddress } = (auth.web3 as any)?.provider?.safe;
 
             network = { chainId: safeChainId };
             accounts = [safeAddress];
           } else {
             const web3 = auth.web3 as Web3Provider;
-            [network, accounts] = await Promise.all([
-              web3?.getNetwork(),
-              web3?.listAccounts()
-            ]);
+            [network, accounts] = await Promise.all([web3?.getNetwork(), web3?.listAccounts()]);
           }
           handleChainChanged(network.chainId);
           const acc = accounts.length > 0 ? accounts[0] : null;
           const profiles = await getProfiles([acc]);
 
           state.account = acc;
-          state.walletConnectType =
-            auth.provider.value?.wc?.peerMeta?.name || null;
+          state.walletConnectType = auth.provider.value?.wc?.peerMeta?.name || null;
           state.profile = profiles[acc];
         }
       } catch (e) {

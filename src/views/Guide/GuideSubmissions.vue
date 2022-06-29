@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
-import GuideSubmissionsTimelineGuideSubmission from '@/components/GuideSubmissions/TimelineGuideSubmission.vue';
+import Checkbox from '@/components/Checkbox.vue';
 import LayoutSingle from '@/components/Layout/Single.vue';
 import NoResults from '@/components/NoResults.vue';
 import RowLoading from '@/components/RowLoading.vue';
 import { useViewGuide } from '@/composables/guide/useViewGuide';
 import { useViewGuideSubmissions } from '@/composables/guide/useViewSubmissions';
+import { GuideSubmissionsQuery_guideSubmissions } from '@/graphql/generated/graphqlDocs';
+import i18n from '@/helpers/i18n';
 import { setPageTitle } from '@/helpers/utils';
-import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { inject, onMounted, PropType, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { AgGridVue } from '@ag-grid-community/vue3';
-import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import { formatDate } from '@/utils/date/dateFormatUtils';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import { ColDef, GridApi, GridReadyEvent } from '@ag-grid-community/core';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
+import { AgGridVue } from '@ag-grid-community/vue3';
+import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
+import { inject, onMounted, PropType, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import GuideSubmissionPayModal from './GuideSubmissionPayModal.vue';
-import { GuideSubmissionsQuery_guideSubmissions } from '@/graphql/generated/graphqlDocs';
-import Checkbox from '@/components/Checkbox.vue';
 
 const props = defineProps({
   spaceId: String,
@@ -49,16 +49,18 @@ onMounted(async () => {
   });
 });
 
+const { t } = i18n.global;
+
 const columnDefs: ColDef[] = [
   {
-    headerName: 'Created By',
+    headerName: t('guide.submissionTable.createdBy'),
     field: 'createdBy',
     wrapText: true,
     autoHeight: true,
     checkboxSelection: true
   },
   {
-    headerName: 'Result',
+    headerName: t('guide.submissionTable.result'),
     field: 'correctQuestions',
     valueGetter: params =>
       params?.data?.result
@@ -69,13 +71,14 @@ const columnDefs: ColDef[] = [
     flex: 2
   },
   {
-    headerName: 'Created Date',
+    headerName: t('guide.submissionTable.createdDate'),
     field: 'created',
     wrapText: true,
     autoHeight: true,
     valueFormatter: params => (params.value ? formatDate(new Date(params.value)) : '-')
   }
 ];
+
 
 const gridApi = ref<GridApi>();
 const filteredSubmission = ref<GuideSubmissionsQuery_guideSubmissions[]>([]);
@@ -104,7 +107,6 @@ function handlePay() {
 }
 
 function handleFilterChange(value) {
-  console.log(value);
   filterScore.value = value;
   filterSubmission();
 }
@@ -121,7 +123,6 @@ function handleFilterUniqueChange(value) {
 function filterSubmission() {
   if (filterScore.value && parseInt(filterScore.value)) {
     const desiredScore = parseInt(filterScore.value);
-    console.log(filteredSubmission.value);
     filteredSubmission.value = guideSubmissionsRef.value.filter(
       item => item.result.correctQuestions.length >= desiredScore
     );
@@ -150,17 +151,19 @@ const gridModules = [ClientSideRowModelModule];
   <div class="flex w-[1248px] mx-auto">
     <LayoutSingle v-bind="$attrs">
       <template #content>
-        <Block slim title="Guide Sumission">
+        <Block slim :title="t('guide.submissionScreen.title')">
           <div>
             <div class="mt-6" v-if="submissionsLoadedRef">
               <NoResults :block="true" v-if="!guideSubmissionsRef || guideSubmissionsRef.length === 0" />
               <div v-else>
                 <div class="flex justify-between">
-                  <UiButton :disabled="selectedRows.length === 0" @click="handlePay()">Pay</UiButton>
+                  <UiButton :disabled="selectedRows.length === 0" @click="handlePay()">{{
+                    t('guide.submissionScreen.payBtn')
+                  }}</UiButton>
                   <div class="flex items-center">
                     <div class="flex mr-4">
                       <Checkbox @update:modelValue="handleFilterUniqueChange" :modelValue="filterUnique" />
-                      <span>Unique</span>
+                      <span>{{ t('guide.submissionScreen.uniqueFilter') }}</span>
                     </div>
                     <div class="w-[150px]">
                       <UiInput
@@ -170,13 +173,12 @@ const gridModules = [ClientSideRowModelModule];
                         class="flex-1"
                         placeholder="Score"
                       >
-                        <template v-slot:label>Score</template>
+                        <template v-slot:label>{{ t('guide.submissionScreen.score') }}</template>
                       </UiInput>
                     </div>
                   </div>
                 </div>
                 <ag-grid-vue
-                  rowClass="custom-row"
                   style="width: 100%"
                   class="ag-theme-alpine theme-table"
                   :columnDefs="columnDefs"
@@ -210,11 +212,6 @@ const gridModules = [ClientSideRowModelModule];
 </template>
 
 <style lang="scss">
-.custom-row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
 .theme-table {
   .ag-cell-focus,
   .ag-cell-no-focus {
