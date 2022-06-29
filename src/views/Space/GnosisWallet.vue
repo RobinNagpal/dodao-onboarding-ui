@@ -46,7 +46,7 @@ const props = defineProps({
 const gnosisWallets = computed(() => props.space.spaceIntegrations?.gnosisSafeWallets);
 const columnDefs: ColDef[] = [
   {
-    headerName: 'Wallet',
+    headerName: t('gnosisWallet.table.wallet'),
     colId: 'wallet',
     cellRenderer: SpaceGnosisWalletGnosisWallet,
     autoHeight: true,
@@ -54,7 +54,7 @@ const columnDefs: ColDef[] = [
     width: 540
   },
   {
-    headerName: 'Info',
+    headerName: t('gnosisWallet.table.info'),
     colId: 'walletInfo',
     cellRenderer: SpaceGnosisWalletGnosisWalletInfo,
     autoHeight: true,
@@ -62,7 +62,7 @@ const columnDefs: ColDef[] = [
     width: 240
   },
   {
-    headerName: 'Actions',
+    headerName: t('gnosisWallet.table.actions'),
     cellRenderer: SpaceGnosisWalletDeleteWalletCell,
     colId: 'actions',
     autoHeight: true,
@@ -204,7 +204,6 @@ const handleAddWallet = async () => {
       <Block :title="$t('settings.gnosisWallets')" :class="`mt-4 wrapper`">
         <div class="wrapper mt-4 py-24 flex justify-center align-center flex-col items-center">
           <ag-grid-vue
-            rowClass="custom-row"
             style="width: 100%"
             class="ag-theme-alpine theme-table"
             :columnDefs="columnDefs"
@@ -222,10 +221,10 @@ const handleAddWallet = async () => {
       <Block :title="$t('settings.addGnosisWallet')" :class="`mt-4 wrapper`">
         <div class="flex mt-4">
           <UiInput v-model="formAddWallet.name" class="flex-1 mr-1" placeholder="My wallet">
-            <template v-slot:label>Name*</template>
+            <template v-slot:label>{{ t('gnosisWallet.walletName') }}*</template>
           </UiInput>
           <UiInput v-model="formAddWallet.address" class="flex-1 mx-1" placeholder="0x00...">
-            <template v-slot:label>Address*</template>
+            <template v-slot:label>{{ t('gnosisWallet.walletAddr') }}*</template>
           </UiInput>
         </div>
         <div class="flex mt-4">
@@ -242,19 +241,19 @@ const handleAddWallet = async () => {
               placeholder="0x00..."
               :disabled="true"
             >
-              <template v-slot:label>Network*</template>
+              <template v-slot:label>{{ t('gnosisWallet.walletNetwork') }}*</template>
             </UiInput>
             <template v-slot:item="{ item }">
               {{ item.name }}
             </template>
           </UiDropdown>
           <UiInput v-model="formAddWallet.tokenContractAddress" class="flex-1 mx-1" placeholder="0x00...">
-            <template v-slot:label>Token Contract Address*</template>
+            <template v-slot:label>{{ t('gnosisWallet.addWalletBtn') }}*</template>
           </UiInput>
         </div>
         <div>
           <UiButton :disabled="savingGnosisWallets" @click="handleAddWallet()" variant="contained" :primary="true">
-            <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>Add Wallet</span>
+            <span class="font-bold text-xl mb-1 mr-2">&plus;</span><span>{{ t('gnosisWallet.addWalletBtn') }}</span>
           </UiButton>
         </div>
       </Block>
@@ -270,11 +269,6 @@ const handleAddWallet = async () => {
 
 .wrapper {
   min-height: 100px;
-}
-
-.custom-row {
-  padding-top: 8px;
-  padding-bottom: 8px;
 }
 
 .theme-table {

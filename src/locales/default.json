@@ -273,7 +273,34 @@
     "votingSystem": "Voting system",
     "showIncorrectChoices": "Show Incorrect Questions",
     "hideQuestions": "Hide Questions",
-    "socialShareImage": "Twitter Share Image"
+    "socialShareImage": "Twitter Share Image",
+    "payModal": {
+      "title": "Batch Pay",
+      "description": "Pay the following submissions",
+      "selectedSubmission": "Selected Submission",
+      "selectYourWallet": "Select Your Wallet",
+      "walletAddr": "Wallet Address",
+      "contract": "Contract",
+      "tokenName": "Token Name",
+      "balance": "Balance",
+      "amount": "Amount",
+      "amountToPay": "Amount to Pay",
+
+      "ok": "Ok",
+      "cancel": "Cancel"
+    },
+    "submissionScreen": {
+      "title": "Guide Sumission",
+      "uniqueFilter": "Unique",
+      "score": "Score",
+      "payBtn": "Pay"
+    },
+    "submissionTable": {
+      "createdBy": "Created By",
+      "result": "Result",
+      "createdDate": "Created Date"
+
+    }
   },
   "guides": {
     "header": "Guides",
@@ -428,6 +455,18 @@
     "type": "Type",
     "anyType": "Any",
     "hideAbstain": "Ignore abstain votes in basic voting results"
+  },
+  "gnosisWallet": {
+    "table": {
+      "wallet": "Wallet",
+      "info": "Info",
+      "actions": "Actions"
+    },
+    "walletName": "Name",
+    "walletAddr": "Address",
+    "walletNetwork": "Network",
+    "addWalletBtn": "Add Wallet",
+    "tokenContractAddr": "Token Contract Address"
   },
   "setupDAO": {
     "header": "Setup DAO",

@@ -126,18 +126,20 @@ async function payForSubmissions() {
 </script>
 
 <template>
-  <UiModal :open="open" @close="$emit('close')" class="flex">
+  <UiModal :open="open" @close="$emit('close')" class="flex payModal">
     <template v-slot:header>
-      <h3>Batch Pay</h3>
-      <div>Pay the following submissions:</div>
+      <h3>{{ t('guide.payModal.title') }}</h3>
+      <div>{{ t('guide.payModal.description') }}</div>
     </template>
     <div class="flex flex-col flex-auto my-2 mx-2 modal-body">
       <div class="px-2">
-        <div>Selected Submission:</div>
-        <div class="flex items-center my-2" :key="item.id" v-for="item in selectedSubmissions">
-          <div class="mr-4 rounded-2xl bg-skin-header-bg px-3 py-1">{{ shortenAddr(item.createdBy) }}</div>
-          <div class="rounded-2xl bg-skin-header-bg px-3 py-1">
-            {{ item.result.correctQuestions.length }}/{{ item.result.allQuestions.length }}
+        <div>{{ t('guide.payModal.selectedSubmission') }}:</div>
+        <div class="selected-submission-list">
+          <div class="flex items-center my-2" :key="item.id" v-for="item in selectedSubmissions">
+            <div class="mr-4 rounded-2xl bg-skin-header-bg px-3 py-1">{{ shortenAddr(item.createdBy) }}</div>
+            <div class="rounded-2xl bg-skin-header-bg px-3 py-1">
+              {{ item.result.correctQuestions.length }}/{{ item.result.allQuestions.length }}
+            </div>
           </div>
         </div>
       </div>
@@ -151,7 +153,7 @@ async function payForSubmissions() {
             :items="formattedWallets"
           >
             <UiInput :modelValue="selectedWallet?.walletName" class="flex-1" placeholder="0x00..." :disabled="true">
-              <template v-slot:label>Select Your Wallet</template>
+              <template v-slot:label>{{ t('guide.payModal.selectYourWallet') }}</template>
             </UiInput>
             <template v-slot:item="{ item }">
               {{ item.walletName }}
@@ -167,7 +169,7 @@ async function payForSubmissions() {
             placeholder="Contract"
             :disabled="true"
           >
-            <template v-slot:label>Wallet Address</template>
+            <template v-slot:label>{{ t('guide.payModal.walletAddr') }}</template>
           </UiInput>
         </div>
         <div class="w-full md:w-1/2 px-2">
@@ -177,7 +179,7 @@ async function payForSubmissions() {
             placeholder="Contract"
             :disabled="true"
           >
-            <template v-slot:label>Contract</template>
+            <template v-slot:label>{{ t('guide.payModal.contract') }}</template>
           </UiInput>
         </div>
         <div class="w-full md:w-1/2 px-2">
@@ -187,7 +189,7 @@ async function payForSubmissions() {
             placeholder="Token Name"
             :disabled="true"
           >
-            <template v-slot:label>Token Name</template>
+            <template v-slot:label>{{ t('guide.payModal.tokenName') }}</template>
           </UiInput>
         </div>
         <div class="w-full md:w-1/2 px-2">
@@ -197,14 +199,14 @@ async function payForSubmissions() {
             placeholder="tokenContractAddress"
             :disabled="true"
           >
-            <template v-slot:label>Balance</template>
+            <template v-slot:label>{{ t('guide.payModal.balance') }}</template>
           </UiInput>
         </div>
       </div>
       <div v-if="selectedWallet">
         <div class="w-full md:w-1/2 px-2">
-          <UiInput type="number" v-model="selectedAmount" class="flex-1" placeholder="Amount to Pay">
-            <template v-slot:label>Amount</template>
+          <UiInput type="number" v-model="selectedAmount" class="flex-1" :placeholder="t('guide.payModal.amountToPay')">
+            <template v-slot:label>{{ t('guide.payModal.amount') }}</template>
           </UiInput>
         </div>
       </div>
@@ -217,17 +219,27 @@ async function payForSubmissions() {
           variant="contained"
           @click="payForSubmissions()"
           primary
-          >Ok</UiButton
+          >{{ t('guide.payModal.ok') }}</UiButton
         >
-        <UiButton @click="$emit('close')">Cancel</UiButton>
+        <UiButton @click="$emit('close')">{{ t('guide.payModal.cancel') }}</UiButton>
       </div>
     </template>
   </UiModal>
 </template>
 <style lang="scss" scoped>
-.modal-body {
-  min-height: 320px;
+.payModal {
+  .modal-body {
+    min-height: 320px;
+    max-height: 500px;
+  }
 }
+
+.selected-submission-list {
+  margin-bottom: 4px;
+  max-height: 124px;
+  overflow: auto;
+}
+
 .dropdown-wallet {
   .sub-menu-wrapper {
     width: 100%;
