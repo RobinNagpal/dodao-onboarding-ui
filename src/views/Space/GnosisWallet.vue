@@ -248,7 +248,7 @@ const handleAddWallet = async () => {
             </template>
           </UiDropdown>
           <UiInput v-model="formAddWallet.tokenContractAddress" class="flex-1 mx-1" placeholder="0x00...">
-            <template v-slot:label>{{ t('gnosisWallet.addWalletBtn') }}*</template>
+            <template v-slot:label>{{ t('gnosisWallet.tokenContractAddr') }}*</template>
           </UiInput>
         </div>
         <div>
