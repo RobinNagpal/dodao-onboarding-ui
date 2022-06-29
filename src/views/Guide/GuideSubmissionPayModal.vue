@@ -4,25 +4,23 @@ import UiDropdown from '@/components/Ui/Dropdown.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiModal from '@/components/Ui/Modal.vue';
 import { useWeb3 } from '@/composables/useWeb3';
-import { useWeb3Wrapper } from '@/composables/useWeb3Wrapper';
 import { GnosisNetWorkList } from '@/constants/gnosisNetworkList';
 import {
   ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets,
   GuideSubmissionsQuery_guideSubmissions
 } from '@/graphql/generated/graphqlDocs';
-import { Signer } from '@ethersproject/abstract-signer';
 import { formatWallet } from '@/helpers/gnosisWallet';
+import i18n from '@/helpers/i18n';
+import erc20Abi from '@/helpers/jsons/erc20Abi.json';
 import { FormattedGnosisWallet } from '@/types/space/formattedGnosisWallet';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
-import { Network } from '@ethersproject/networks/src.ts/types';
 import { Web3Provider } from '@ethersproject/providers';
 import Safe from '@gnosis.pm/safe-core-sdk';
 import { MetaTransactionData } from '@gnosis.pm/safe-core-sdk-types';
 import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
 import SafeServiceClient from '@gnosis.pm/safe-service-client';
 import { ethers } from 'ethers';
-import { onMounted, PropType, ref } from 'vue';
-import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk';
+import { inject, onMounted, PropType, ref } from 'vue';
 
 const props = defineProps({
   open: Boolean,
@@ -33,7 +31,10 @@ const props = defineProps({
   }
 });
 const emit = defineEmits(['close']);
+const notify: Function = inject('notify')!;
+const { t } = i18n.global;
 
+const executingGnosisTransaction = ref(false);
 const selectedAmount = ref<string | undefined>();
 
 const formattedWallets = ref<(ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet)[]>([]);
@@ -54,14 +55,16 @@ function shortenAddr(addr = '') {
 }
 
 async function payForSubmissions() {
+  executingGnosisTransaction.value = true;
   const { web3 } = useWeb3();
   const web3Provider = web3.value.web3Provider;
-  // https://safe-docs.dev.gnosisdev.com/safe/docs/tutorial_tx_service_initiate_sign/
-  const txServiceUrl = 'https://safe-transaction.rinkeby.gnosis.io';
-  if (selectedWallet.value && web3Provider) {
+  const gnosisNetwork = GnosisNetWorkList.find(gnosis => gnosis.chainId === selectedWallet.value?.chainId);
+  if (selectedWallet.value && web3Provider && gnosisNetwork) {
     try {
       const gnosisWallet: ExtendedSpace_space_spaceIntegrations_gnosisSafeWallets & FormattedGnosisWallet =
         selectedWallet.value;
+
+      const txServiceUrl = gnosisNetwork.txServiceUrl;
 
       const safeOwner = await (web3Provider as Web3Provider).getSigner(0);
 
@@ -70,51 +73,23 @@ async function payForSubmissions() {
         signer: safeOwner
       });
 
-      const safeSdk: Safe = await Safe.create({ ethAdapter: ethAdapter, safeAddress: gnosisWallet.walletAddress });
-
-      const connectedSafe = await safeSdk.connect({ ethAdapter: ethAdapter, safeAddress: gnosisWallet.walletAddress });
-      console.log('connectedSafe', connectedSafe);
-      const safeBalance = await connectedSafe.getBalance();
-      console.log('safeBalance', ethers.utils.formatUnits(safeBalance, 18));
-      const three_ethers = ethers.utils.parseUnits(selectedAmount.value!, 'ether').toHexString();
-
-      // https://piyopiyo.medium.com/how-to-send-erc20-token-with-web3-js-99ed040693ce
-      const minABI = [
-        // transfer
-        {
-          constant: false,
-          inputs: [
-            {
-              name: '_to',
-              type: 'address'
-            },
-            {
-              name: '_value',
-              type: 'uint256'
-            }
-          ],
-          name: 'transfer',
-          outputs: [
-            {
-              name: '',
-              type: 'bool'
-            }
-          ],
-          type: 'function'
-        }
-      ];
-
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
-      const contract = new ethers.Contract(gnosisWallet.tokenContractAddress, minABI, web3Provider as Web3Provider);
+      const contract = new ethers.Contract(gnosisWallet.tokenContractAddress, erc20Abi, web3Provider as Web3Provider);
+
+      const safeSdk: Safe = await Safe.create({ ethAdapter: ethAdapter, safeAddress: gnosisWallet.walletAddress });
+
+      const decimals = await contract.decimals();
+
+      const tokensToPay = ethers.utils.parseUnits(selectedAmount.value!, decimals).toHexString();
 
       // https://mirror.xyz/0xa1AC2cC82249A44892802a99CA84c4ed1072B29C/lL8AYV_b4VzTbojuZEprrxD7-RTTap2IMIS8qIObfl8
       const transactions: MetaTransactionData[] = await Promise.all(
         props.selectedSubmissions.map(async receiver => {
-          const unsignedTransaction = await contract.populateTransaction.transfer(receiver.createdBy, '2');
+          const unsignedTransaction = await contract.populateTransaction.transfer(receiver.createdBy, tokensToPay);
           return {
-            to: receiver.createdBy,
-            value: '2',
+            to: gnosisWallet.tokenContractAddress,
+            value: '0',
             data: unsignedTransaction.data!
           };
         })
@@ -122,33 +97,31 @@ async function payForSubmissions() {
 
       const txs = await safeSdk.createTransaction(transactions);
 
-      // const paymentTsx: MetaTransactionData[] = props.selectedSubmissions.map(
-      //   (sub: GuideSubmissionsQuery_guideSubmissions): MetaTransactionData => ({
-      //     to: sub.createdBy,
-      //     value: '3',
-      //     data: '0x'
-      //   })
-      // );
-      // const txs = await safeSdk.createTransaction(paymentTsx);
       const hash = await safeSdk.getTransactionHash(txs);
 
       const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
+      const formattedDate = new Date().toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' ');
       await safeService.proposeTransaction({
         safeAddress: gnosisWallet.walletAddress,
         safeTransaction: txs,
         safeTxHash: hash,
         senderAddress: web3.value.account,
-        origin
+        origin: 'DoDAO Guide Submissions - ' + formattedDate
       });
 
       const txResponse = await safeSdk.approveTransactionHash(hash);
       await txResponse.transactionResponse?.wait();
-
-      console.log('txs', txs);
+      notify(['green', t('notify.gnosisTransactionsQueued')]);
+      emit('close');
     } catch (e) {
       console.error(e);
+      emit('close');
+      notify(['red', t('notify.gnosisTransactionsError')]);
     }
+  } else {
+    notify(['red', t('notify.somethingWentWrong')]);
   }
+  executingGnosisTransaction.value = false;
 }
 </script>
 
@@ -240,6 +213,7 @@ async function payForSubmissions() {
       <div class="flex justify-around">
         <UiButton
           :disabled="!selectedWallet || !selectedAmount"
+          :loading="executingGnosisTransaction"
           variant="contained"
           @click="payForSubmissions()"
           primary
