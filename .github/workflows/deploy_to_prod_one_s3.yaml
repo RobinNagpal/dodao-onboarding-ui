@@ -29,7 +29,7 @@ jobs:
           yarn run build
           yarn run lint
         env:
-          NODE_OPTIONS: --max_old_space_size=4096
+          NODE_OPTIONS: --max-old-space-size=4096
           VITE_DEFAULT_NETWORK: mainnet
           VITE_BLOCKCHAIN: ONE
           VITE_ENVIRONMENT: prod

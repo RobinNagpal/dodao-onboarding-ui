@@ -29,7 +29,7 @@ jobs:
           yarn run build
           yarn run lint
         env:
-          NODE_OPTIONS: --max_old_space_size=4096
+          NODE_OPTIONS: --max-old-space-size=4096
           VITE_HUB_URL: https://staging.api.onboarding.dodao.io
           VITE_ENVIRONMENT: staging
       - uses: jakejarvis/s3-sync-action@master
