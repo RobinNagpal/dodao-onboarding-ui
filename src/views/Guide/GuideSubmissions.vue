@@ -75,10 +75,9 @@ const columnDefs: ColDef[] = [
     field: 'created',
     wrapText: true,
     autoHeight: true,
-    valueFormatter: params => (params.value ? formatDate(new Date(params.value)) : '-')
+    valueFormatter: params => (params.value ? formatDate(new Date(params.value * 1000)) : '-')
   }
 ];
-
 
 const gridApi = ref<GridApi>();
 const filteredSubmission = ref<GuideSubmissionsQuery_guideSubmissions[]>([]);
