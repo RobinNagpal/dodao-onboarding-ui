@@ -68,7 +68,8 @@
     "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.9",
     "vue-tippy": "^6.0.0-alpha.39",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "web3": "^1.7.4"
   },
   "devDependencies": {
     "@rollup/plugin-graphql": "^1.1.0",
