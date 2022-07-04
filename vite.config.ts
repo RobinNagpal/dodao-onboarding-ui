@@ -28,8 +28,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@ag-grid-community/core$': path.resolve(__dirname, 'node_modules/@ag-grid-community/core'),
       '@dodao/onboarding-schemas': path.resolve(__dirname, './dodao-onboarding-schemas/src'),
-      vue$: path.resolve(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js'),
-      web3: path.resolve(__dirname, 'web3/dist/web3.min.js')
+      'readable-stream': 'vite-compatible-readable-stream',
+      vue$: path.resolve(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js')
     },
     dedupe: ['@popperjs/core']
   },
