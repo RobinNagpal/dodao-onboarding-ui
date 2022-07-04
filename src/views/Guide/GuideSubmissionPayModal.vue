@@ -18,7 +18,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import Safe from '@gnosis.pm/safe-core-sdk';
 import { MetaTransactionData } from '@gnosis.pm/safe-core-sdk-types';
 import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
-import SafeServiceClient from '@gnosis.pm/safe-service-client';
+import SafeServiceClient, { ProposeTransactionProps } from '@gnosis.pm/safe-service-client';
 import { ethers } from 'ethers';
 import { inject, onMounted, PropType, ref } from 'vue';
 
@@ -83,6 +83,7 @@ async function payForSubmissions() {
 
       const tokensToPay = ethers.utils.parseUnits(selectedAmount.value!, decimals).toHexString();
 
+      console.log('tokensToPay', tokensToPay);
       // https://mirror.xyz/0xa1AC2cC82249A44892802a99CA84c4ed1072B29C/lL8AYV_b4VzTbojuZEprrxD7-RTTap2IMIS8qIObfl8
       const transactions: MetaTransactionData[] = await Promise.all(
         props.selectedSubmissions.map(async receiver => {
@@ -95,20 +96,25 @@ async function payForSubmissions() {
         })
       );
 
+      console.log('create transactions:', transactions);
       const txs = await safeSdk.createTransaction(transactions);
 
       const hash = await safeSdk.getTransactionHash(txs);
 
       const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
       const formattedDate = new Date().toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' ');
-      await safeService.proposeTransaction({
+
+      console.log('propose transaction:', transactions);
+      const proposeTransactionProps: ProposeTransactionProps = {
         safeAddress: gnosisWallet.walletAddress,
         safeTransaction: txs,
         safeTxHash: hash,
         senderAddress: web3.value.account,
         origin: 'DoDAO Guide Submissions - ' + formattedDate
-      });
+      };
+      await safeService.proposeTransaction(proposeTransactionProps);
 
+      console.log('approve transaction hash:', hash);
       const txResponse = await safeSdk.approveTransactionHash(hash);
       await txResponse.transactionResponse?.wait();
       notify(['green', t('notify.gnosisTransactionsQueued')]);
