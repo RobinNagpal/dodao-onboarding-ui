@@ -150,9 +150,9 @@ async function navigateToNextStep() {
 
       <div
         v-if="guide.guideIntegrations?.projectGalaxyOatMintUrl && guideSubmission?.galaxyCredentialsUpdated"
-        class="my-3 bold"
+        class="my-4 bold"
       >
-        <h3>You have WON a Badge</h3>
+        <h3 class="badge-heading">You have WON a Badge</h3>
         Claim you guide completion badge <a :href="guide.guideIntegrations?.projectGalaxyOatMintUrl">here.</a>
       </div>
 
@@ -273,6 +273,16 @@ async function navigateToNextStep() {
 
 .step-content p {
   margin-bottom: 1rem;
+}
+
+.badge-heading {
+  font-weight: 700;
+}
+
+.badge-claim-link {
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: underline;
 }
 
 .step-content iframe {
