@@ -150,10 +150,11 @@ async function navigateToNextStep() {
 
       <div
         v-if="guide.guideIntegrations?.projectGalaxyOatMintUrl && guideSubmission?.galaxyCredentialsUpdated"
-        class="my-4 bold"
+        class="mt-4 mb-6 bold"
       >
         <h3 class="badge-heading">You have WON a Badge</h3>
-        Claim you guide completion badge <a :href="guide.guideIntegrations?.projectGalaxyOatMintUrl">here.</a>
+        Claim you guide completion badge
+        <a :href="guide.guideIntegrations?.projectGalaxyOatMintUrl" class="badge-claim-link">here</a>
       </div>
 
       <div
