@@ -171,6 +171,7 @@ import oaklanddao from './oaklanddao.scss';
 import oceandao from './oceandao.scss';
 import octofi from './octofi.scss';
 import omg from './omg.scss';
+import opolis from './opolis.scss';
 import paladin from './paladin.scss';
 import pancake from './pancake.scss';
 import pandayield from './pandayield.scss';
@@ -446,6 +447,7 @@ export default {
   oceandao,
   octofi,
   omg,
+  opolis,
   paladin,
   pancake,
   pandayield,

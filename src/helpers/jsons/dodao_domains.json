@@ -79,6 +79,10 @@
     "spaceId": "ocean-protocol-eth-1",
     "siteType": "onboarding"
   },
+  "opolis.dodao.io": {
+    "spaceId": "opolis-eth-1",
+    "siteType": "onboarding"
+  },
   "makerdao.dodao.io": {
     "spaceId": "makerdao-eth-1",
     "siteType": "onboarding"
