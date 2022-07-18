@@ -11,7 +11,8 @@ export default defineConfig({
     minify: false
   },
   define: {
-    'process.env': process.env
+    'process.env': process.env,
+    global: {}
   },
   plugins: [
     vue({ reactivityTransform: true }),
