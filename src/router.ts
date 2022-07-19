@@ -104,9 +104,14 @@ const spaceRoutes: RouteRecordRaw[] = [
     props: true
   },
   {
-    path: 'course/view/:uuid',
+    path: 'course/bundle/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
+  },
+  {
+    path: 'course/file/view/:uuid',
+    name: 'fileCourse',
+    component: () => import('@/views/Course/ViewFileCourse.vue')
   },
   {
     path: ':guideType/create',
