@@ -2,6 +2,7 @@ import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
+import i18n from '@/helpers/i18n';
 import { getGuideBundle } from '@/helpers/snapshot';
 import { GuideBundleError } from '@/types/error';
 import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
