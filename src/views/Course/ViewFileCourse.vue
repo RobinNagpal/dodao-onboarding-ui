@@ -7,8 +7,9 @@ const course = {
   duration: '45 - 60 mins',
   topics: [
     {
-      title: 'Types',
+      title: 'Data Types',
       summary: 'This chapter explains the basics of data types used in Solidity.',
+      key: 'data-types',
       order: 0,
       questions: [
         {
