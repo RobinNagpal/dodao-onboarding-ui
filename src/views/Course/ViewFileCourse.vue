@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { cloneDeep } from 'lodash';
+import CourseNavigation from './CourseNavigation.vue';
 const course = {
   key: 'solidity-course',
   title: 'Solidity Course',
@@ -1568,8 +1570,29 @@ const course = {
     }
   ]
 };
+course.topics.push(cloneDeep(course.topics[0]));
+course.topics[1].key= "second-topic",
+course.topics[1].title = 'second topic'
+console.log(1234, course)
 </script>
 
 <template>
-  <h1>File Course</h1>
+  <div class="mt-4 container-default">
+    <Block slim :title="course.title">
+      <div class="mt-4 flex flex-col md:flex-row">
+        <div class="nav-wrapper mt-16">
+          <CourseNavigation :course="course"></CourseNavigation>
+        </div>
+        <div class="flex-1 ml-4 mb-4">
+          <router-view v-if="course" :course="course" />
+        </div>
+      </div>
+    </Block>
+  </div>
 </template>
+<style lang="scss" scoped>
+.nav-wrapper {
+  width: 100%;
+  max-width: 300px;
+}
+</style>
