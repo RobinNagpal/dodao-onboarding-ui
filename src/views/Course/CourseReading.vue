@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex">
+    <div class="flex flex-col lg:flex-row">
       <div class="left mr-4 flex-shrink-0">
         <div class="iframe-container">
           <iframe class="responsive-iframe" :src="iframeUrl"></iframe>
@@ -104,7 +104,10 @@ const details = computed(() => {
   min-height: 300px;
 }
 .left {
-  width: 30%;
+  width: 100%;
+  @screen lg {
+    width: 30%;
+  }
 }
 .iframe-container {
   position: relative;

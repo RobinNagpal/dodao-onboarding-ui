@@ -149,6 +149,7 @@ const handleToggle = (key, open) => {
                 :to="{
                   name: 'courseEvaluation',
                   params: {
+                    topicKey: topic.key,
                     questionIndex: 0
                   }
                 }"

@@ -1579,11 +1579,11 @@ console.log(1234, course)
 <template>
   <div class="mt-4 container-default">
     <Block slim :title="course.title">
-      <div class="mt-4 flex flex-col md:flex-row">
-        <div class="nav-wrapper mt-16">
+      <div class="flex flex-col md:flex-row">
+        <div class="nav-wrapper my-4">
           <CourseNavigation :course="course"></CourseNavigation>
         </div>
-        <div class="flex-1 ml-4 mb-4">
+        <div class="flex-1 ml-4 my-4">
           <router-view v-if="course" :course="course" />
         </div>
       </div>
@@ -1593,6 +1593,8 @@ console.log(1234, course)
 <style lang="scss" scoped>
 .nav-wrapper {
   width: 100%;
-  max-width: 300px;
+  @screen md {
+    max-width: 300px;
+  }
 }
 </style>
