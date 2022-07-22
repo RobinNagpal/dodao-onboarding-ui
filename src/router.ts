@@ -104,9 +104,34 @@ const spaceRoutes: RouteRecordRaw[] = [
     props: true
   },
   {
-    path: 'course/view/:uuid',
+    path: 'course/bundle/view/:uuid',
     name: 'guideBundle',
     component: () => import('@/views/GuideBundle/ViewBundle.vue')
+  },
+  {
+    path: 'course/file/view/:courseKey',
+    name: 'fileCourse',
+    component: () => import('@/views/Course/ViewFileCourse.vue'),
+    children: [
+      {
+        path: ':topicKey/reading/:uuid',
+        name: 'courseReading',
+        component: () => import('@/views/Course/CourseReading.vue'),
+        props: true
+      },
+      {
+        path: ':topicKey/summary/:summaryKey',
+        name: 'courseSummary',
+        component: () => import('@/views/Course/CourseSummary.vue'),
+        props: true
+      },
+      {
+        path: ':topicKey/evaluation/:questionIndex?',
+        name: 'courseEvaluation',
+        component: () => import('@/views/Course/CourseEvaluation.vue'),
+        props: true
+      }
+    ]
   },
   {
     path: ':guideType/create',
