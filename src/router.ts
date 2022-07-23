@@ -111,36 +111,36 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'course/file/view/:courseKey',
     name: 'fileCourse',
-    component: () => import('@/views/Course/ViewFileCourse.vue'),
+    component: () => import('@/views/GitCourse/ViewFileCourse.vue'),
     children: [
       {
         path: '',
         name: 'courseIndex',
-        component: () => import('@/views/Course/CourseIndex.vue'),
+        component: () => import('@/views/GitCourse/CourseIndex.vue'),
         props: true
       },
       {
         path: ':topicKey',
         name: 'topicIndex',
-        component: () => import('@/views/Course/TopicIndex.vue'),
+        component: () => import('@/views/GitCourse/TopicIndex.vue'),
         props: true
       },
       {
         path: ':topicKey/reading/:uuid',
         name: 'courseReading',
-        component: () => import('@/views/Course/CourseReading.vue'),
+        component: () => import('@/views/GitCourse/CourseReading.vue'),
         props: true
       },
       {
         path: ':topicKey/summary/:summaryKey',
         name: 'courseSummary',
-        component: () => import('@/views/Course/CourseSummary.vue'),
+        component: () => import('@/views/GitCourse/CourseSummary.vue'),
         props: true
       },
       {
         path: ':topicKey/evaluation/:questionIndex?',
         name: 'courseEvaluation',
-        component: () => import('@/views/Course/CourseEvaluation.vue'),
+        component: () => import('@/views/GitCourse/CourseEvaluation.vue'),
         props: true
       }
     ]
