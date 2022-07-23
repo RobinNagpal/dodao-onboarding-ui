@@ -10,7 +10,7 @@ import TextareaArray from '@/components/TextareaArray.vue';
 import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
-import { useEditGuideBundle } from '@/composables/guide/useEditGuideBundle';
+import { useEditGuideCourse } from '@/composables/course/useEditGuideCourse';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useClient } from '@/composables/useClient';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
@@ -19,7 +19,7 @@ import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import { GuidesQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
-import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { GuideCoursePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
@@ -56,7 +56,7 @@ const {
   moveGuideDown,
   removeGuideInput,
   selectGuide
-} = useEditGuideBundle(uuid as string, props.space, notify);
+} = useEditGuideCourse(uuid as string, props.space, notify);
 const { modalAccountOpen } = useModal();
 const { store } = useStore();
 const { apolloQuery } = useApolloQuery();
@@ -154,11 +154,11 @@ function selectPublishStatus(status) {
 const guideBundleStatuses = [
   {
     text: 'Live',
-    action: GuideBundlePublishStatus.Live
+    action: GuideCoursePublishStatus.Live
   },
   {
     text: 'Draft',
-    action: GuideBundlePublishStatus.Draft
+    action: GuideCoursePublishStatus.Draft
   }
 ];
 
@@ -190,7 +190,7 @@ function splitArrayFunction(inputString: string) {
           class="text-color"
         >
           <Icon name="back" size="22" class="!align-middle" />
-          {{ guideBundle.id ? guideBundle.name : 'Back to Guide Bundles' }}
+          {{ guideBundle.id ? guideBundle.name : 'Back to Courses' }}
         </router-link>
 
         <UiSidebarButton v-if="preview" @click="preview = false" class="float-right">

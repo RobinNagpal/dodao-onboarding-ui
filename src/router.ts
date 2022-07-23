@@ -87,11 +87,7 @@ const spaceRoutes: RouteRecordRaw[] = [
     name: 'allGuides',
     component: AllGuides
   },
-  {
-    path: 'courses',
-    name: 'guideBundles',
-    component: GuideCourses
-  },
+
   {
     path: 'proposal/:id',
     name: 'spaceProposal',
@@ -102,6 +98,37 @@ const spaceRoutes: RouteRecordRaw[] = [
     name: 'guide',
     component: () => import('@/views/Guide/ViewGuide.vue'),
     props: true
+  },
+  {
+    path: ':guideType/create',
+    name: 'guideCreate',
+    component: CreateGuide
+  },
+  {
+    path: ':guideType/guide/edit/:uuid/:settingTab',
+    name: 'guideEdit',
+    component: EditGuide,
+    props: true
+  },
+  {
+    path: 'courses',
+    name: 'guideBundles',
+    component: GuideCourses
+  },
+  {
+    path: 'course/bundle/create',
+    name: 'guideCourseCreate',
+    component: GuideCourseCreate
+  },
+  {
+    path: 'course/file/create',
+    name: 'guideCourseCreate',
+    component: GuideCourseCreate
+  },
+  {
+    path: 'course/bundle/edit/:uuid',
+    name: 'guideCourseEdit',
+    component: GuideCourseCreate
   },
   {
     path: 'course/bundle/view/:uuid',
@@ -144,27 +171,6 @@ const spaceRoutes: RouteRecordRaw[] = [
         props: true
       }
     ]
-  },
-  {
-    path: ':guideType/create',
-    name: 'guideCreate',
-    component: CreateGuide
-  },
-  {
-    path: 'course/create',
-    name: 'guideCourseCreate',
-    component: GuideCourseCreate
-  },
-  {
-    path: ':guideType/guide/edit/:uuid/:settingTab',
-    name: 'guideEdit',
-    component: EditGuide,
-    props: true
-  },
-  {
-    path: 'course/edit/:uuid',
-    name: 'guideCourseEdit',
-    component: GuideCourseCreate
   },
   {
     path: ':guideType/guide/submissions/:uuid',

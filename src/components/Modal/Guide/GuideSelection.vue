@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TempGuideModelInput } from '@/composables/guide/EmptyGuideBundle';
+import { TempGuideModelInput } from '@/composables/course/EmptyGuideCourse';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType, toRefs } from 'vue';
 import UiModal from '@/components/Ui/Modal.vue';

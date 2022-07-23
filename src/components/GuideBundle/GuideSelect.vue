@@ -3,7 +3,7 @@ import Icon from '@/components/Icon.vue';
 import ModalGuideGuideSelection from '@/components/Modal/Guide/GuideSelection.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import UiThumbnail from '@/components/Ui/Thumbnail.vue';
-import { TempGuideBundleInput, TempGuideModelInput } from '@/composables/guide/EmptyGuideBundle';
+import { TempGuideCourseInput, TempGuideModelInput } from '@/composables/course/EmptyGuideCourse';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { PropType, ref } from 'vue';
 import Block from '@/components/Block.vue';
@@ -11,7 +11,7 @@ import { shorten } from '@/helpers/utils';
 
 defineProps({
   bundleInput: {
-    type: Object as PropType<TempGuideBundleInput>,
+    type: Object as PropType<TempGuideCourseInput>,
     required: true
   },
   guideErrors: { type: Boolean },

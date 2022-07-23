@@ -29,7 +29,7 @@ export interface GuideError {
   guideIntegrations?: Partial<Record<KeyOfGuideIntegration, boolean | undefined>>;
 }
 
-export interface GuideBundleError {
+export interface GuideCourseError {
   name?: boolean;
   excerpt?: boolean;
   content?: boolean;

@@ -1,24 +1,24 @@
+import { emptyGuideCourse, TempGuideCourseInput } from '@/composables/course/EmptyGuideCourse';
 import { useApp } from '@/composables/useApp';
 import { useClient } from '@/composables/useClient';
 import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
 import i18n from '@/helpers/i18n';
 import { getGuideBundle } from '@/helpers/snapshot';
-import { GuideBundleError } from '@/types/error';
-import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { GuideCourseError } from '@/types/error';
+import { GuideCoursePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import orderBy from 'lodash/orderBy';
 import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { emptyGuideBundle, TempGuideBundleInput } from './EmptyGuideBundle';
 
 const bundleNameLimit = 32;
 const bundleContentLimit = 14400;
 const bundleExceptContentLimit = 512;
 
-export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notify: any) {
+export function useEditGuideCourse(uuid: string | null, space: SpaceModel, notify: any) {
   const { send } = useClient();
   const router = useRouter();
   const route = useRoute();
@@ -28,9 +28,9 @@ export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notif
   const { store } = useStore();
   const { web3 } = useWeb3();
 
-  const emptyGuideBundleModel = emptyGuideBundle(web3.value.account, space);
-  const guideBundleRef = ref<TempGuideBundleInput>(emptyGuideBundleModel);
-  const guideBundleErrors = ref<GuideBundleError>({});
+  const emptyGuideBundleModel = emptyGuideCourse(web3.value.account, space);
+  const guideBundleRef = ref<TempGuideCourseInput>(emptyGuideBundleModel);
+  const guideBundleErrors = ref<GuideCourseError>({});
   const guideBundleLoaded = ref<boolean>(false);
 
   const guideBundleCreating = ref(false);
@@ -50,7 +50,7 @@ export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notif
           order: g.order
         })),
         socialShareImage: guideBundle.socialShareImage || undefined,
-        publishStatus: guideBundle.publishStatus as GuideBundlePublishStatus
+        publishStatus: guideBundle.publishStatus as GuideCoursePublishStatus
       };
     }
 
@@ -100,7 +100,7 @@ export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notif
     guideBundleRef.value.bundleGuides = orderBy(guideBundleRef.value.bundleGuides, 'order');
   }
 
-  function validateBundle(bundle: TempGuideBundleInput) {
+  function validateBundle(bundle: TempGuideCourseInput) {
     guideBundleErrors.value.name = undefined;
     if (!bundle.name || bundle.name.length > bundleNameLimit) {
       guideBundleErrors.value.name = true;

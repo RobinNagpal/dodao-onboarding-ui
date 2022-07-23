@@ -1,4 +1,4 @@
-import { GuideBundlePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
+import { GuideCoursePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +13,7 @@ export interface TempGuideModelInput {
   };
 }
 
-export interface TempGuideBundleInput {
+export interface TempGuideCourseInput {
   uuid: string;
   bundleGuides: TempGuideModelInput[];
   categories: string[];
@@ -24,14 +24,14 @@ export interface TempGuideBundleInput {
   from: string;
   highlights: string[];
   name: string;
-  publishStatus: GuideBundlePublishStatus;
+  publishStatus: GuideCoursePublishStatus;
   socialShareImage?: string;
   space: string;
   thumbnail?: string;
   timestamp?: number;
 }
 
-export const emptyGuideBundle = (from: string, space: SpaceModel): TempGuideBundleInput => {
+export const emptyGuideCourse = (from: string, space: SpaceModel): TempGuideCourseInput => {
   return {
     from,
     excerpt: 'Provides information for ....',
@@ -47,7 +47,7 @@ export const emptyGuideBundle = (from: string, space: SpaceModel): TempGuideBund
         order: 0
       }
     ],
-    publishStatus: GuideBundlePublishStatus.Live,
+    publishStatus: GuideCoursePublishStatus.Live,
     space: space.id
   };
 };

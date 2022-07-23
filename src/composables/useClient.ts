@@ -1,4 +1,4 @@
-import { TempGuideBundleInput } from '@/composables/guide/EmptyGuideBundle';
+import { TempGuideCourseInput } from '@/composables/course/EmptyGuideCourse';
 import { useNotifications } from '@/composables/useNotifications';
 import { useWeb3 } from '@/composables/useWeb3';
 import client from '@/helpers/client';
@@ -140,7 +140,7 @@ export function useClient() {
       };
       return (await clientEIP712.guide(auth.web3, web3.value.account, guideMessage)) as MsgResponse;
     } else if (type === 'guideBundle') {
-      const bundlePayload = payload as TempGuideBundleInput;
+      const bundlePayload = payload as TempGuideCourseInput;
       const bundleMessage: GuideBundleInput = {
         uuid: bundlePayload.uuid,
         bundleGuides: bundlePayload.bundleGuides.map(g => ({
