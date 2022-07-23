@@ -7,8 +7,8 @@ import CreateGuide from '@/views/Guide/CreateGuide.vue';
 import EditGuide from '@/views/Guide/EditGuide.vue';
 import Guides from '@/views/Guide/Guides.vue';
 import GuideSubmissions from '@/views/Guide/GuideSubmissions.vue';
-import GuideBundleCreate from '@/views/GuideBundle/CreateBundle.vue';
-import GuideBundles from '@/views/GuideBundle/GuideBundles.vue';
+import GuideCourseCreate from '@/views/GuideCourse/CreateGuideCourse.vue';
+import GuideCourses from '@/views/GuideCourse/GuideCourses.vue';
 import Home from '@/views/Home.vue';
 import Playground from '@/views/Playground.vue';
 import Setup from '@/views/Setup.vue';
@@ -37,7 +37,7 @@ const spaceHomeRoute: RouteRecordRaw =
     ? {
         path: '',
         name: 'spaceHome',
-        component: GuideBundles,
+        component: GuideCourses,
         props: {
           bundleType: 'courses'
         }
@@ -90,7 +90,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'courses',
     name: 'guideBundles',
-    component: GuideBundles
+    component: GuideCourses
   },
   {
     path: 'proposal/:id',
@@ -106,7 +106,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'course/bundle/view/:uuid',
     name: 'guideBundle',
-    component: () => import('@/views/GuideBundle/ViewBundle.vue')
+    component: () => import('@/views/GuideCourse/ViewGuideCourse.vue')
   },
   {
     path: 'course/file/view/:courseKey',
@@ -153,7 +153,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'course/create',
     name: 'guideBundleCreate',
-    component: GuideBundleCreate
+    component: GuideCourseCreate
   },
   {
     path: ':guideType/guide/edit/:uuid/:settingTab',
@@ -164,7 +164,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'course/edit/:uuid',
     name: 'guideBundleEdit',
-    component: GuideBundleCreate
+    component: GuideCourseCreate
   },
   {
     path: ':guideType/guide/submissions/:uuid',
