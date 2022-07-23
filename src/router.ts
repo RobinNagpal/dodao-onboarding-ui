@@ -152,7 +152,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   },
   {
     path: 'course/create',
-    name: 'guideBundleCreate',
+    name: 'guideCourseCreate',
     component: GuideCourseCreate
   },
   {
@@ -163,7 +163,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   },
   {
     path: 'course/edit/:uuid',
-    name: 'guideBundleEdit',
+    name: 'guideCourseEdit',
     component: GuideCourseCreate
   },
   {

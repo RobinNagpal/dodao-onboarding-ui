@@ -80,7 +80,7 @@ const threeDotItems = computed(() => {
 
 async function editBundle() {
   await router.push({
-    name: 'guideBundleEdit',
+    name: 'guideCourseEdit',
     params: { uuid: guideBundle.value?.uuid }
   });
 }

@@ -22,7 +22,7 @@ const guideType = computed(() => route.params.guideType || GuideType.Onboarding)
 
 function createNewBundle() {
   router.push({
-    name: 'guideBundleCreate',
+    name: 'guideCourseCreate',
     params: {
       key: props.space.id
     }

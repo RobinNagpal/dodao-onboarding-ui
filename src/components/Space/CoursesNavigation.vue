@@ -25,7 +25,7 @@ const routeName = computed(() => {
 
 function createNewBundle() {
   router.push({
-    name: 'guideBundleCreate',
+    name: 'guideCourseCreate',
     params: {
       key: props.space.id
     }

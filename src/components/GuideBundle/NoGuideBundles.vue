@@ -14,7 +14,7 @@ const { isAdmin } = useSpace(props.space);
   <div class="mb-3 text-center">
     <Block class="pt-1" v-if="isAdmin">
       <p v-text="$t('courses.createFirstCourse')" class="mb-2" />
-      <router-link :to="{ name: 'guideBundleCreate', params: { key: space.id } }">
+      <router-link :to="{ name: 'guideCourseCreate', params: { key: space.id } }">
         <UiButton>
           {{ $t('courses.createCourse') }}
         </UiButton>

@@ -524,7 +524,7 @@
     "gnosisTransactionsQueued": "Payments have been queued to Gnosis Wallet. Please reload gnosis wallet in a couple of mins to see the transactions.",
     "guideCreated": "Guide Created",
     "guideResponseSubmitted": "Guide Submitted",
-    "guideBundleCreated": "Guide Bundle Created",
+    "guideCourseCreated": "Guide Bundle Created",
     "proposalDeleted": "Proposal deleted",
     "somethingWentWrong": "Oops, something went wrong!",
     "saved": "Saved!",

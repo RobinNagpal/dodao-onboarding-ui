@@ -139,7 +139,7 @@ export function useEditGuideBundle(uuid: string | null, space: SpaceModel, notif
     if (result?.id) {
       await getExplore();
       store.space.guideBundles = [];
-      notify(['green', t('notify.guideBundleCreated')]);
+      notify(['green', t('notify.guideCourseCreated')]);
       await router.push({
         name: 'guideBundle',
         params: {
