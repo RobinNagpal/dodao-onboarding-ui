@@ -2,6 +2,7 @@ import { useDomain } from '@/composables/useDomain';
 import Delegate from '@/views/Delegate.vue';
 import Explore from '@/views/Explore.vue';
 import GenericDiscordRedirect from '@/views/GenericDiscordRedirect.vue';
+import GitCourseCreate from '@/views/GitCourse/Edit/CreateGitCourse.vue';
 import AllGuides from '@/views/Guide/AllGuides.vue';
 import CreateGuide from '@/views/Guide/CreateGuide.vue';
 import EditGuide from '@/views/Guide/EditGuide.vue';
@@ -123,7 +124,7 @@ const spaceRoutes: RouteRecordRaw[] = [
   {
     path: 'course/file/create',
     name: 'guideCourseCreate',
-    component: GuideCourseCreate
+    component: GitCourseCreate
   },
   {
     path: 'course/bundle/edit/:uuid',
