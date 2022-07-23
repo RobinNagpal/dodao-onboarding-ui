@@ -8,10 +8,10 @@ const course = courses[0];
   <div class="mt-4 container-default">
     <Block slim :title="course.title">
       <div class="flex flex-col md:flex-row">
-        <div class="nav-wrapper my-4">
+        <div class="nav-wrapper my-4 relative overflow-auto">
           <CourseNavigation :course="course"></CourseNavigation>
         </div>
-        <div class="flex-1 ml-4 my-4">
+        <div class="right-content flex-1 ml-4 my-4">
           <router-view v-if="course" :course="course" />
         </div>
       </div>
@@ -23,6 +23,19 @@ const course = courses[0];
   width: 100%;
   @screen md {
     max-width: 300px;
+  }
+  > div {
+    position: absolute;
+  }
+}
+
+.right-content {
+  overflow: scroll;
+  min-height: 620px;
+  > div {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
   }
 }
 </style>

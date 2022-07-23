@@ -1,3 +1,45 @@
+
+<script setup lang="ts">
+import { marked } from 'marked';
+import { computed } from 'vue';
+import Button from '@/components/Ui/Button.vue';
+
+const props = defineProps({
+  course: Object,
+  topicKey: {
+    type: String,
+    required: true
+  },
+  uuid: {
+    type: String,
+    required: true
+  }
+});
+
+const topic = computed(() => {
+  const topic = props.course?.topics.find(topic => topic.key === props.topicKey);
+  return topic;
+});
+const currentReadingIndex = computed(() => {
+  if (!topic.value) return null;
+  return topic.value.readings.findIndex(reading => reading.uuid === props.uuid);
+});
+const currentReading = computed<any>(() => {
+  if (currentReadingIndex.value === -1) return null;
+  return topic.value.readings[currentReadingIndex.value];
+});
+const iframeUrl = computed(() => {
+  const params = new URLSearchParams('?' + currentReading.value.url.split('?')[1]);
+  return `https://www.youtube.com/embed/${params.get('v')}`;
+});
+
+const renderer = new marked.Renderer();
+
+const details = computed(() => {
+  return marked.parse(currentReading.value.details, { renderer });
+});
+</script>
+
 <template>
   <div>
     <div class="flex flex-col lg:flex-row">
@@ -11,7 +53,7 @@
         <p v-html="details" class="markdown-body"></p>
       </div>
     </div>
-    <div class="flex flex-between mt-6">
+    <div class="flex flex-between mt-4 flex-1 items-end p-2">
       <router-link
         v-if="currentReadingIndex > 0"
         :to="{
@@ -59,46 +101,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { marked } from 'marked';
-import { computed } from 'vue';
-import Button from '@/components/Ui/Button.vue';
 
-const props = defineProps({
-  course: Object,
-  topicKey: {
-    type: String,
-    required: true
-  },
-  uuid: {
-    type: String,
-    required: true
-  }
-});
-
-const topic = computed(() => {
-  const topic = props.course?.topics.find(topic => topic.key === props.topicKey);
-  return topic;
-});
-const currentReadingIndex = computed(() => {
-  if (!topic.value) return null;
-  return topic.value.readings.findIndex(reading => reading.uuid === props.uuid);
-});
-const currentReading = computed<any>(() => {
-  if (currentReadingIndex.value === -1) return null;
-  return topic.value.readings[currentReadingIndex.value];
-});
-const iframeUrl = computed(() => {
-  const params = new URLSearchParams('?' + currentReading.value.url.split('?')[1]);
-  return `https://www.youtube.com/embed/${params.get('v')}`;
-});
-
-const renderer = new marked.Renderer();
-
-const details = computed(() => {
-  return marked.parse(currentReading.value.details, { renderer });
-});
-</script>
 <style lang="scss" scoped>
 .right {
   min-height: 300px;

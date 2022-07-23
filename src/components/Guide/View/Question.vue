@@ -21,8 +21,6 @@ const props = defineProps({
   }
 });
 
-console.log(123123, props.questionResponse)
-
 const emit = defineEmits(['update:questionResponse']);
 
 const currentlySelectedChoices = computed<string[]>(() => props.questionResponse || []);
