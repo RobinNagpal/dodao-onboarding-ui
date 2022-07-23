@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { marked } from 'marked';
+import { computed } from 'vue';
+import Button from '@/components/Ui/Button.vue';
+
+const props = defineProps({
+  course: Object,
+  topicKey: {
+    type: String,
+    required: true
+  },
+  summaryKey: {
+    type: String,
+    required: true
+  }
+});
+
+const topic = computed(() => {
+  const topic = props.course?.topics.find(topic => topic.key === props.topicKey);
+  return topic;
+});
+const currentSummaryIndex = computed(() => {
+  if (!topic.value) return -1;
+  return topic.value.summaries.findIndex(summary => summary.key === props.summaryKey);
+});
+const currentSummary = computed<any>(() => {
+  if (currentSummary.value === -1) return null;
+  return topic.value.summaries[currentSummaryIndex.value];
+});
+
+const renderer = new marked.Renderer();
+
+const details = computed(() => {
+  return marked.parse(currentSummary.value.details, { renderer });
+});
+</script>
+
 <template>
   <div>
     <div class="flex">
@@ -6,7 +43,7 @@
         <p v-html="details" class="markdown-body"></p>
       </div>
     </div>
-    <div class="flex flex-between mt-6">
+    <div class="flex flex-between mt-4 flex-1 items-end p-2">
       <router-link
         v-if="currentSummaryIndex > 0"
         :to="{
@@ -54,42 +91,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { marked } from 'marked';
-import { computed } from 'vue';
-import Button from '@/components/Ui/Button.vue';
 
-const props = defineProps({
-  course: Object,
-  topicKey: {
-    type: String,
-    required: true
-  },
-  summaryKey: {
-    type: String,
-    required: true
-  }
-});
-
-const topic = computed(() => {
-  const topic = props.course?.topics.find(topic => topic.key === props.topicKey);
-  return topic;
-});
-const currentSummaryIndex = computed(() => {
-  if (!topic.value) return -1;
-  return topic.value.summaries.findIndex(summary => summary.key === props.summaryKey);
-});
-const currentSummary = computed<any>(() => {
-  if (currentSummary.value === -1) return null;
-  return topic.value.summaries[currentSummaryIndex.value];
-});
-
-const renderer = new marked.Renderer();
-
-const details = computed(() => {
-  return marked.parse(currentSummary.value.details, { renderer });
-});
-</script>
 <style lang="scss" scoped>
 .right {
   min-height: 300px;

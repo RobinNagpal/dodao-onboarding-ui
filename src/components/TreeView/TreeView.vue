@@ -49,12 +49,12 @@
     -webkit-justify-content: center;
     justify-content: center;
     span:after {
-      content: "";
+      content: '';
       display: inline-block;
       width: 10px;
       height: 10px;
       transform: rotate(135deg);
-
+      transition: transform .3s;
       @apply border-l-2 border-b-2 border-skin-text;
     }
     &.iconCollapse {
@@ -83,6 +83,16 @@
     margin: 0;
     padding: 0;
     margin-left: 17px;
+    max-height: 100vh;
+    transition: max-height 0.3s, transform 0.3s;
+    transform-origin: top;
+    overflow: hidden;
+    transform: scaleY(1);
+
+    &.collapse {
+      max-height: 0;
+      transform: scaleY(0);
+    }
   }
 
   :deep(.collapseWrapper) {

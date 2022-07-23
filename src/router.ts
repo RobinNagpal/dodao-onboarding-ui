@@ -114,6 +114,18 @@ const spaceRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/Course/ViewFileCourse.vue'),
     children: [
       {
+        path: '',
+        name: 'courseIndex',
+        component: () => import('@/views/Course/CourseIndex.vue'),
+        props: true
+      },
+      {
+        path: ':topicKey',
+        name: 'topicIndex',
+        component: () => import('@/views/Course/TopicIndex.vue'),
+        props: true
+      },
+      {
         path: ':topicKey/reading/:uuid',
         name: 'courseReading',
         component: () => import('@/views/Course/CourseReading.vue'),

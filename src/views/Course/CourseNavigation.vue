@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useWeb3 } from '@/composables/useWeb3';
 import { useRoute } from 'vue-router';
-import SpaceSettingIcon from './SpaceSettingIcon.vue';
 import TreeView from '@/components/TreeView/TreeView.vue';
 import TreeItem from '@/components/TreeView/TreeItem.vue';
-import CourseNavigationIcon from './CourseNavigationIcon.vue';
 import { ref } from 'vue';
+import ChapterIcon from '@/components/Ui/Icons/ChapterIcon.vue';
+import ReadingIcon from '@/components/Ui/Icons/ReadingIcon.vue';
+import DiamondIcon from '@/components/Ui/Icons/DiamondIcon.vue';
+import SummaryIcon from '@/components/Ui/Icons/SummaryIcon.vue';
+import EvaluationIcon from '@/components/Ui/Icons/EvaluationIcon.vue';
 
 const props = defineProps({
   course: Object
@@ -34,12 +37,20 @@ const handleToggle = (key, open) => {
           v-for="topic in course?.topics"
         >
           <template v-slot:label>
+            <router-link :to="{
+              name: 'topicIndex',
+              params: {
+                topicKey: topic.key
+              }
+            }">
             <span class="mt-1 flex items-center">
               <span class="icon mr-2">
-                <CourseNavigationIcon name="chapter"></CourseNavigationIcon>
+                <ChapterIcon></ChapterIcon>
               </span>
               {{ topic.title }}</span
             >
+            </router-link>
+
           </template>
 
           <!-- reading section -->
@@ -57,7 +68,7 @@ const handleToggle = (key, open) => {
               >
                 <span class="mt-1 flex items-center">
                   <span class="icon mr-2">
-                    <CourseNavigationIcon name="reading"></CourseNavigationIcon>
+                    <ReadingIcon></ReadingIcon>
                   </span>
                   Reading</span
                 >
@@ -81,7 +92,7 @@ const handleToggle = (key, open) => {
                 >
                   <span class="mt-1 flex items-center">
                     <span class="icon mr-2">
-                      <CourseNavigationIcon name="diamond"></CourseNavigationIcon>
+                      <DiamondIcon></DiamondIcon>
                     </span>
                     {{ reading.title }}</span
                   >
@@ -105,7 +116,7 @@ const handleToggle = (key, open) => {
               >
                 <span class="mt-1 flex items-center">
                   <span class="icon mr-2">
-                    <CourseNavigationIcon name="summary"></CourseNavigationIcon>
+                    <SummaryIcon></SummaryIcon>
                   </span>
                   Summary</span
                 >
@@ -129,7 +140,7 @@ const handleToggle = (key, open) => {
                 >
                   <span class="mt-1 flex items-center">
                     <span class="icon mr-2">
-                      <CourseNavigationIcon name="diamond"></CourseNavigationIcon>
+                      <DiamondIcon></DiamondIcon>
                     </span>
                     {{ summary.title }}</span
                   >
@@ -156,7 +167,7 @@ const handleToggle = (key, open) => {
               >
                 <span class="mt-1 flex items-center">
                   <span class="icon mr-2">
-                    <CourseNavigationIcon name="summary"></CourseNavigationIcon>
+                    <EvaluationIcon></EvaluationIcon>
                   </span>
                   Evaluations ({{ topic.questions.length }})</span
                 >
