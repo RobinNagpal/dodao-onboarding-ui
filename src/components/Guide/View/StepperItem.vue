@@ -21,8 +21,41 @@ import { GuideSubmission } from '@dodao/onboarding-schemas/models/GuideSubmissio
 import { marked } from 'marked';
 import { computed, PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import prism from 'prismjs';
+
+import 'prismjs/components/prism-markup-templating';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-yaml';
+import 'prismjs/components/prism-toml';
+import 'prismjs/components/prism-solidity';
+import 'prismjs/components/prism-rust';
 
 const renderer = new marked.Renderer();
+renderer.code = function (code, lang, escaped) {
+  console.log('Got code', lang);
+  console.log('Got code', code);
+  code = renderer.options.highlight?.(code, lang!) as string;
+  if (!lang) {
+    return `<pre><code>${code}</code></pre>`;
+  }
+
+  const langClass = 'language-' + lang;
+  return `<pre class="${langClass}"><code class="${langClass}">${code}</code></pre>`;
+};
+
+marked.setOptions({
+  renderer,
+  highlight: (code, lang) => {
+    console.log('prism.languages', prism.languages);
+    if (prism.languages[lang]) {
+      return prism.highlight(code, prism.languages[lang], lang);
+    } else {
+      return code;
+    }
+  }
+});
 
 renderer.link = function (href, title, text) {
   return '<a target="_blank" href="' + href + '" title="' + title + '">' + text + '</a>';
@@ -261,6 +294,9 @@ async function navigateToNextStep() {
   </div>
 </template>
 <style lang="scss">
+.guide-stepper-content {
+  overflow: scroll;
+}
 .step-content li {
   margin-bottom: 0.5rem;
 }

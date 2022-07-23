@@ -39,6 +39,11 @@
     "spaceId": "dhedge-eth-1",
     "siteType": "onboarding"
   },
+  "dodao-localhost": {
+    "spaceId": "dodao-1",
+    "siteType": "onboarding"
+  },
+
   "dxdao.dodao.io": {
     "spaceId": "dxdao-eth-1",
     "siteType": "onboarding"
