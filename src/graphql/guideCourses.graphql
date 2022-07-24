@@ -19,21 +19,10 @@ query GuideBundlesQuery(
     authors
     name
     categories
-    content
     created
     duration
     excerpt
     highlights
-    bundleGuides {
-      categories
-      content
-      created
-      guideType
-      name
-      order
-      thumbnail
-      uuid
-    }
     space {
       id
       name

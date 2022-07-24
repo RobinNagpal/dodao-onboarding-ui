@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import Block from '@/components/Block.vue';
 import GuideGuideinBundle from '@/components/Guide/GuideInBundle.vue';
-import RowLoading from '@/components/RowLoading.vue';
-import UiThumbnail from '@/components/Ui/Thumbnail.vue';
 import Icon from '@/components/Icon.vue';
+import RowLoading from '@/components/RowLoading.vue';
 import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useProfiles } from '@/composables/useProfiles';
 import { useSharing } from '@/composables/useSharing';
 import { useSpace } from '@/composables/useSpace';
 import { useStore } from '@/composables/useStore';
 import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
-import { GuideBundleQuery } from '@/graphql/guideBundles.graphql';
+import { GuideBundleQuery } from '@/graphql/guideCourses.graphql';
+import i18n from '@/helpers/i18n';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { marked } from 'marked';
-import { computed, onMounted, ref } from 'vue';
-import i18n from '@/helpers/i18n';
+import { computed, onMounted, PropType, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { PropType } from 'vue';
 
 const renderer = new marked.Renderer();
 

@@ -207,6 +207,12 @@ input GnosisSafeWalletInput {
   walletName: String!
 }
 
+input UpsertGitCourseInput {
+  weight: Int!
+  courseJsonUrl: String!
+  publishStatus: String!
+}
+
 enum OrderDirection {
   asc
   desc
@@ -377,6 +383,57 @@ type GuideBundle {
   uuid: String!
   version: Int!
   link: String!
+}
+
+type GitCourseSummary {
+  title: String!
+  key: String!
+  details: String!
+}
+
+type GitCourseQuestionChoice {
+  content: String!
+  key: String!
+}
+
+type GitCourseQuestion {
+  uuid: String!
+  type: String!
+  content: String!
+  hint: String!
+  explanation: String!
+  answerKeys: [String!]
+  subTopics: [String!]
+  difficultyLevel: String!
+  choices: [GitCourseQuestionChoice!]
+}
+
+type GitCourseReading {
+  uuid: String!
+  title: String!
+  details: String!
+  type: String!
+  url: String!
+  subTopics: [String!]
+}
+
+type GitCourseTopic {
+  title: String!
+  key: String!
+  details: String!
+  order: Int!
+  questions: [GitCourseQuestion!]!
+  readings: [GitCourseReading!]!
+  summaries: [GitCourseSummary!]!
+}
+
+type GitCourse {
+  key: String!
+  title: String!
+  summary: String!
+  details: String!
+  duration: String!
+  topics: [GitCourseTopic!]!
 }
 
 type GuideQuestionSubmission {

@@ -9,7 +9,7 @@ import {
   GuideSubmissionsQueryVariables,
   GuideSubmissionsQuery_guideSubmissions
 } from '@/graphql/generated/graphqlDocs';
-import { GuideBundleQuery as guideBundleQuery } from '@/graphql/guideBundles.graphql';
+import { GuideBundleQuery as guideBundleQuery } from '@/graphql/guideCourses.graphql';
 import { GuideQuery as guideQuery } from '@/graphql/guides.graphql';
 import { GuideSubmissionsQuery as guideSubmissionsQuery } from '@/graphql/guideSubmissions.graphql';
 import { apolloClient } from '@/helpers/apollo';
@@ -63,15 +63,10 @@ export async function getGuide(uuid): Promise<GuideQuery_guide> {
   }
 }
 
-export async function getGuideBundle(
-  uuid
-): Promise<GuideBundleQuery_guideBundle> {
+export async function getGuideBundle(uuid): Promise<GuideBundleQuery_guideBundle> {
   try {
     console.time('getGuideBundle');
-    const response = await apolloClient.query<
-      GuideBundleQuery,
-      GuideBundleQueryVariables
-    >({
+    const response = await apolloClient.query<GuideBundleQuery, GuideBundleQueryVariables>({
       query: guideBundleQuery,
       variables: {
         uuid
@@ -87,15 +82,10 @@ export async function getGuideBundle(
   }
 }
 
-export async function getGuideSubmissions(
-  guideUuid: string
-): Promise<GuideSubmissionsQuery_guideSubmissions[]> {
+export async function getGuideSubmissions(guideUuid: string): Promise<GuideSubmissionsQuery_guideSubmissions[]> {
   try {
     console.time('getGuideSubmissions');
-    const response = await apolloClient.query<
-      GuideSubmissionsQuery,
-      GuideSubmissionsQueryVariables
-    >({
+    const response = await apolloClient.query<GuideSubmissionsQuery, GuideSubmissionsQueryVariables>({
       query: guideSubmissionsQuery,
       variables: {
         guideUuid
@@ -161,9 +151,7 @@ export async function getResults(space, proposal, votes) {
 
       votes = votes
         .map((vote: any) => {
-          vote.scores = strategies.map(
-            (strategy, i) => scores[i][vote.voter] || 0
-          );
+          vote.scores = strategies.map((strategy, i) => scores[i][vote.voter] || 0);
           vote.balance = vote.scores.reduce((a, b: any) => a + b, 0);
           return vote;
         })
@@ -197,9 +185,7 @@ export async function getPower(space, address, proposal) {
       parseInt(proposal.snapshot),
       import.meta.env.VITE_SCORES_URL + '/api/scores'
     );
-    scores = scores.map((score: any) =>
-      Object.values(score).reduce((a, b: any) => a + b, 0)
-    );
+    scores = scores.map((score: any) => Object.values(score).reduce((a, b: any) => a + b, 0));
     return {
       scores,
       totalScore: scores.reduce((a, b: any) => a + b, 0)

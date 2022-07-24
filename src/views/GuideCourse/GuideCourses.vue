@@ -9,7 +9,7 @@ import Block from '@/components/Block.vue';
 import RowLoading from '@/components/RowLoading.vue';
 import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useApolloQuery } from '@/composables/useApolloQuery';
-import { GuideBundlesQuery } from '@/graphql/guideBundles.graphql';
+import { GuideBundlesQuery } from '@/graphql/guideCourses.graphql';
 import { useProfiles } from '@/composables/useProfiles';
 import { setPageTitle } from '@/helpers/utils';
 import { useStore } from '@/composables/useStore';

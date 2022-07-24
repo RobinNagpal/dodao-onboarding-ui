@@ -7,16 +7,11 @@ import UiButton from '@/components/Ui/Button.vue';
 import UiInput from '@/components/Ui/Input.vue';
 import UiSidebarButton from '@/components/Ui/SidebarButton.vue';
 import { useEditGuideCourse } from '@/composables/course/useEditGuideCourse';
-import { useApolloQuery } from '@/composables/useApolloQuery';
 import { useClient } from '@/composables/useClient';
-import { useInfiniteLoader } from '@/composables/useInfiniteLoader';
 import { useModal } from '@/composables/useModal';
-import { useStore } from '@/composables/useStore';
 import { useWeb3 } from '@/composables/useWeb3';
-import { GuidesQuery } from '@/graphql/guides.graphql';
 import { setPageTitle } from '@/helpers/utils';
 import { GuideCoursePublishStatus } from '@dodao/onboarding-schemas/models/GuideBundleModel';
-import { GuideModel } from '@dodao/onboarding-schemas/models/GuideModel';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';
 import { computed, inject, onMounted, PropType, ref, unref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -47,9 +42,6 @@ const {
   initialize
 } = useEditGuideCourse(uuid as string, props.space, notify);
 const { modalAccountOpen } = useModal();
-const { store } = useStore();
-const { apolloQuery } = useApolloQuery();
-const { loadBy, stopLoadingMore } = useInfiniteLoader();
 
 const form = ref(guideBundle);
 
@@ -63,9 +55,6 @@ function clickSubmit() {
 
 const errors = unref(guideBundleErrors);
 
-const loadingGuides = ref(false);
-const guides = ref<GuideModel[]>([]);
-
 const bundleHasErrors = computed(() => {
   return Object.values(guideBundleErrors.value).filter(v => !!v).length > 0;
 });
@@ -74,29 +63,8 @@ function inputError(field: string) {
   return errors[field];
 }
 
-async function loadGuides(skip = 0) {
-  loadingGuides.value = true;
-  const guidesResult = await apolloQuery(
-    {
-      query: GuidesQuery,
-      variables: {
-        first: loadBy,
-        skip,
-        space: props.spaceId
-      }
-    },
-    'guides'
-  );
-  stopLoadingMore.value = guidesResult?.length < loadBy;
-
-  store.space.guides = guidesResult;
-  guides.value = guidesResult;
-  loadingGuides.value = false;
-}
-
 onMounted(async () => {
   setPageTitle('page.title.guide.create', { space: props.space?.name });
-  loadGuides(store.space.guides.length);
   await initialize();
 });
 
