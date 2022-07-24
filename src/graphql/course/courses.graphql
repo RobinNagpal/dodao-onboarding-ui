@@ -1,0 +1,38 @@
+query CoursesQuery(
+  $space: String
+  $bundleType: String
+  $space_in: [String]
+  $author_in: [String]
+  $publish_status_in: [String!]
+) {
+  guideBundles(
+    where: {
+      space: $space
+      bundle_type: $bundleType
+      space_in: $space_in
+      author_in: $author_in
+      publish_status_in: $publish_status_in
+    }
+  ) {
+    id
+    ipfs
+    authors
+    name
+    categories
+    created
+    duration
+    excerpt
+    highlights
+    space {
+      id
+      name
+      members
+      avatar
+      symbol
+    }
+    publishStatus
+    socialShareImage
+    thumbnail
+    uuid
+  }
+}

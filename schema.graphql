@@ -81,6 +81,11 @@ type Mutation {
     spaceId: String!
     wallets: [GnosisSafeWalletInput!]!
   ): Space!
+
+  upsertGitCourse(
+    spaceId: String!
+    gitCourseInput: GitCourseInput!
+  ): SummarizedGitCourse
 }
 
 input SpaceWhere {
@@ -207,7 +212,7 @@ input GnosisSafeWalletInput {
   walletName: String!
 }
 
-input UpsertGitCourseInput {
+input GitCourseInput {
   weight: Int!
   courseJsonUrl: String!
   publishStatus: String!
@@ -434,6 +439,22 @@ type GitCourse {
   details: String!
   duration: String!
   topics: [GitCourseTopic!]!
+}
+
+type SummarizedGitCourseTopic {
+  title: String!
+  key: String!
+  details: String!
+  order: Int!
+}
+
+type SummarizedGitCourse {
+  key: String!
+  title: String!
+  summary: String!
+  details: String!
+  duration: String!
+  topics: [SummarizedGitCourseTopic!]!
 }
 
 type GuideQuestionSubmission {

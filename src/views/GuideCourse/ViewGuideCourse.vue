@@ -9,7 +9,7 @@ import { useSharing } from '@/composables/useSharing';
 import { useSpace } from '@/composables/useSpace';
 import { useStore } from '@/composables/useStore';
 import { GuideBundleQuery_guideBundle } from '@/graphql/generated/graphqlDocs';
-import { GuideBundleQuery } from '@/graphql/guideCourses.graphql';
+import { GuideBundleQuery } from '@/graphql/course/guideCourses.graphql';
 import i18n from '@/helpers/i18n';
 import { setPageTitle } from '@/helpers/utils';
 import { SpaceModel } from '@dodao/onboarding-schemas/models/SpaceModel';

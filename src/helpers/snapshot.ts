@@ -1,3 +1,4 @@
+import { GuideBundleQuery as guideBundleQuery } from '@/graphql/course/guideCourses.graphql';
 import {
   GuideBundleQuery,
   GuideBundleQueryVariables,
@@ -9,7 +10,6 @@ import {
   GuideSubmissionsQueryVariables,
   GuideSubmissionsQuery_guideSubmissions
 } from '@/graphql/generated/graphqlDocs';
-import { GuideBundleQuery as guideBundleQuery } from '@/graphql/guideCourses.graphql';
 import { GuideQuery as guideQuery } from '@/graphql/guides.graphql';
 import { GuideSubmissionsQuery as guideSubmissionsQuery } from '@/graphql/guideSubmissions.graphql';
 import { apolloClient } from '@/helpers/apollo';

@@ -1,0 +1,15 @@
+mutation UpsertGitCourse($spaceId: String!, $gitCourseInput: GitCourseInput!) {
+  payload: upsertGitCourse(spaceId: $spaceId, gitCourseInput: $gitCourseInput) {
+    key
+    title
+    summary
+    details
+    duration
+    topics {
+      key
+      title
+      order
+      details
+    }
+  }
+}
