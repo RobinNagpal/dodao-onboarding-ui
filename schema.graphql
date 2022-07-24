@@ -66,6 +66,10 @@ type Query {
     orderBy: String
     orderDirection: OrderDirection
   ): [Subscription]
+
+  rawGitCourse(spaceId: String!, key: String!): RawGitCourse
+
+  gitCourseSummarized(spaceId: String!, key: String!): SummarizedGitCourse
 }
 
 type Mutation {
@@ -390,6 +394,12 @@ type GuideBundle {
   link: String!
 }
 
+type RawGitCourse {
+  key: String!
+  weight: Int!
+  courseJsonUrl: String!
+  publishStatus: String!
+}
 type GitCourseSummary {
   title: String!
   key: String!

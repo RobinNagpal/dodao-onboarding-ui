@@ -1,0 +1,40 @@
+mutation UpsertGitCourse($spaceId: String!, $gitCourseInput: GitCourseInput!) {
+  payload: upsertGitCourse(spaceId: $spaceId, gitCourseInput: $gitCourseInput) {
+    key
+    title
+    summary
+    details
+    duration
+    topics {
+      key
+      title
+      order
+      details
+    }
+  }
+}
+
+query RawGitCourse($spaceId: String!, $key: String!) {
+  payload: rawGitCourse(spaceId: $spaceId, key: $key) {
+    key
+    publishStatus
+    courseJsonUrl
+    weight
+  }
+}
+
+query GitCourseSummarized($spaceId: String!, $key: String!) {
+  payload: gitCourseSummarized(spaceId: $spaceId, key: $key) {
+    key
+    title
+    summary
+    details
+    duration
+    topics {
+      title
+      key
+      details
+      order
+    }
+  }
+}
