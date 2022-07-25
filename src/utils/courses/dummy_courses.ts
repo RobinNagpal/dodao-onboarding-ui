@@ -1,4 +1,4 @@
-import { Course } from '@/types/course/Course';
+import { Course } from '@dodao/onboarding-schemas/models/course/Course';
 import defiCourse from './defi-course.json';
 import rustCourse from './rust-course.json';
 import solidityCourse from './solidity-course.json';
