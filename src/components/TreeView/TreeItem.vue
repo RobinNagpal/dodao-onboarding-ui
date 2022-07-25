@@ -31,9 +31,9 @@ function handleClick() {
 </script>
 <template>
   <li class="treeItem">
-    <div class="itemContent" :class="[{ 'border-b': hasSlot }]">
-      <div @click="handleClick" class="itemLabel"><slot name="label"></slot></div>
-      <div @click="handleClick" class="iconContainer" :class="{iconCollapse: open !== true && collapse }">
+    <div class="itemContent" @click="handleClick" :class="[{ 'border-b': hasSlot }]">
+      <div class="itemLabel"><slot name="label"></slot></div>
+      <div class="iconContainer" :class="{iconCollapse: open !== true && collapse }">
         <span v-if="hasSlot"></span>
       </div>
     </div>

@@ -31,7 +31,7 @@ const course = courses[0];
 
 .right-content {
   overflow: scroll;
-  min-height: 620px;
+  min-height: calc(100vh - 300px);
   > div {
     display: flex;
     flex-direction: column;
