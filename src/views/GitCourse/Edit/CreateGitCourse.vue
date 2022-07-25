@@ -182,40 +182,44 @@ const guideBundleStatuses = [
             <Icon name="back" size="18" />
           </UiSidebarButton>
         </div>
-        <template>
-          <Block :title="$t('courses.create.basicInfo')" :class="`mt-4`">
-            <div class="mb-2">
-              <UiInput v-model="form.name" min="10" maxlength="32">
-                <template v-slot:label>{{ $t(`courses.create.name`) }}*</template>
-              </UiInput>
 
-              <div class="status-wrapper pt-3">
-                <UiDropdown
-                  top="2.5rem"
-                  right="2.5rem"
-                  class="mr-2 w-[5rem] status-drop-down"
-                  @select="selectPublishStatus($event)"
-                  :items="guideBundleStatuses"
-                >
-                  <div class="pr-1 select-none">
-                    {{ form.publishStatus === 'Live' ? 'Live' : 'Draft' }}
-                  </div>
-                </UiDropdown>
-                <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Publish Status*</div>
-              </div>
+        <Block :title="$t('courses.create.basicInfo')" :class="`mt-4`">
+          <div class="mb-2">
+            <UiInput
+              v-model="form.courseJsonUrl"
+              min="10"
+              maxlength="1024"
+              placeholder="https://raw.githubusercontent.com/DoDAO-io/dodao-solidity-course/main/generated/course.json"
+            >
+              <template v-slot:label>{{ $t(`courses.create.courseJsonUrl`) }}*</template>
+            </UiInput>
+
+            <div class="status-wrapper pt-3">
+              <UiDropdown
+                top="2.5rem"
+                right="2.5rem"
+                class="mr-2 w-[5rem] status-drop-down"
+                @select="selectPublishStatus($event)"
+                :items="guideBundleStatuses"
+              >
+                <div class="pr-1 select-none">
+                  {{ form.publishStatus === 'Live' ? 'Live' : 'Draft' }}
+                </div>
+              </UiDropdown>
+              <div class="input-label text-color mr-2 whitespace-nowrap absolute forceFloat">Publish Status*</div>
             </div>
-          </Block>
-          <UiButton
-            @click="clickSubmit"
-            :disabled="!isValid"
-            :loading="clientLoading || gitCourseUpserting"
-            class="block w-full mt-4"
-            variant="contained"
-            primary
-          >
-            {{ $t('create.publish') }}
-          </UiButton>
-        </template>
+          </div>
+        </Block>
+        <UiButton
+          @click="clickSubmit"
+          :disabled="!isValid"
+          :loading="clientLoading || gitCourseUpserting"
+          class="block w-full mt-4"
+          variant="contained"
+          primary
+        >
+          {{ $t('create.publish') }}
+        </UiButton>
       </div>
       <PageLoading v-else />
     </template>

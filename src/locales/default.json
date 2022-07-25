@@ -331,6 +331,7 @@
   "courses": {
     "create": {
       "name": "Name",
+      "courseJsonUrl": "Course Json Url",
       "excerpt": "Course excerpt...",
       "basicInfo": "Basic Information",
       "content": "Detailed Description of the Guide Bundle",
