@@ -24,14 +24,18 @@ const course = courses[0];
   @screen md {
     max-width: 300px;
   }
-  > div {
-    position: absolute;
+  @screen md {
+    > div {
+      position: absolute;
+    }
   }
 }
 
 .right-content {
   overflow: scroll;
-  min-height: 620px;
+  @screen md {
+    min-height: calc(100vh - 295px);
+  }
   > div {
     display: flex;
     flex-direction: column;
